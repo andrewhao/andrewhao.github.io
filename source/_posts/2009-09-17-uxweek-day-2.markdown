@@ -1,0 +1,394 @@
+---
+author: andrewhao
+comments: true
+date: 2009-09-17 09:22:38
+layout: post
+slug: uxweek-day-2
+title: UXweek Day 2 - Expression
+wordpress_id: 932
+categories:
+- Information Architecture
+- Interfaces
+- UXweek
+---
+
+## Day 2 - "Expression"
+
+
+From here on out, the speakers were a bit more unconventional, with more emphasis on the human interaction and experience side of things.
+
+**Sarah Jones**
+
+[caption id="" align="alignnone" width="500" caption="Sarah Jones, interviewed by Sarah Nelson (via Flickr - @quietaction)"][![Sarah Jones and Sarah B Nelson](http://farm3.static.flickr.com/2560/3928307492_e16a881b44.jpg)](http://www.flickr.com/photos/quietaction/3928307492/)[/caption]
+
+Sarah is a Tony-award winning playwright, whose forte is giving a multi-character one-woman monologue. She delivered her hilarious and spot-on impressions of a Jewish woman, a rapid-talking Dominican American woman, and an African-American youth, all the characters giving their own takes on what UI and UX meant to them.
+
+See her TED talk here: [http://www.ted.com/talks/sarah_jones_as_a_one_woman_global_village.html](http://www.ted.com/talks/sarah_jones_as_a_one_woman_global_village.html)
+
+The application of her talk with UI and UX was in her process of "getting into character" and how that mirrors the persona-building and role-playing design process. Sarah described how she spent the majority of her time prepping in character--one story she shared was how she once prepared for the role of a homeless woman by actually dressing like one and sitting outside her theater and experiencing the fear and insecurity the woman must have felt.
+
+
+
+	
+  * The work of UX affects the confidence of users
+
+	
+  * UX bridges the gap between the haves and have-nots
+
+	
+  * Can't forget that these are _personal_ experiences
+
+
+
+
+### Alexandra Zafiroglu - Intel - "Thinking Ethnographically about Technology"
+
+
+[caption id="" align="alignnone" width="500" caption="One of Alexandra's slides (via Flickr - @quietaction)"][![Alexandra Zafiroglu 01](http://farm3.static.flickr.com/2656/3928307546_c01c2ef951.jpg)](http://www.flickr.com/photos/quietaction/3928307546/)[/caption]
+
+Alexandra is a anthropologist at Intel assigned to study the habits of people and technology. She highlighted four interactions: one in Japan, one in Sweden, one in the USA and one in India.
+
+_Ethnographic moments surround us._ Way of viewing, questioning, interpreting the world: what, why, how, etc.
+
+Durable culture practices:
+
+
+
+	
+  * Social connection
+
+	
+  * meta-meaning (spirituality, religion)
+
+	
+  * creative acts
+
+	
+  * a story
+
+	
+  * sense of identity
+
+	
+  * secrets & lies
+
+
+_Tech changes faster than these!_
+
+
+#### Five (four?) ethnographic moments
+
+
+**1. Japan:** Zafiroglu tasked one familiy to record one TV-watching moment with a Flip camcorder. Team received a clip of the father sprawled on the floor of a tiny room, the daughter giving him a massage.
+
+**Insights into:**
+
+
+
+	
+  * body mechanics
+
+	
+  * sleeping practices
+
+	
+  * affection & love
+
+	
+  * filial piety
+
+
+**2. Sweden:**
+
+"yuppie teddy bear aphasia":
+
+
+
+	
+  * Term for burnout when the world becomes overly connected, wired.
+
+	
+  * public expression of fear and distrust
+
+	
+  * critique of free-market capitalism
+
+	
+  * gendered protest: way for women to critique
+
+	
+  * dealing with the death of socialist government
+
+
+**3. USA**
+
+Family fights over who gets to record what on the DVR. Mom wakes up early to delete shows that boys record, boys wake up earlier, etc.
+
+**Insights into:**
+
+
+
+	
+  * responsibility: family tensions, tech tensions
+
+	
+  * thwarts mothering
+
+	
+  * necessitates responsibility
+
+	
+  * encourages autonomy, ingenuity
+
+
+**4. India**
+
+Man owns cell phone business, also a place where he loads up forbidden content onto customers' phones. Also runs a PlayStation arcade.
+
+**Insights into:**
+
+
+
+	
+  * Trust and community
+
+	
+  * Gendered play (men and boys)
+
+	
+  * Independence
+
+
+I also got a chance to chat briefly with Alexandra while in line for lunch. Turns out her path to joining the tech industry through her Ph.D. has been a bit unconventional (after all, how many anthropologists get hired in the industry? These days, it's a growing number.) Kudos to Intel for putting in the research to develop technologies that mold to culture practices.
+
+
+### Scott McCloud: "Experiencing Comics"
+
+
+[![Scott McCloud 01](http://farm3.static.flickr.com/2602/3927525783_5677e29e3a.jpg)](http://www.flickr.com/photos/quietaction/3927525783/)
+Scott is a graphic artist/illustrator who gave this really tight presentation on how the comic world deals with issues of time and space and where graphic storytelling is going in the future.
+
+
+
+	
+  * "I'm a storyteller."
+
+	
+  * Comics is a kind of temporal map, a call & response between artist and reader
+
+	
+  * Digital comics are a different beast -- CDROMs were the center of experimentation in the 90's.
+
+	
+  * **In comics, space = time**
+
+	
+  * Form affects storytelling.
+
+	
+  * Typical comic strip: vertical layout. This is not the way we were designed to see. Shows horizontal frame--we should be displaying comics horizontally?
+
+	
+  * How can we break out of the print format. Adapt to Web.
+
+	
+  * Rich digital comics: Continuous space metaphor, deep-zoom.
+
+	
+  * "Desire" as a motivator for stories. Look at stories around you. Note how a story is told when a character has a desire for something: Dorothy, to go home. The Little Mermaid, to be human, etc.
+
+
+
+
+### Erin McKean - wordnik.com - "How Words Work"
+
+
+[caption id="" align="alignnone" width="500" caption="Erin McKean on stage (via Flickr - @quietaction)"][![Erin McKean 01](http://farm4.static.flickr.com/3598/3927525879_42bca7c0b9.jpg)](http://www.flickr.com/photos/quietaction/3927525879/)[/caption]
+
+
+
+	
+  * English is broken: expectations of how it's supposed to work and how it actually works are different.
+
+	
+  * Broken phrases: "Speed enforced by aircraft", "slow--children @ play", "can you pass the salt?"
+
+	
+  * New words: "Fail", "teh internets"
+
+	
+  * We can choose to fight these new phrases or accept them. The right thing to do is accept them.
+
+	
+  * How wordnik is designed: instead of dictionary experience (in, find def'n, out), refine as an exploratory experience.
+
+	
+    * See full usage in texts, Twitter, Flickr photos.
+
+
+
+
+
+
+
+### Seminar Day 2: Rapid Prototyping w/ Kate Rutter, Adaptive Path
+
+
+How to (1) sketch/explore ideas, (2) bring lots of ideas together, (3) share & iterate with team.
+
+**Sketching: not about being good or bad, it's about communicating an idea.**
+
+Use markers for emphasis, line weights. Not a pencil.
+
+Label your mockups/prototypes often.
+
+
+
+
+
+
+
+[Exploratory Sketching](https://internal.nbttech.com/twiki/bin/view/NBT/UIUXWeek2009?sortcol=0;table=1;up=0#sorted_table) 
+[Refinement Sketching](https://internal.nbttech.com/twiki/bin/view/NBT/UIUXWeek2009?sortcol=1;table=1;up=0#sorted_table) 
+
+
+
+
+
+Good to make mind go free 
+
+
+Take several ideas and narrow down 
+
+
+
+
+
+
+Use 6-up template 
+
+
+Use 1-up template 
+
+
+
+
+Tips to get creative:
+
+
+
+	
+  1. "Use your words": Acquire a big stash of words associated with UI ("bookshelves", "tags", "collapsible", "carousel", "quicklook", ...) and then try them out on your solution.
+
+	
+  2. Inspiration: collect samples of interesting design work that inspires you and go back to it often.
+
+	
+  3. Use dimensions to expand conceptual model.
+
+	
+  4. Line weight draws attention to
+
+	
+  5. Shading draws attention away
+
+	
+  6. Labels are important.
+
+
+**Sketchboards: A way to prototype as a group.**
+
+
+
+	
+  1. Get large sheet of paper
+
+	
+  2. Give it some structure (divide into functional sections)
+
+	
+  3. Add inputs
+
+	
+    * Anything that drives thinking
+
+	
+    * Requirements
+
+	
+    * Personas
+
+
+
+
+
+Drafting dots hold papers on a wall and can be used to affix sketches to boards.
+
+**Thinking top-down**
+A healthy sketchboard has depth (curiosity) and breadth (completeness)
+
+Organize sketches _breadthwise_ into modules, components
+
+Then expand your ideas _depthwise_.
+
+**How to do a review session.**
+
+
+
+	
+  * Email people beforehand, prepare them.
+
+	
+  * Use walls where people can come around your designs.
+
+	
+  * Tailor design for who is in the room
+
+	
+  * Pass the pen around and ask others to draw
+
+	
+  * Refer back to inputs
+
+	
+  * Black hat sessions - have folks play "devil's advocate" and ask questions, critique.
+
+
+**Asking questions to drive design discussion**
+
+
+
+	
+  * Open-ended questions @ beginning leads to conversations
+
+	
+  * Closed-ended questions @ end lead to decisions
+
+
+Remember that sketchboards are just jumping-off points.
+
+**Design sprints**
+
+Quickly generate wireframes and comps from ideas generated from sketchboard.
+
+A possible weeklong sprint:
+
+
+
+	
+  * Monday: braindump, start sketches
+
+	
+  * Tuesday: assemble sketchboards, share and review sketchboards
+
+	
+  * Wed: Create higher-fidelity designs.
+
+	
+  * Thursday: Share hi-fi designs, refine.
+
+	
+  * Fri: Refine some more, complete.
+
+
+Remember to take breaks!

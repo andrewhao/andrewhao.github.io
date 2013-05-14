@@ -1,0 +1,43 @@
+---
+author: andrewhao
+comments: true
+date: 2011-02-11 00:42:27
+layout: post
+slug: update
+title: Update
+wordpress_id: 1022
+categories:
+- Art
+- Design
+- SOS
+---
+
+A quick update on the art project:
+
+
+
+	
+  * I switched from my normal LEDs to "straw hat" wide-angle LEDs. The viewing angle is much better, meaning also that I can get a more diffuse glow @ closer distances so the light comes through better through the paper.
+
+	
+  * I found out my deadline is Sunday so I'm a little stressed.
+
+	
+  * No progress on Arduino/Processing or the Twitter feed. Still have to figure out whether I should use a Bayesian classifier for better fuzzy matching on tweets or if I should just rig the feed with a simple text filter on "I feel ___". I have a feeling the former is nice in theory but isn't good enough and the latter is probably best given this short time span.
+
+	
+  * No idea how I'm going to solder the LEDs to the breadboards. Heck, I think my breadboards aren't even wide enough, meaning I either need to find a larger breadboard or cut one up and paste the two pieces together lengthwise.
+
+	
+  * I still need to find wood to mount/suspend the project.
+
+	
+  * I called around and got some good quotes from print shops. I'm probably going to go with [Alameda Copy](http://www.yelp.com/biz/alameda-copy-alameda). Friendly staff, good Yelp review, best price I saw around. I'll be printing the poster off their oversize printer on a roll of 70lb paper. Quote: $6-8 per sq. foot, color.
+
+	
+  * I've made some good progress on the design, though. I think I'm lengthening the poster but decreasing the width. I'll post more screens if I get a chance.
+
+
+[caption id="" align="alignnone" width="500" caption="Left: conventional LEDs. Right: straw hat LEDs"][![Compare straw hat LEDs with conventional LEDs](http://farm6.static.flickr.com/5019/5437057228_8568b5095d.jpg)](http://www.flickr.com/photos/andrewhao/5437057228/)[/caption]
+
+[caption id="" align="alignnone" width="500" caption="Final design"][![(Final) Remix](http://farm5.static.flickr.com/4141/5437055328_81b362d325.jpg)](http://www.flickr.com/photos/andrewhao/5437055328/)[/caption]
