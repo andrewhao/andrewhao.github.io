@@ -42,7 +42,7 @@ To be honest, I'd love more feedback from other engineering managers in that are
 
 ### People are your priority.
 
-I've read often that [empathy is everything]() when it comes to management, and it still rings true. No matter how this product launch goes, in the end your team will remember how you treated them, how their thoughts and feelings were taken into account.
+I've read often that [empathy is everything](http://firstround.com/article/My-Management-Lessons-from-Three-Failed-Startups-Google-Apple-Dropbox-Twitter-and-Square) when it comes to management, and it still rings true. No matter how this product launch goes, in the end your team will remember how you treated them, how their thoughts and feelings were taken into account.
 
 One thing I'm trying to check myself is my tendency to jump in on other people's sentences and cut them off. It sounds silly, but sometimes I realize I like to talk a lot more than listen. As a manager, sometimes you need to dwell on the feedback of a team member for some time before you write it off. There's usually a core message in there that's completely valid -- a frustration, a desire for change. Empathy means communicating the message: "I heard you, and I respect your thoughts."
 
@@ -57,3 +57,9 @@ And finally, here's what I think: your attitude toward your company and the team
 * How are you checking your own negativity -- sometimes we forget that we're the solutions to our own problems, and I've found oftentimes that the very issues that you assume are impossible to change are crackable by having the right relationships with the right people.
 
 The little things matter.
+
+### Growth areas
+
+Lord knows I have a lot to learn here. One area I'm learning to grow in is how to give honest and accurate feedback to team members, without fearing how they're going to receive it.
+
+Another area? Delegation. I'm learning to delegate the little micro-responsibilities in my job that I just kind of expect that I'm supposed to do. Case in point: every week we accept a translation import from a third-party translation service. I realized that I was burning a lot of time reviewing hundreds of lines of translation keys every week, and the repetition of it was sapping a lot of my energy. I had to learn to ask a team member for help and give them responsibility to own that function of the process.
