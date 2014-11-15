@@ -1,5 +1,5 @@
 ---
-layout: page
+layout: post
 title: "QConSF: Day One"
 date: 2014-11-03 09:21
 comments: true
