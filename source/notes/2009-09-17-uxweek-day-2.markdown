@@ -4,7 +4,7 @@ comments: true
 date: 2009-09-17 09:22:38
 layout: post
 slug: uxweek-day-2
-title: UXweek Day 2 - Expression
+title: "UXweek Day 2 - Expression"
 wordpress_id: 932
 categories:
 - Information Architecture

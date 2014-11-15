@@ -11,7 +11,7 @@ footer: true
 
 Blurb sent me to QCon SF for three days:
 
-* [Day One](2014-11-03-qconsf-day-one)
+* [Day One](2014-11-03-qconsf-day-one.html)
 * [Day Two](2014-11-04-qconsf-day-two.html)
 * [Day Three](2014-11-05-qconsf-day-three.html)
 

@@ -3,7 +3,7 @@ author: andrewhao
 comments: true
 date: 2009-09-16 23:10:59
 layout: page
-title: UX Week: Day 1
+title: "UX Week: Day 1"
 wordpress_id: 929
 ---
 

@@ -1,0 +1,38 @@
+---
+layout: post
+title: "Recap: QCon SF 2014"
+date: 2014-11-05 19:01
+comments: true
+categories: 
+- qconsf
+- conference
+- software
+---
+Blurb sent me off to QCon SF 2014 for three days.
+
+## Notes
+
+I took a series of notes each day in attendance:
+
+* [Day One: Architectures, Functional](/notes/2014-11-03-qconsf-day-one.html)
+* [Day Two: Rx Systems, API Platforms](/notes/2014-11-04-qconsf-day-two.html)
+* [Day Three: Microservices, Culture](/notes/2014-11-05-qconsf-day-three.html)
+
+## Summary
+
+* Big trends in continuous delivery and deployment -- deploy more often, smaller feedback loops
+* A lot of emphasis on event driven architectures + microservices. Lots of emphasis on DDD as a design tool.
+* Reactive systems with functional implementations were widely discussed as a scaling tool (backpressure-sensitive) and as a coordination tool between multiple async services.
+* Big data/realtime streaming talks were interesting -- my personal experience with them is limited, but it seems there is a debate over the merits of existing Lambda architecture practice.
+* A lot of talk about microservice orchestration tools -- acknowledging the pain of configuration and management of many services.
+* Scala got a lotttt of attention. Probably because of its presence in bigger companies like Netflix, Twitter, LinkedIn. Wonder what smaller startups are using.
+* Web Components were a big upcoming trend in frontend technologies. Strong modularization of views + behaviors in HTML documents.
+
+## Questions
+
+* If I could do a startup over again, would I begin an app in Rails? Where is the sweet spot for that sort of application architecture?
+* How can I design systems such that they can be extractible into focused components/services as early as possible?
+* How can we plan for failures ([fault injection](http://en.wikipedia.org/wiki/Fault_injection))?
+* How does one implement change in software engineering organizations? Bottom-up (organic initiatives bubbling up through management) vs top-down (management/software leaders direct org to implement).
+* How are we doing with encouraging women and minorities who traditionally are underrepresented in our industry?
+* What are places in our hiring funnels that, unbeknownst to us, may be turning away or detracting women and minorities?

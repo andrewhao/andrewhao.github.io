@@ -219,7 +219,7 @@ categories:
 * picks up the trash lying on the floor
 * Behaves like an owner
 
-## Melissa Pierce: 
+## Melissa Pierce: The Evolution of Engineering Culture
 
 * Grace Hopper: Ph.D in mathematics at Yale
 * Babbage machine
@@ -227,3 +227,7 @@ categories:
 * Look at ads and how they portray women. Women as commodities, cheap
 * women were strong in math. it wasn't perceived as being professional enough. engineering was masculine. CS moved to be an "engineering" degree
 * the drop and decline in women in CS happened around the time of its alignment with engineering
+
+### Takeaways:
+
+* How can our field recognize the contributions of women in CS? How can we make our field more inclusive and accessible to women in tech?
