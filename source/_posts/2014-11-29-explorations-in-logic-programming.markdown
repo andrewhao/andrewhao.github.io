@@ -10,11 +10,11 @@ Out of [Storybook](https://github.com/andrewhao/storybook), a side project I've 
 
 > A set of students are assigned a book a week. Write plan generator to create a set of student-book assignments for that week, given the following constraints:
 > 
-> * All students must receive a book-bag.
-> * Each book-bag may only be assigned to one student at a time.
-> * A student may not be assigned a book-bag s/he has received before.
+> * All students must receive a book.
+> * Each book may only be assigned to one student at a time.
+> * A student may not be assigned a book s/he has received before.
 
-Being that this was a Rails app, I put [Amb](https://github.com/andrewhao/storybook), a Ruby-based CSP solver, to use. Amb is derived off Jim Weirich's original source code, implementing a simple backtracking algorithm.
+Being that this was a Rails app, I put [Amb](https://github.com/andrewhao/storybook), a Ruby-based CSP solver, to use. Amb is derived off [Jim Weirich's original source code](), implementing a simple backtracking algorithm. (More [interesting reading on the original idea](http://community.schemewiki.org/?amb) behind the `amb` operator, proposed in a [paper](http://www-formal.stanford.edu/jmc/basis1.pdf) by LISP founder John McCarthy in 1963.)
 
 Not having written any CSP logic since my university days, I tried to come up with a naive solution. It goes something like this:
 
