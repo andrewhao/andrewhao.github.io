@@ -6,7 +6,7 @@ comments: true
 categories: 
 ---
 
-Out of a [storybook](https://github.com/andrewhao/storybook), side project I've been doing for a friend, I had the opportunity to model the problem domain as a constraint satisfaction problem (CSP). It goes:
+Out of [Storybook](https://github.com/andrewhao/storybook), a side project I've been doing for a friend, I had the opportunity to model the problem domain as a constraint satisfaction problem (CSP). It goes:
 
 > A set of students are assigned a book a week. Write plan generator to create a set of student-book assignments for that week, given the following constraints:
 > 
