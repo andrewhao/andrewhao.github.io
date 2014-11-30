@@ -37,7 +37,7 @@ It implements the rTSS as detailed in [this article](http://home.trainingpeaks.c
 (functional_threshold_pace * 3600) * 100
 ```
 
-Stressfactor is a higher-level toolbelt for deriving meaning from GPX tracks, so it, at the moment, attempts to calculate the stress score and grade adjusted pace.
+Stressfactor is a higher-order tookit for deriving meaning from GPX tracks, so it, at the moment, attempts to calculate the stress score and grade adjusted pace.
 
 The data still needs validation, so I'm eager to run it on my data set of GPX tracks from the past years.
 
