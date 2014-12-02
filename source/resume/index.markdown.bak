@@ -1,0 +1,95 @@
+---
+author: andrewhao
+comments: false
+date: 2014-09-23 10:18:08
+layout: page
+slug: resume
+title: Andrew Hao
+wordpress_id: 881
+---
+# Andrew Hao
+## Software leader & craftsman
+
+> [Download PDF](resume.pdf)
+> [andrewhao@gmail.com](andrewhao@gmail.com)
+> (408) 621-5937
+
+-----
+
+### Overview
+
+Empathetic software leader developing strong software teams and delivering products that matter.
+
+-----
+
+### Experience
+
+#### Blurb, Engineering Manager
+
+Team lead responsible for delivering Blurb's ecommerce features and author publishing experience. Led planning team developing the architectural vision of the Blurb platform from monolith to a microservice future. Evangelist and trainer in TDD and clean OO design. Technical lead for Rails 2 to 4 upgrade project aimed to modernize the Blurb platform without stopping feature development. Successfully delivered three projects with external development teams, local and overseas. Hired several engineers and mentored team in XP-based practices.
+
+#### Blurb, Software Engineer
+
+TDD Rails and Javascript development delivering ecommerce features at scale. Key player in transition from a monolithic Rails app to SOA using Rails, Redis, and Backbone. Implementing composable APIs and elegant OO design. Refactor for business. Refactor for pleasure.
+
+#### Wejoinin, Co-founder
+
+An accidental startup that began life as a side project, borne out of a personal need to organize volunteers for events. Wejoinin has evolved to support thousands of users and organizations, with upwards of 40,000 visitors a month driven solely from word-of-mouth and seeing much adoption in the nonprofit and academic sectors.
+
+I designed and developed the site with my cofounder and have supported our customers over the years. Transitioned the site seamlessly from Rails 2 to 3 while backfilling deployment and test automation infrastructure.
+
+#### g9Labs* Design Studio, Founder
+
+Freelance and passion projects spanning iOS development, Web application development, graphic art and UX design. Recent projects include: a real-time browser-based chat application, social online shopping experience, and an interactive Twitter art installation. See my [github](http://www.github.com/andrewhao) for some samples of my projects.
+
+#### Riverbed, User Interface Developer
+
+Designed and developed management pages to configure appliance features in Web interface across Riverbed product family, e.g. a management interface to control multiple VMware VM instances over a large collection of Steelhead appliances & a significantly simplified QoS workflow. Coached others in UX methodologies (sketching, prototyping, user research) and integrated them into team processes. Drove adoption of YUI3 framework. Coordinated between PM, QA, salespeople, developers and customers to gather much-needed feedback to drive feature development and design. Optimized application performance in the server, browser client and over the wire.
+
+#### Apple, Software Engineering Intern
+
+As an mobile engineering intern, designed and built an OS X Server monitoring application on iPhone. Began with extensive user research and case studies that informed design. Responsible for porting an internal server communication framework from Cocoa to UIKit. Developed an internal Web-based iPhone CalDAV calendaring application.
+
+#### FAQQLY, Lead Developer
+
+Full-stack Rails and Javascript programmer at a social networking startup. Led a four-person development team in planning and execution of site vision and goals. Specialized in scalable, accessible, standards-compliant design. Developed solutions for internationalization challenges involving communication and coordination with an overseas team. Implemented a REST API for third-party apps.
+
+### Education
+
+#### University of California, Berkeley
+
+  * B.S. Electrical Engineering Computer Science (EECS)
+  * B.A. Mass Communications
+  * Management of Engineering and Innovation Certificate (Entrepreneurship)
+
+Graduated: _Dec 2008_
+GPA: _3.58_
+
+### Skills
+
+#### Code
+
+Ruby, Javascript, Objective-C, Java, Python, Git, HTML5+CSS3, MySQL/PostgreSQL, Redis, PHP
+
+#### Tools
+
+Ruby on Rails, Ember, Backbone, Node.js, OOCSS, iOS, Puppet, Capistrano, Vagrant, RaphaelJS, Processing, Arduino, Docker, JIRA
+
+#### Techniques
+
+Agile/Scrum, Lean UX, user-centered design, Domain-Driven Design
+
+#### Interests
+
+**Honors:** Eta Kappa Nu, Mu Chapter (05-08)
+
+**Leadership:** Board Member, Running for a Better Oakland (12-14), Intervarsity Christian Fellowhip at UC Berkeley (04-08), Regeneration Church Staff (09-14)
+
+**Design:** [Berkeley Innovation](http://innovation.berkeley.edu/) Product Design Group (08)
+
+**Languages:** English, Mandarin Chinese (conversational)
+
+**Interests:** Trail running, guitar, interactive & computational art, creative writing, triathlon, cycling, photography, spirituality
+
+**Volunteer:** [Running for a Better Oakland](http://www.rboakland.org), [BRUTE Labs](http://www.brutelabs.org) (social design agency)
+
