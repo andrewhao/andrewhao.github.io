@@ -8,8 +8,7 @@ categories:
 - Rails
 ---
 
-(This post [originally
-appeared](http://blog.carbonfive.com/2015/03/17/docker-rails-docker-compose-together-in-your-development-workflow/) on the Carbon Five blog.)
+(This post [originally appeared](http://blog.carbonfive.com/2015/03/17/docker-rails-docker-compose-together-in-your-development-workflow/) on the Carbon Five blog.)
 
 We've been trialing the usage of Docker and [Docker Compose](https://docs.docker.com/compose/) (previously known as [fig](http://www.fig.sh)) on a Rails project here at Carbon Five. In the past, my personal experience with Docker had been that the promise of portable containerized apps was within reach, but the tooling and development workflow were still awkward - commands were complex, configuration and linking steps were complicated, and the overall learning curve was high.
 
@@ -38,21 +37,21 @@ Docker runs in a VirtualBox VM through an image called `boot2docker`. The reason
 1. Download and install [VirtualBox](https://www.virtualbox.org/wiki/Downloads).
 2. Now install boot2docker and Docker Compose.
 
-  ```bash
-  $ brew install boot2docker docker-compose
-  ```
+```bash
+$ brew install boot2docker docker-compose
+```
 3. Initialize and start up boot2docker
 
-  ```bash
-  $ boot2docker init
-  $ boot2docker start
-  ```
+```bash
+$ boot2docker init
+$ boot2docker start
+```
 
 4. Configure your Docker host to point to your boot2docker image.
 
-  ```bash
-  $ $(boot2docker shellinit)
-  ```
+```bash
+$ $(boot2docker shellinit)
+```
 
   You'll need to run this for every terminal session that invokes the `docker` or `docker-compose` command - better export this line into your `.zshrc` or `.bashrc`.
 
@@ -259,38 +258,38 @@ When you want to run:           | With Docker Compose, you would run:
 
 Here are some nice development tricks I found useful when working with Docker:
 
-1. Add a `dockerhost` entry to your `/etc/hosts` file so you can visit `dockerhost` from your browser.
+* Add a `dockerhost` entry to your `/etc/hosts` file so you can visit `dockerhost` from your browser.
 
-  ```bash
-  $ boot2docker ip
-  192.168.59.104
-  ```
+```bash
+$ boot2docker ip
+192.168.59.104
+```
 
   Then add the IP to your `/etc/hosts`
 
-  ```
-  192.168.59.104  dockerhost
-  ```
+```
+192.168.59.104  dockerhost
+```
 
   Now you can pull up your app from `dockerhost:3000`:
 
   ![Screenshot of your URL bar](http://i.imgur.com/5eqNJqN.png)
 
-2. Debugging containers with `docker exec`
+* Debugging containers with `docker exec`
 
   Sometimes you need to get inside a container to see what's _really_ happening. Perhaps you need to test whether a port is truly open, or verify that a process is truly running. This can be accomplished by grabbing the container ID with a `docker ps`, then passing that ID into the `docker exec` command:
 
-  ```bash
-  $ docker ps
-  CONTAINER ID        IMAGE
-  301fa6331388        myrailsapp_web:latest
-  $ docker exec -it 301fa6331388 /bin/bash
-  root@301fa6331388:/myapp#
-  ```
+```bash
+$ docker ps
+CONTAINER ID        IMAGE
+301fa6331388        myrailsapp_web:latest
+$ docker exec -it 301fa6331388 /bin/bash
+root@301fa6331388:/myapp#
+```
 
-3. Showing environment variables in a container with `docker-compose run web env`
+* Showing environment variables in a container with `docker-compose run web env`
 
-  ```bash
+```bash
 $ docker-compose run web env
 AWS_SECRET_KEY=
 MAX_THREADS=16
@@ -299,15 +298,15 @@ AWS_REGION=us-west-2
 BUNDLE_APP_CONFIG=/usr/local/bundle
 HOME=/root
 #...
-  ```
+```
 
-4. Running an interactive debugger (like [pry](http://pryrepl.org/)) in your Docker container
+* Running an interactive debugger (like [pry](http://pryrepl.org/)) in your Docker container
 
   It takes a little extra work to get Docker to allow interactive terminal debugging with tools like `byebug` or `pry`. Should you desire to start your web server with debugging capabilities, you will need to use the `--service-ports` flag with the `run` command.
 
-  ```bash
+```bash
 $ docker-compose run --service-ports web
-  ```
+```
 
   This works due to two internal implementations of `docker-compose run`:
 
