@@ -68,7 +68,7 @@ Let's start by creating a Dockerfile for this app. This specifies the base depen
 
 Create a `Dockerfile` from within your Rails app directory.
 
-```Dockerfile
+```
 FROM ruby:2.2.0
 RUN apt-get update -qq && apt-get install -y build-essential nodejs npm nodejs-legacy mysql-client vim
 RUN npm install -g phantomjs
@@ -88,14 +88,14 @@ CMD ["rails","server","-b","0.0.0.0"]
 
 Let's start by breaking this up line-by-line:
 
-```Dockerfile
+```
 FROM ruby:2.2.0
 ```
 The [`FROM`](https://docs.docker.com/reference/builder/#from) directive specifies the [`library/ruby` base image from Docker Hub](https://registry.hub.docker.com/u/library/ruby/), and uses the `2.2.0` tag, which corresponds to the Ruby 2.2.0 runtime.
 
 From here on, we are going to be executing commands that will build on this reference image.
 
-```Dockerfile
+```
 RUN apt-get update -qq && apt-get install -y build-essential nodejs npm nodejs-legacy mysql-client vim
 RUN npm install -g phantomjs
 ```
@@ -116,7 +116,7 @@ Keep these concepts in mind as we talk about speeding up your Docker build in th
 
 The following steps install the required Ruby gems for Bundler, within your app container:
 
-```Dockerfile
+```
 WORKDIR /tmp
 COPY Gemfile Gemfile
 COPY Gemfile.lock Gemfile.lock
@@ -135,7 +135,7 @@ HT: [Brian Morearty: "How to skip bundle install when deploying a Rails app to D
 
 Finally, we finish our Dockerfile by adding our current app code to the working directory.
 
-```Dockerfile
+```
 ADD . /myapp
 WORKDIR /myapp
 RUN RAILS_ENV=production bundle exec rake assets:precompile --trace
