@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: development | The Sweet Spot]]></title>
+  <link href="http://www.g9labs.com/category/development/atom.xml" rel="self"/>
+  <link href="http://www.g9labs.com/"/>
+  <updated>2015-03-19T14:39:53-07:00</updated>
+  <id>http://www.g9labs.com/</id>
+  <author>
+    <name><![CDATA[Andrew Hao]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Moving to Ember App Kit]]></title>
+    <link href="http://www.g9labs.com/2014/01/26/moving-to-ember-app-kit/"/>
+    <updated>2014-01-26T23:32:00-08:00</updated>
+    <id>http://www.g9labs.com/2014/01/26/moving-to-ember-app-kit</id>
+    <content type="html"><![CDATA[<p>I&rsquo;ve noticed a bit of the buzz around <a href="https://github.com/stefanpenner/ember-app-kit">Ember App Kit</a>
+recently and decided to move Hendrix, my music management app, over from
+a <a href="http://yeoman.io/">Yeoman</a>-generated Ember app to EAK with all its
+bells and whistles.</p>
+
+<h3>What&rsquo;s the difference?</h3>
+
+<p>Well on the surface, the two frameworks aren&rsquo;t very different. The
+standard Yeoman build tool sets you up with Grunt and Bower, which is
+what EAK provides you out of the box. The cool stuff happens when you
+dive under the hood: ES6 module transpilation and an AMD-compatible
+Ember Resolver, built-in Karma integration and a built-in API stub
+framework for development and test environments.</p>
+
+<h3>The joys of modules</h3>
+
+<p>What I didn&rsquo;t realize was that compiling to ES6 modules required that my
+filenames be renamed exactly how the modules were going to be placed,
+with the extra caveat that resource actions needed to live in their own
+directories. Recall that in the old way of doing things with globals and
+namespaces, you could get away with throwing a route file like this in
+your app directory:</p>
+
+<p><code>
+routes/
+  songs_index_controller.js
+</code></p>
+
+<p>And inside:</p>
+
+<p><code>javascript
+MyApp.SongsIndexRoute = Ember.Route.extend({
+  //...
+});
+</code></p>
+
+<p>In EAK&rsquo;s world, you need to nest the file under the <code>songs/</code> directory,
+and strip the type from the filename, like so:</p>
+
+<p>```
+routes/
+  songs/</p>
+
+<pre><code>index.js
+</code></pre>
+
+<p>```</p>
+
+<p>Inside the file, you assign the function to a variable and let it be
+exported in the default namespace.</p>
+
+<p><code>javascript
+var SongsIndexRoute = Ember.Route.extend({
+  //...
+});
+export default SongsIndexRoute;
+</code></p>
+
+<h3>File name matters</h3>
+
+<p>The <a href="https://github.com/stefanpenner/ember-jj-abrams-resolver/">new Ember resolver</a>
+loads modules in a smart way &mdash; according to how the framework
+structures resources, controllers and their corresponding actions. So
+visiting <code>#/songs</code> from my app caused the app to look up and load
+<code>appkit/routes/songs/index</code>. What I didn&rsquo;t realize was <em>this module must
+live at a very specific place in the file directory structure</em>.
+I realized that I left the module type in the file name the first time
+around, like this:</p>
+
+<p>```
+routes/
+  songs/</p>
+
+<pre><code>index_route.js
+</code></pre>
+
+<p>```</p>
+
+<p>There are no types in the module names &mdash; or the filenames, for that
+matter. I had not realized this (I&rsquo;m also an AMD newbie) &mdash; so I had
+left my files un-renamed as <code>songs_index_route</code>, which meant that
+the module loader had stored the SongsIndexRoute module under
+<code>appkit/routes/songs/index_route</code>, but was doing a route lookup through
+the Resolver for: <code>appkit/routes/songs/index</code>. Renaming the file to:</p>
+
+<p>```
+routes/
+  songs/</p>
+
+<pre><code>index.js
+</code></pre>
+
+<p>```</p>
+
+<p>did the trick.</p>
+]]></content>
+  </entry>
+  
+</feed>

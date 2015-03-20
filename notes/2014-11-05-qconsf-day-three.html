@@ -1,0 +1,609 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>QConSF: Day Three - The Sweet Spot</title>
+  <meta name="author" content="Andrew Hao">
+
+  
+  <meta name="description" content="Melody Meckfessel: Google/Cloud Engineering The world is changing. Mobile is up and coming. Cloud platform is a huge market opportunity.
+Google &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://www.g9labs.com/notes/2014-11-05-qconsf-day-three.html">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="The Sweet Spot" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-2330913-9']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">The Sweet Spot</a></h1>
+  
+    <h2>Andrew Hao's thoughts about software engineering, design, and anything shiny.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:www.g9labs.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/notes">Notes</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">QConSF: Day Three</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-11-05T09:22:00-08:00" pubdate data-updated="true">Nov 5<span>th</span>, 2014</time>
+        
+         | <a href="#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><h2>Melody Meckfessel: Google/Cloud Engineering</h2>
+
+<ul>
+<li>The world is changing. Mobile is up and coming. Cloud platform is a huge market opportunity.</li>
+<li>Google DevOps platform: supports fast builds, caching.</li>
+<li>Best cloud platform on the planet (MarketingSpeak?)</li>
+<li>Every day, Google cranks out 800K builds, 2 petabytes of data&hellip;</li>
+<li>Internally: single monolithic code tree</li>
+<li>Code is open to any engineer</li>
+<li>Variety of languages</li>
+<li>Mandatory code review.</li>
+<li>Need good tools to get information about system.</li>
+<li>Deployment resource utilization</li>
+</ul>
+
+
+<h2>Breaking the Monolith: Organizing your team to embrace microservices</h2>
+
+<ul>
+<li>what about microservices for startups? 500px is 40-person startup that embraced microservices</li>
+<li>Ruby/Rails + Go architecture</li>
+<li>Conway&rsquo;s Law: reminds us that the core component of SE is humans!</li>
+<li>Microservices: &ldquo;hipster SOA&rdquo;?! small services. cost of integration is lower than we once thought.</li>
+<li>are SRP (single responsibility principle) at the codebase level</li>
+</ul>
+
+
+<h3>Prior Architecture</h3>
+
+<ul>
+<li>LB, app servers, db servers</li>
+<li>many data stores, one monolithic code</li>
+<li>lots of SPOFs</li>
+<li>Large codebase. hard to enforce boundaries, leak over time.</li>
+<li>lots of cascading failures</li>
+<li>deployments were &ldquo;get in line&rdquo;</li>
+<li>hosted datacenter</li>
+</ul>
+
+
+<h3>First thing: changed search/infrastructure</h3>
+
+<ul>
+<li>naturally asynchronous, off the critical path part of our infrastructure</li>
+<li>rewrote the indexer in go</li>
+<li>used to take 20hr to do a full build, now it takes 20m in Go</li>
+<li>wrote search service layer &ndash; extracted out of app</li>
+</ul>
+
+
+<h3>Next: uploads</h3>
+
+<ul>
+<li>EC2-based go uploaders</li>
+<li>Natural pair with S3</li>
+</ul>
+
+
+<h3>Activities and notifications</h3>
+
+<ul>
+<li>Ongoing</li>
+<li>Riak</li>
+<li>Technologies?</li>
+</ul>
+
+
+<h3>Lessons</h3>
+
+<p>1) DevOps</p>
+
+<ul>
+<li>Do 12-factor apps</li>
+<li>Monitor everything. They use datadog &mdash; hosted graphite</li>
+<li>Implement an on-call rotation</li>
+<li>Measure MTTD (detect), MTTR (resolve). Work to implement changes</li>
+<li>Test your failover scenarios</li>
+</ul>
+
+
+<p>2) Automation</p>
+
+<ul>
+<li>Automation</li>
+<li>Use circuit breakers</li>
+<li>Michael Nygard: use circuit breakers. Try to recover from external failure scenarios.</li>
+</ul>
+
+
+<p>3) Design for business capabilities</p>
+
+<ul>
+<li>Break app into biz capabilities (search, reco, uploads)</li>
+<li>Tempting to design around tech layers. don&rsquo;t</li>
+<li>treat each biz capability as a team</li>
+</ul>
+
+
+<h3>Teams</h3>
+
+<ul>
+<li>API facades can unblock teams. Web Team owns an API facade that proxies requests from the browser to serve the internal services (Sinatra app).</li>
+<li>Cute: BFFs &ndash; backend-for-frontend</li>
+<li>Web team: frontend code, API facade</li>
+<li>Media team: upload service, watermarking</li>
+<li>search team: search infrastructure</li>
+<li>Mobile team: mobile apps, mobile API facade</li>
+<li>Platform: everything else incl release engineering</li>
+<li>How to spread institutional knowledge? Swap developers.</li>
+</ul>
+
+
+<h2>Deploying microservices with Docker, event sourcing, CQRS</h2>
+
+<p>@crichardson, <a href="http://microservices.io/">http://microservices.io/</a></p>
+
+<ul>
+<li>Using scala, functional immudatable domain models, microservices, event sourcing, CQRS and Docker</li>
+</ul>
+
+
+<h3>Why build event-driven microservices?</h3>
+
+<ul>
+<li>Traditional architecture: ACID+WAR-bundled monolith</li>
+<li>Problem with monolith:
+
+<ul>
+<li>intimidates developers</li>
+<li>infrequent deployments</li>
+<li>overloads IDE</li>
+<li>obstacle to scaling development</li>
+<li>modules have different dependencies</li>
+<li>long term commitment to architecture stack</li>
+</ul>
+</li>
+<li>Apply functional decomposition</li>
+<li>Problem with RDBMS
+
+<ul>
+<li>Scalability</li>
+<li>distribution</li>
+<li>schema updates</li>
+<li>O/R impedance mismatch</li>
+<li>handling semi-structured data</li>
+</ul>
+</li>
+<li>Microservices = distributed data management
+
+<ul>
+<li>very painful, don&rsquo;t try to do 2-phased commit</li>
+</ul>
+</li>
+<li>NoSQL has no ACID guarantees, limited transactions, limited querying capabilities</li>
+</ul>
+
+
+<h3>Event-based architecture to the rescue</h3>
+
+<ul>
+<li>Microservices publish events when state changes</li>
+<li>Microservices subscribe to events</li>
+<li>for this to work, you have to atomically publish an event when state changes</li>
+<li>How to reliably generate events?
+
+<ul>
+<li>db triggers?</li>
+<li>app code?</li>
+</ul>
+</li>
+<li>How to atomically update the datastore and publish events?
+
+<ul>
+<li>use two-phased commit</li>
+</ul>
+</li>
+</ul>
+
+
+<h3>Event sourcing</h3>
+
+<ul>
+<li>For each aggregate/entity:
+
+<ul>
+<li>identify all the state-changing domain events</li>
+<li>define event classes</li>
+</ul>
+</li>
+<li><p>That way you can reconstruct the current state of an entity by replaying events to get state.</p></li>
+<li><p>Persisting events: use weak serialization, like JSON</p></li>
+<li>For long-running aggregates, you can save a snapshot, discard old events.</li>
+</ul>
+
+
+<h3>Biz benefits of Event Sourcing</h3>
+
+<ul>
+<li>reliable audit log</li>
+<li>enables temporal queries</li>
+<li>publishes events needed by logs/big data</li>
+<li>solves data consistency issues. eventual consistency</li>
+</ul>
+
+
+<h3>Drawbacks of event sourcing</h3>
+
+<ul>
+<li>weird and unfamiliar</li>
+<li>events = history of bad events</li>
+<li>dupe events are tricky</li>
+<li>app handles eventually consistent data</li>
+<li>event store only supports PK-lookup of data</li>
+</ul>
+
+
+<h3>Microservices</h3>
+
+<ul>
+<li>Corresponds to a DDD aggregate</li>
+<li>requests from outside world => commands</li>
+<li>Processed by svc, generates events</li>
+<li>Can also subscribe to events over the bus</li>
+</ul>
+
+
+<h3>CQRS</h3>
+
+<ul>
+<li>commands process aggregates</li>
+<li>queries build views from events
+
+<ul>
+<li>view is a store</li>
+<li>view updater service syncs the view with events</li>
+<li>view query service generates the view from the view store</li>
+</ul>
+</li>
+</ul>
+
+
+<h3>How to deal with eventually-consistent views?</h3>
+
+<ul>
+<li>creation update response contains aggregate</li>
+<li>out of date view compares version #s</li>
+<li>Or just fake it in UI</li>
+</ul>
+
+
+<h3>Docker</h3>
+
+<ul>
+<li>Jenkins deploy pipeline: Build &amp; test code + build &amp; test docker image + deploy docker to registry</li>
+<li>Smoke test the image:
+
+<ul>
+<li><code>POST /containers/create</code>, <code>POST /containers/{id}/start</code></li>
+<li>ping <code>/health</code> URL</li>
+</ul>
+</li>
+<li>tag image, then push image</li>
+<li>takes seconds to build, deploy!</li>
+<li>Jenkins is on Docker, too!</li>
+</ul>
+
+
+<h3>Deployment to prod</h3>
+
+<ul>
+<li>Diffs running dockers against build dockers, then deploys the changed containers.</li>
+<li>Mesos + marathon + zookeeper</li>
+</ul>
+
+
+<h2>Culture of CareEvolution</h2>
+
+<ul>
+<li>Completely decentralized. Decisions made by consensus</li>
+<li>culture of overwork in silicon valley</li>
+<li>Do we need Scrum masters? we don&rsquo;t trust people to do things themselves</li>
+<li><p>Self-directed teams can STILL apply to mission critical systems and important industries.</p></li>
+<li><p>Individuals are center: process serves the individual. all individuals yearn to be <em>productive</em>.</p></li>
+<li>Teams are nothing more than individuals working toward a common goal with trust in one another</li>
+<li>if we can&rsquo;t trust each other then we need to start over. Lack of trust is a mortal weakness.</li>
+<li>Management is not a title or role, but an activity to be performed by the individual. We are all managers!</li>
+<li>Work and life are not two opposing forces: it&rsquo;s both.</li>
+<li>size brings complexity</li>
+<li>ambiguity and the need for juddgment: embrace ambiguity. with time, the org is less capable of doing things, instead of doing more</li>
+<li>you can&rsquo;t tie compensation to titles</li>
+<li>Doing good is good business</li>
+<li>Run the business as if it&rsquo;ll be there for 100+ years. Beyond you. So be wary of professional investors who want to see short term gain. Question if there really <em>is</em> a first mover advantage.</li>
+</ul>
+
+
+<h3>Netflix: &ldquo;Responsible person&rdquo;</h3>
+
+<ul>
+<li>Self-motivating</li>
+<li>Self-aware</li>
+<li>Self-disciplined</li>
+<li>Self-improving</li>
+<li>Acts like a leader</li>
+<li>Doesn&rsquo;t wait to be told what to do</li>
+<li>Never feels &ldquo;that&rsquo;s not my job&rdquo;</li>
+<li>picks up the trash lying on the floor</li>
+<li>Behaves like an owner</li>
+</ul>
+
+
+<h2>Melissa Pierce: The Evolution of Engineering Culture</h2>
+
+<ul>
+<li>Grace Hopper: Ph.D in mathematics at Yale</li>
+<li>Babbage machine</li>
+<li>1842-1843: she wrote elaborate set of notes</li>
+<li>Look at ads and how they portray women. Women as commodities, cheap</li>
+<li>women were strong in math. it wasn&rsquo;t perceived as being professional enough. engineering was masculine. CS moved to be an &ldquo;engineering&rdquo; degree</li>
+<li>the drop and decline in women in CS happened around the time of its alignment with engineering</li>
+</ul>
+
+
+<h3>Takeaways:</h3>
+
+<ul>
+<li>How can our field recognize the contributions of women in CS? How can we make our field more inclusive and accessible to women in tech?</li>
+</ul>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Andrew Hao</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-11-05T09:22:00-08:00" pubdate data-updated="true">Nov 5<span>th</span>, 2014</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/category/conference/'>conference</a>, <a class='category' href='/category/notes/'>notes</a>, <a class='category' href='/category/qconsf/'>qconsf</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://www.g9labs.com/notes/2014-11-05-qconsf-day-three.html" data-via="andrewhao" data-counturl="http://www.g9labs.com/notes/2014-11-05-qconsf-day-three.html" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2015/03/19/docker-rails-and-docker-compose-in-your-development-workflow/">Docker, Rails, and Docker Compose in your development workflow</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2014/11/29/explorations-in-logic-programming/">Explorations in logic programming</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2014/11/15/my-own-robot-training-buddy/">My own robot training buddy.</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2014/11/05/qcon-sf-2014/">Recap: QCon SF 2014</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2014/11/01/conways-law-for-humans/">Conway's Law for humans</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/andrewhao">@andrewhao</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'andrewhao',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2015 - Andrew Hao -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'g9labs';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://www.g9labs.com/notes/2014-11-05-qconsf-day-three.html';
+        var disqus_url = 'http://www.g9labs.com/notes/2014-11-05-qconsf-day-three.html';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

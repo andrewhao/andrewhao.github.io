@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: running | The Sweet Spot]]></title>
+  <link href="http://www.g9labs.com/category/running/atom.xml" rel="self"/>
+  <link href="http://www.g9labs.com/"/>
+  <updated>2015-03-19T14:39:53-07:00</updated>
+  <id>http://www.g9labs.com/</id>
+  <author>
+    <name><![CDATA[Andrew Hao]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[My own robot training buddy.]]></title>
+    <link href="http://www.g9labs.com/2014/11/15/my-own-robot-training-buddy/"/>
+    <updated>2014-11-15T10:03:00-08:00</updated>
+    <id>http://www.g9labs.com/2014/11/15/my-own-robot-training-buddy</id>
+    <content type="html"><![CDATA[<p>As an ultra runner, I am really into the mountains. As a software engineer, I&rsquo;m really into data. So naturally, I&rsquo;m interested in the intersection of both.</p>
+
+<p>I&rsquo;ve particularly been interested in how systems like <a href="http://www.strava.com">Strava</a> work, especially when they quantify what is known as a &ldquo;Suffer Score&rdquo;, a single number denoting the amount of training stress (a.k.a. suffering) you put yourself through in a workout.</p>
+
+<p>How does a track workout compare to a long day on the trails? Which is tougher: a 5m tempo road run in and around my neighborhood, or a tough 2m climb into a local regional park?</p>
+
+<h2>Data in&hellip;</h2>
+
+<p>I first attacked the problem of getting data off of my phone. I record my GPX tracks in <a href="http://runmeter.com/">Runmeter</a>, a fantastic iPhone application with all sorts of metrics and data export capabilities. What I wanted was a seamless way to get the data off my phone without fuss after a hard workout.</p>
+
+<p>The application has a nifty feature in which it can automatically send an email to an email address after a workout is completed.</p>
+
+<p>I wrote an <a href="https://github.com/andrewhao/velocitas">email ingester, Velocitas</a>, with the help of <a href="http://cloudmailin.com/">Cloudmailin</a>, which fires off a POST request to the Node application. Velocitas does the following:</p>
+
+<ul>
+<li><code>curl</code>s and downloads the GPX link embedded in the email.</li>
+<li>Saves the GPX file to a linked Dropbox account.</li>
+<li>Republishes the GPX file to a linked Strava account.</li>
+</ul>
+
+
+<h2>Deriving the Training Stress Score</h2>
+
+<p>Next up: I wanted to do a quick and dirty implementation of the (run-based) Training Stress Score. <a href="https://github.com/andrewhao/stressfactor">Stressfactor</a>, a Ruby gem, is what came out of it.</p>
+
+<p>It implements the rTSS as detailed in <a href="http://home.trainingpeaks.com/blog/article/running-training-stress-score-rtss-explained">this article</a>.</p>
+
+<p><code>ruby
+(duration_seconds * normalized_graded_pace * intensity_factor) /
+(functional_threshold_pace * 3600) * 100
+</code></p>
+
+<p>Stressfactor is a higher-order tookit for deriving meaning from GPX tracks, so it, at the moment, attempts to calculate the stress score and grade adjusted pace.</p>
+
+<p>The data still needs validation, so I&rsquo;m eager to run it on my data set of GPX tracks from the past years.</p>
+
+<h2>Generating reports</h2>
+
+<p>I&rsquo;m working on this part right now &mdash; I need to nicely display a report from my workout history in Dropbox and display per-GPX. I&rsquo;ve started the project &mdash; <a href="https://github.com/andrewhao/stressreport">Stressreport</a>.</p>
+
+<h2>Some things I&rsquo;ve learned and am learning</h2>
+
+<ul>
+<li>The human body is complex, and cannot be <a href="http://fellrnr.com/wiki/Modeling_Human_Performance">easily modeled</a> without sufficient data. That said, what I&rsquo;m doing now may be sufficient for basic training data.</li>
+<li>The nature of parsing and generating higher-order stats from raw data may lend itself well to experimentation with functional languages. I&rsquo;m interested in trying to reimplement Stressfactor in Scala, or a functional equivalent.</li>
+<li>Deploying all my apps on Heroku&rsquo;s free tier may actually be an interesting start to building a microservice architecture &mdash; with the space limitations on Heroku, I&rsquo;m forced to build new features on new services. Call it cheapskate architecture.</li>
+</ul>
+
+]]></content>
+  </entry>
+  
+</feed>

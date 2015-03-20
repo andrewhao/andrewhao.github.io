@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Productivity | The Sweet Spot]]></title>
+  <link href="http://www.g9labs.com/category/productivity/atom.xml" rel="self"/>
+  <link href="http://www.g9labs.com/"/>
+  <updated>2015-03-19T14:39:53-07:00</updated>
+  <id>http://www.g9labs.com/</id>
+  <author>
+    <name><![CDATA[Andrew Hao]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[GTD-izing my Thunderbird client, and other productivity things]]></title>
+    <link href="http://www.g9labs.com/2006/09/02/geek-brief/"/>
+    <updated>2006-09-02T13:29:00-07:00</updated>
+    <id>http://www.g9labs.com/2006/09/02/geek-brief</id>
+    <content type="html"><![CDATA[<p>Do any fellow geeks out there follow any <a href="http://en.wikipedia.org/wiki/Getting_things_done">GettingThingsDone</a> (GTD) practices?</p>
+
+<p>(I&rsquo;m trying to get my life organizedï¿½a futile attempt before the sledgehammer of school and responsibilities drops. Organized as in&hellip; prioritizing, managing time, et cetera.) A couple things I&rsquo;ve done:</p>
+
+<ul>
+<li><p><a href="http://entropicprincipal.blogspot.com/2005/09/using-thunderbird-to-get-things-done.html">GTD-ized my Thunderbird client</a> (heck, I never knew labels could be so useful) and it seems to really help keep my mind on track when I field emails (I receive twenty to forty non-spam messages a day). The basic principle is to tag (label) your mail the instant it shows up in your inbox with its priority status. Then you run back through your mail and attack each piece according to its priority.</p></li>
+<li><p>I&rsquo;m syncing my Palm V to Yahoo Calendar. Using the Yahoo Widgets Day Planner widget as an interface, I&rsquo;m basically able to access my calendar information anywhere, whether I have the Palm or not. I&rsquo;m still debating whether this is useful because the sync is less-than-accurate and well, nothing beats pencil and paper (a la the <a href="http://www.43folders.com/2004/09/03/introducing-the-hipster-pda/">Hipster PDA</a>. Has anybody used it? What were your experiences?)</p></li>
+</ul>
+
+
+<p>Sorry, that was a quick break from our regularly scheduled programming. Geek, out.</p>
+]]></content>
+  </entry>
+  
+</feed>

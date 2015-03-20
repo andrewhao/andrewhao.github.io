@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: SOS | The Sweet Spot]]></title>
+  <link href="http://www.g9labs.com/category/sos/atom.xml" rel="self"/>
+  <link href="http://www.g9labs.com/"/>
+  <updated>2015-03-19T14:39:53-07:00</updated>
+  <id>http://www.g9labs.com/</id>
+  <author>
+    <name><![CDATA[Andrew Hao]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Save our souls - a Twitter art installation]]></title>
+    <link href="http://www.g9labs.com/2011/02/23/save-our-souls-a-twitter-art-installation/"/>
+    <updated>2011-02-23T02:51:37-08:00</updated>
+    <id>http://www.g9labs.com/2011/02/23/save-our-souls-a-twitter-art-installation</id>
+    <content type="html"><![CDATA[<p>Here&rsquo;s how the installation looked on the day of the art show.</p>
+
+<p>[caption id=&ldquo;&rdquo; align=&ldquo;alignnone&rdquo; width=&ldquo;333&rdquo; caption=&ldquo;We mounted the installation on the inside of the Regeneration cafe. The Arduino lies behind the Macbook behind the monitor.&rdquo;]<a href="http://www.flickr.com/photos/andrewhao/5467033003/"><img src="http://farm6.static.flickr.com/5180/5467033003_c1c14c5dc0.jpg" alt="Installation" /></a>[/caption]</p>
+
+<p>[caption id=&ldquo;&rdquo; align=&ldquo;alignnone&rdquo; width=&ldquo;333&rdquo; caption=&ldquo;The LEDs are mounted on breadboards suspended on fishing wire, binder clips, rubber bands, chopsticks, and a prayer.&rdquo;]<a href="http://www.flickr.com/photos/andrewhao/5471602272/"><img src="http://farm6.static.flickr.com/5296/5471602272_85203b475e.jpg" alt="Mounted LED array" /></a>[/caption]</p>
+
+<p>[caption id=&ldquo;&rdquo; align=&ldquo;alignnone&rdquo; width=&ldquo;333&rdquo; caption=&ldquo;Finished it just in time.&rdquo;]<a href="http://www.flickr.com/photos/andrewhao/5471598060/"><img src="http://farm6.static.flickr.com/5057/5471598060_f1bb64a83f.jpg" alt="In action" /></a>[/caption]</p>
+
+<p><a href="http://vimeo.com/20267056">Save our souls &ndash; Twitter art installation</a> from <a href="http://vimeo.com/user807863">Andrew Hao</a> on <a href="http://vimeo.com">Vimeo</a>.</p>
+
+<blockquote><p>What are people saying about the ashes in the world today? This installation visualizes a live Twitter stream on heartache, injustice, loss, and our city and matches them up with the redemptive promises of Isaiah.</p></blockquote>
+
+<p>Life is difficult, and redemption is something we all long for. What changes do you hope for in your life or in the world? Send a response from your Twitter account to @sos_61 and watch the installation react. If you&rsquo;d like to be kept anonymous, send your response in a DM to @sos_61.</p>
+
+<p>&ldquo;I hope for <strong><strong>&rdquo;
+&ldquo;I wish that </strong></strong>&rdquo;
+&ldquo;I want to see ____&rdquo;</p>
+
+<h3>A few notes</h3>
+
+<ul>
+<li><p>Web interface is a fullscreen Google Chrome window. <a href="http://socket.io/">socket.io</a> is the Websocket interface to the <a href="http://nodejs.org">node.js</a> backend. The slide transition is animated via a CSS3 animation, and the red overlay is a simple SVG shape plotted with the help of <a href="http://raphaeljs.com">RaphaëlJS</a>.</p></li>
+<li><p>The Twitter backend is a collection of four self-updating Twitter searches, one for heartache (&ldquo;i feel lonely, sad, depressed&rdquo;), injustice (&ldquo;violence, war, oppression, justice&rdquo;), death (&ldquo;rest in peace, passed away&rdquo;), and Oakland (&ldquo;oakland&rdquo;). A blacklist filters out undesirable tweet keywords (&ldquo;justin bieber&rdquo;).</p></li>
+<li><p>Additionally, the backend connects to Twitter via the <a href="http://dev.twitter.com/pages/streaming_api">Streaming API</a> and displays a special animation for users who reply via tweet to the <a href="http://www.twitter.com/sos_61">@sos_61</a> account.</p></li>
+<li><p>The installation picks a tweet to display and pulses the LED array corresponding to the right tweet.</p></li>
+<li><p>Communication to the Arduino happens via a python script over the Firmata protocol, using the <a href="https://github.com/lupeke/python-firmata">python-firmata</a> library. The nodejs server signals the script over a socket connection which will run the pulse animation on the correct pin.</p></li>
+<li><p>I printed the graphic on an oversize printer with the good folks at <a href="http://alamedacopy.com">Alameda Copy</a>. Friendly service, fast turnaround, very reasonable prices. Ask for Joe.</p></li>
+</ul>
+
+
+<h3>Links</h3>
+
+<ul>
+<li><p><a href="http://www.github.com/andrewhao/isaiah-61-project">Source code on github.</a></p></li>
+<li><p><a href="http://www.flickr.com/photos/andrewhao/sets/72157626107989740/">Flickr photos from the art show.</a></p></li>
+<li><p><a href="http://www.flickr.com/photos/andrewhao/sets/72157625956085386/">Photos of the creation process.</a></p></li>
+<li><p>Other posts on the process: <a href="http://www.g9labs.com/2011/02/01/the-making-of-sos-intro/">[1]</a>, <a href="http://www.g9labs.com/2011/02/11/update/">[2]</a>, <a href="http://www.g9labs.com/2011/02/12/currently-frustrated/">[3]</a>, <a href="http://www.g9labs.com/2011/02/15/arduino-and-python-firmata/">[4]</a></p></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Arduino and python-firmata]]></title>
+    <link href="http://www.g9labs.com/2011/02/14/arduino-and-python-firmata/"/>
+    <updated>2011-02-14T21:29:07-08:00</updated>
+    <id>http://www.g9labs.com/2011/02/14/arduino-and-python-firmata</id>
+    <content type="html"><![CDATA[<p>I just spent five hours trying to figure out why  none of the <a href="http://arduino.cc/playground/Interfacing/Python">Firmata libraries for Python</a> were working over my serial connection. I was wondering why the previous program remained on the board and none of the signals sent were hot.</p>
+
+<p>Hint: you need to load Firmata first onto the board before it can understand the protocol. Oh. Duh.</p>
+
+<p>[caption id=&ldquo;attachment_1032&rdquo; align=&ldquo;alignnone&rdquo; width=&ldquo;500&rdquo; caption=&ldquo;Don&rsquo;t forget to load up "OldStandardFirmata&rdquo;&ldquo;]<a href="http://www.g9labs.com/2011/02/15/arduino-and-python-firmata/screen-shot-2011-02-15-at-4-24-47-am/"><img src="http://www.g9labs.com/wp-content/uploads/2011/02/Screen-shot-2011-02-15-at-4.24.47-AM-500x312.png" alt="" /></a>[/caption]</p>
+
+<p>Only &ldquo;OldStandardFirmata&rdquo; (Firmata 2.0) seems to work with my version of <a href="https://github.com/lupeke/python-firmata">python-firmata</a>. The newer Firmata PDEs can talk Firmata 2.1 and 2.2, but I&rsquo;m too tired to figure them out.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Currently: frustrated]]></title>
+    <link href="http://www.g9labs.com/2011/02/12/currently-frustrated/"/>
+    <updated>2011-02-12T09:38:45-08:00</updated>
+    <id>http://www.g9labs.com/2011/02/12/currently-frustrated</id>
+    <content type="html"><![CDATA[<p>So I got the poster printed, and the LEDs currently show through the board pretty well. This is good:</p>
+
+<p><a href="http://www.flickr.com/photos/andrewhao/5437339409/"><img src="http://farm5.static.flickr.com/4134/5437339409_14b14199d0.jpg" alt="Printed poster, testing the light" /></a></p>
+
+<p>But last night I spent a good chunk of my evening and early morning hitting a lot of walls:</p>
+
+<ul>
+<li><p>I might have to throw out the idea of using the Twitter Streaming API. For the kind of searches I need to do, I just can&rsquo;t get enough granularity to use live information. Plus, I can only open one connection to the API at a time, which is not good if I need to run four listeners at a time.</p></li>
+<li><p>I couldn&rsquo;t get the <a href="http://classifier.rubyforge.org/">Classifier</a> Ruby gem to work; which looked like the easiest implementation of an LSI/naive Bayes classifier out there. The next closest thing was <a href="http://code.google.com/p/nltk/">nltk</a>, and there was no way in heck I had the time to figure that out. Plus, I realized that creating a training set was a LOT more work than I thought I had. So&hellip; scratch the machine intelligence out of this. I&rsquo;m just going to manually search for specific search terms.</p></li>
+<li><p>New solution: Periodically use the Search API to grab results. This allows more exact search results and gives me the ability to tweak the search terms while the demo loop is running.</p></li>
+<li><p>Event-driven programming is throwing me for a loop (ha, get it?). After perusing the <a href="http://nodejs.org/docs/v0.4.0/api/">node.js docs</a> for the better part of an evening, I think I need to re-architect the code. I need to create a simple event-driven queue, which is confusing because it seems like something simple, yet support isn&rsquo;t built in. node provides so little out of the box.</p></li>
+<li><p>It could be more difficult to set up a socket connection to Arduino than I thought. I may have to set up a socket connection in python with <a href="https://github.com/lupeke/python-firmata">python-firmata</a> to interface with the Arduino. Other Arduino/serial proxies report not working well with Snow Leopard.</p></li>
+<li><p>I haven&rsquo;t yet thought about the Web interface.</p></li>
+<li><p>I haven&rsquo;t thought about how I&rsquo;m going to hang the piece. I have some scrap wood and fishing wire, but I haven&rsquo;t thought about whether it&rsquo;s possible to hang all those LED arrays w/o some weird gravity issues.</p></li>
+<li><p>Woodwork help? I need to figure out how to use a rotary saw.</p></li>
+</ul>
+
+
+<p>So uh, yeah, I&rsquo;m getting nowhere but at least I know what I still need to do.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Update]]></title>
+    <link href="http://www.g9labs.com/2011/02/10/update/"/>
+    <updated>2011-02-10T16:42:27-08:00</updated>
+    <id>http://www.g9labs.com/2011/02/10/update</id>
+    <content type="html"><![CDATA[<p>A quick update on the art project:</p>
+
+<ul>
+<li><p>I switched from my normal LEDs to &ldquo;straw hat&rdquo; wide-angle LEDs. The viewing angle is much better, meaning also that I can get a more diffuse glow @ closer distances so the light comes through better through the paper.</p></li>
+<li><p>I found out my deadline is Sunday so I&rsquo;m a little stressed.</p></li>
+<li><p>No progress on Arduino/Processing or the Twitter feed. Still have to figure out whether I should use a Bayesian classifier for better fuzzy matching on tweets or if I should just rig the feed with a simple text filter on &ldquo;I feel ___&rdquo;. I have a feeling the former is nice in theory but isn&rsquo;t good enough and the latter is probably best given this short time span.</p></li>
+<li><p>No idea how I&rsquo;m going to solder the LEDs to the breadboards. Heck, I think my breadboards aren&rsquo;t even wide enough, meaning I either need to find a larger breadboard or cut one up and paste the two pieces together lengthwise.</p></li>
+<li><p>I still need to find wood to mount/suspend the project.</p></li>
+<li><p>I called around and got some good quotes from print shops. I&rsquo;m probably going to go with <a href="http://www.yelp.com/biz/alameda-copy-alameda">Alameda Copy</a>. Friendly staff, good Yelp review, best price I saw around. I&rsquo;ll be printing the poster off their oversize printer on a roll of 70lb paper. Quote: $6-8 per sq. foot, color.</p></li>
+<li><p>I&rsquo;ve made some good progress on the design, though. I think I&rsquo;m lengthening the poster but decreasing the width. I&rsquo;ll post more screens if I get a chance.</p></li>
+</ul>
+
+
+<p>[caption id=&ldquo;&rdquo; align=&ldquo;alignnone&rdquo; width=&ldquo;500&rdquo; caption=&ldquo;Left: conventional LEDs. Right: straw hat LEDs&rdquo;]<a href="http://www.flickr.com/photos/andrewhao/5437057228/"><img src="http://farm6.static.flickr.com/5019/5437057228_8568b5095d.jpg" alt="Compare straw hat LEDs with conventional LEDs" /></a>[/caption]</p>
+
+<p>[caption id=&ldquo;&rdquo; align=&ldquo;alignnone&rdquo; width=&ldquo;500&rdquo; caption=&ldquo;Final design&rdquo;]<a href="http://www.flickr.com/photos/andrewhao/5437055328/"><img src="http://farm5.static.flickr.com/4141/5437055328_81b362d325.jpg" alt="(Final) Remix" /></a>[/caption]</p>
+]]></content>
+  </entry>
+  
+</feed>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Advertising | The Sweet Spot]]></title>
+  <link href="http://www.g9labs.com/category/advertising/atom.xml" rel="self"/>
+  <link href="http://www.g9labs.com/"/>
+  <updated>2015-03-19T14:39:53-07:00</updated>
+  <id>http://www.g9labs.com/</id>
+  <author>
+    <name><![CDATA[Andrew Hao]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[I Love/Hate Marmite]]></title>
+    <link href="http://www.g9labs.com/2010/04/04/i-lovehate-marmite/"/>
+    <updated>2010-04-04T10:00:05-07:00</updated>
+    <id>http://www.g9labs.com/2010/04/04/i-lovehate-marmite</id>
+    <content type="html"><![CDATA[<p>I had my first taste of Marmite last year while in Botswana. My South African roommate loved it, and encouraged me to try it and spread it on my toast. One bite and I gagged. It was like somebody mixed soy sauce and peanut butter and cranked it to 11.</p>
+
+<p>The Marmite company apparently recognizes this dichotomy as well and so runs the advertising campaign accordingly:</p>
+
+<p><a href="http://www.g9labs.com/2010/04/04/i-lovehate-marmite/capture/"><img src="http://www.g9labs.com/wp-content/uploads/2010/04/Capture-500x367.png" alt="" /></a></p>
+
+<p><a href="http://www.g9labs.com/2010/04/04/i-lovehate-marmite/capture-love/"><img src="http://www.g9labs.com/wp-content/uploads/2010/04/Capture-Love-500x367.png" alt="" /></a></p>
+
+<p>Every section of the site is written from a love and a hate perspective. <a href="http://www.marmite.co.uk/">Check it out</a>.</p>
+]]></content>
+  </entry>
+  
+</feed>

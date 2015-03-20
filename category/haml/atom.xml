@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: HAML | The Sweet Spot]]></title>
+  <link href="http://www.g9labs.com/category/haml/atom.xml" rel="self"/>
+  <link href="http://www.g9labs.com/"/>
+  <updated>2015-03-19T14:39:53-07:00</updated>
+  <id>http://www.g9labs.com/</id>
+  <author>
+    <name><![CDATA[Andrew Hao]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[HAML object references]]></title>
+    <link href="http://www.g9labs.com/2012/04/12/haml-object-references/"/>
+    <updated>2012-04-12T07:40:09-07:00</updated>
+    <id>http://www.g9labs.com/2012/04/12/haml-object-references</id>
+    <content type="html"><![CDATA[<p>Did you guys know that you can use the &lsquo;[ ]&rsquo; brackets in HAML to automatically set the id and class on a tag, kind of like Rails' <a href="http://api.rubyonrails.org/classes/ActionView/Helpers/TagHelper.html#method-i-tag">tag</a> helper?</p>
+
+<pre><code># file: app/controllers/users_controller.rb
+
+def show
+  @user = CrazyUser.find(15)
+end
+
+-# file: app/views/users/show.haml
+
+%div[@user, :greeting]
+  %bar[290]/
+  Hello!
+</code></pre>
+
+<p>is compiled to:</p>
+
+<pre><code>&lt;div class='greeting_crazy_user' id='greeting_crazy_user_15'&gt;
+  &lt;bar class='fixnum' id='fixnum_581' /&gt;
+  Hello!
+&lt;/div&gt;
+</code></pre>
+
+<p>Keeps things nice, concise and DRY. See the <a href="http://haml-lang.com/docs/yardoc/file.HAML_REFERENCE.html#object_reference_">HAML documentation</a>.</p>
+]]></content>
+  </entry>
+  
+</feed>

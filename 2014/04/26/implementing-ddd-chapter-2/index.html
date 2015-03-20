@@ -1,0 +1,337 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Implementing DDD: Chapter 2 - The Sweet Spot</title>
+  <meta name="author" content="Andrew Hao">
+
+  
+  <meta name="description" content="Chapter 2: Domains, Subdomains, and Bounded Contexts A Domain is what a business does and the surrounding context of how it does business. It is &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://www.g9labs.com/2014/04/26/implementing-ddd-chapter-2">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="The Sweet Spot" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-2330913-9']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">The Sweet Spot</a></h1>
+  
+    <h2>Andrew Hao's thoughts about software engineering, design, and anything shiny.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:www.g9labs.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/notes">Notes</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Implementing DDD: Chapter 2</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-04-26T08:43:00-07:00" pubdate data-updated="true">Apr 26<span>th</span>, 2014</time>
+        
+         | <a href="#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><h2>Chapter 2: Domains, Subdomains, and Bounded Contexts</h2>
+
+<p>A <em>Domain</em> is what a business does and the surrounding context of how it does business. It is important to model out its supported <em>Subdomains</em> &mdash; that is, the smaller components of the business that collaborate in real, day-to-day operations of the business. The book describes these as <em>Core Domains</em>.</p>
+
+<p>Finally, a <em>Bounded Context</em> is the physical manifestation of the solution space as software &mdash; models living in a real application. Its key feature in the context of DDD is as a linguistic barrier between different domains.</p>
+
+<p>In an ideal world, each <em>Subdomain</em> maps directly to one <em>Bounded Context</em>. In the real world, this is less common since we tend to build things into monolithic systems. Still &mdash; many monolithic applications have several components that could in themselves be bounded contexts.</p>
+
+<h6>Side note: In Rails, one could think of Engines as a <em>Bounded Context</em>. But that might be a blog post for another time.</h6>
+
+<p>It is important to get these ideas and concepts down correctly because we need correct modeling of our systems to determine what they do.</p>
+
+<h3>Bounded Contexts and terms</h3>
+
+<p>It&rsquo;s not usually realistic to get the entire organization agreeing on a universal linguistic definition for every term. Instead, DDD assumes that different terms have different meanings in different contexts.</p>
+
+<p>The author then dives into the an example of a book, where a <em>book</em> means several different things to different people in different contexts. A book is touched upon by authors, graphic designers, editors, marketing folks. In each of these contexts, the features of a book mean different things at different times. It is impossible to develop an all-knowing Book model without disagreement between stakeholders. DDD, instead, acknowledges these differences and allows stakeholders to use linguistic terms from within their unique Bounded Contexts.</p>
+
+<p>Bounded Contexts may include things like:</p>
+
+<ul>
+<li>Object models</li>
+<li>A database schema / persistence layer</li>
+<li>A SOAP or REST API</li>
+<li>A user interface</li>
+</ul>
+
+
+<h3>Bounded context antipatterns</h3>
+
+<p>You may be tempted to divide up a bounded context by architectural concerns, or because you want to assign smaller tasks to developers (resource allocation). Beware that this kind of work tends to fragment the language.</p>
+
+<p>DDD operates on <em>linquistic drivers</em>. The unity, cohesion and domain-adherence of the bounded context should be the first priority in the design.</p>
+
+<p>Assigning two teams to the same bounded context results in fragmentation of the bounded context.</p>
+
+<p>Ideally: we strive to assign one team to work on one Bounded Context with one Ubiquitous Language at a time.</p>
+
+<h6>In Rails, what are the bounded contexts? It could be the top-level Rails application, or an engine, or a gem, that define the context boundaries._</h6>
+
+<h3>A story&hellip;</h3>
+
+<p>The chapter then goes on to describe their fictional team designing through three iterations off their DDD strategy:</p>
+
+<p>A system in which all domains live within the same bounded context. They see the folly of this and refactor with some tactical patterns, like creating services.</p>
+
+<p>This is, however, missing the point. They realized they needed to listen to business and their domain experts to find out exactly where the right places were to segregate the contexts. The team discovers that the business has a desire to go in a new direction which allows them to segregate the domain in such a way that would enable future directions for the business.</p>
+
+<h6>How often are we as developers in conversation with our product owners and asking where the business <em>wants</em> to go in the future?</h6>
+
+<p>Conversations with the business reveal an intention to develop an add-on product to the core product. This implies the development of two subdomains. However, further investigation reveals that the shared overlap of certain domain models (like users, roles, and access management) cannot simply be identically shared between two systems, since their <em>linguistic meanings</em> in the two systems differ slightly. Instead, the developers use the linguistic problem to develop a third bounded context.</p>
+
+<p>The developers separate their app into three bounded contexts built as three software systems.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Andrew Hao</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-04-26T08:43:00-07:00" pubdate data-updated="true">Apr 26<span>th</span>, 2014</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/category/book-review/'>Book Review</a>, <a class='category' href='/category/ddd/'>DDD</a>, <a class='category' href='/category/domain-driven-design/'>Domain-Driven Design</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://www.g9labs.com/2014/04/26/implementing-ddd-chapter-2/" data-via="andrewhao" data-counturl="http://www.g9labs.com/2014/04/26/implementing-ddd-chapter-2/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/2014/03/08/six-months-as-a-manager/" title="Previous Post: Six months as a manager">&laquo; Six months as a manager</a>
+      
+      
+        <a class="basic-alignment right" href="/2014/06/06/running-mocha-tests-with-es6-amd-modules/" title="Next Post: Running Mocha tests with ES6/AMD modules">Running Mocha tests with ES6/AMD modules &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2015/03/19/docker-rails-and-docker-compose-in-your-development-workflow/">Docker, Rails, and Docker Compose in your development workflow</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2014/11/29/explorations-in-logic-programming/">Explorations in logic programming</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2014/11/15/my-own-robot-training-buddy/">My own robot training buddy.</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2014/11/05/qcon-sf-2014/">Recap: QCon SF 2014</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2014/11/01/conways-law-for-humans/">Conway's Law for humans</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/andrewhao">@andrewhao</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'andrewhao',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2015 - Andrew Hao -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'g9labs';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://www.g9labs.com/2014/04/26/implementing-ddd-chapter-2/';
+        var disqus_url = 'http://www.g9labs.com/2014/04/26/implementing-ddd-chapter-2/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

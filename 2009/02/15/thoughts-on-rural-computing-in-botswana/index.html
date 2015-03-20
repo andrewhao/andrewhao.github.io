@@ -1,0 +1,339 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Thoughts on rural computing in Botswana - The Sweet Spot</title>
+  <meta name="author" content="Andrew Hao">
+
+  
+  <meta name="description" content="I&rsquo;m currently in Botswana, doing volunteer work at a nonprofit Christian agency called Love Botswana Outreach Mission. Among my &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://www.g9labs.com/2009/02/15/thoughts-on-rural-computing-in-botswana">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="The Sweet Spot" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-2330913-9']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">The Sweet Spot</a></h1>
+  
+    <h2>Andrew Hao's thoughts about software engineering, design, and anything shiny.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:www.g9labs.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/notes">Notes</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Thoughts on rural computing in Botswana</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-02-15T06:02:41-08:00" pubdate data-updated="true">Feb 15<span>th</span>, 2009</time>
+        
+         | <a href="#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>I&rsquo;m currently in Botswana, doing volunteer work at a nonprofit Christian agency called <a href="http://lovebotswana.org">Love Botswana Outreach Mission</a>. Among my responsibilities are helping out with the organization&rsquo;s IT needs. I was pleasantly surprised to discover that the organization is wired for 24/7 Internet access, despite being located about 10km out from the center of Maun, a medium-sized village.</p>
+
+<h3>Infrastructure</h3>
+
+<p>As far as I understand it, there is little-to-no telecom infrastructure here in Maun (i.e. there are no telephone, cable or fiber lines). Thus, most communication links happen via satellite or wifi radio.</p>
+
+<p>The mission has a 100-ft radio tower, where a local ISP colocates a wireless repeater to hook into its wireless network. In exchange, the mission receives a special deal on its Internet access plan.</p>
+
+<h3>Existing network setup</h3>
+
+<p>Because of the relatively low price and quick setup of wireless access points, the mission currently uses a mix of wired switches and wireless repeaters to extend the reach of the network.</p>
+
+<p>A directional antenna on the tower beams a signal to a directional antenna mounted above the IT office trailer to an access point connected through a gateway serving as the DHCP server and firewall. From there, the signal gets sent via a a wired Ethernet network to the other office buildings.</p>
+
+<p>Wireless access points have been installed at various points along the wired office network, allowing wireless access onto the Net.</p>
+
+<p>Only recently has Internet connectivity been extended to reach a cluster of family homes, situated about 200 meters away from the office buildings. A wireless access point is set up in the IT trailer, broadcasting on a +10dB omnidirectional antenna. The closest house to the office has an outdoor +10dB omnidirectional antenna hooked up to a wireless bridge/repeater. Thus, the link from the houses to the gateway is maintained via a wireless bridge. The houses themselves are connected on a hardwired Ethernet network.</p>
+
+<h3>Lessons from the field</h3>
+
+<h4>Lesson: plan for environmental factors.</h4>
+
+<p>We observed that the wireless link from the homes to the offices would be intermittently reliable at best, often going down for no reason. We discovered later on that our link would fail on particularly humid days, because the signal quality over the wireless bridge would degrade significantly and decrease the range of the network.</p>
+
+<h4>Lesson: keep power voltages in mind.</h4>
+
+<p>I fried a power supply when I left it switched to a 115V (US) input, and plugged it into the 220V power plugs there. Sizzle. This led to a lot of apologizing and reassurances from the staff that this was a common thing for Americans to do.</p>
+
+<h4>Lesson: Clean computers frequently.</h4>
+
+<p>Dust is a common fact of life here. Thus, computer innards were frequently coated with dust, and more susceptible to overheating and/or a shorter lifecycle on moving parts (fans, etc).</p>
+
+<h4>Lesson: Scan for viruses, too</h4>
+
+<p>I don&rsquo;t know why, but viruses just seem to be more common here. I&rsquo;ve been passed a few flash drives that have been infected. In the states, I&rsquo;d be (un)lucky to find one a year.</p>
+
+<h4>Lesson: Plan for low bandwidth and outages</h4>
+
+<p>In the States, we depend on always-on Internet. Here, however, the Internet seems to go down for any of a multitude of reasons. If it <em>is</em> up, it&rsquo;s being shared by fifteen computers all downloading at once over an already-restricted pipeline. Thus, Web pages can&rsquo;t be expected to load reliably, Skype sessions will cut out, and chat services won&rsquo;t be accessible.</p>
+
+<p>I&rsquo;ve come to depend on <a href="http://gmailblog.blogspot.com/2009/01/new-in-labs-offline-gmail.html">Offline Gmail</a> to compose email when the Internet&rsquo;s down. Other productivity apps like <a href="http://rememberthemilk.com">Remember the Milk</a> and <a href="http://docs.google.com">Google Docs</a> offer offline modes for their applications.</p>
+
+<p>I rely on Bonjour-enabled chat (iChat on a Mac, <a href="http://pidgin.im">Pidgin</a> + <a href="http://apple.com/support/downloads/bonjourforwindows.htm">Bonjour for Windows</a>) for the times when the Internet or DHCP server goes down and I need to chat with somebody in another office or house.</p>
+
+<p>When making large-ish downloads, I&rsquo;ve gone to using a download manager (flashback to the days of the 56K modem trying to download a 20 MB file)! I&rsquo;ve been using <a href="http://freedownloadmanager.org">Free Download Manager</a>. It&rsquo;s not much of a name, but it&rsquo;s a full-featured open source program allowing you to schedule, pause, resume downloads.</p>
+
+<p>Just FYI: my downloads range between 900 bytes/sec up to 28KB/sec.</p>
+
+<h4>Lesson: Designing Web pages for low bandwidth is still a good idea</h4>
+
+<p>As a Web developer, I tend to make the erroneous assumption people have the same quality of high-speed connection as I do back home in the States. Now that I&rsquo;m a continent away from most of the sites I visit, I&rsquo;m beginning to realize that optimizing a site for bandwidth savings can be a lifesaver. Here, a round trip to and from the States can take up to 20 seconds. That adds up over the course of a page load. As a Web designer or developer, ask yourself if you can be doing anything for the &ldquo;56K guy&rdquo;: Are you using CSS sprites? A CDN? Compressing (gzip, mod_deflate) your output? Are you optimizing your image files for the Web?</p>
+
+<h4>Lesson: Knock out as many failure points as possible</h4>
+
+<p>Because the wireless bridge seemed to be the weakest link in our network, we decided to bypass it. We ran a really long Ethernet line from the IT office to the houses. This meant ordering a 200-meter length of cable, some sleeving and doing a lot of trench-digging to embed the cable under the dirt access roads. Our work paid off as everybody in the houses now enjoys a reliable network link to the main server (including me!).</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">andrewhao</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-02-15T06:02:41-08:00" pubdate data-updated="true">Feb 15<span>th</span>, 2009</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/category/andrew-2-dot-0/'>Andrew 2.0</a>, <a class='category' href='/category/geek/'>Geek</a>, <a class='category' href='/category/web/'>Web</a>, <a class='category' href='/category/ict4d/'>ict4d</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://www.g9labs.com/2009/02/15/thoughts-on-rural-computing-in-botswana/" data-via="andrewhao" data-counturl="http://www.g9labs.com/2009/02/15/thoughts-on-rural-computing-in-botswana/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/2008/11/05/setting-up-a-multi-ap-wireless-network/" title="Previous Post: Setting up a multi-AP wireless network">&laquo; Setting up a multi-AP wireless network</a>
+      
+      
+        <a class="basic-alignment right" href="/2010/03/12/shiny-font-overhaul/" title="Next Post: Shiny font overhaul!">Shiny font overhaul! &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2015/03/19/docker-rails-and-docker-compose-in-your-development-workflow/">Docker, Rails, and Docker Compose in your development workflow</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2014/11/29/explorations-in-logic-programming/">Explorations in logic programming</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2014/11/15/my-own-robot-training-buddy/">My own robot training buddy.</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2014/11/05/qcon-sf-2014/">Recap: QCon SF 2014</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2014/11/01/conways-law-for-humans/">Conway's Law for humans</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/andrewhao">@andrewhao</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'andrewhao',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2015 - Andrew Hao -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'g9labs';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://www.g9labs.com/2009/02/15/thoughts-on-rural-computing-in-botswana/';
+        var disqus_url = 'http://www.g9labs.com/2009/02/15/thoughts-on-rural-computing-in-botswana/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

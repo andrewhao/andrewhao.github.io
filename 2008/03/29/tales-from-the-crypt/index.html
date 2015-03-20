@@ -1,0 +1,318 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Tales from the crypt - The Sweet Spot</title>
+  <meta name="author" content="Andrew Hao">
+
+  
+  <meta name="description" content="Now I remember why I love and hate assembling computers. You&rsquo;ve got to love the rush of building something cool. The anticipation of the new &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://www.g9labs.com/2008/03/29/tales-from-the-crypt">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="The Sweet Spot" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-2330913-9']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">The Sweet Spot</a></h1>
+  
+    <h2>Andrew Hao's thoughts about software engineering, design, and anything shiny.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:www.g9labs.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/notes">Notes</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Tales from the crypt</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-03-29T08:52:29-07:00" pubdate data-updated="true">Mar 29<span>th</span>, 2008</time>
+        
+         | <a href="#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Now I remember why I love and hate assembling computers.</p>
+
+<p>You&rsquo;ve got to love the rush of building something cool. The anticipation of the new BIOS screen&mdash;blue letters on black indicating some really high memory size and clock frequency. You are your very own Dr. Frankenstein and the monster is about to liiiiiive&hellip;</p>
+
+<p>But more frequently than not, it plays out like this: after scanning the electronics ads (<a href="http://slickdeals.net">Slickdeals</a>, <a href="http://dealnews.com">Dealnews</a>, the ever-present <a href="http://newspaperads.mercurynews.com/ROP/ads.aspx?advid=32664">Fry&rsquo;s ads on the back of the San Jose Mercury</a>) for what seems like years, you finally get the courage to splurge a couple hundred bucks on assorted parts. You&rsquo;ve done your research; the heatsink fan <em>doesn&rsquo;t</em> collide with the on-board capacitors, your brand of memory doesn&rsquo;t have any motherboard compatibility errors, your motherboard manufacturer is of good repute and doesn&rsquo;t, for the first time, have parts from some no-name Chinese manufacturer (okay, so this is me speaking here).</p>
+
+<p>You get your parts, and spend a couple of hours putting it all together. You painstakingly push clips into place, apply thermal grease as needed, silently curse the motherboard powers-that-be that pack front panel pin connectors so closely together. Your fingers grow raw from turning the screwdriver so many times. You wonder to yourself whether you&rsquo;ll somehow accidentally fry some component by putting it on the table, or whether if by accidentally scraping your screwdriver across the PCB you&rsquo;ve just junked your expensive toy.</p>
+
+<p>I&rsquo;ll spare you the gory details. But essentially, what usually happens is you get it all Assembled Together after an hour or so and then comes the Moment of Truth: you push the power button to witness your machine come gloriously to life and, in a wonderful demonstration of <a href="http://en.wikipedia.org/wiki/Murphy's_law">Murphy&rsquo;s Law</a>, one or more of the following will happen:</p>
+
+<ol>
+<li><p> You witness a bright flash of light, then smoke rises out from the PCB.</p></li>
+<li><p> Your computer will beep at you. Continuously. The screen will stay off, just for dramatic effect.</p></li>
+<li><p> Midway through the OS installation, your computer will freeze.</p></li>
+<li><p> Your hard drive gets corrupted from a rogue reboot.</p></li>
+<li><p> Nothing.</p></li>
+</ol>
+
+
+<p>By the way, these have all happened to me at some point(s) in time.</p>
+
+<p>After aforementioned catastrophe, you exhale deeply, clench your fists and then proceed to Pinpoint The Problem.</p>
+
+<p>Remember the Scientific Method? Remember how you had to isolate one variable&mdash;the independent variable&mdash;while keeping everything else at a &ldquo;control&rdquo;? Well here&rsquo;s the part where you scrounge up all available parts and start switching them in and out, testing each component one by one to see which part the problem resides in.</p>
+
+<p>I hate the Scientific Method.</p>
+
+<p>Here&rsquo;s where you begin the Gradual Spiral Into Despair. It&rsquo;s the sinking feeling you get after a couple of days you realize that you still don&rsquo;t know what the problem is. Look at you, a loner in your room surrounded by junky computer parts all over the place. You&rsquo;ve got red eyes from lack of sleep and staring at monitors. You haven&rsquo;t seen a human being in two days. And when was the last time you showered?</p>
+
+<p>But it&rsquo;s all worth it when you emerge on the other side, bruised and broken but victorious.</p>
+
+<p>Here&rsquo;s to the ones who nevertheless press on. Here&rsquo;s to the ones who will rather take a bullet than give up on your rig. Here&rsquo;s to the ones who scoff at light and food and warmth and human companionship. Here&rsquo;s to you, True Geek. You&rsquo;ve got your scars, now here&rsquo;s your reward: Dual Cores of Computing Sweetness. It&rsquo;s rather worth it, won&rsquo;t you say? Right?</p>
+
+<p>Hey, you still there?</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">andrewhao</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-03-29T08:52:29-07:00" pubdate data-updated="true">Mar 29<span>th</span>, 2008</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/category/andrew-2-dot-0/'>Andrew 2.0</a>, <a class='category' href='/category/geek/'>Geek</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://www.g9labs.com/2008/03/29/tales-from-the-crypt/" data-via="andrewhao" data-counturl="http://www.g9labs.com/2008/03/29/tales-from-the-crypt/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/2008/03/12/after-site-duplication-an-htaccess-redirect-for-old-wordpress-posts/" title="Previous Post: After site duplication, an .htaccess redirect for old Wordpress posts">&laquo; After site duplication, an .htaccess redirect for old Wordpress posts</a>
+      
+      
+        <a class="basic-alignment right" href="/2008/04/07/designing-the-thinkanywhere-logo/" title="Next Post: Designing the ThinkAnywhere Logo">Designing the ThinkAnywhere Logo &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2015/03/19/docker-rails-and-docker-compose-in-your-development-workflow/">Docker, Rails, and Docker Compose in your development workflow</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2014/11/29/explorations-in-logic-programming/">Explorations in logic programming</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2014/11/15/my-own-robot-training-buddy/">My own robot training buddy.</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2014/11/05/qcon-sf-2014/">Recap: QCon SF 2014</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2014/11/01/conways-law-for-humans/">Conway's Law for humans</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/andrewhao">@andrewhao</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'andrewhao',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2015 - Andrew Hao -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'g9labs';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://www.g9labs.com/2008/03/29/tales-from-the-crypt/';
+        var disqus_url = 'http://www.g9labs.com/2008/03/29/tales-from-the-crypt/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

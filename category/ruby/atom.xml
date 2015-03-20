@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Ruby | The Sweet Spot]]></title>
+  <link href="http://www.g9labs.com/category/ruby/atom.xml" rel="self"/>
+  <link href="http://www.g9labs.com/"/>
+  <updated>2015-03-19T14:39:53-07:00</updated>
+  <id>http://www.g9labs.com/</id>
+  <author>
+    <name><![CDATA[Andrew Hao]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Decomposing Fat Models]]></title>
+    <link href="http://www.g9labs.com/2012/12/26/decomposing-fat-models/"/>
+    <updated>2012-12-26T04:46:09-08:00</updated>
+    <id>http://www.g9labs.com/2012/12/26/decomposing-fat-models</id>
+    <content type="html"><![CDATA[<p>Heard an awesome Ruby Rogues podcast recently: <a href="http://rubyrogues.com/083-rr-decomposing-fat-models-with-bryan-helmkamp/">&ldquo;Decomposing Fat Models&rdquo;</a>.</p>
+
+<p>Essentially, they&rsquo;re talking through Bryan Helmkamp&rsquo;s <a href="http://blog.codeclimate.com/blog/2012/10/17/7-ways-to-decompose-fat-activerecord-models/">Code Climate blog entry &ldquo;7 ways to decompose fat ActiveRecord models&rdquo;</a>, which sums up a few strategies that mainly involve extracting objects from your existing code, value, service, policy, decorator objects and the like. Give the entry a read-through, it&rsquo;s opened my eyes a lot to rethinking my architecture of my Rails models.</p>
+
+<p>A few interesting thoughts that came up in the podcast:</p>
+
+<ul>
+<li><p>The &ldquo;Skinny Controller, Fat Model&rdquo; mantra has hurt the Rails community because we start getting these bloated AR classes. &ldquo;&lsquo;fat-&rsquo; anything is bad&rdquo; one of the hosts mentions in the blog. The smaller your models, the more manageable, readable and testable they become.</p></li>
+<li><p>Rubyists don&rsquo;t like the term &ldquo;Factory&rdquo;, even though in Helmkamp&rsquo;s opinion, Ruby classes <em>are</em> factories. &ldquo;We call them "builders&rdquo;&ldquo; one of the hosts jokes.</p></li>
+<li><p>The Open/Closed Principle as applied to Ruby: using delegators, decorators.</p></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Speeding up Rspec/Cucumber feedback times without sacrificing coverage]]></title>
+    <link href="http://www.g9labs.com/2012/04/27/speeding-up-rspeccucumber-feedback-times-without-sacrificing-coverage/"/>
+    <updated>2012-04-27T10:27:17-07:00</updated>
+    <id>http://www.g9labs.com/2012/04/27/speeding-up-rspeccucumber-feedback-times-without-sacrificing-coverage</id>
+    <content type="html"><![CDATA[<iframe src="http://www.slideshare.net/slideshow/embed_code/4479466" width="512" height="421" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:1px solid #CCC;border-width:1px 1px 0;margin-bottom:5px" allowfullscreen>
+</iframe>
+
+
+<p><a href="http://www.slideshare.net/josephwilk/rocket-fuelled-cucumbers">Rocket Fuelled Cucumbers</a>
+View more <a href="http://www.slideshare.net/">presentations</a> from <a href="http://www.slideshare.net/josephwilk">Joseph Wilk</a></p>
+
+<p>One thing the Blurb devs have been discussing is how we can speed up our test feedback cycles without sacrificing coverage. There&rsquo;s some good tips (mainly Rails+Rspec/Cucumber) in the presentation such as:</p>
+
+<ul>
+<li>Don&rsquo;t run all the tests when developing (tag your tests by function)</li>
+<li>Parallelize, chunk tests over machines/cores using Testjour/<a href="https://github.com/sandro/specjour">Specjour</a>, <a href="https://github.com/ngauthier/hydra">Hydra</a></li>
+<li>Don&rsquo;t run all the tests at once. Tests that never fail should nightly.</li>
+<li>Instead of spinning up a browser for acceptance tests, can you use a js/DOM simulator (e.g. <a href="https://github.com/thatcher/env-js">envjs</a> via <a href="https://github.com/smparkes/capybara-envjs">capybara-envjs</a>, or <a href="https://github.com/jarib/celerity">celerity</a>)</li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[HAML object references]]></title>
+    <link href="http://www.g9labs.com/2012/04/12/haml-object-references/"/>
+    <updated>2012-04-12T07:40:09-07:00</updated>
+    <id>http://www.g9labs.com/2012/04/12/haml-object-references</id>
+    <content type="html"><![CDATA[<p>Did you guys know that you can use the &lsquo;[ ]&rsquo; brackets in HAML to automatically set the id and class on a tag, kind of like Rails' <a href="http://api.rubyonrails.org/classes/ActionView/Helpers/TagHelper.html#method-i-tag">tag</a> helper?</p>
+
+<pre><code># file: app/controllers/users_controller.rb
+
+def show
+  @user = CrazyUser.find(15)
+end
+
+-# file: app/views/users/show.haml
+
+%div[@user, :greeting]
+  %bar[290]/
+  Hello!
+</code></pre>
+
+<p>is compiled to:</p>
+
+<pre><code>&lt;div class='greeting_crazy_user' id='greeting_crazy_user_15'&gt;
+  &lt;bar class='fixnum' id='fixnum_581' /&gt;
+  Hello!
+&lt;/div&gt;
+</code></pre>
+
+<p>Keeps things nice, concise and DRY. See the <a href="http://haml-lang.com/docs/yardoc/file.HAML_REFERENCE.html#object_reference_">HAML documentation</a>.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[RSpec order-agnostic array matching]]></title>
+    <link href="http://www.g9labs.com/2012/03/23/rspec-order-agnostic-array-matching/"/>
+    <updated>2012-03-23T11:09:40-07:00</updated>
+    <id>http://www.g9labs.com/2012/03/23/rspec-order-agnostic-array-matching</id>
+    <content type="html"><![CDATA[<p>What&rsquo;s that? <a href="http://stackoverflow.com/questions/2978922/rspec-array-should-another-array-but-without-concern-for-order">You want to write an expectation for an array but your method returns the Array in a nondeterministic ordering</a>?</p>
+
+<p>Simple. Write:</p>
+
+<pre><code>my_method.should =~ &lt;my_expectation&gt;
+</code></pre>
+
+<p>See the <a href="https://github.com/dchelimsky/rspec/blob/master/lib/spec/matchers/match_array.rb">source</a>.</p>
+]]></content>
+  </entry>
+  
+</feed>

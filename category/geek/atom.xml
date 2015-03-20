@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Geek | The Sweet Spot]]></title>
+  <link href="http://www.g9labs.com/category/geek/atom.xml" rel="self"/>
+  <link href="http://www.g9labs.com/"/>
+  <updated>2015-03-19T14:39:53-07:00</updated>
+  <id>http://www.g9labs.com/</id>
+  <author>
+    <name><![CDATA[Andrew Hao]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Backup, backup, backup]]></title>
+    <link href="http://www.g9labs.com/2012/04/23/backup-backup-backup/"/>
+    <updated>2012-04-23T01:02:05-07:00</updated>
+    <id>http://www.g9labs.com/2012/04/23/backup-backup-backup</id>
+    <content type="html"><![CDATA[<p>Well, the inevitable happened: I finally experienced a hard drive failure. It&rsquo;s pretty incredible that in the twenty-odd years I&rsquo;ve been around computers I&rsquo;ve never had the horror of losing a drive.</p>
+
+<p>Friday rolls around and my Macbook Pro decides to freeze up on me. <em>Strange, </em>I think to myself. It&rsquo;s making a clicking noise. Crap.</p>
+
+<p>Luckily, I&rsquo;ve been fairly good about making backups and copies of my work. Here&rsquo;s my general strategy:</p>
+
+<ul>
+<li><p>Work/code: keeping local changes on a separate branch and pushing it to a remote Git branch every so often.</p></li>
+<li><p>Everything else: I keep one local copy here with me in Oakland, and have another copy offsite. I rsync my files out to my server at home, which has a cronjob set up to sync with the offsite copy at my parents' home (I run a <a href="http://pogoplug.com/">Pogoplug</a> with <a href="http://archlinuxarm.org/platforms/armv6/pogoplug-provideov3">Archlinux</a> and a couple of external drives connected to it &mdash; fantastic and totally recommended for a cheap and low-power server setup).</p></li>
+</ul>
+
+
+<p>There was a minor scare this time around though &mdash; I had some photography work (and an engagement photoshoot!) lying around that almost didn&rsquo;t make it to the first stage rsync with my local server. Fortunately, I had the foresight to keep my photos backed up to a random local hard disk, and the rest remained on the memory cards (and some even on a shared Dropbox folder that saved my butt!). Most frustrating thing was learning that I had forgotten to back up my Lightroom catalog, so all my edits were lost. At least I have the original shots.</p>
+
+<p>One thing I think I&rsquo;ll try doing from here on out &mdash; saving my Develop settings/presets directly to the DNGs themselves before backing up. That way if I ever lose my LR catalog, the edit settings are still embedded in the original files.</p>
+
+<p>Jeff Atwood reminds us to <a href="http://www.codinghorror.com/blog/2008/01/whats-your-backup-strategy.html">keep backups around on multiple disks</a>. With the price of storage so low, what&rsquo;s your data worth to you? How are you keeping your backups?</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[mmtss, a collaborative loop station]]></title>
+    <link href="http://www.g9labs.com/2011/10/02/mmtss-a-collaborative-loop-station/"/>
+    <updated>2011-10-02T03:53:45-07:00</updated>
+    <id>http://www.g9labs.com/2011/10/02/mmtss-a-collaborative-loop-station</id>
+    <content type="html"><![CDATA[<h2>mmtss is a loop station built for live performances.</h2>
+
+<p>Let&rsquo;s make music together! This project simplifies a traditional loop tracking station and is designed for interactive collaborative music performances.</p>
+
+<p>The idea: Everybody adds or modifies one &ldquo;part&rdquo; of a 32-bar loop. The user gets to play an instrument over the existing mix and record the 32-bar phrase when she or he is ready. Once the person is finished, the project selects another instrument at random for the next viewer to record.</p>
+
+<p>It&rsquo;s an Ableton Live controller serving a Webkit view, backed by node.js on the backend and socket.io + RaphaelJS on the front. Communication is done through a LiveOSC Live plugin via sockets.</p>
+
+<p>Displayed at the Regeneration &ldquo;We Collaborate&rdquo; art show in Oakland, CA. 9/24/2011.</p>
+
+<h3>Screenshots</h3>
+
+<p><img src="https://a248.e.akamai.net/assets.github.com/img/64abaefb0d10744dda42f362b6cd991522a88da4/687474703a2f2f6661726d372e7374617469632e666c69636b722e636f6d2f363136392f363138383336363537375f376261343864333864315f7a2e6a7067" alt="Practice mode" /></p>
+
+<p>mmtss in practice/playback mode. Here the user is able to practice/mess around with the current instrument to prepare to record the next track.</p>
+
+<p><img src="https://a248.e.akamai.net/assets.github.com/img/3f0c633b9b8d9d35970efe73f84c0f67bf68c6a8/687474703a2f2f6661726d372e7374617469632e666c69636b722e636f6d2f363132312f363138383838363131345f396436643531393937325f7a2e6a7067" alt="Cued mode" /></p>
+
+<p>Pressing &ldquo;record&rdquo; puts the user in a wait state. They are prompted to begin recording when all the black boxes count down and disappear.</p>
+
+<p><img src="https://a248.e.akamai.net/assets.github.com/img/650dc62a52d8ca6441eff57e697307325390caaa/687474703a2f2f6661726d372e7374617469632e666c69636b722e636f6d2f363137372f363138383336373135315f636135623738323733355f7a2e6a7067" alt="Record mode" /></p>
+
+<p>mmtss in record mode.</p>
+
+<p>More screenshots: <a href="http://www.flickr.com/photos/andrewhao/sets/72157627640840853/">http://www.flickr.com/photos/andrewhao/sets/72157627640840853/</a></p>
+
+<h3>Source code</h3>
+
+<p>Github: <a href="http://www.github.com/andrewhao/mmtss.">http://www.github.com/andrewhao/mmtss.</a></p>
+
+<p>MIT/GPL-sourced for your coding pleasure.</p>
+
+<h3>Installation</h3>
+
+<ul>
+<li><p>Make sure you have npm installed: <a href="http://www.npmjs.org/">http://www.npmjs.org</a></p></li>
+<li><p>Copy <code>lib/LiveOSC</code> into <code>/Applications/Live x.y.z OS X/Live.app/Contents/App-Resources/MIDI\ Remote\ Scripts/</code> folder</p></li>
+<li><p>Set it as your MIDI remote in the Ableton Live Preferences pane, in the &ldquo;MIDI Remote&rdquo; tab.</p></li>
+</ul>
+
+
+<h3>Running it</h3>
+
+<ul>
+<li><p>Open <code>Mmtss_0.als</code> as a sample Live project.</p></li>
+<li><p>Install all project dependencies with <code>npm install</code> from the project root.</p></li>
+<li><p>Start the Node server with <code>node app.js</code> from the root directory.</p></li>
+<li><p>Open a Web browser and visit <code>localhost:3000</code></p></li>
+</ul>
+
+
+<h3>Modifying the sample project</h3>
+
+<p>You can modify this project to suit your own needs. Note that there are two sets of tracks; instrument (MIDI input) tracks and loop tracks that actually store clips.</p>
+
+<p>For <code>n</code> tracks, you can add or remove your own instruments. Just make sure that instrument at track <code>x</code> corresponds to track <code>x</code> + <code>n</code>.</p>
+
+<h3>Credits</h3>
+
+<ul>
+<li><p>Design and architectural inspiration taken from <a href="http://github.com/vnoise/vtouch">vtouch</a>, a HTML5/Node/Canvas Ableton controller.</p></li>
+<li><p>Original LiveOSC source is found at: <a href="http://monome.q3f.org/browser/trunk/LiveOSC">http://monome.q3f.org/browser/trunk/LiveOSC</a>. We use a different fork of the project at:<a href="http://github.com/vnoise/vtouch">http://github.com/vnoise/vtouch</a>.</p></li>
+<li><p>Super sweet CSS3 rocker widgets courtesy of <a href="http://www.simurai.com/">Simurai</a>: <a href="http://lab.simurai.com/css/umbrui/">UmbrUI</a></p></li>
+</ul>
+
+
+<h3>License</h3>
+
+<p><a href="http://www.opensource.org/licenses/mit-license.php">MIT</a> and <a href="http://www.gnu.org/copyleft/gpl.html">GPLv3</a> licensed. Go for it.</p>
+
+<p>You will, however, need to get a license for <a href="http://www.ableton.com/live">Ableton Live</a> yourself.</p>
+
+<h3>The handsome collaborators</h3>
+
+<ul>
+<li><p>Andrew Hao: <a href="http://www.g9labs.com/">http://www.g9labs.com</a></p></li>
+<li><p>David Luoh: <a href="http://www.inkproj.com/">http://www.inkproj.com</a></p></li>
+</ul>
+
+
+<h3></h3>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Introducing Boink, a photobooth for the rest of us.]]></title>
+    <link href="http://www.g9labs.com/2011/08/10/introducing-boink-a-photobooth-for-the-rest-of-us/"/>
+    <updated>2011-08-10T02:25:10-07:00</updated>
+    <id>http://www.g9labs.com/2011/08/10/introducing-boink-a-photobooth-for-the-rest-of-us</id>
+    <content type="html"><![CDATA[<p>My friends were complaining that wedding photobooths were too expensive to rent. Could we make one for them?</p>
+
+<p>Glen and I from the <a href="http://porkbuns.net">Porkbuns Initiative</a> stepped up in full armor, ready to help.</p>
+
+<p>What is it? It&rsquo;s a self-running photobooth that uses your Mac for brains and DSLR for eyes and a Webkit browser for its clothes and a photo printer for&hellip; a printer. You can connect an iPad as the frontend for a nice visual touch (pun intended).</p>
+
+<p>We built it on a backend Rails instance, pushing SVG+HTML5 in the frontend and using the gphoto4ruby gem as a camera library wrapper.</p>
+
+<p>[caption id=&ldquo;attachment_1105&rdquo; align=&ldquo;alignnone&rdquo; width=&ldquo;500&rdquo; caption=&ldquo;All dressed up and ready to go.&rdquo;]<a href="http://www.g9labs.com/2011/08/10/introducing-boink-a-photobooth-for-the-rest-of-us/284852_10100607611957573_1201208_60011361_805844_n/"><img src="http://www.g9labs.com/wp-content/uploads/2011/08/284852_10100607611957573_1201208_60011361_805844_n-500x333.jpg" alt="" /></a>[/caption]</p>
+
+<p>[caption id=&ldquo;&rdquo; align=&ldquo;alignnone&rdquo; width=&ldquo;500&rdquo; caption=&ldquo;An early UI prototype.&rdquo;]<a href="http://www.flickr.com/photos/andrewhao/6006564205/"><img src="http://farm7.static.flickr.com/6029/6006564205_60fda1b366.jpg" alt="Boink Preview" /></a>[/caption]</p>
+
+<p>[caption id=&ldquo;attachment_1106&rdquo; align=&ldquo;alignnone&rdquo; width=&ldquo;500&rdquo; caption=&ldquo;This comes out of the printer.&rdquo;]<a href="http://www.g9labs.com/2011/08/10/introducing-boink-a-photobooth-for-the-rest-of-us/gen_219/"><img src="http://www.g9labs.com/wp-content/uploads/2011/08/gen_219-500x348.jpg" alt="" /></a>[/caption]</p>
+
+<h3>Try it out</h3>
+
+<p>Check it out on <a href="http://www.github.com/andrewhao/boink">Github</a>.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Save our souls - a Twitter art installation]]></title>
+    <link href="http://www.g9labs.com/2011/02/23/save-our-souls-a-twitter-art-installation/"/>
+    <updated>2011-02-23T02:51:37-08:00</updated>
+    <id>http://www.g9labs.com/2011/02/23/save-our-souls-a-twitter-art-installation</id>
+    <content type="html"><![CDATA[<p>Here&rsquo;s how the installation looked on the day of the art show.</p>
+
+<p>[caption id=&ldquo;&rdquo; align=&ldquo;alignnone&rdquo; width=&ldquo;333&rdquo; caption=&ldquo;We mounted the installation on the inside of the Regeneration cafe. The Arduino lies behind the Macbook behind the monitor.&rdquo;]<a href="http://www.flickr.com/photos/andrewhao/5467033003/"><img src="http://farm6.static.flickr.com/5180/5467033003_c1c14c5dc0.jpg" alt="Installation" /></a>[/caption]</p>
+
+<p>[caption id=&ldquo;&rdquo; align=&ldquo;alignnone&rdquo; width=&ldquo;333&rdquo; caption=&ldquo;The LEDs are mounted on breadboards suspended on fishing wire, binder clips, rubber bands, chopsticks, and a prayer.&rdquo;]<a href="http://www.flickr.com/photos/andrewhao/5471602272/"><img src="http://farm6.static.flickr.com/5296/5471602272_85203b475e.jpg" alt="Mounted LED array" /></a>[/caption]</p>
+
+<p>[caption id=&ldquo;&rdquo; align=&ldquo;alignnone&rdquo; width=&ldquo;333&rdquo; caption=&ldquo;Finished it just in time.&rdquo;]<a href="http://www.flickr.com/photos/andrewhao/5471598060/"><img src="http://farm6.static.flickr.com/5057/5471598060_f1bb64a83f.jpg" alt="In action" /></a>[/caption]</p>
+
+<p><a href="http://vimeo.com/20267056">Save our souls &ndash; Twitter art installation</a> from <a href="http://vimeo.com/user807863">Andrew Hao</a> on <a href="http://vimeo.com">Vimeo</a>.</p>
+
+<blockquote><p>What are people saying about the ashes in the world today? This installation visualizes a live Twitter stream on heartache, injustice, loss, and our city and matches them up with the redemptive promises of Isaiah.</p></blockquote>
+
+<p>Life is difficult, and redemption is something we all long for. What changes do you hope for in your life or in the world? Send a response from your Twitter account to @sos_61 and watch the installation react. If you&rsquo;d like to be kept anonymous, send your response in a DM to @sos_61.</p>
+
+<p>&ldquo;I hope for <strong><strong>&rdquo;
+&ldquo;I wish that </strong></strong>&rdquo;
+&ldquo;I want to see ____&rdquo;</p>
+
+<h3>A few notes</h3>
+
+<ul>
+<li><p>Web interface is a fullscreen Google Chrome window. <a href="http://socket.io/">socket.io</a> is the Websocket interface to the <a href="http://nodejs.org">node.js</a> backend. The slide transition is animated via a CSS3 animation, and the red overlay is a simple SVG shape plotted with the help of <a href="http://raphaeljs.com">RaphaëlJS</a>.</p></li>
+<li><p>The Twitter backend is a collection of four self-updating Twitter searches, one for heartache (&ldquo;i feel lonely, sad, depressed&rdquo;), injustice (&ldquo;violence, war, oppression, justice&rdquo;), death (&ldquo;rest in peace, passed away&rdquo;), and Oakland (&ldquo;oakland&rdquo;). A blacklist filters out undesirable tweet keywords (&ldquo;justin bieber&rdquo;).</p></li>
+<li><p>Additionally, the backend connects to Twitter via the <a href="http://dev.twitter.com/pages/streaming_api">Streaming API</a> and displays a special animation for users who reply via tweet to the <a href="http://www.twitter.com/sos_61">@sos_61</a> account.</p></li>
+<li><p>The installation picks a tweet to display and pulses the LED array corresponding to the right tweet.</p></li>
+<li><p>Communication to the Arduino happens via a python script over the Firmata protocol, using the <a href="https://github.com/lupeke/python-firmata">python-firmata</a> library. The nodejs server signals the script over a socket connection which will run the pulse animation on the correct pin.</p></li>
+<li><p>I printed the graphic on an oversize printer with the good folks at <a href="http://alamedacopy.com">Alameda Copy</a>. Friendly service, fast turnaround, very reasonable prices. Ask for Joe.</p></li>
+</ul>
+
+
+<h3>Links</h3>
+
+<ul>
+<li><p><a href="http://www.github.com/andrewhao/isaiah-61-project">Source code on github.</a></p></li>
+<li><p><a href="http://www.flickr.com/photos/andrewhao/sets/72157626107989740/">Flickr photos from the art show.</a></p></li>
+<li><p><a href="http://www.flickr.com/photos/andrewhao/sets/72157625956085386/">Photos of the creation process.</a></p></li>
+<li><p>Other posts on the process: <a href="http://www.g9labs.com/2011/02/01/the-making-of-sos-intro/">[1]</a>, <a href="http://www.g9labs.com/2011/02/11/update/">[2]</a>, <a href="http://www.g9labs.com/2011/02/12/currently-frustrated/">[3]</a>, <a href="http://www.g9labs.com/2011/02/15/arduino-and-python-firmata/">[4]</a></p></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Arduino and python-firmata]]></title>
+    <link href="http://www.g9labs.com/2011/02/14/arduino-and-python-firmata/"/>
+    <updated>2011-02-14T21:29:07-08:00</updated>
+    <id>http://www.g9labs.com/2011/02/14/arduino-and-python-firmata</id>
+    <content type="html"><![CDATA[<p>I just spent five hours trying to figure out why  none of the <a href="http://arduino.cc/playground/Interfacing/Python">Firmata libraries for Python</a> were working over my serial connection. I was wondering why the previous program remained on the board and none of the signals sent were hot.</p>
+
+<p>Hint: you need to load Firmata first onto the board before it can understand the protocol. Oh. Duh.</p>
+
+<p>[caption id=&ldquo;attachment_1032&rdquo; align=&ldquo;alignnone&rdquo; width=&ldquo;500&rdquo; caption=&ldquo;Don&rsquo;t forget to load up "OldStandardFirmata&rdquo;&ldquo;]<a href="http://www.g9labs.com/2011/02/15/arduino-and-python-firmata/screen-shot-2011-02-15-at-4-24-47-am/"><img src="http://www.g9labs.com/wp-content/uploads/2011/02/Screen-shot-2011-02-15-at-4.24.47-AM-500x312.png" alt="" /></a>[/caption]</p>
+
+<p>Only &ldquo;OldStandardFirmata&rdquo; (Firmata 2.0) seems to work with my version of <a href="https://github.com/lupeke/python-firmata">python-firmata</a>. The newer Firmata PDEs can talk Firmata 2.1 and 2.2, but I&rsquo;m too tired to figure them out.</p>
+]]></content>
+  </entry>
+  
+</feed>

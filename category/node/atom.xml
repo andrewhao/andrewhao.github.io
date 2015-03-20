@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: node | The Sweet Spot]]></title>
+  <link href="http://www.g9labs.com/category/node/atom.xml" rel="self"/>
+  <link href="http://www.g9labs.com/"/>
+  <updated>2015-03-19T14:39:53-07:00</updated>
+  <id>http://www.g9labs.com/</id>
+  <author>
+    <name><![CDATA[Andrew Hao]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Running Mocha tests with ES6/AMD modules]]></title>
+    <link href="http://www.g9labs.com/2014/06/06/running-mocha-tests-with-es6-amd-modules/"/>
+    <updated>2014-06-06T15:11:00-07:00</updated>
+    <id>http://www.g9labs.com/2014/06/06/running-mocha-tests-with-es6-amd-modules</id>
+    <content type="html"><![CDATA[<p>In one of my personal projects (<a href="https://github.com/andrewhao/chordmeister">Chordmeister</a>), I&rsquo;ve been trying to
+upgrade the code to be written in <a href="http://wiki.ecmascript.org/doku.php?id=harmony:modules#export_declarations">ES6 modules</a> and transpile down to AMD modules with Square&rsquo;s <a href="https://github.com/square/es6-module-transpiler">very excellent es6-module-transpiler project</a>.</p>
+
+<p>Since I&rsquo;ve already <a href="https://github.com/andrewhao/hendrix">updated</a> an Ember app of mine to try ES6, I figured it was high time to do it on another project.</p>
+
+<h2>Sorry Coffeescript, but I&rsquo;m moving on.</h2>
+
+<p>First problem: Coffeescript seems indecisive with respect to ES6
+support. In order to support <code>import</code> or <code>export</code> keywords, I had to
+wrap the statements in backticks, making the code look like this:</p>
+
+<p><code>``coffeescript
+</code>import ClassifiedLine from &ldquo;chordmeister/classified_line&rdquo;`
+class Parser
+  # Implementation</p>
+
+<p><code>export default Parser</code>
+```</p>
+
+<p>Except this wasn&rsquo;t being picked up by es6-module-transpiler, since
+Coffeescript wraps the entire declaration in a closure: I was
+finding myself having problems compiling from Coffeescript &ndash;> ES5 JS &ndash;> ES6 JS.</p>
+
+<p>```javascript
+define(&ldquo;chordmeister/parser&rdquo;,
+  [],
+  function() {</p>
+
+<pre><code>"use strict";
+(function() {
+  // Oops, I wasn't transpiled!
+  import ClassifiedLine from 'chordmeister/classified_line';
+  var Parser;
+  Parser = (function() {
+    // Implementation
+  }
+  )();
+  // Oops, I wasn't transpiled!
+  export default Parser;
+  })()
+</code></pre>
+
+<p>  });</p>
+
+<p>```</p>
+
+<p>So the first call: ditch Coffeescript. Write this in pure ES6.</p>
+
+<p>```javascript
+import ClassifiedLine from &lsquo;chordmeister/classified_line&rsquo;;
+var Parser;</p>
+
+<p>Parser = (function() {
+  // implementation
+})();</p>
+
+<p>export default Parser;
+```</p>
+
+<p>Which transpiled nicely to:</p>
+
+<p>```javascript
+define(&ldquo;chordmeister/parser&rdquo;,
+  [&ldquo;chordmeister/classified_line&rdquo;,&ldquo;exports&rdquo;],
+  function(<strong>dependency1</strong>, <strong>exports</strong>) {</p>
+
+<pre><code>"use strict";
+var ClassifiedLine = __dependency1__["default"];
+var Parser;
+Parser = (function() {
+  // Implementation
+})();
+__exports__["default"] = Parser;
+});
+</code></pre>
+
+<p>```</p>
+
+<h2>Next up: adding AMD support in Mocha</h2>
+
+<p>Okay, so we need to set up a few things to get Mocha playing well with RequireJS, the AMD loader.</p>
+
+<p>Our plan of attach will be to leverage the generated AMD modules and load our tests up with them. We have the benefit of being able to specifically inject dependencies into our test suite.</p>
+
+<p>The tricky parts will be:</p>
+
+<h3>Set up the Mocha index.html runner</h3>
+
+<p>Install <code>mocha</code>, <code>require.js</code>, and <code>chai</code> via <code>bower</code>, then plug them into the harness:</p>
+
+<p>``` html test/index.html
+&lt;!doctype html>
+<html>
+<head></p>
+
+<pre><code>&lt;meta charset="utf-8"&gt;
+&lt;meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"&gt;
+&lt;title&gt;Mocha Spec Runner&lt;/title&gt;
+&lt;link rel="stylesheet" href="../bower_components/mocha/mocha.css"&gt;
+</code></pre>
+
+<p></head>
+<body></p>
+
+<pre><code>&lt;div id="mocha"&gt;&lt;/div&gt;
+&lt;script src="../bower_components/mocha/mocha.js"&gt;&lt;/script&gt;
+&lt;script src="../bower_components/chai/chai.js"&gt;&lt;/script&gt;
+&lt;script data-main="test_helper" src="../bower_components/requirejs/require.js"&gt;&lt;/script&gt;
+</code></pre>
+
+<p></body>
+</html></p>
+
+<p>```</p>
+
+<p>Note the references to <code>data-main="test_helper"</code>, which is require.js&rsquo;s way of determining its entry point after it loads.</p>
+
+<h3>Set up a test runner.</h3>
+
+<p>``` javascript test/test_runner.js
+// Configure and set up the tests.
+require.config({
+  baseUrl: &ldquo;../build/&rdquo;
+})</p>
+
+<p>// Load up the files to run against
+var specs = [
+  &lsquo;chordmeister/chord_spec.js&rsquo;,
+  &lsquo;chordmeister/song_spec.js&rsquo;,
+  &lsquo;chordmeister/parser_spec.js&rsquo;,
+  &lsquo;chordmeister/classified_line_spec.js&rsquo;,
+];</p>
+
+<p>// Start up the specs.
+require(specs, function(require) {
+  mocha.setup(&lsquo;bdd&rsquo;);
+  expect = chai.expect;
+  // Why? Some async loading condition? Is there a callback I should be hooking into?
+  setTimeout(function() {</p>
+
+<pre><code>mocha.run();
+</code></pre>
+
+<p>  }, 100);
+});
+```</p>
+
+<p>You&rsquo;ll notice that I was having synchonicity issues between spec suite load and <code>mocha.run()</code>. Throwing everything back a few hundred ms seemed to have done the fix.</p>
+
+<h2>AMD gotchas</h2>
+
+<p>Pay attention to the <code>default</code> parameter that the module exports with. This is important to remember since native ES6 will allow you to directly import it with its native syntax:</p>
+
+<p><code>javascript
+import Parser from "chordmeister/parser"
+</code></p>
+
+<p>But if you&rsquo;re using RequireJS/AMD modules, you&rsquo;ll need to explicitly call out the <code>default</code> namespace from the required module, so like so:</p>
+
+<p><code>javascript
+require(["chordmeister/parser"], function(parser) {
+  Parser = parser.default;
+  new Parser() // and do stuff.
+});
+</code></p>
+
+<p>Let me know if you have any questions!</p>
+]]></content>
+  </entry>
+  
+</feed>

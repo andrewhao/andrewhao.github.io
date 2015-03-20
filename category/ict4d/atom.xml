@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: ict4d | The Sweet Spot]]></title>
+  <link href="http://www.g9labs.com/category/ict4d/atom.xml" rel="self"/>
+  <link href="http://www.g9labs.com/"/>
+  <updated>2015-03-19T14:39:53-07:00</updated>
+  <id>http://www.g9labs.com/</id>
+  <author>
+    <name><![CDATA[Andrew Hao]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Thoughts on rural computing in Botswana]]></title>
+    <link href="http://www.g9labs.com/2009/02/15/thoughts-on-rural-computing-in-botswana/"/>
+    <updated>2009-02-15T06:02:41-08:00</updated>
+    <id>http://www.g9labs.com/2009/02/15/thoughts-on-rural-computing-in-botswana</id>
+    <content type="html"><![CDATA[<p>I&rsquo;m currently in Botswana, doing volunteer work at a nonprofit Christian agency called <a href="http://lovebotswana.org">Love Botswana Outreach Mission</a>. Among my responsibilities are helping out with the organization&rsquo;s IT needs. I was pleasantly surprised to discover that the organization is wired for 24/7 Internet access, despite being located about 10km out from the center of Maun, a medium-sized village.</p>
+
+<h3>Infrastructure</h3>
+
+<p>As far as I understand it, there is little-to-no telecom infrastructure here in Maun (i.e. there are no telephone, cable or fiber lines). Thus, most communication links happen via satellite or wifi radio.</p>
+
+<p>The mission has a 100-ft radio tower, where a local ISP colocates a wireless repeater to hook into its wireless network. In exchange, the mission receives a special deal on its Internet access plan.</p>
+
+<h3>Existing network setup</h3>
+
+<p>Because of the relatively low price and quick setup of wireless access points, the mission currently uses a mix of wired switches and wireless repeaters to extend the reach of the network.</p>
+
+<p>A directional antenna on the tower beams a signal to a directional antenna mounted above the IT office trailer to an access point connected through a gateway serving as the DHCP server and firewall. From there, the signal gets sent via a a wired Ethernet network to the other office buildings.</p>
+
+<p>Wireless access points have been installed at various points along the wired office network, allowing wireless access onto the Net.</p>
+
+<p>Only recently has Internet connectivity been extended to reach a cluster of family homes, situated about 200 meters away from the office buildings. A wireless access point is set up in the IT trailer, broadcasting on a +10dB omnidirectional antenna. The closest house to the office has an outdoor +10dB omnidirectional antenna hooked up to a wireless bridge/repeater. Thus, the link from the houses to the gateway is maintained via a wireless bridge. The houses themselves are connected on a hardwired Ethernet network.</p>
+
+<h3>Lessons from the field</h3>
+
+<h4>Lesson: plan for environmental factors.</h4>
+
+<p>We observed that the wireless link from the homes to the offices would be intermittently reliable at best, often going down for no reason. We discovered later on that our link would fail on particularly humid days, because the signal quality over the wireless bridge would degrade significantly and decrease the range of the network.</p>
+
+<h4>Lesson: keep power voltages in mind.</h4>
+
+<p>I fried a power supply when I left it switched to a 115V (US) input, and plugged it into the 220V power plugs there. Sizzle. This led to a lot of apologizing and reassurances from the staff that this was a common thing for Americans to do.</p>
+
+<h4>Lesson: Clean computers frequently.</h4>
+
+<p>Dust is a common fact of life here. Thus, computer innards were frequently coated with dust, and more susceptible to overheating and/or a shorter lifecycle on moving parts (fans, etc).</p>
+
+<h4>Lesson: Scan for viruses, too</h4>
+
+<p>I don&rsquo;t know why, but viruses just seem to be more common here. I&rsquo;ve been passed a few flash drives that have been infected. In the states, I&rsquo;d be (un)lucky to find one a year.</p>
+
+<h4>Lesson: Plan for low bandwidth and outages</h4>
+
+<p>In the States, we depend on always-on Internet. Here, however, the Internet seems to go down for any of a multitude of reasons. If it <em>is</em> up, it&rsquo;s being shared by fifteen computers all downloading at once over an already-restricted pipeline. Thus, Web pages can&rsquo;t be expected to load reliably, Skype sessions will cut out, and chat services won&rsquo;t be accessible.</p>
+
+<p>I&rsquo;ve come to depend on <a href="http://gmailblog.blogspot.com/2009/01/new-in-labs-offline-gmail.html">Offline Gmail</a> to compose email when the Internet&rsquo;s down. Other productivity apps like <a href="http://rememberthemilk.com">Remember the Milk</a> and <a href="http://docs.google.com">Google Docs</a> offer offline modes for their applications.</p>
+
+<p>I rely on Bonjour-enabled chat (iChat on a Mac, <a href="http://pidgin.im">Pidgin</a> + <a href="http://apple.com/support/downloads/bonjourforwindows.htm">Bonjour for Windows</a>) for the times when the Internet or DHCP server goes down and I need to chat with somebody in another office or house.</p>
+
+<p>When making large-ish downloads, I&rsquo;ve gone to using a download manager (flashback to the days of the 56K modem trying to download a 20 MB file)! I&rsquo;ve been using <a href="http://freedownloadmanager.org">Free Download Manager</a>. It&rsquo;s not much of a name, but it&rsquo;s a full-featured open source program allowing you to schedule, pause, resume downloads.</p>
+
+<p>Just FYI: my downloads range between 900 bytes/sec up to 28KB/sec.</p>
+
+<h4>Lesson: Designing Web pages for low bandwidth is still a good idea</h4>
+
+<p>As a Web developer, I tend to make the erroneous assumption people have the same quality of high-speed connection as I do back home in the States. Now that I&rsquo;m a continent away from most of the sites I visit, I&rsquo;m beginning to realize that optimizing a site for bandwidth savings can be a lifesaver. Here, a round trip to and from the States can take up to 20 seconds. That adds up over the course of a page load. As a Web designer or developer, ask yourself if you can be doing anything for the &ldquo;56K guy&rdquo;: Are you using CSS sprites? A CDN? Compressing (gzip, mod_deflate) your output? Are you optimizing your image files for the Web?</p>
+
+<h4>Lesson: Knock out as many failure points as possible</h4>
+
+<p>Because the wireless bridge seemed to be the weakest link in our network, we decided to bypass it. We ran a really long Ethernet line from the IT office to the houses. This meant ordering a 200-meter length of cable, some sleeving and doing a lot of trench-digging to embed the cable under the dirt access roads. Our work paid off as everybody in the houses now enjoys a reliable network link to the main server (including me!).</p>
+]]></content>
+  </entry>
+  
+</feed>

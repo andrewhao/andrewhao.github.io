@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: rails | The Sweet Spot]]></title>
+  <link href="http://www.g9labs.com/category/rails/atom.xml" rel="self"/>
+  <link href="http://www.g9labs.com/"/>
+  <updated>2015-03-19T14:39:53-07:00</updated>
+  <id>http://www.g9labs.com/</id>
+  <author>
+    <name><![CDATA[Andrew Hao]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Ember Data, Rails, CORS, and you!]]></title>
+    <link href="http://www.g9labs.com/2013/12/27/ember-data-rails-cors-and-you/"/>
+    <updated>2013-12-27T16:22:00-08:00</updated>
+    <id>http://www.g9labs.com/2013/12/27/ember-data-rails-cors-and-you</id>
+    <content type="html"><![CDATA[<p>I&rsquo;m starting up a new personal project involving Ember-Data and Rails
+(more to come). The gist of it is that it&rsquo;s a pure frontend app engine
+built in Yeoman and Grunt, and designed to talk to a remote API service
+built on Rails.</p>
+
+<p>So since it&rsquo;s a remote API, I&rsquo;ve got to enable CORS, right?</p>
+
+<h2>Install CORS via rack-cors</h2>
+
+<p><code>ruby Gemfile.rb
+gem "rack-cors", :require =&gt; "rack/cors"
+</code></p>
+
+<p>```ruby config/application.rb
+config.middleware.use Rack::Cors do
+  allow do</p>
+
+<pre><code>origins "*"
+
+resource "*",
+  :headers =&gt; :any,
+  :methods =&gt; [:get, :post, :put, :delete, :options, :patch]
+end
+</code></pre>
+
+<p>  allow do</p>
+
+<pre><code>origins "*"
+resource "/public/*",
+  :headers =&gt; :any,
+  :methods =&gt; :get
+</code></pre>
+
+<p>  end
+end
+```</p>
+
+<p>A very naive implementation with zero security whatsoever. Anyways.
+Onward!</p>
+
+<h2>Get Ember-Data DS.RESTAdapter talkin' CORS</h2>
+
+<p>I saw conflicting documentation on Ember-Data and CORS &mdash; it seemed like
+it should support CORS out of the box. Apparently this is not so.</p>
+
+<p>In my ember app&rsquo;s <code>store.js</code> (or anywhere your app loads before the
+application adapter is defined, do this:</p>
+
+<p>```javascript store.js
+$.ajaxSetup({
+  crossDomain: true,
+  xhrFields: {</p>
+
+<pre><code>withCredentials: true
+</code></pre>
+
+<p>  }
+});</p>
+
+<p>Hendrix.Store = DS.Store.extend();
+Hendrix.ApplicationAdapter = DS.RESTAdapter.extend({
+  host: &ldquo;<a href="http://localhost:3000">http://localhost:3000</a>&rdquo;,
+})
+```</p>
+
+<p><a href="http://api.jquery.com/jQuery.ajaxSetup/"><code>$.ajaxSetup</code></a>, though its
+usage is not recommended, is designed to set global options on the
+jQuery <code>ajax</code> object. It provides some information on the options you can modify.</p>
+
+<p>Why doesn&rsquo;t Ember support this out of the box? I think it&rsquo;s because they
+cannot support IE, where one must use an XDR object to support CORS.</p>
+
+<p>I&rsquo;ve posted an <a href="http://discuss.emberjs.com/t/ember-data-and-cors/3690">Ember follow-up question in the
+forums</a> for discussion.</p>
+
+<h2>Get Rails talking JSON out of its mimetype confusion.</h2>
+
+<p>Did you know that if you rely on the <code>Accepts:</code> header in HTTP that
+Rails does not obey its ordering<code>*</code>? I was trying to figure out why my
+Rails controllers were trying to render HTML instead of JSON when the
+headers were:</p>
+
+<p><code>'Accept: application/json, text/javascript, */*; q=0.01'</code></p>
+
+<p>A <a href="https://github.com/rails/rails/issues/9940">very long winded
+discussion</a> on the Rails
+project reveals that, well, nobody has it figured out yet. Most modern
+browsers do obey <code>Accepts:</code> specificity, but for the sake of older
+browser compatibility, the best practice for browsers is still to return
+HTML when <code>*/*</code> is specified.</p>
+
+<p>What does this mean for Rails developers who want to use <code>Accepts:</code>
+mimetype lists? Well, we either wait for the Rails projects to support
+mimetype specificity (and for older browsers to die out), or we are
+encouraged to include the format explicitly in the URI.</p>
+
+<p>I chose to have Ember append the <code>.json</code> suffix to the URL, thanks to
+this <a href="http://stackoverflow.com/questions/13648807/ds-model-url-not-working-in-ember-js">SO
+post</a></p>
+
+<p><code>``javascript store.js
+Hendrix.ApplicationAdapter = DS.RESTAdapter.extend({
+  host: "http://localhost:3000",
+  // Force ember-data to append the</code>json` suffix
+  buildURL: function(record, suffix) {</p>
+
+<pre><code>return this._super(record, suffix) + ".json";
+</code></pre>
+
+<p>  }
+})
+```</p>
+
+<p>More to come how how this app works.</p>
+]]></content>
+  </entry>
+  
+</feed>

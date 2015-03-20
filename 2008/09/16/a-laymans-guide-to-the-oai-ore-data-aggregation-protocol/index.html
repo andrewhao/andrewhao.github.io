@@ -1,0 +1,333 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>A layman's guide to the OAI-ORE data aggregation protocol - The Sweet Spot</title>
+  <meta name="author" content="Andrew Hao">
+
+  
+  <meta name="description" content="In Spring 2008, I took an information architecture course in the UC Berkeley School of Information, taught by Erik Wilde (disclaimer: I dropped the &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://www.g9labs.com/2008/09/16/a-laymans-guide-to-the-oai-ore-data-aggregation-protocol">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="The Sweet Spot" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-2330913-9']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">The Sweet Spot</a></h1>
+  
+    <h2>Andrew Hao's thoughts about software engineering, design, and anything shiny.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:www.g9labs.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/notes">Notes</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">A layman's guide to the OAI-ORE data aggregation protocol</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-09-16T18:37:12-07:00" pubdate data-updated="true">Sep 16<span>th</span>, 2008</time>
+        
+         | <a href="#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>In Spring 2008, I took an information architecture course in the <a href="http://ischool.berkeley.edu">UC Berkeley School of Information</a>, taught by <a href="http://dret.typepad.com">Erik Wilde</a> (disclaimer: I dropped the course after a month because of schedule conflicts). An interesting part of my research for that class involved investigating the nascent <a href="http://www.openarchives.org/ore/">Object Reuse and Exchange (OAI-ORE)</a> protocol, a way of organizing groups of resources across the Web. I&rsquo;m going to try to describe in laymen&rsquo;s terms what I learned from my research and explain why it&rsquo;s significant.</p>
+
+<h3>Group things together on the Web</h3>
+
+<p>Let&rsquo;s say you&rsquo;re looking for a book online. You&rsquo;ll hit up JStor or Google Books and browse through the pages of that book you found. Easy enough, right?</p>
+
+<p>In reality, the <em>physical, electronic representation</em> of the book online is actually more than just &ldquo;that book on JStor&rdquo; or &ldquo;<a href="http://www.jstor.com/book">http://www.jstor.com/book</a>&rdquo;. It&rsquo;s actually a collection of images on a Web server. We need a uniform way to descibe that jStor&#8217; specific online version of &ldquo;War and Peace&rdquo; is actually comprised of &ldquo;page1.jpg&rdquo;, &ldquo;page2.jpg&rdquo;, et cetera.</p>
+
+<p>As another example, let&rsquo;s say that the local public library wants to create a digital representation of its materials on Jimi Hendrix. Well, the library&rsquo;s got Jimi Hendrix CDs, Jimi Hendrix books, Jimi Hendrix magazine articles, and so on. With the OAI-ORE protocol, we can create a digital &ldquo;Jimi Hendrix @ Your Local Public Library&rdquo; object that lists out each CD, book and magazine article contained in the library.</p>
+
+<p>Let&rsquo;s say on top of that, a certain Jimi Hendrix biography references &ldquo;Little Wing&rdquo; on pages 12, 141 and 254. This &ldquo;Jimi Hendrix&rdquo; object is capable of encoding that reference from those pages to &ldquo;Little Wing&rdquo; on the &ldquo;Axis: Bold as Love&rdquo; album in the library.</p>
+
+<h3>Why even have a description framework?</h3>
+
+<p>As the Web gets more connected and as we&rsquo;re seeing the rise of interoperable Web services, it becomes increasingly important to have a standard resource description language. Various protocols (such as RDF) have built a foundation on which to describe relationships between electronic resources.</p>
+
+<p>Think of OAI-ORE as a way of organizing information for re-use by others. If every library created its own &ldquo;Jimi Hendrix&rdquo; resource object and made them accessible to others, we could potentially create programs and Web services to collect all &ldquo;Jimi Hendrix&rdquo; objects from across the globe and reconstruct the ultimate, canonical Jimi Hendrix electronic resource library. We could note which books made references to &ldquo;Little Wing.&rdquo; We could view &ldquo;Little Wing&rdquo; as an WMA file, an MP3 file, or as lyrics.</p>
+
+<p>The key is that by standardizing a description language, we <strong>enable programmatic ways to collect and synthesize data</strong> that can potentially add to the value of the world&rsquo;s sum knowledge.</p>
+
+<h3>Resource maps &amp; implementation formats</h3>
+
+<p>OAI-ORE is a specification that defines relationships between resources through an object called the <em>resource map</em>. The resource map is a resource file enumerating a collection of resources and describing the relationships between each resource. Each resource map has its own URI, so it can be discoverable and accessible.</p>
+
+<p>There is no standard file format to encode resource maps. Currently, the OAI-ORE working group has suggested the following description formats (HT: <a href="http://www.natlib.govt.nz/downloads/IT19-Hunter-OAI-ORE-Oct30.ppt">Univ. of Queensland</a>):</p>
+
+<ul>
+<li><p><a href="http://www.w3.org/TR/REC-rdf-syntax/">RDF</a> (Resource Description Framework)</p></li>
+<li><p><a href="http://en.wikipedia.org/wiki/Atom_(standard">Atom</a>) syndication format</p></li>
+<li><p><a href="http://nurture.nature.com/yads">YADS</a></p></li>
+<li><p><a href="http://www.w3.org/2004/03/trix/">TriX</a> (RDF triples in XML)</p></li>
+</ul>
+
+
+<p>The <a href="http://www.openarchives.org/ore/0.9/rdfxml">recommended method of describing a resource map is in RDF/XML</a>. I&rsquo;m not very familiar with the RDF syntax, however, and the TriX format, which affords us RDF triples that can easiliy express relationships between objects and resources, seems to make more sense to me.. However, there is a <a href="http://www.openarchives.org/ore/0.1/atom">complete Atom implementation of the protocol</a>, used when syndication is preferred.</p>
+
+<p>I&rsquo;d definitely refer the reader to the <a href="http://www.natlib.govt.nz/downloads/IT19-Hunter-OAI-ORE-Oct30.ppt">Univ. of Queensland&rsquo;s OAI-ORE PDF overview</a> for a broader overview of the protocol and its potential implementations.</p>
+
+<h3>The nitty-gritty</h3>
+
+<blockquote><p><strong>Collections</strong>: Multiple resources can be grouped together, but only via an &ldquo;aggregate object&rdquo; or a &ldquo;collection&rdquo;, which maintains pointers to each object in a collection.</p>
+
+<p><strong>Links</strong>: Links describe relationships between objects in a resource map, such as &ldquo;has-part&rdquo; (&ldquo;War &amp; Peace &rdquo;-has-part-&ldquo;page 2&rdquo;) or &ldquo;derived-from&rdquo; (&ldquo;Radiohead &ndash; 15 Step Remix&rdquo;-derived-from-&ldquo;Radiohead &ndash; 15 Step&rdquo;). Actual relationships depend on selected vocabularies and namespaces (meaning you can change the link relationships to be whatever you need them to be). There is a <a href="http://www.openarchives.org/ore/0.9/primer.html#Namespaces">list of default namespaces on the spec</a>.</p></blockquote>
+
+<h3>In conclusion</h3>
+
+<p>I took a high-level and somewhat abstract tack in describing the protocol, and would direct you to the <a href="http://www.openarchives.org/ore/0.9/primer.html">OAI-ORE Primer</a> for more implementation specifics. Apologies to those of you who were completely lost in this discussion.</p>
+
+<p>I&rsquo;m excited about developing standards like these because resource mapping protocols such as OAI-ORE are an instrumental step in connecting resources, services and information on the Web. They&rsquo;ll help us &ldquo;connect the tubes&rdquo; and create the infrastructure needed to link the world&rsquo;s information together. Now that&rsquo;s pretty cool.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">andrewhao</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-09-16T18:37:12-07:00" pubdate data-updated="true">Sep 16<span>th</span>, 2008</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/category/andrew-2-dot-0/'>Andrew 2.0</a>, <a class='category' href='/category/geek/'>Geek</a>, <a class='category' href='/category/information-architecture/'>Information Architecture</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://www.g9labs.com/2008/09/16/a-laymans-guide-to-the-oai-ore-data-aggregation-protocol/" data-via="andrewhao" data-counturl="http://www.g9labs.com/2008/09/16/a-laymans-guide-to-the-oai-ore-data-aggregation-protocol/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/2008/09/03/i-like-google-chrome/" title="Previous Post: I Like Google Chrome">&laquo; I Like Google Chrome</a>
+      
+      
+        <a class="basic-alignment right" href="/2008/09/24/updated-portfolio-sort-of/" title="Next Post: Updated portfolio... sort of.">Updated portfolio... sort of. &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2015/03/19/docker-rails-and-docker-compose-in-your-development-workflow/">Docker, Rails, and Docker Compose in your development workflow</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2014/11/29/explorations-in-logic-programming/">Explorations in logic programming</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2014/11/15/my-own-robot-training-buddy/">My own robot training buddy.</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2014/11/05/qcon-sf-2014/">Recap: QCon SF 2014</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2014/11/01/conways-law-for-humans/">Conway's Law for humans</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/andrewhao">@andrewhao</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'andrewhao',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2015 - Andrew Hao -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'g9labs';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://www.g9labs.com/2008/09/16/a-laymans-guide-to-the-oai-ore-data-aggregation-protocol/';
+        var disqus_url = 'http://www.g9labs.com/2008/09/16/a-laymans-guide-to-the-oai-ore-data-aggregation-protocol/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

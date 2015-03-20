@@ -1,0 +1,523 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>QConSF: Day Two - The Sweet Spot</title>
+  <meta name="author" content="Andrew Hao">
+
+  
+  <meta name="description" content="Leslie Lamport: Programming is more than coding We should be thinking harder before we start coding. Clear thinking can prevent errors. Fuzzy/wishful &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://www.g9labs.com/notes/2014-11-04-qconsf-day-two.html">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="The Sweet Spot" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-2330913-9']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">The Sweet Spot</a></h1>
+  
+    <h2>Andrew Hao's thoughts about software engineering, design, and anything shiny.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:www.g9labs.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/notes">Notes</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">QConSF: Day Two</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-11-04T09:25:00-08:00" pubdate data-updated="true">Nov 4<span>th</span>, 2014</time>
+        
+         | <a href="#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><h2>Leslie Lamport: Programming is more than coding</h2>
+
+<ul>
+<li>We should be thinking harder before we start coding. Clear thinking can prevent errors. Fuzzy/wishful thinking can&rsquo;t.</li>
+<li>How do you think clearly? Write.</li>
+<li>Specifications: help us think clearly.</li>
+<li>Think like a scientist!</li>
+</ul>
+
+
+<h3>In computer science:</h3>
+
+<ul>
+<li>reality is digital systems, processor chips.</li>
+<li>models are turing machines, tc..</li>
+<li>what is a program? code that makes sense to think about itself</li>
+<li>functions in math are not equal to functions in programming languages</li>
+<li>program execution represented as a behavior</li>
+<li>behavior is a sequence of states</li>
+<li>program is a sequence of behaviors</li>
+</ul>
+
+
+<h3>Productivity</h3>
+
+<p>Best place to eliminate code is to think about what you need to do and what you <em>don&rsquo;t</em> need to do.</p>
+
+<h3>How to describe a set of behaviors</h3>
+
+<ul>
+<li>Theorems: behaviors can be described by safety and liveness properties.</li>
+<li>Safety property: something bad doesn&rsquo;t happen (doesn&rsquo;t throw exception)</li>
+<li>Liveness property: something good eventually does happen (program eventually returns)</li>
+<li>Errors more likely to occur in safety properties.</li>
+<li><p>current state, next state transition can be described by a formula</p></li>
+<li><p>Engineers starting to use TLA+ to describe system behaviors</p></li>
+<li>debug 6 lines of specs better than debugging 850+ LOC.</li>
+<li>when you write specs, you should write formal specs.</li>
+<li>Before you write code, write spec.</li>
+<li>Thus, you write better programs.</li>
+</ul>
+
+
+<h2>Netflix: RxJava services</h2>
+
+<ul>
+<li>Observables vs Iterables. Push vs Pull.</li>
+<li>Observable is at the core: abstraction of events over sets.
+
+<ul>
+<li>Prefer Observable over Future because Future is still fragmented in Java ecosystem.</li>
+</ul>
+</li>
+<li>Using Rx services that aggregate granular APIs.</li>
+</ul>
+
+
+<h3>Cold finite streams</h3>
+
+<ul>
+<li>Shows an example of observable API &ndash; multiple network calls</li>
+<li>Instead of blocking APIs, can do async Observable APIs</li>
+<li>Decouples production from consumption. No matter how you implement</li>
+<li>Very cool example: a Collapser can batch up granular network calls in windows and send them off to a REST API.</li>
+<li>This lets you treat network calls like in-process methods, which goes against typical warnings in distributed systems theory</li>
+<li>Retrieval, transformation</li>
+</ul>
+
+
+<h3>Error handling</h3>
+
+<ul>
+<li><em>Flow control</em>: You need backpressure when you hop threads. what do you do when you consume slower than producer? Often necessary in UIs</li>
+<li><em>Hot vs Cold source</em>: Hot: emits whether you&rsquo;re ready or not. mouse event.Cold: emits when requested: HTTP request.</li>
+<li>Approach: block threads. like iterables.</li>
+<li>Hot streams: use temporal operators: like <code>sample</code> or <code>debounce</code></li>
+<li>Buffer, debounce, buffer pattern &ndash; can group signals by temporal</li>
+<li><em>Reactive push: hot infinite stream</em>: Buffer by time window, drop some samples if appropriately, do map/reduce on windows</li>
+</ul>
+
+
+<h3>Mental shift</h3>
+
+<ul>
+<li>imperative &ndash;> functional</li>
+<li>sync &ndash;> async</li>
+<li>pull &ndash;> push</li>
+<li>Rx doesn&rsquo;t trivialize concurrency. You need to reason about what&rsquo;s going on underneath.</li>
+</ul>
+
+
+<h2>Evolution to Reactive</h2>
+
+<h3>Monolith</h3>
+
+<ul>
+<li>OK for small services, startups</li>
+<li>simple at first</li>
+<li>queries are easy</li>
+<li>&ldquo;if you don&rsquo;t end up regretting your early tech decisions, you probably overengineered&rdquo; (so it&rsquo;s OK!)</li>
+</ul>
+
+
+<h3>Evolve to Microservices</h3>
+
+<p>Microservices: loosely-coupled service oriented architecture with bounded contexts</p>
+
+<ul>
+<li>single purpose</li>
+<li>simple well-defined interface</li>
+<li>modular and independent</li>
+<li>more a grpah of relationships than tiers</li>
+<li>isolated persistence!</li>
+<li>each unit is simple</li>
+<li>helps your company scale. people can hold it in their heads.</li>
+</ul>
+
+
+<h4>pros:</h4>
+
+<ul>
+<li>unit is simple</li>
+<li>independent scaling and performance</li>
+<li>independent testing and deployment</li>
+<li>tune performance</li>
+</ul>
+
+
+<h4>cons:</h4>
+
+<ul>
+<li>many cooperating units</li>
+<li>many small repos</li>
+<li>requires sophistication around tooling and dep management</li>
+<li>network latency</li>
+</ul>
+
+
+<p>(Not a panacea for everything.)</p>
+
+<h3>Google Services</h3>
+
+<ul>
+<li>all groups are organized into services: gmail, app engine, bigtable</li>
+<li>self-sufficient and autonomous</li>
+<li>layered on each other &mdash; empowers engineers to focus on the domains</li>
+</ul>
+
+
+<h3>Reactive microservices</h3>
+
+<ul>
+<li>first tenet is to be responsive, fail latencies, async nonblocking calls from client</li>
+<li>resilient: redundancy, timeouts, retries. hystrix</li>
+<li>&ldquo;release it&rdquo; book my michael nygard</li>
+<li>elastic: can scale up and down according to load.</li>
+<li>message-driven: message passing</li>
+<li>FRP patterns: actor model</li>
+<li>scala/akka + rxjava</li>
+</ul>
+
+
+<h3>Kixeye service chassis</h3>
+
+<ul>
+<li>Takes a long time to build and deploy a new service</li>
+<li>goal: make it easy to build/deploy new uservice
+
+<ul>
+<li>configuration</li>
+<li>registration/discovery</li>
+<li>load balancing for downstream services</li>
+<li>failiure management for downstream svc</li>
+</ul>
+</li>
+<li>eureka: service registry</li>
+<li>15m no code to running service in AWS</li>
+</ul>
+
+
+<h3>How to do this?</h3>
+
+<ul>
+<li>Don&rsquo;t migrate in one big bang. do it incrementally.</li>
+<li>find your worst scaling bottleneck</li>
+<li>wall it off behind an interface</li>
+<li>replace it</li>
+<li>then do it again</li>
+</ul>
+
+
+<h3>process</h3>
+
+<ul>
+<li>common chassis</li>
+<li>define service interface. discuss with clients. agree</li>
+<li>prototype: simplest thing that could possibly work. client can integrate with prototype.</li>
+<li>distributed tracing &mdash; track a request through multiple services</li>
+<li>network visualization</li>
+<li>dash metrics &ndash; scan health</li>
+<li>hystrix and turbine generate nice visualizations</li>
+</ul>
+
+
+<h3>Other implications</h3>
+
+<ul>
+<li>Can have smaller teams</li>
+<li>teams are autonomous, can make their own technology and implementation choices</li>
+<li>let the team own the HOW</li>
+<li>vendor/customer relationship: friendly, cooperative, but structured</li>
+<li>clear ownership and division of responsibility</li>
+<li>the customer can choose whether to use that service or not. if it&rsquo;s not the best choice for the client, why are we building/maintaining it?</li>
+<li>We should have market forces inside our companies than outside.</li>
+</ul>
+
+
+<h2>Paypal API</h2>
+
+<p>Paypal used to have a fragmented, legacy API ecosystem.
+Circa 2012, they began an initiative to standardize and modernize their API infrastructure.</p>
+
+<h3>Defined a target state:</h3>
+
+<ul>
+<li>API first</li>
+<li>API as a product</li>
+<li>REST first</li>
+</ul>
+
+
+<h3>Architecture</h3>
+
+<ul>
+<li>Built using facades</li>
+<li>Facades coordinate between internal services (microservices?)</li>
+<li>Tiered approach: experience APIs (facades) and capability APIs (core services)</li>
+<li>How did they assess success? Did a maturity model. Level 1-5</li>
+<li>People got into competitions</li>
+<li>Used DDD &ndash; bounded contexts &ndash; shared language</li>
+<li>Evolution is more than technology</li>
+</ul>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Andrew Hao</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-11-04T09:25:00-08:00" pubdate data-updated="true">Nov 4<span>th</span>, 2014</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/category/conference/'>conference</a>, <a class='category' href='/category/notes/'>notes</a>, <a class='category' href='/category/qconsf/'>qconsf</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://www.g9labs.com/notes/2014-11-04-qconsf-day-two.html" data-via="andrewhao" data-counturl="http://www.g9labs.com/notes/2014-11-04-qconsf-day-two.html" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2015/03/19/docker-rails-and-docker-compose-in-your-development-workflow/">Docker, Rails, and Docker Compose in your development workflow</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2014/11/29/explorations-in-logic-programming/">Explorations in logic programming</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2014/11/15/my-own-robot-training-buddy/">My own robot training buddy.</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2014/11/05/qcon-sf-2014/">Recap: QCon SF 2014</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2014/11/01/conways-law-for-humans/">Conway's Law for humans</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/andrewhao">@andrewhao</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'andrewhao',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2015 - Andrew Hao -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'g9labs';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://www.g9labs.com/notes/2014-11-04-qconsf-day-two.html';
+        var disqus_url = 'http://www.g9labs.com/notes/2014-11-04-qconsf-day-two.html';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

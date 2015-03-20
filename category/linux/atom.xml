@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Linux | The Sweet Spot]]></title>
+  <link href="http://www.g9labs.com/category/linux/atom.xml" rel="self"/>
+  <link href="http://www.g9labs.com/"/>
+  <updated>2015-03-19T14:39:53-07:00</updated>
+  <id>http://www.g9labs.com/</id>
+  <author>
+    <name><![CDATA[Andrew Hao]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Backup, backup, backup]]></title>
+    <link href="http://www.g9labs.com/2012/04/23/backup-backup-backup/"/>
+    <updated>2012-04-23T01:02:05-07:00</updated>
+    <id>http://www.g9labs.com/2012/04/23/backup-backup-backup</id>
+    <content type="html"><![CDATA[<p>Well, the inevitable happened: I finally experienced a hard drive failure. It&rsquo;s pretty incredible that in the twenty-odd years I&rsquo;ve been around computers I&rsquo;ve never had the horror of losing a drive.</p>
+
+<p>Friday rolls around and my Macbook Pro decides to freeze up on me. <em>Strange, </em>I think to myself. It&rsquo;s making a clicking noise. Crap.</p>
+
+<p>Luckily, I&rsquo;ve been fairly good about making backups and copies of my work. Here&rsquo;s my general strategy:</p>
+
+<ul>
+<li><p>Work/code: keeping local changes on a separate branch and pushing it to a remote Git branch every so often.</p></li>
+<li><p>Everything else: I keep one local copy here with me in Oakland, and have another copy offsite. I rsync my files out to my server at home, which has a cronjob set up to sync with the offsite copy at my parents' home (I run a <a href="http://pogoplug.com/">Pogoplug</a> with <a href="http://archlinuxarm.org/platforms/armv6/pogoplug-provideov3">Archlinux</a> and a couple of external drives connected to it &mdash; fantastic and totally recommended for a cheap and low-power server setup).</p></li>
+</ul>
+
+
+<p>There was a minor scare this time around though &mdash; I had some photography work (and an engagement photoshoot!) lying around that almost didn&rsquo;t make it to the first stage rsync with my local server. Fortunately, I had the foresight to keep my photos backed up to a random local hard disk, and the rest remained on the memory cards (and some even on a shared Dropbox folder that saved my butt!). Most frustrating thing was learning that I had forgotten to back up my Lightroom catalog, so all my edits were lost. At least I have the original shots.</p>
+
+<p>One thing I think I&rsquo;ll try doing from here on out &mdash; saving my Develop settings/presets directly to the DNGs themselves before backing up. That way if I ever lose my LR catalog, the edit settings are still embedded in the original files.</p>
+
+<p>Jeff Atwood reminds us to <a href="http://www.codinghorror.com/blog/2008/01/whats-your-backup-strategy.html">keep backups around on multiple disks</a>. With the price of storage so low, what&rsquo;s your data worth to you? How are you keeping your backups?</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[post-review, git-svn and Review Board]]></title>
+    <link href="http://www.g9labs.com/2010/06/02/post-review-git-svn-and-review-board/"/>
+    <updated>2010-06-02T04:26:02-07:00</updated>
+    <id>http://www.g9labs.com/2010/06/02/post-review-git-svn-and-review-board</id>
+    <content type="html"><![CDATA[<p>Here&rsquo;s how to set up the excellent VMware-developed open-source <a href="http://www.reviewboard.org/">Review Board</a> and its <code>[post-review](http://www.reviewboard.org/docs/releasenotes/dev/rbtools/0.2/)</code> command line review creation utility to work with git and git-svn on your computer.</p>
+
+<p>My assumption is that you&rsquo;re working with a local Git repository that is remotely linked to an SVN repository via the <a href="http://utsl.gen.nz/talks/git-svn/intro.html">git-svn</a> bridge. Let&rsquo;s assume that your master branch is synced with the SVN repository, and you&rsquo;re working on <code>bug_12345_branch</code>.</p>
+
+<ol>
+<li><p> Make sure you have RBTools installed (<code>sudo easy_install rbtools</code> for me on Ubuntu Linux), and Review Board set up elsewhere.</p></li>
+<li><p> Add a link to your Review Board URL in .git/config:</p></li>
+</ol>
+
+
+<blockquote><pre><code>[reviewboard]
+ url = &lt;a href="#"&gt;https://(url_for_review_board)/&lt;/a&gt;
+</code></pre></blockquote>
+
+<ol>
+<li><p> Make sure all your changes in <code>bug_12345_branch</code> have been locally committed.</p></li>
+<li><p> <code>post-review -o</code>, and&hellip;</p></li>
+<li><p> Voila! You should have a new review up on your Review Board instance.</p></li>
+<li><p> (After you get reviews, you can modify <code>bug_12345_branch</code>, pull the changes into master, and then <code>git svn dcommit</code>, blah, blah, blah.)</p></li>
+</ol>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Today's Geek Hijinks]]></title>
+    <link href="http://www.g9labs.com/2008/02/18/todays-geek-hijinks/"/>
+    <updated>2008-02-18T09:32:42-08:00</updated>
+    <id>http://www.g9labs.com/2008/02/18/todays-geek-hijinks</id>
+    <content type="html"><![CDATA[<h3>Morning: Woke up and attempted to mount a Samba file share under Ubuntu.</h3>
+
+<p>My Gutsy server in the living room is getting a second life as a backup file server. I need to mount it in my filesystem so I can rsync certain directories on my desktop over to the server.</p>
+
+<p><code>mount -t //my_server_ip/share_folder /media/mount_folder</code></p>
+
+<p>Alas! I couldn&rsquo;t get write access into the mount point! At first I thought this was a chmod problem, so I added myself as the mount_folder owner.</p>
+
+<p><code>sudo chown username mount_folder/</code></p>
+
+<p>To no avail. So then I attempted to use the &ldquo;permit all&rdquo; chmod sledgehammer:</p>
+
+<p><code>sudo chmod 777 mount_folder/</code></p>
+
+<p>Argh! STILL no good!</p>
+
+<p>So then I went back to the drawing board and did some investigating. I could, 50% of the time, gain write access to child subfolders on the Samba share via GNOME Nautilus interface (smb://my_server_ip). Weird! Was this a Samba config problem? I didn&rsquo;t have the cajones to find out.</p>
+
+<p>As a last-ditch attempt, I tried to modify my fstab file to mount the Samba share (I read somewhere that the uid and gid option flags give you the win). Side note: you can find your username&rsquo;s uid and gid numbers from the <code>/etc/passwd file</code>.</p>
+
+<pre><code># TEMPORARY SAMBA SHARE FROM LIVINGROOM SERVER
+
+# @author Andrew
+
+//my_server_ip/archive /media/archive smbfs noauto,rw,uid=1000,gid=1000 0 0
+</code></pre>
+
+<p><em>Still</em> no good! Arghs! At this point, I gave up and simply SFTP-ed in to dump my files. Admitting defeat is a sad, sad thing.</p>
+
+<h3>Afternoon: Designed some logo comps for a Web company.</h3>
+
+<p><a href="http://blog.g9labs.com/wp-content/uploads/2008/02/logo.png"><img src="http://blog.g9labs.com/wp-content/uploads/2008/02/logo.png" alt="Logo I started on." /></a></p>
+
+<p>I&rsquo;m working under contract from Ryan Waliany. This site should be doing some cool things. Unfortunately, I can&rsquo;t reveal too much. All this to say that I&rsquo;ve taken a long hiatus from design and I really miss it.</p>
+
+<h3>Late Afternoon: Set up Google Apps for g9labs.com</h3>
+
+<p>I gave in to the hype, and began setting up a Google Apps For Your Domain (GFYD) account for this g9labs site, primarily so I can hook into the awesome GMail interface instead of being chained to the Thunderbird client.</p>
+
+<p>This was a multi-step process of:</p>
+
+<ol>
+<li><p> <strong>Verifying ownership of your domain. </strong>Google has you modify a CNAME entry on your domain so they can ping it to check that it&rsquo;s changed. I marched happily over to the <a href="http://dreamhost.com">Dreamhost</a> panel where I found the DNS page for <a href="http://g9labs.com">g9labs.com</a>. There I added a CNAME value of googlexxxxxxxxx (a unique value given to you) and set its CNAME value to &ldquo;google.com&rdquo;.</p></li>
+<li><p> While Google takes 48 hours to verify you&rsquo;ve done the right steps, you can go ahead and <strong>modify the MX records for your domain </strong>so mail gets sent on over to Google instead of your Dreamhost server. This was easily set in the Dreamhost panel under Mail >> MX Records. You change your MX records to Google&rsquo;s special MX server, and you&rsquo;re on your way!</p></li>
+<li><p> I&rsquo;m waiting for verification to go through, then I&rsquo;ll talk about how to get <strong>IMAP for GFYD working</strong>.</p></li>
+</ol>
+
+]]></content>
+  </entry>
+  
+</feed>

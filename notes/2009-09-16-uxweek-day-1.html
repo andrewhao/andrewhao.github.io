@@ -1,0 +1,382 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>UX Week: Day 1 - The Sweet Spot</title>
+  <meta name="author" content="Andrew Hao">
+
+  
+  <meta name="description" content="UX Week: Day 1 Sep 16th, 2009 I&rsquo;m here in San Francisco at UXweek 2009, sent by Riverbed, determined to learn all I can and rub shoulders with &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://www.g9labs.com/notes/2009-09-16-uxweek-day-1.html">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="The Sweet Spot" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-2330913-9']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">The Sweet Spot</a></h1>
+  
+    <h2>Andrew Hao's thoughts about software engineering, design, and anything shiny.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:www.g9labs.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/notes">Notes</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article role="article">
+  
+  <header>
+    <h1 class="entry-title">UX Week: Day 1</h1>
+    <p class="meta">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-09-16T16:10:59-07:00" pubdate data-updated="true">Sep 16<span>th</span>, 2009</time></p>
+  </header>
+  
+  <p>I&rsquo;m here in San Francisco at <a href="http://uxweek.com">UXweek 2009</a>, sent by Riverbed, determined to learn all I can and rub shoulders with the best and brightest minds in the industry. It&rsquo;s been a really cool couple of days so far. I&rsquo;ve met some really cool designers and got to pick their brains on their team practices. The food, oh the food: it&rsquo;s excellent (ahi tuna? creme brulee? smoked salmon? green tea cookies? Pinch me.)</p>
+
+<p>Um, back to the main subject: I also attended a bunch of seminars and heard some brilliant talks.</p>
+
+<h2>Keynote &ndash; Matias Duarte &ndash; Designing webOS</h2>
+
+<p><a href="http://www.flickr.com/photos/39980698@N02/3924614801/"><img src="http://farm4.static.flickr.com/3497/3924614801_c437467920.jpg" alt="Day 1 - Matias Duarte - Palm" /></a></p>
+
+<p>Matias came up and talked about how the process of webOS came to be. They apparently began with a vision of the &ldquo;Mad Men&rdquo; 1960&rsquo;s-style office environment, complete with the desk, paper calendar, wall clock, assistant, etc etc. He proceeded to label each set of office equipment to its attributes, and showed us how that feature eventually made its way into the UI.</p>
+
+<ul>
+<li>Think of the filing cabinet and how it&rsquo;s a place to start tasks. Its attributes are &ldquo;spatial&rdquo;, &ldquo;searchable&rdquo;, &ldquo;favorites&rdquo;. Now map it to webOS&rsquo;s quick search bar, where you can find files and folders and launch apps.</li>
+<li>Think of how the office assistant will quietly interrupt your meeting to give you a message. Its attributes are &ldquo;appropriate&rdquo;, &ldquo;courteous&rdquo;, &ldquo;available&rdquo;. Now see how webOS&rsquo;s taskbar will subtly notify you to incoming mail, messages, and other alert items.</li>
+</ul>
+
+
+<p>Most folks I talked to, however, weren&rsquo;t convinced that this was the exact ideation process behind the scenes&mdash;the &ldquo;Mad Men&rdquo; desk metaphor seemed just too perfect to fall together like that. Someone commented to me that that kind of pitch was what it would have taken to sell it to the higher-ups at Palm. All of us were pretty impressed by the OS, though. I&rsquo;m sure a few iPhone users even got jealous.</p>
+
+<p>All in all, their prototyping process took 6 months, involving paper, cardboard, cutouts, etc.</p>
+
+<h3>Take-home points:</h3>
+
+<ul>
+<li>&ldquo;We needed to demonstrate vision&hellip; Do you have a design vision for your team?&rdquo;</li>
+<li>&ldquo;Mobile needs a good solution to interruptions&rdquo;</li>
+<li>Strong desktop metaphor as key to webOS success.</li>
+</ul>
+
+
+<h2>Aaron Forth &ndash; mint.com &ndash; Why Good UX and Design are Successful</h2>
+
+<p><a href="http://www.flickr.com/photos/39980698@N02/3925402006/"><img src="http://farm4.static.flickr.com/3453/3925402006_cc39f62003.jpg" alt="Day 1 - Aaron Forth - Mint.com" /></a></p>
+
+<p>Aaron&rsquo;s talk was a bit more business-oriented&mdash;I kind of felt like I was in some sort of entrepreneurship seminar! He gave a good glimpse on how mint.com developed in the early years.</p>
+
+<p>&ldquo;User experience is where strategy must begin.&rdquo;</p>
+
+<p><strong>Branding challenge:</strong> unknown brand, small marketing budget, security concerns, legacy of user frustration in the industry. &ldquo;mint&rdquo;: refreshing, organic, different, benefits-oriented.</p>
+
+<p><strong>Design:</strong> Aaron mentioned how Mint&rsquo;s design (a clean, airy feel) overcame the male-oriented nature of browsing patterns for certain Web sites. They have a 50/50 distribution.</p>
+
+<p><strong>User experience principles:</strong></p>
+
+<ul>
+<li>Quick signup: &lt; 3 min</li>
+<li>Reduce as much work as possible</li>
+<li>Design for &ldquo;wow&rdquo; moments</li>
+<li>Focus on providing insights</li>
+</ul>
+
+
+<p>&ldquo;Mint&rsquo;s competitive advantage is that we build faster than the competition.&rdquo; Aaron cited an example that the development team spent 20% of its cycles developing for IE6&mdash;so they decided to drop support for it, opting to degrade gracefully and provide the right sort of upgrade message to IE6 users. This revelation provoked a lot of buzz among the audience. Drop IE6 support? Risky for some, but for a startup like Mint where development cycles are sparse, maybe that&rsquo;s what needs to be done.</p>
+
+<p>Aaron talked about turning security concerns on its head. &ldquo;You can&rsquo;t afford <em>not</em> to use Mint with your account information spread all over the Web.&rdquo;</p>
+
+<p>Audience member asked a question: &ldquo;How does your revenue model affect user experience?&rdquo; Aaron&rsquo;s response: &ldquo;We make money only if the user saves money&rdquo;&mdash;that is, if the user has a good experience. How specifically? Lead generation for financial services (new credit card, etc).</p>
+
+<p><strong>On usability testing:</strong> Mint hasn&rsquo;t done formal usability studies, rather going with a &ldquo;friends and family usability&rdquo; testing model&mdash;an informal way to dogfood the interface with friends and family.</p>
+
+<h2>Bernhard Seefeld and Elizabeth Windram &ndash; How Google Maps Keeps Innovating</h2>
+
+<p>Seefeld &ndash; PM
+Windram &ndash; UX</p>
+
+<ul>
+<li>Talked about designing for the Street View interface and how they released it into the wild.</li>
+<li>Insight: &ldquo;maps are about places&rdquo;</li>
+<li>Challenge is to incorporate new ideas while maintaining a cohesive whole.</li>
+</ul>
+
+
+<h3>Principles for innovation:</h3>
+
+<ul>
+<li>Technical insights (new technologies, perhaps? AJAX in 2005, Street View cars, etc)</li>
+<li>Anyone can submit ideas (I assume there&rsquo;s some sort of feedback form)</li>
+<li>Study the behaviors and motivations of users</li>
+<li>Be self-critical. Even though initial feedback for Street View was positive, the team chose to press in.</li>
+<li>Design for power users &mdash; the hardest ones to please (I don&rsquo;t know if I agree with this one. I&rsquo;d aim for a better balance between your power and novice users, primarily because it&rsquo;s hard to elegantly design for advanced users without alienating or confusing the other 80%).</li>
+<li>Reward your users. Exploring in the GMaps interface results in simple &ldquo;wow&rdquo; moments (pan/zoom in Street view, the yellow man icon animates, etc).</li>
+<li>Use power to drive simplicity. Example given was removing Address/Business tabs under the location search box and instead using NLP to have the user simply write what they want in a single text box.</li>
+</ul>
+
+
+<h2>Changemakers.com Redesign: Charlie Brown and Henning Fischer</h2>
+
+<p><a href="http://www.flickr.com/photos/39980698@N02/3924617257/"><img src="http://farm4.static.flickr.com/3534/3924617257_db6f5738b4.jpg" alt="Day 1 - Henning Fischer and Charlie Brown (Changemakers.com)" /></a></p>
+
+<p>Social entrepreneurship site seeks redesign of static site to facilitate community interactions. This wasn&rsquo;t too relevant to me, but some interesting points came up;</p>
+
+<ul>
+<li>Design agency initially refused the project because the specs were too rigid and wouldn&rsquo;t accomplish goals.</li>
+<li>Changemakers was flexible enough to push back and ask design agency to help them refocus their needs. A very humble attitude.</li>
+</ul>
+
+
+<h2>Seminar &ndash; Rachel Glaves &ndash; Sketching Fundamentals</h2>
+
+<p>Oh boy, my favorite part of the day&mdash;sketching class! We were given a bunch of Sharpies of different weights. (<em>TODO:</em> Here&rsquo;s where I need to scan in my notebook sketches so these techniques make more sense. I&rsquo;ll get around to them soon.)</p>
+
+<p>We started out by practicing drawing straight lines and boxes. <strong>Tip for straight lines: </strong><em>draw from your shoulder, moving your whole arm</em> (rather than drawing from your elbow)<em>.</em> It helps to look at destination point and then draw toward that.</p>
+
+<p><em>Draw in pen, not pencil.</em> You can&rsquo;t get the same amount of visual boldness, and you don&rsquo;t have to waste your time retracing your drawings. Drawing in pen also helps you get over the need for perfection. If you mess up, just cross it out.</p>
+
+<h3>Techniques to increase visual weight:</h3>
+
+<ul>
+<li>bolder line weights (thicker Sharpie)</li>
+<li>highlight with a yellow marker</li>
+<li>fill in with Prismacolor grey marker</li>
+<li>use depth: smaller when fading into bg. &ldquo;This gives the user the sense that there&rsquo;s a world in the page.&rdquo;</li>
+<li>use motion: ghosting, arrows, gradients.</li>
+<li>under/overline to accent text/headers</li>
+<li>use simple lines and squiggles to signify text.</li>
+</ul>
+
+
+<h3>Some tips when sketching interface mockups:</h3>
+
+<ul>
+<li>It&rsquo;s helpful to draw in simple human figures with speech balloons whose voices represent the user, his/her motivations. &ldquo;Here&rsquo;s where I want to log in, gosh it&rsquo;s so easy!&rdquo; or &ldquo;Now I want to save this comment into the thread.&rdquo;</li>
+<li>Designing multitouch interfaces and have trouble drawing hands? You can always take a picture of your hand and trace it in Illustrator.</li>
+</ul>
+
+
+  
+    <footer>
+      <p class="meta">
+        
+  
+
+<span class="byline author vcard">Posted by <span class="fn">andrewhao</span></span>
+
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-09-16T16:10:59-07:00" pubdate data-updated="true">Sep 16<span>th</span>, 2009</time>
+        
+      </p>
+      
+        <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://www.g9labs.com/notes/2009-09-16-uxweek-day-1.html" data-via="andrewhao" data-counturl="http://www.g9labs.com/notes/2009-09-16-uxweek-day-1.html" >Tweet</a>
+  
+  
+  
+</div>
+
+      
+    </footer>
+  
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2015/03/19/docker-rails-and-docker-compose-in-your-development-workflow/">Docker, Rails, and Docker Compose in your development workflow</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2014/11/29/explorations-in-logic-programming/">Explorations in logic programming</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2014/11/15/my-own-robot-training-buddy/">My own robot training buddy.</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2014/11/05/qcon-sf-2014/">Recap: QCon SF 2014</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2014/11/01/conways-law-for-humans/">Conway's Law for humans</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/andrewhao">@andrewhao</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'andrewhao',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2015 - Andrew Hao -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'g9labs';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://www.g9labs.com/notes/2009-09-16-uxweek-day-1.html';
+        var disqus_url = 'http://www.g9labs.com/notes/2009-09-16-uxweek-day-1.html';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

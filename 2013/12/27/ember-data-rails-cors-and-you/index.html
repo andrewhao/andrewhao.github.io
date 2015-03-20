@@ -1,0 +1,425 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Ember Data, Rails, CORS, and you! - The Sweet Spot</title>
+  <meta name="author" content="Andrew Hao">
+
+  
+  <meta name="description" content="I&rsquo;m starting up a new personal project involving Ember-Data and Rails
+(more to come). The gist of it is that it&rsquo;s a pure frontend app &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://www.g9labs.com/2013/12/27/ember-data-rails-cors-and-you">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="The Sweet Spot" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-2330913-9']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">The Sweet Spot</a></h1>
+  
+    <h2>Andrew Hao's thoughts about software engineering, design, and anything shiny.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:www.g9labs.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/notes">Notes</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Ember Data, Rails, CORS, and you!</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-12-27T16:22:00-08:00" pubdate data-updated="true">Dec 27<span>th</span>, 2013</time>
+        
+         | <a href="#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>I&rsquo;m starting up a new personal project involving Ember-Data and Rails
+(more to come). The gist of it is that it&rsquo;s a pure frontend app engine
+built in Yeoman and Grunt, and designed to talk to a remote API service
+built on Rails.</p>
+
+<p>So since it&rsquo;s a remote API, I&rsquo;ve got to enable CORS, right?</p>
+
+<h2>Install CORS via rack-cors</h2>
+
+<figure class='code'><figcaption><span>Gemfile.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">gem</span> <span class="s2">&quot;rack-cors&quot;</span><span class="p">,</span> <span class="ss">:require</span> <span class="o">=&gt;</span> <span class="s2">&quot;rack/cors&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span>config/application.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">config</span><span class="o">.</span><span class="n">middleware</span><span class="o">.</span><span class="n">use</span> <span class="ss">Rack</span><span class="p">:</span><span class="ss">:Cors</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">allow</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">origins</span> <span class="s2">&quot;*&quot;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">resource</span> <span class="s2">&quot;*&quot;</span><span class="p">,</span>
+</span><span class='line'>      <span class="ss">:headers</span> <span class="o">=&gt;</span> <span class="ss">:any</span><span class="p">,</span>
+</span><span class='line'>      <span class="ss">:methods</span> <span class="o">=&gt;</span> <span class="o">[</span><span class="ss">:get</span><span class="p">,</span> <span class="ss">:post</span><span class="p">,</span> <span class="ss">:put</span><span class="p">,</span> <span class="ss">:delete</span><span class="p">,</span> <span class="ss">:options</span><span class="p">,</span> <span class="ss">:patch</span><span class="o">]</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">allow</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">origins</span> <span class="s2">&quot;*&quot;</span>
+</span><span class='line'>    <span class="n">resource</span> <span class="s2">&quot;/public/*&quot;</span><span class="p">,</span>
+</span><span class='line'>      <span class="ss">:headers</span> <span class="o">=&gt;</span> <span class="ss">:any</span><span class="p">,</span>
+</span><span class='line'>      <span class="ss">:methods</span> <span class="o">=&gt;</span> <span class="ss">:get</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>A very naive implementation with zero security whatsoever. Anyways.
+Onward!</p>
+
+<h2>Get Ember-Data DS.RESTAdapter talkin&#8217; CORS</h2>
+
+<p>I saw conflicting documentation on Ember-Data and CORS &mdash; it seemed like
+it should support CORS out of the box. Apparently this is not so.</p>
+
+<p>In my ember app&rsquo;s <code>store.js</code> (or anywhere your app loads before the
+application adapter is defined, do this:</p>
+
+<figure class='code'><figcaption><span>store.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">$</span><span class="p">.</span><span class="nx">ajaxSetup</span><span class="p">({</span>
+</span><span class='line'>  <span class="nx">crossDomain</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+</span><span class='line'>  <span class="nx">xhrFields</span><span class="o">:</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">withCredentials</span><span class="o">:</span> <span class="kc">true</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">});</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">Hendrix</span><span class="p">.</span><span class="nx">Store</span> <span class="o">=</span> <span class="nx">DS</span><span class="p">.</span><span class="nx">Store</span><span class="p">.</span><span class="nx">extend</span><span class="p">();</span>
+</span><span class='line'><span class="nx">Hendrix</span><span class="p">.</span><span class="nx">ApplicationAdapter</span> <span class="o">=</span> <span class="nx">DS</span><span class="p">.</span><span class="nx">RESTAdapter</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
+</span><span class='line'>  <span class="nx">host</span><span class="o">:</span> <span class="s2">&quot;http://localhost:3000&quot;</span><span class="p">,</span>
+</span><span class='line'><span class="p">})</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><a href="http://api.jquery.com/jQuery.ajaxSetup/"><code>$.ajaxSetup</code></a>, though its
+usage is not recommended, is designed to set global options on the
+jQuery <code>ajax</code> object. It provides some information on the options you can modify.</p>
+
+<p>Why doesn&rsquo;t Ember support this out of the box? I think it&rsquo;s because they
+cannot support IE, where one must use an XDR object to support CORS.</p>
+
+<p>I&rsquo;ve posted an <a href="http://discuss.emberjs.com/t/ember-data-and-cors/3690">Ember follow-up question in the
+forums</a> for discussion.</p>
+
+<h2>Get Rails talking JSON out of its mimetype confusion.</h2>
+
+<p>Did you know that if you rely on the <code>Accepts:</code> header in HTTP that
+Rails does not obey its ordering<code>*</code>? I was trying to figure out why my
+Rails controllers were trying to render HTML instead of JSON when the
+headers were:</p>
+
+<p><code>'Accept: application/json, text/javascript, */*; q=0.01'</code></p>
+
+<p>A <a href="https://github.com/rails/rails/issues/9940">very long winded
+discussion</a> on the Rails
+project reveals that, well, nobody has it figured out yet. Most modern
+browsers do obey <code>Accepts:</code> specificity, but for the sake of older
+browser compatibility, the best practice for browsers is still to return
+HTML when <code>*/*</code> is specified.</p>
+
+<p>What does this mean for Rails developers who want to use <code>Accepts:</code>
+mimetype lists? Well, we either wait for the Rails projects to support
+mimetype specificity (and for older browsers to die out), or we are
+encouraged to include the format explicitly in the URI.</p>
+
+<p>I chose to have Ember append the <code>.json</code> suffix to the URL, thanks to
+this <a href="http://stackoverflow.com/questions/13648807/ds-model-url-not-working-in-ember-js">SO
+post</a></p>
+
+<figure class='code'><figcaption><span>store.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">Hendrix</span><span class="p">.</span><span class="nx">ApplicationAdapter</span> <span class="o">=</span> <span class="nx">DS</span><span class="p">.</span><span class="nx">RESTAdapter</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
+</span><span class='line'>  <span class="nx">host</span><span class="o">:</span> <span class="s2">&quot;http://localhost:3000&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="c1">// Force ember-data to append the `json` suffix</span>
+</span><span class='line'>  <span class="nx">buildURL</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">record</span><span class="p">,</span> <span class="nx">suffix</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">_super</span><span class="p">(</span><span class="nx">record</span><span class="p">,</span> <span class="nx">suffix</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;.json&quot;</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">})</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>More to come how how this app works.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Andrew Hao</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-12-27T16:22:00-08:00" pubdate data-updated="true">Dec 27<span>th</span>, 2013</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/category/ajax/'>ajax</a>, <a class='category' href='/category/api/'>api</a>, <a class='category' href='/category/cors/'>cors</a>, <a class='category' href='/category/crossdomain/'>crossdomain</a>, <a class='category' href='/category/ember/'>ember</a>, <a class='category' href='/category/ember-data/'>ember data</a>, <a class='category' href='/category/json/'>json</a>, <a class='category' href='/category/rails/'>rails</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://www.g9labs.com/2013/12/27/ember-data-rails-cors-and-you/" data-via="andrewhao" data-counturl="http://www.g9labs.com/2013/12/27/ember-data-rails-cors-and-you/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/2012/12/26/decomposing-fat-models/" title="Previous Post: Decomposing Fat Models">&laquo; Decomposing Fat Models</a>
+      
+      
+        <a class="basic-alignment right" href="/2014/01/26/moving-to-ember-app-kit/" title="Next Post: Moving to Ember App Kit">Moving to Ember App Kit &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2015/03/19/docker-rails-and-docker-compose-in-your-development-workflow/">Docker, Rails, and Docker Compose in your development workflow</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2014/11/29/explorations-in-logic-programming/">Explorations in logic programming</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2014/11/15/my-own-robot-training-buddy/">My own robot training buddy.</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2014/11/05/qcon-sf-2014/">Recap: QCon SF 2014</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2014/11/01/conways-law-for-humans/">Conway's Law for humans</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/andrewhao">@andrewhao</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'andrewhao',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2015 - Andrew Hao -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'g9labs';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://www.g9labs.com/2013/12/27/ember-data-rails-cors-and-you/';
+        var disqus_url = 'http://www.g9labs.com/2013/12/27/ember-data-rails-cors-and-you/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

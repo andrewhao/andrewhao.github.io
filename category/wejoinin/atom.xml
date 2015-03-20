@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Wejoinin | The Sweet Spot]]></title>
+  <link href="http://www.g9labs.com/category/wejoinin/atom.xml" rel="self"/>
+  <link href="http://www.g9labs.com/"/>
+  <updated>2015-03-19T14:39:53-07:00</updated>
+  <id>http://www.g9labs.com/</id>
+  <author>
+    <name><![CDATA[Andrew Hao]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Crusher website]]></title>
+    <link href="http://www.g9labs.com/2007/10/17/crusher-website/"/>
+    <updated>2007-10-17T06:43:26-07:00</updated>
+    <id>http://www.g9labs.com/2007/10/17/crusher-website</id>
+    <content type="html"><![CDATA[<p>What gives you more geek fuzzies than seeing an Evite competitor with an ASCII logo?</p>
+
+<p><a href="http://crush3r.com/">Crusher website ~ Send invites for free</a></p>
+
+<p>Fun, simple, bare-bones, everything you need and nothing you don&rsquo;t. <a href="http://www.wejoinin.com">We like</a> that philosophy.</p>
+]]></content>
+  </entry>
+  
+</feed>

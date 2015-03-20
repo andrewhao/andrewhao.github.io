@@ -1,0 +1,693 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>The Sweet Spot</title>
+  <meta name="author" content="Andrew Hao">
+
+  
+  <meta name="description" content="I spent a good four hours today digging through Wordpress code, trying to get our Cal Christian Fellowship Web site back up. The problem: the page &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://www.g9labs.com/page/7">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="The Sweet Spot" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-2330913-9']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">The Sweet Spot</a></h1>
+  
+    <h2>Andrew Hao's thoughts about software engineering, design, and anything shiny.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:www.g9labs.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/notes">Notes</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div class="blog-index">
+  
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2008/01/27/wordpress-bughunt/">Wordpress Bughunt</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-01-27T14:48:04-08:00" pubdate data-updated="true">Jan 27<span>th</span>, 2008</time>
+        
+         | <a href="/2008/01/27/wordpress-bughunt/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I spent a good four hours today digging through <a href="http://www.wordpress.org">Wordpress</a> code, trying to get our <a href="http://www.ocf.berkeley.edu/~ccf">Cal Christian Fellowship</a> Web site back up.</p>
+
+<p>The problem: the page seemed to freeze when loading page content. The request would time out, leaving a half-loaded page sans content. I dug into the theme at first, trying to track down which function call could have barfed. I tracked it into the apply_filters() call in the the post.</p>
+
+<p>Wordpress uses a filtering system to manage content. This lets us add filters over all kinds of content. I realize that the problem was stemming from the <a href="http://dev.wp-plugins.org/wiki/TextControl">Text Control</a> plugin, where something had barfed!</p>
+
+<p>I disabled the plugin and voila! We were good to go again.</p>
+
+<p>Since we only really used Textile markup on the CCF site, I just re-enabled the default Textile plugin and we were back in business.</p>
+
+<p>I don&rsquo;t know for the life of me what went wrong over the weekend in the Text Control plugin, but I don&rsquo;t have the cajones or the time to dig through server logs, et. al. and find out.</p>
+
+<p>Geeking out like nobody&rsquo;s business,</p>
+
+<p>-Andrew</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2007/12/11/im-ready-for-the-winter/">I&#8217;m ready for the winter.</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-12-11T11:24:15-08:00" pubdate data-updated="true">Dec 11<span>th</span>, 2007</time>
+        
+         | <a href="/2007/12/11/im-ready-for-the-winter/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Okay, I confess. I&rsquo;ve been daydreaming about winter break:</p>
+
+<ol>
+<li><p> Sleeping in.</p></li>
+<li><p> The laughter of friends.</p></li>
+<li><p> Taking a day trip with a camera to Monterey/Carmel (or anywhere awesome).</p></li>
+<li><p> Working (uninterrupted) on <a href="http://www.wejoinin.com">Wejoinin</a>.</p></li>
+<li><p> Redesigning the <a href="http://blog.g9labs.com">blog</a>? Updating the <a href="http://portfolio.g9labs.com">portfolio</a>? (Good Lord, it&rsquo;s about time).</p></li>
+<li><p> Kicking it with Jesus.</p></li>
+<li><p> Working on a few songs, and maybe trying a bit of recording.</p></li>
+<li><p> Reading, reading, reading, then writing, writing, writing.</p></li>
+<li><p> Spending the holidays with family.</p></li>
+</ol>
+
+
+<p>And hooray! I&rsquo;m finally done with interviews. I&rsquo;ll be taking an internship at <a href="http://www.apple.com">Apple</a> this summer doing software engineering and Web development. I&rsquo;m real excited about (and very thankful for) the opportunity to hang out with the cool kids.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2007/12/05/feeling-awesome-today/">Feeling awesome today</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-12-05T02:55:08-08:00" pubdate data-updated="true">Dec 5<span>th</span>, 2007</time>
+        
+         | <a href="/2007/12/05/feeling-awesome-today/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>So for our <a href="http://inst.eecs.berkeley.edu/~cs188/fa07/announcements.html">CS188 (Artificial Intelligence)</a> project, <a href="http://inst.eecs.berkeley.edu/~cs188/fa07/projects/contest/contest.html">Capture-the-Flag Pac-Man</a>, I&rsquo;m responsible for writing a script that does some processing and analysis on a game board, simulating a Pac-Man agent (my other group members are responsible for far cooler things, like inference and heuristics, but humor me here).</p>
+
+<p>I most definitely need at least several hours of computation time to get the results I need, but figured that I&rsquo;d do best by dividing up the labor between CPUs. So last night I set five cores&#8217; worth of computational power a-workin&#8217;&mdash;1 on my desktop, 2 on my laptop and 2 remote cores on Hsiu-Fan&rsquo;s sweet desktop.</p>
+
+<p>(Then I disconnected sometime last night from Hsiu-Fan&rsquo;s computer, abruptly killing my processes. I&rsquo;m back on using UNIX <a href="http://www.askbjoernhansen.com/2006/02/07/happy_unix_screen.html"><code>screen</code></a> because I read I can remotely detach windows and processes, but I&rsquo;m actually not sure if the process keeps chuggin&#8217; in the case when your program spawns X windows and you&rsquo;ve disconnected).</p>
+
+<p>So humor me here, I feel pretty awesome right now. My room&rsquo;s a bit warm with the sheer heat dissipation from my computers, but at least that negates the need for human companionship. Tally-ho!</p>
+
+<p>&mdash;&ndash; Edit: the joys of Python:</p>
+
+<p><img src="http://imgs.xkcd.com/comics/python.png" alt="" /></p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2007/12/03/meeting-joe-hewitt/">Meeting Joe Hewitt</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-12-03T17:45:30-08:00" pubdate data-updated="true">Dec 3<span>rd</span>, 2007</time>
+        
+         | <a href="/2007/12/03/meeting-joe-hewitt/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I shook <a href="http://www.joehewitt.com">Joe Hewitt</a>&rsquo;s hand today (psst, he&rsquo;s the guy who did tons of Mozilla stuff but most notably built <a href="http://www.getfirebug.com/">Firebug</a>). I stammered a lot. But that&rsquo;s okay, because I shook Joe Hewitt&rsquo;s hand.</p>
+
+<p>&ldquo;Fanboy&rdquo; says the Facebook engineer behind me, under his breath.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2007/11/15/more-scenes/">More scenes</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-11-15T06:10:47-08:00" pubdate data-updated="true">Nov 15<span>th</span>, 2007</time>
+        
+         | <a href="/2007/11/15/more-scenes/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><em>Disclaimer: about 95% of you won&rsquo;t get this. The other 5% should consider getting a life.</em></p>
+
+<p>So we&rsquo;re in CS lecture (this is with Prof. Papadmitrou), and one student in the front raises his hand and asks, &ldquo;Isn&rsquo;t the Traveling Salesman Problem not yet proven NP-complete?&rdquo;</p>
+
+<p>Papadmitrou turns around with a concerned expression on his face. &ldquo;No, it is definitely NP-complete. What makes you think that?&rdquo;</p>
+
+<p>&ldquo;Oh, I dunno. I just thought I heard you say it or read it somewhere.&rdquo;</p>
+
+<p>&ldquo;It is most definitely NP-complete.&rdquo; Papadmitrou talks for a few moments about why it is so. &ldquo;I should know, I proved it in my thesis.&rdquo; Then he follows it up with this smile.</p>
+
+<p>Our jaws all drop.<em> </em>Everybody&rsquo;s thinking the same thing:<em> </em>this man is a <em>gangster</em>. There is laughter and applause for a minute or two.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2007/10/25/sensations-6/">Sensations</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-10-25T19:24:16-07:00" pubdate data-updated="true">Oct 25<span>th</span>, 2007</time>
+        
+         | <a href="/2007/10/25/sensations-6/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><a href="http://www.flickr.com/photos/andrewhao/1756742112/"><img src="http://farm3.static.flickr.com/2379/1756742112_a54cf5e9a8.jpg" alt="Sensations - Awaken the Dawn" /></a></p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2007/10/24/sensations-5/">Sensations</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-10-24T15:00:30-07:00" pubdate data-updated="true">Oct 24<span>th</span>, 2007</time>
+        
+         | <a href="/2007/10/24/sensations-5/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><a href="http://www.flickr.com/photos/andrewhao/1738876421/"><img src="http://farm3.static.flickr.com/2051/1738876421_c2e2aa4ec8.jpg" alt="Sensations - Rocks Cry Out" /></a></p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2007/10/19/yahoo-university-hack-day/">Yahoo! University Hack Day</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-10-19T19:20:08-07:00" pubdate data-updated="true">Oct 19<span>th</span>, 2007</time>
+        
+         | <a href="/2007/10/19/yahoo-university-hack-day/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>So Hsiu-fan and I had floated the idea of doing a hack for <a href="http://developer.yahoo.com/hacku/">Yahoo! University Hack Day</a>. We had even polled some of our friends about it, and the consensus seemed to be &ldquo;We&rsquo;ll see what we can do with the time we&rsquo;re given.&rdquo;</p>
+
+<p>Well it turned out we didn&rsquo;t have very much time. Today I opened up my email inbox to discover that Hack Day was today, and the actual time to hack was only from 2PM to 6PM.</p>
+
+<p>So I head on over to the Woz with the intention of:</p>
+
+<ol>
+<li><p> Eating free food</p></li>
+<li><p> Grabbing a t-shirt or two</p></li>
+<li><p> Talking to some of the Yahoo! devs</p></li>
+<li><p> Giving a couple of hours as a freelance developer.</p></li>
+</ol>
+
+
+<p>While I easily managed to achieve #1, 2 and 3, #4 (joining a random group) was something that I didn&rsquo;t expect to do.</p>
+
+<p>Hsiu-Fan showed up half-way through the competition and told me &ldquo;Okay, I have 50 minutes. What do you want to do?&rdquo; We had floated the idea of doing the <a href="http://blog.g9labs.com/2007/08/10/thinking-about-writing-a-rhapsody-scrobbler/">Rhapsody scrobbler</a>. &ldquo;Okay,&rdquo; he tells me. &ldquo;I think I can do that in 50 minutes.&rdquo;</p>
+
+<p>But by then, I&rsquo;ve been snagged by this other group, composed of folks mainly from the <a href="http://csua.berkeley.edu">CS Undergrad Association</a>. The idea? The creation of a <strong>commuter Web application</strong> that would take peoples&#8217; commute details and sort them into carpools based on convenience.</p>
+
+<p>The problem? These guys were serious Java heads. I was the lone Web developer. We were going to have problems. Fortunately we managed to hash out a somewhat working hack using the skill sets that we had.</p>
+
+<p>Okay, it was a &ldquo;hack&rdquo; in every sense of the word. The other guys didn&rsquo;t want to implement a database (which means no locking, no synchronization). I was parsing browser inputs through PHP and writing them out to a flat file. Then something got slurped by our Java backend and requests were shot back and forth between Yahoo! Maps and our service. Then the resulting routes were written out to a flat file and a PHP script consumed it on demand, displaying calculated routes.</p>
+
+<p>My job? I was the frontend guy, interface guy, PHP guy, and client-side guy. I put together a pretty quick-and-dirty interface (see below) using <a href="http://developer.yahoo.com/yui/grids/">YUI grids and reset</a>. Then I did a pretty massive Frankenstein CSS job, piecing bits of code from the <a href="http://code.google.com/p/blueprintcss/">Blueprint CSS framework</a>, previous projects and <a href="http://www.wejoinin.com">Wejoinin</a>.</p>
+
+<p>(Aside: If there&rsquo;s one thing I appreciate about a CSS framework, it&rsquo;s the flexibility and speed it affords you. I love, particularly with Blueprint (which I would have preferred to use on this project but didn&rsquo;t because it <em>is</em> a Yahoo! Hack Day), the ability to lay out a grid-based layout using CSS selectors in a fraction of the time it takes you to build it again from scratch.)</p>
+
+<p>Then I took a deep breath and summoned up enough of the PHP left in the recesses of my brain.</p>
+
+<p>Oh yeah, Hsiu-Fan didn&rsquo;t manage to finish the Scrobbler on time (50 minutes was pretty optimistic), but we&rsquo;re looking into finishing it up sometime, somewhere else. And it will be cool and we will feel fuzzy.</p>
+
+<h4>Hack day lessons</h4>
+
+<ul>
+<li><p>Come in with a cool idea with a cool team ready to execute. Don&rsquo;t assemble something together last minute.</p></li>
+<li><p>Yahoo! cares more about people that are passionate than  about people who  have impressive resumes.</p></li>
+<li><p>Your project idea should be limited enough in scope to be polished.</p></li>
+<li><p>Even if your team strengths don&rsquo;t align well, you&rsquo;ll always find a way to do [your hack].</p></li>
+<li><p>Come on, Yahoo!, could we get a little more than 4 hours to finish? :)</p></li>
+</ul>
+
+
+<p>All in all, a bunch of fun. I&rsquo;d definitely do it again. And I&rsquo;d pray that I&rsquo;d have a little more time to execute. And hope that people don&rsquo;t give me any more weird looks when I tell them I was at a &ldquo;programming contest.&rdquo;</p>
+
+<p><a href="http://blog.g9labs.com/wp-content/uploads/2007/10/commuter_screenshot_2.png"><img src="http://blog.g9labs.com/wp-content/uploads/2007/10/commuter_screenshot_2.thumbnail.png" alt="Commuter Interface" /></a><a href="http://blog.g9labs.com/wp-content/uploads/2007/10/commuter_screenshot_1.png"><img src="http://blog.g9labs.com/wp-content/uploads/2007/10/commuter_screenshot_1.thumbnail.png" alt="Commuter Interface" /></a></p>
+
+<p>&mdash; Edit:</p>
+
+<p><a href="http://flickr.com/photos/rckenned/1646789668/in/set-72157602538180791/"><img src="http://farm3.static.flickr.com/2368/1646789668_342a79679b_m.jpg" alt="" /></a></p>
+
+<blockquote><p>Berkeley Hack Day happened Friday at a frenetic pace.  We invaded the Woz in Soda Hall and students were trickling in and out all day with a core group of four hack teams staying for the duration and a couple of teams working remotely.  The teams fought Java, Python, C++ and PHP all day long, with Java defeating at least a couple of team members with its multiple layers of input streams required just to pull in a simple text file.  We also fought with RSS feeds from Craigslist, news archives and local Berkeley event listings.</p></blockquote>
+
+<p>In the end it was a very close race between two hacks that rose above the rest: an extremely useful carpool commuter application that matched up peoples&#8217; addresses and their daily destinations and tried to organize the most efficient combination of carpools, and a magnificent hack that provided a cell phone interface to the old game of Twenty Questions.  The impressive mix of technologies required to answer the call automatically, acquire the data for the twenty questions, do the text-to-speech translation and issue the FFT code to decipher the user responses from the cell phone won over the judges to take the top prize.</p>
+
+<p><a href="http://developer.yahoo.net/blog/archives/2007/10/berkeley_univer.html">Berkeley University Hack Day Wrap-Up Yahoo Developer Network blog</a></p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2007/10/17/crusher-website/">Crusher website</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-10-17T06:43:26-07:00" pubdate data-updated="true">Oct 17<span>th</span>, 2007</time>
+        
+         | <a href="/2007/10/17/crusher-website/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>What gives you more geek fuzzies than seeing an Evite competitor with an ASCII logo?</p>
+
+<p><a href="http://crush3r.com/">Crusher website ~ Send invites for free</a></p>
+
+<p>Fun, simple, bare-bones, everything you need and nothing you don&rsquo;t. <a href="http://www.wejoinin.com">We like</a> that philosophy.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2007/10/11/oh-well-lessons-learned-the-hard-way/">Oh well! Lessons learned the hard way</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-10-11T11:37:57-07:00" pubdate data-updated="true">Oct 11<span>th</span>, 2007</time>
+        
+         | <a href="/2007/10/11/oh-well-lessons-learned-the-hard-way/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I restored a database by hand from the Rails production log and the console. We had forgotten to run a backup cronjob (and good thing we&rsquo;re stealth! Otherwise folks would have our heads :D) Shall never do dumb things like that (or run with scissors) again.</p>
+
+<p><a href="http://blog.wejoinin.com/2007/10/11/lessons-learned/">Wejoinin Blog » Blog Archive » Lessons learned</a></p>
+</div>
+  
+  
+
+
+    </article>
+  
+  <div class="pagination">
+    
+      <a class="prev" href="/page/8/">&larr; Older</a>
+    
+    <a href="/blog/archives">Blog Archives</a>
+    
+    <a class="next" href="/page/6/">Newer &rarr;</a>
+    
+  </div>
+</div>
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2015/03/19/docker-rails-and-docker-compose-in-your-development-workflow/">Docker, Rails, and Docker Compose in your development workflow</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2014/11/29/explorations-in-logic-programming/">Explorations in logic programming</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2014/11/15/my-own-robot-training-buddy/">My own robot training buddy.</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2014/11/05/qcon-sf-2014/">Recap: QCon SF 2014</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2014/11/01/conways-law-for-humans/">Conway&#8217;s Law for humans</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/andrewhao">@andrewhao</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'andrewhao',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2015 - Andrew Hao -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'g9labs';
+      
+        
+        var disqus_script = 'count.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

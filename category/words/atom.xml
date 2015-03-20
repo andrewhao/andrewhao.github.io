@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Words | The Sweet Spot]]></title>
+  <link href="http://www.g9labs.com/category/words/atom.xml" rel="self"/>
+  <link href="http://www.g9labs.com/"/>
+  <updated>2015-03-19T14:39:53-07:00</updated>
+  <id>http://www.g9labs.com/</id>
+  <author>
+    <name><![CDATA[Andrew Hao]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[It's official: "Web site" becomes "website"]]></title>
+    <link href="http://www.g9labs.com/2010/04/16/its-official-web-site-becomes-website/"/>
+    <updated>2010-04-16T06:34:45-07:00</updated>
+    <id>http://www.g9labs.com/2010/04/16/its-official-web-site-becomes-website</id>
+    <content type="html"><![CDATA[<p><a href="http://www.g9labs.com/2010/04/16/its-official-web-site-becomes-website/screenshot1-2/"><img src="http://www.g9labs.com/wp-content/uploads/2010/04/screenshot1-500x350.png" alt="" /></a></p>
+
+<p><a href="http://www.g9labs.com/2010/04/16/its-official-web-site-becomes-website/screenshot1-2/"></a>File this under &ldquo;Nobody is going to care&rdquo;, but I&rsquo;ve always been instructed to write &ldquo;Web site&rdquo; in my technical communications class. I found it grating. Hooray for change!</p>
+]]></content>
+  </entry>
+  
+</feed>

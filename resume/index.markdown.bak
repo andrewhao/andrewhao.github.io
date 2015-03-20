@@ -1,0 +1,325 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Andrew Hao - The Sweet Spot</title>
+  <meta name="author" content="Andrew Hao">
+
+  
+  <meta name="description" content="Andrew Hao Sep 23rd, 2014 # Andrew Hao
+## Software leader & craftsman > [Download PDF](resume.pdf)
+> [andrewhao@gmail.com](andrewhao@gmail.com)
+> ( &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://www.g9labs.com/resume/index.markdown.bak">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="The Sweet Spot" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-2330913-9']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">The Sweet Spot</a></h1>
+  
+    <h2>Andrew Hao's thoughts about software engineering, design, and anything shiny.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:www.g9labs.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/notes">Notes</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article role="article">
+  
+  <header>
+    <h1 class="entry-title">Andrew Hao</h1>
+    <p class="meta">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-09-23T03:18:08-07:00" pubdate data-updated="true">Sep 23<span>rd</span>, 2014</time></p>
+  </header>
+  
+  # Andrew Hao
+## Software leader & craftsman
+
+> [Download PDF](resume.pdf)
+> [andrewhao@gmail.com](andrewhao@gmail.com)
+> (408) 621-5937
+
+-----
+
+### Overview
+
+Empathetic software leader developing strong software teams and delivering products that matter.
+
+-----
+
+### Experience
+
+#### Blurb, Engineering Manager
+
+Team lead responsible for delivering Blurb's ecommerce features and author publishing experience. Led planning team developing the architectural vision of the Blurb platform from monolith to a microservice future. Evangelist and trainer in TDD and clean OO design. Technical lead for Rails 2 to 4 upgrade project aimed to modernize the Blurb platform without stopping feature development. Successfully delivered three projects with external development teams, local and overseas. Hired several engineers and mentored team in XP-based practices.
+
+#### Blurb, Software Engineer
+
+TDD Rails and Javascript development delivering ecommerce features at scale. Key player in transition from a monolithic Rails app to SOA using Rails, Redis, and Backbone. Implementing composable APIs and elegant OO design. Refactor for business. Refactor for pleasure.
+
+#### Wejoinin, Co-founder
+
+An accidental startup that began life as a side project, borne out of a personal need to organize volunteers for events. Wejoinin has evolved to support thousands of users and organizations, with upwards of 40,000 visitors a month driven solely from word-of-mouth and seeing much adoption in the nonprofit and academic sectors.
+
+I designed and developed the site with my cofounder and have supported our customers over the years. Transitioned the site seamlessly from Rails 2 to 3 while backfilling deployment and test automation infrastructure.
+
+#### g9Labs* Design Studio, Founder
+
+Freelance and passion projects spanning iOS development, Web application development, graphic art and UX design. Recent projects include: a real-time browser-based chat application, social online shopping experience, and an interactive Twitter art installation. See my [github](http://www.github.com/andrewhao) for some samples of my projects.
+
+#### Riverbed, User Interface Developer
+
+Designed and developed management pages to configure appliance features in Web interface across Riverbed product family, e.g. a management interface to control multiple VMware VM instances over a large collection of Steelhead appliances & a significantly simplified QoS workflow. Coached others in UX methodologies (sketching, prototyping, user research) and integrated them into team processes. Drove adoption of YUI3 framework. Coordinated between PM, QA, salespeople, developers and customers to gather much-needed feedback to drive feature development and design. Optimized application performance in the server, browser client and over the wire.
+
+#### Apple, Software Engineering Intern
+
+As an mobile engineering intern, designed and built an OS X Server monitoring application on iPhone. Began with extensive user research and case studies that informed design. Responsible for porting an internal server communication framework from Cocoa to UIKit. Developed an internal Web-based iPhone CalDAV calendaring application.
+
+#### FAQQLY, Lead Developer
+
+Full-stack Rails and Javascript programmer at a social networking startup. Led a four-person development team in planning and execution of site vision and goals. Specialized in scalable, accessible, standards-compliant design. Developed solutions for internationalization challenges involving communication and coordination with an overseas team. Implemented a REST API for third-party apps.
+
+### Education
+
+#### University of California, Berkeley
+
+  * B.S. Electrical Engineering Computer Science (EECS)
+  * B.A. Mass Communications
+  * Management of Engineering and Innovation Certificate (Entrepreneurship)
+
+Graduated: _Dec 2008_
+GPA: _3.58_
+
+### Skills
+
+#### Code
+
+Ruby, Javascript, Objective-C, Java, Python, Git, HTML5+CSS3, MySQL/PostgreSQL, Redis, PHP
+
+#### Tools
+
+Ruby on Rails, Ember, Backbone, Node.js, OOCSS, iOS, Puppet, Capistrano, Vagrant, RaphaelJS, Processing, Arduino, Docker, JIRA
+
+#### Techniques
+
+Agile/Scrum, Lean UX, user-centered design, Domain-Driven Design
+
+#### Interests
+
+**Honors:** Eta Kappa Nu, Mu Chapter (05-08)
+
+**Leadership:** Board Member, Running for a Better Oakland (12-14), Intervarsity Christian Fellowhip at UC Berkeley (04-08), Regeneration Church Staff (09-14)
+
+**Design:** [Berkeley Innovation](http://innovation.berkeley.edu/) Product Design Group (08)
+
+**Languages:** English, Mandarin Chinese (conversational)
+
+**Interests:** Trail running, guitar, interactive & computational art, creative writing, triathlon, cycling, photography, spirituality
+
+**Volunteer:** [Running for a Better Oakland](http://www.rboakland.org), [BRUTE Labs](http://www.brutelabs.org) (social design agency)
+
+
+  
+    <footer>
+      <p class="meta">
+        
+  
+
+<span class="byline author vcard">Posted by <span class="fn">andrewhao</span></span>
+
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-09-23T03:18:08-07:00" pubdate data-updated="true">Sep 23<span>rd</span>, 2014</time>
+        
+      </p>
+      
+        <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://www.g9labs.com/resume/index.markdown.bak" data-via="andrewhao" data-counturl="http://www.g9labs.com/resume/index.markdown.bak" >Tweet</a>
+  
+  
+  
+</div>
+
+      
+    </footer>
+  
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2015/03/19/docker-rails-and-docker-compose-in-your-development-workflow/">Docker, Rails, and Docker Compose in your development workflow</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2014/11/29/explorations-in-logic-programming/">Explorations in logic programming</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2014/11/15/my-own-robot-training-buddy/">My own robot training buddy.</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2014/11/05/qcon-sf-2014/">Recap: QCon SF 2014</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2014/11/01/conways-law-for-humans/">Conway's Law for humans</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/andrewhao">@andrewhao</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'andrewhao',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2015 - Andrew Hao -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

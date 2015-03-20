@@ -1,0 +1,760 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>The Sweet Spot</title>
+  <meta name="author" content="Andrew Hao">
+
+  
+  <meta name="description" content="So I got the poster printed, and the LEDs currently show through the board pretty well. This is good: But last night I spent a good chunk of my &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://www.g9labs.com/page/4">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="The Sweet Spot" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-2330913-9']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">The Sweet Spot</a></h1>
+  
+    <h2>Andrew Hao's thoughts about software engineering, design, and anything shiny.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:www.g9labs.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/notes">Notes</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div class="blog-index">
+  
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2011/02/12/currently-frustrated/">Currently: frustrated</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-02-12T09:38:45-08:00" pubdate data-updated="true">Feb 12<span>th</span>, 2011</time>
+        
+         | <a href="/2011/02/12/currently-frustrated/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>So I got the poster printed, and the LEDs currently show through the board pretty well. This is good:</p>
+
+<p><a href="http://www.flickr.com/photos/andrewhao/5437339409/"><img src="http://farm5.static.flickr.com/4134/5437339409_14b14199d0.jpg" alt="Printed poster, testing the light" /></a></p>
+
+<p>But last night I spent a good chunk of my evening and early morning hitting a lot of walls:</p>
+
+<ul>
+<li><p>I might have to throw out the idea of using the Twitter Streaming API. For the kind of searches I need to do, I just can&rsquo;t get enough granularity to use live information. Plus, I can only open one connection to the API at a time, which is not good if I need to run four listeners at a time.</p></li>
+<li><p>I couldn&rsquo;t get the <a href="http://classifier.rubyforge.org/">Classifier</a> Ruby gem to work; which looked like the easiest implementation of an LSI/naive Bayes classifier out there. The next closest thing was <a href="http://code.google.com/p/nltk/">nltk</a>, and there was no way in heck I had the time to figure that out. Plus, I realized that creating a training set was a LOT more work than I thought I had. So&hellip; scratch the machine intelligence out of this. I&rsquo;m just going to manually search for specific search terms.</p></li>
+<li><p>New solution: Periodically use the Search API to grab results. This allows more exact search results and gives me the ability to tweak the search terms while the demo loop is running.</p></li>
+<li><p>Event-driven programming is throwing me for a loop (ha, get it?). After perusing the <a href="http://nodejs.org/docs/v0.4.0/api/">node.js docs</a> for the better part of an evening, I think I need to re-architect the code. I need to create a simple event-driven queue, which is confusing because it seems like something simple, yet support isn&rsquo;t built in. node provides so little out of the box.</p></li>
+<li><p>It could be more difficult to set up a socket connection to Arduino than I thought. I may have to set up a socket connection in python with <a href="https://github.com/lupeke/python-firmata">python-firmata</a> to interface with the Arduino. Other Arduino/serial proxies report not working well with Snow Leopard.</p></li>
+<li><p>I haven&rsquo;t yet thought about the Web interface.</p></li>
+<li><p>I haven&rsquo;t thought about how I&rsquo;m going to hang the piece. I have some scrap wood and fishing wire, but I haven&rsquo;t thought about whether it&rsquo;s possible to hang all those LED arrays w/o some weird gravity issues.</p></li>
+<li><p>Woodwork help? I need to figure out how to use a rotary saw.</p></li>
+</ul>
+
+
+<p>So uh, yeah, I&rsquo;m getting nowhere but at least I know what I still need to do.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2011/02/10/update/">Update</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-02-10T16:42:27-08:00" pubdate data-updated="true">Feb 10<span>th</span>, 2011</time>
+        
+         | <a href="/2011/02/10/update/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>A quick update on the art project:</p>
+
+<ul>
+<li><p>I switched from my normal LEDs to &ldquo;straw hat&rdquo; wide-angle LEDs. The viewing angle is much better, meaning also that I can get a more diffuse glow @ closer distances so the light comes through better through the paper.</p></li>
+<li><p>I found out my deadline is Sunday so I&rsquo;m a little stressed.</p></li>
+<li><p>No progress on Arduino/Processing or the Twitter feed. Still have to figure out whether I should use a Bayesian classifier for better fuzzy matching on tweets or if I should just rig the feed with a simple text filter on &ldquo;I feel ___&rdquo;. I have a feeling the former is nice in theory but isn&rsquo;t good enough and the latter is probably best given this short time span.</p></li>
+<li><p>No idea how I&rsquo;m going to solder the LEDs to the breadboards. Heck, I think my breadboards aren&rsquo;t even wide enough, meaning I either need to find a larger breadboard or cut one up and paste the two pieces together lengthwise.</p></li>
+<li><p>I still need to find wood to mount/suspend the project.</p></li>
+<li><p>I called around and got some good quotes from print shops. I&rsquo;m probably going to go with <a href="http://www.yelp.com/biz/alameda-copy-alameda">Alameda Copy</a>. Friendly staff, good Yelp review, best price I saw around. I&rsquo;ll be printing the poster off their oversize printer on a roll of 70lb paper. Quote: $6-8 per sq. foot, color.</p></li>
+<li><p>I&rsquo;ve made some good progress on the design, though. I think I&rsquo;m lengthening the poster but decreasing the width. I&rsquo;ll post more screens if I get a chance.</p></li>
+</ul>
+
+
+<p>[caption id=&ldquo;&rdquo; align=&ldquo;alignnone&rdquo; width=&ldquo;500&rdquo; caption=&ldquo;Left: conventional LEDs. Right: straw hat LEDs&rdquo;]<a href="http://www.flickr.com/photos/andrewhao/5437057228/"><img src="http://farm6.static.flickr.com/5019/5437057228_8568b5095d.jpg" alt="Compare straw hat LEDs with conventional LEDs" /></a>[/caption]</p>
+
+<p>[caption id=&ldquo;&rdquo; align=&ldquo;alignnone&rdquo; width=&ldquo;500&rdquo; caption=&ldquo;Final design&rdquo;]<a href="http://www.flickr.com/photos/andrewhao/5437055328/"><img src="http://farm5.static.flickr.com/4141/5437055328_81b362d325.jpg" alt="(Final) Remix" /></a>[/caption]</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2011/02/01/the-making-of-sos-intro/">The making of SOS: Intro</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-02-01T10:40:40-08:00" pubdate data-updated="true">Feb 1<span>st</span>, 2011</time>
+        
+         | <a href="/2011/02/01/the-making-of-sos-intro/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><a href="http://www.flickr.com/photos/andrewhao/5408231821/"><img src="http://farm6.static.flickr.com/5095/5408231821_b4d0fd6837.jpg" alt="Save Our Souls - Logo" /></a></p>
+
+<p>I&rsquo;m starting a project for my church&rsquo;s art show that integrates Twitter, print design and light. I&rsquo;m titling it &ldquo;Save Our Souls&rdquo;.</p>
+
+<p>The theme of the art show is &ldquo;Instead of Ashes&rdquo;, a reference from of <a href="http://www.esvonline.org/search/isaiah+61/">Isaiah 61</a> which highlights of God&rsquo;s promises of redemption for the world&rsquo;s suffering through Jesus.</p>
+
+<h2>What does it do?</h2>
+
+<p>Essentially, what I want it to do is parse the global Twitter firehose and display a live stream of tweets that highlight brokenness and pain: tweets about the world&rsquo;s injustices, breakups, deaths, disappointments, and even ennui. This is inspired by <a href="http://twistori.com">twistori</a>.</p>
+
+<p>At the same time these tweets are floating across the screen, I want to illuminate a part of the printed verse in physical space that corresponds to the tweet.</p>
+
+<p>Imagine:</p>
+
+<p>Tweet: <em>I just want everyone to understand something&hellip;&hellip;I&rsquo;m SEVERELY depressed right now&hellip;&hellip;my (ex)girlfriend is one of the greatest things to happen to me and she&rsquo;s gone.</em></p>
+
+<p>At the same time, the LED array behind &ldquo;he has sent me to bind up the brokenhearted&rdquo; from Isaiah 61:1 would light up and pulse.</p>
+
+<p>And so on, for each tweet that flies across the screen.</p>
+
+<h2>Architecture</h2>
+
+<p><a href="http://www.flickr.com/photos/andrewhao/5408232737/"><img src="http://farm6.static.flickr.com/5020/5408232737_0ba8545d4e.jpg" alt="Isaiah 61 Architecture" /></a></p>
+
+<p>node.js would process messages from the Twitter streaming API keyed off of certain keywords and filter them by (negative) sentiment, and pushed onto queues. Queues would be drained in a fair manner and pushed out to a browser frontend, while a socket connection to an Arduino script would be responsible for pulsing the LED array.</p>
+
+<p>Of course, there&rsquo;s a lot of questions left unanswered here: How do you make an LED array? How do you do (reliable) sentiment analysis? How big should the print graphic be? How far behind the print should the LED arrays be placed for the light to be sufficiently diffuse, yet bright enough to be visible? I&rsquo;m not sure yet.</p>
+
+<h2>First steps</h2>
+
+<p>So I just bought an Arduino and a ton of LEDs off of eBay. I&rsquo;m trying to relearn all the EE40 I tried so hard to forget way back in my undergrad days.</p>
+
+<p>[caption id=&ldquo;&rdquo; align=&ldquo;alignnone&rdquo; width=&ldquo;500&rdquo; caption=&ldquo;Arduinos are cool. I had to do my fair share of head-scratching to figure out resistor values.&rdquo;]<a href="http://www.flickr.com/photos/andrewhao/5408162241/"><img src="http://farm6.static.flickr.com/5096/5408162241_201f757ddd.jpg" alt="Arduino is hooked up" /></a>[/caption]</p>
+
+<p>[caption id=&ldquo;&rdquo; align=&ldquo;alignnone&rdquo; width=&ldquo;500&rdquo; caption=&ldquo;A conceptual design for the print graphic.&rdquo;]<a href="http://www.flickr.com/photos/andrewhao/5408870750/"><img src="http://farm6.static.flickr.com/5098/5408870750_9fa4951f0d.jpg" alt="Print Concepts" /></a>[/caption]</p>
+
+<p>[caption id=&ldquo;&rdquo; align=&ldquo;alignnone&rdquo; width=&ldquo;500&rdquo; caption=&ldquo;Basic node.js backend with a rudimentary frontend streams live tweets.&rdquo;]<a href="http://www.flickr.com/photos/andrewhao/5408765510/"><img src="http://farm6.static.flickr.com/5137/5408765510_3381c46945.jpg" alt="Testing backend." /></a>[/caption]</p>
+
+<p>See the (rudimentary) nodejs/client code at <a href="https://github.com/andrewhao/isaiah-61-project">github</a>.</p>
+
+<p>See the <a href="http://www.flickr.com/photos/andrewhao/sets/72157625956085386/with/5408765510/">rest of the photos</a>.</p>
+
+<p>More to come!</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2011/01/28/using-37signals-shorthand-for-ux-flows/">Using 37signals shorthand for UX flows</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-01-28T10:38:42-08:00" pubdate data-updated="true">Jan 28<span>th</span>, 2011</time>
+        
+         | <a href="/2011/01/28/using-37signals-shorthand-for-ux-flows/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><a href="http://37signals.com/svn/posts/1926-a-shorthand-for-designing-ui-flows">http://37signals.com/svn/posts/1926-a-shorthand-for-designing-ui-flows</a></p>
+
+<p>I&rsquo;ve found this technique useful for illustrating workflows quickly, particularly when brainstorming in teams.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2011/01/28/appstoreconnect-ux/">AppStoreConnect UX</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-01-28T08:27:33-08:00" pubdate data-updated="true">Jan 28<span>th</span>, 2011</time>
+        
+         | <a href="/2011/01/28/appstoreconnect-ux/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><a href="http://www.flickr.com/photos/andrewhao/5411517135/"><img src="http://farm6.static.flickr.com/5138/5411517135_e63f84705d.jpg" alt="2. Dashboard: Reviews Tab" /></a></p>
+
+<p>A series of UX workflow designs I did for <a href="http://www.appstoreconnect.com">AppStoreConnect</a>, an overseas Android multi-market submission application. Completed November 2010.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2010/12/01/aristo-the-shiniest-jquery-ui-theme-of-them-all/">Aristo, the shiniest jQuery UI theme of them all.</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-12-01T09:54:40-08:00" pubdate data-updated="true">Dec 1<span>st</span>, 2010</time>
+        
+         | <a href="/2010/12/01/aristo-the-shiniest-jquery-ui-theme-of-them-all/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Let&rsquo;s face it: <a href="http://jqueryui.com/themeroller/">jQuery UI skins</a> suck. They&rsquo;re flat, they&rsquo;re boring, they don&rsquo;t pop.</p>
+
+<p>Enter <a href="http://taitems.tumblr.com/post/482577430/introducing-aristo-a-jquery-ui-theme">Aristo</a>, a jQuery UI port of the <a href="http://cappuccino.org/">Cappuccino Javascript framework</a> theme.</p>
+
+<p><a href="http://www.g9labs.com/2010/12/01/aristo-the-shiniest-jquery-ui-theme-of-them-all/screen-shot-2010-12-01-at-4-47-58-pm/"><img src="http://www.g9labs.com/wp-content/uploads/2010/12/Screen-shot-2010-12-01-at-4.47.58-PM.png" alt="" /></a></p>
+
+<p>Much better. Clone the <a href="https://github.com/taitems/Aristo-jQuery-UI-Theme">repo from GitHub</a> here, or check out a <a href="http://www.warfuric.com/taitems/demo.html">demo</a>.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2010/08/03/on-selling-my-soul-and-switching-to-mac/">On selling my soul and switching to Mac</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-08-03T14:44:45-07:00" pubdate data-updated="true">Aug 3<span>rd</span>, 2010</time>
+        
+         | <a href="/2010/08/03/on-selling-my-soul-and-switching-to-mac/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>A month ago I bought an &lsquo;07 MacBook on Craigslist. No, it&rsquo;s not one of those sexy aluminum hot rods, but it sure is pretty.</p>
+
+<p>I was full of mixed emotions. I had finally joined the Tribe! I had sold my soul. I can now develop iPhone apps! I am property of SJ. Yes, I had interned at Apple in the summer of &lsquo;08, but I haven&rsquo;t really paid much attention to OS X until I&rsquo;ve owned one of these suckers for myself.</p>
+
+<p>It&rsquo;s not easy making the switch. Here are some of my gripes with OSX and some stopgap replacements I&rsquo;ve found:</p>
+
+<ul>
+<li><p>No keyboard shortcut to maximize windows. (Solved with <a href="http://www.blazingtools.com/downloads.html#RightZoom">RightZoom</a>)</p></li>
+<li><p>MacPorts really sucks (that is, having to compile everything from source is really slow). (Still outstanding)</p></li>
+<li><p>Switching windows between spaces is really clunky. (Sorta solved with <a href="http://thecocoabots.com/hyperspaces/">Hyperspaces</a>)</p></li>
+<li><p>No keyboard shortcut to &ldquo;move active window to space&rdquo;. (Still outstanding)</p></li>
+<li><p>No way to force windows to a grid. (Solved with <a href="http://www.mizage.com/divvy/">Divvy</a>)</p></li>
+<li><p>No right Ctrl key makes things really painful in Emacs. (Remapped right &ldquo;Enter&rdquo; with <a href="http://doublecommand.sourceforge.net/">DoubleCommand</a>)</p></li>
+<li><p>Aero Snap is cool. (Check out <a href="http://www.irradiatedsoftware.com/cinch/">Cinch</a>)</p></li>
+<li><p>The MacBook keyboard keys feel cheap compared to a Thinkpad. (Still outstanding)</p></li>
+<li><p>Really annoyed with Command-Tab switching. I just want to switch to a different window! (Still outstanding).</p></li>
+<li><p>Expose feels limited compared to Compiz&#8217; Scale plugin. Cannot Expose all windows in all spaces. (Still outstanding)</p></li>
+<li><p>Closing window doesn&rsquo;t kill the process. I suspect this is just a design philosophy I have to deal with. (Still outstanding)</p></li>
+<li><p>Not sure why, but my wrists generally tend to hurt more after using the MB rather than my work Thinkpad.</p></li>
+</ul>
+
+
+<p>Okay, I&rsquo;m not going to do all complaining. Some things I really enjoy:</p>
+
+<ul>
+<li><p>Drag-and-drop installation is totally elegant.</p></li>
+<li><p>Time Machine just works, and the zoomable interface is totally slick.</p></li>
+<li><p>Helvetica Neue, I love you.</p></li>
+<li><p>Something about the font rendering is just amazing.</p></li>
+<li><p>I get to look cool (and slightly cliche&hellip;) at coffee shops</p></li>
+<li><p>Desktop graphics &amp; animations render smoothly with CoreAnimation. This stuff just looks slick.</p></li>
+</ul>
+
+
+<p>I guess it&rsquo;s not as bad as I&rsquo;ve made it out to be. Well here I am. Swore I&rsquo;d never do it, but you got me with all that shiny, Mr. Jobs. You got me.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2010/06/02/post-review-git-svn-and-review-board/">post-review, git-svn and Review Board</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-06-02T04:26:02-07:00" pubdate data-updated="true">Jun 2<span>nd</span>, 2010</time>
+        
+         | <a href="/2010/06/02/post-review-git-svn-and-review-board/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Here&rsquo;s how to set up the excellent VMware-developed open-source <a href="http://www.reviewboard.org/">Review Board</a> and its <code>[post-review](http://www.reviewboard.org/docs/releasenotes/dev/rbtools/0.2/)</code> command line review creation utility to work with git and git-svn on your computer.</p>
+
+<p>My assumption is that you&rsquo;re working with a local Git repository that is remotely linked to an SVN repository via the <a href="http://utsl.gen.nz/talks/git-svn/intro.html">git-svn</a> bridge. Let&rsquo;s assume that your master branch is synced with the SVN repository, and you&rsquo;re working on <code>bug_12345_branch</code>.</p>
+
+<ol>
+<li><p> Make sure you have RBTools installed (<code>sudo easy_install rbtools</code> for me on Ubuntu Linux), and Review Board set up elsewhere.</p></li>
+<li><p> Add a link to your Review Board URL in .git/config:</p></li>
+</ol>
+
+
+<blockquote><pre><code>[reviewboard]
+ url = &lt;a href="#"&gt;https://(url_for_review_board)/&lt;/a&gt;
+</code></pre></blockquote>
+
+<ol>
+<li><p> Make sure all your changes in <code>bug_12345_branch</code> have been locally committed.</p></li>
+<li><p> <code>post-review -o</code>, and&hellip;</p></li>
+<li><p> Voila! You should have a new review up on your Review Board instance.</p></li>
+<li><p> (After you get reviews, you can modify <code>bug_12345_branch</code>, pull the changes into master, and then <code>git svn dcommit</code>, blah, blah, blah.)</p></li>
+</ol>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2010/04/26/yui-widget-lazy-instantiation/">YUI 3 Widget lazy instantiation</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-04-26T19:09:01-07:00" pubdate data-updated="true">Apr 26<span>th</span>, 2010</time>
+        
+         | <a href="/2010/04/26/yui-widget-lazy-instantiation/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>At work, we make good use of <a href="http://developer.yahoo.com/yui/">YUI 3</a>. It&rsquo;s a really well-thought-out framework, from sandboxing and deep namespaces to CSS3 selector support and lazy-loading modules through the Yahoo! CDN. One of YUI 3&rsquo;s biggest features is the Widget framework, which specifies an object on the page that the user can tweak to his or her whims.</p>
+
+<p>Now typically, a YUI widget must be instantiated, then rendered onto the page. The render method is responsible for:</p>
+
+<ol>
+<li><p> Writing the widget&rsquo;s DOM elements out to the page</p></li>
+<li><p> Binding handlers onto the DOM object.</p></li>
+<li><p> Updating the widget state to match the JS object state.</p></li>
+</ol>
+
+
+<p>(This information didn&rsquo;t come easily. I had to dig around in some YUI slides and found this in <a href="http://developer.yahoo.com/yui/theater/video.php?v=desai-yuiconf2009-widgets">Satyen Desai&rsquo;s &ldquo;A Widget Walkthrough&rdquo; presentation</a> at YUIConf 2009.)</p>
+
+<p><a href="http://www.g9labs.com/2010/04/27/yui-widget-lazy-instantiation/screenshot5/"><img src="http://www.g9labs.com/wp-content/uploads/2010/04/screenshot5-499x374.png" alt="" /></a></p>
+
+<p>Now we have a page that generates hundreds if not thousands of these tooltips. Instantiating each tooltip, rendering them into the DOM and generating event handlers for each was wasteful and slowed IE browsers down to a crawl. So this brought us to the decision to lazily instantiate each Tooltip instance. My first thought was that I should be able to overwrite the render() method to write to the DOM only after a mouseover onto the Tooltip trigger.</p>
+
+<p>Here&rsquo;s the folly: note that in the previous slide, the event handlers don&rsquo;t go live until after the widget HTML is rendered into the DOM. Rats. Is there any way I can get around this?</p>
+
+<p>Here&rsquo;s some peculiar code for the Tooltip wrapper:</p>
+
+<pre><code>function ttWrapper(triggerNode) {
+  this.tt = null;
+  /* First mouseover will instantiate the real TooltipWidget. */
+  var mOver = Y.on('mouseover', function (e) {
+    this.tt = new TooltipWidget(/*config*/).render();
+    /* Detach this listener so it won't intercept any more mouseovers */
+    mOver.detach();
+    /* A second mouseover must be simulated on the real TooltipWidget */
+    Y.Event.simulate(triggerNode, 'mouseover'); 
+  }, triggerNode);
+
+
+
+
+}
+</code></pre>
+
+<p>The code installs a mouseover listener on the trigger node, then swaps itself out for the real mouseover listener that gets attached to the triggerNode when TooltipWidget gets instantiated. Event.simulate() is a strange, yet smart way to solve this problem.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2010/04/16/its-official-web-site-becomes-website/">It&#8217;s official: &#8220;Web site&#8221; becomes &#8220;website&#8221;</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-04-16T06:34:45-07:00" pubdate data-updated="true">Apr 16<span>th</span>, 2010</time>
+        
+         | <a href="/2010/04/16/its-official-web-site-becomes-website/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><a href="http://www.g9labs.com/2010/04/16/its-official-web-site-becomes-website/screenshot1-2/"><img src="http://www.g9labs.com/wp-content/uploads/2010/04/screenshot1-500x350.png" alt="" /></a></p>
+
+<p><a href="http://www.g9labs.com/2010/04/16/its-official-web-site-becomes-website/screenshot1-2/"></a>File this under &ldquo;Nobody is going to care&rdquo;, but I&rsquo;ve always been instructed to write &ldquo;Web site&rdquo; in my technical communications class. I found it grating. Hooray for change!</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  <div class="pagination">
+    
+      <a class="prev" href="/page/5/">&larr; Older</a>
+    
+    <a href="/blog/archives">Blog Archives</a>
+    
+    <a class="next" href="/page/3/">Newer &rarr;</a>
+    
+  </div>
+</div>
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2015/03/19/docker-rails-and-docker-compose-in-your-development-workflow/">Docker, Rails, and Docker Compose in your development workflow</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2014/11/29/explorations-in-logic-programming/">Explorations in logic programming</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2014/11/15/my-own-robot-training-buddy/">My own robot training buddy.</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2014/11/05/qcon-sf-2014/">Recap: QCon SF 2014</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2014/11/01/conways-law-for-humans/">Conway&#8217;s Law for humans</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/andrewhao">@andrewhao</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'andrewhao',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2015 - Andrew Hao -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'g9labs';
+      
+        
+        var disqus_script = 'count.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

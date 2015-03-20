@@ -1,0 +1,317 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Code For Oakland Barcamp - The Sweet Spot</title>
+  <meta name="author" content="Andrew Hao">
+
+  
+  <meta name="description" content="[caption id=&ldquo;&rdquo; align=&ldquo;alignnone&rdquo; width=&ldquo;500&rdquo; caption=&ldquo;Is that Jon Chan I see? Yes it is. Photo credit &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://www.g9labs.com/2011/06/04/code-for-oakland-barcamp">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="The Sweet Spot" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-2330913-9']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">The Sweet Spot</a></h1>
+  
+    <h2>Andrew Hao's thoughts about software engineering, design, and anything shiny.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:www.g9labs.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/notes">Notes</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Code For Oakland Barcamp</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-06-04T11:43:19-07:00" pubdate data-updated="true">Jun 4<span>th</span>, 2011</time>
+        
+         | <a href="#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>[caption id=&ldquo;&rdquo; align=&ldquo;alignnone&rdquo; width=&ldquo;500&rdquo; caption=&ldquo;Is that Jon Chan I see? Yes it is. Photo credit Oakland Local.&rdquo;]<a href="http://www.flickr.com/photos/oaklandlocal/5804304389/"><img src="http://farm4.static.flickr.com/3527/5804304389_e539db36a2.jpg" alt="" /></a>[/caption]</p>
+
+<p>A few notes from this <a href="http://codeforoakland.org/">one-day barcamp/hackfest</a>. The goal was to create mobile apps for Oakland, with a special emphasis on serving underserved populations.</p>
+
+<ul>
+<li><p>Text messaging is still king. While smartphones and their apps are at the leading edge and grabbing all the attention these days, most underserved populations don&rsquo;t have access to these services. Lots of apps today are using <a href="http://www.twilio.com/">Twilio</a> or <a href="http://www.tropo.com">Tropo</a> APIs as their SMS/voice gateways.</p></li>
+<li><p>Open data is awesome. I learned about <a href="http://www.scraperwiki.com">ScraperWiki</a>, which basically puts site scraping code into the cloud so people can maintain your scraper script long after you&rsquo;ve tossed it. Some staff from maplight.org are here.</p></li>
+<li><p>Open data is also difficult to maintain. One presenter mentioned how Oakland keeps a database of social services&mdash;that&rsquo;s great, but what if the organization shuts down and/or changes its hours? Who&rsquo;s responsible for updating the information? IIRC, the estimate was that 30% of the listings kept by the City are no longer valid. There need to be active efforts to combat dataset decay.</p></li>
+<li><p>By the way, here&rsquo;s a <a href="http://codeforoakland.org/data-sets/">list of Oakland GIS datasets</a>. Some of it really sucks (filled with garbage spam data). Some of it is useful.</p></li>
+</ul>
+
+
+<h4>Today&rsquo;s Projects:</h4>
+
+<ul>
+<li><p><a href="http://comtxt.nodester.com/">comtxt</a>: text gateway for community organizers. <a href="http://github.com/ryanjarvinen/comtxt">github.com/ryanjarvinen/comtxt</a></p></li>
+<li><p>freexchange.org. mobile interface to donated goods.</p></li>
+<li><p>oakland:pm. get oakland high-schoolers connected to afterschool programs. <a href="http://github.com/jedp/oakland.pm">github.com/jedp/oakland.pm</a></p></li>
+<li><p>txt2wrk: text-based job matching. this one is unique because it is a complete SMS/voice based interface. connects to craigslist. call it and it reads back craigslist job postings. targeted for parolees.</p></li>
+<li><p>Oakland Food Finder: helping people find healthy, locally-grown food.</p></li>
+<li><p>BettaSTOP: help people find buses, access bus schedules. in oakland, many underserved communities depend on making and finding the right bus. it also allows users to give feedback on buses, remark on their timeliness, and talk about bus route features. Live &amp; in production: <a href="http://www.bettastop.net.">http://www.bettastop.net.</a></p></li>
+</ul>
+
+
+<h4>What I did</h4>
+
+<p>I&rsquo;m helping out the Oakland:PM team, which is in the process of building out a service to get high schoolers connected to city-funded afterschool programs. The idea is that they can pull up their mobile phones and see what&rsquo;s available to them while they&rsquo;re kicking it with friends and bored out of their minds.</p>
+
+<p>While the others hacked on wireframes and some code, I worked on a few user stories and resolved to interview a few of my contacts who work for the YMCA in East Oakland. We won a $500 grant from the City to see this thing through in July. Here&rsquo;s hoping that we&rsquo;ll make it.</p>
+
+<p>So far the app is a <a href="http://nodejs.org">nodejs</a> app with pages served with the <a href="http://expressjs.com/">Express</a> framework. We threw around ideas of using <a href="http://www.sencha.com/products/touch/">Sencha Touch</a>, but I think that decision is out of my hands. We&rsquo;ll see how we proceed.</p>
+
+<p>Source code can be found at: <a href="http://github.com/jedp/oakland.pm">http://www.github.com/jedp/oakland.pm</a></p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">andrewhao</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-06-04T11:43:19-07:00" pubdate data-updated="true">Jun 4<span>th</span>, 2011</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/category/andrew-2-dot-0/'>Andrew 2.0</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://www.g9labs.com/2011/06/04/code-for-oakland-barcamp/" data-via="andrewhao" data-counturl="http://www.g9labs.com/2011/06/04/code-for-oakland-barcamp/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/2011/03/22/un-declaration-of-human-rights-visualization/" title="Previous Post: UN Declaration of Human Rights (Visualization)">&laquo; UN Declaration of Human Rights (Visualization)</a>
+      
+      
+        <a class="basic-alignment right" href="/2011/06/15/brute-labs-ux-project-studentsconnect/" title="Next Post: BRUTE LABS UX project: StudentsConnect">BRUTE LABS UX project: StudentsConnect &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2015/03/19/docker-rails-and-docker-compose-in-your-development-workflow/">Docker, Rails, and Docker Compose in your development workflow</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2014/11/29/explorations-in-logic-programming/">Explorations in logic programming</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2014/11/15/my-own-robot-training-buddy/">My own robot training buddy.</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2014/11/05/qcon-sf-2014/">Recap: QCon SF 2014</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2014/11/01/conways-law-for-humans/">Conway's Law for humans</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/andrewhao">@andrewhao</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'andrewhao',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2015 - Andrew Hao -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'g9labs';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://www.g9labs.com/2011/06/04/code-for-oakland-barcamp/';
+        var disqus_url = 'http://www.g9labs.com/2011/06/04/code-for-oakland-barcamp/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,307 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Conway's Law for humans - The Sweet Spot</title>
+  <meta name="author" content="Andrew Hao">
+
+  
+  <meta name="description" content="If you&rsquo;re familiar with Conway&rsquo;s Law, it states: Any organization that designs a system (defined broadly) will produce a design whose &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://www.g9labs.com/2014/11/01/conways-law-for-humans">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="The Sweet Spot" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-2330913-9']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">The Sweet Spot</a></h1>
+  
+    <h2>Andrew Hao's thoughts about software engineering, design, and anything shiny.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:www.g9labs.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/notes">Notes</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Conway's Law for humans</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-11-01T18:38:00-07:00" pubdate data-updated="true">Nov 1<span>st</span>, 2014</time>
+        
+         | <a href="#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>If you&rsquo;re familiar with <a href="http://en.wikipedia.org/wiki/Conway's_law">Conway&rsquo;s Law</a>, it states:</p>
+
+<blockquote><p>Any organization that designs a system (defined broadly) will produce a design whose structure is a copy of the organization&rsquo;s communication structure.</p></blockquote>
+
+<p>Or in layman&rsquo;s terms, your software systems reflect the structure of the teams that create them.</p>
+
+<p>Think about it &mdash; do your teams prefer to do everything themselves? Or do they ask for help from other teams? In general, as a team, we prefer to have as little dependencies as possible. The work that the engineer has to do to send an email, or wait for work from another team (like an API change or design change) is usually time-consuming and burdensome. Therefore, it is not (usually) in the team&rsquo;s best interests to cross silos and ask for help from others. Your teams, if they look like this, tend to work in codebases that are generally monolithic and wholly owned by the team.</p>
+
+<p>It&rsquo;s not wrong, or it&rsquo;s not bad, it&rsquo;s just a sociological observation. This is why companies like Spotify, Netflix or Amazon have embraced Conway&rsquo;s Law and changed their organizations to match the  microservice-driven architecture they want. Small teams work on small codebases and are empowered to make the changes they need.</p>
+
+<h3>A corollary and some observations about your company culture.</h3>
+
+<p>Here&rsquo;s a corollary, which I&rsquo;ve heard in various shapes and forms. Paraphrased:</p>
+
+<blockquote><p>An organization&rsquo;s structure tends to pattern after its leaders&#8217; communication patterns.</p></blockquote>
+
+<p>I&rsquo;ve been pushing an effort to unify our company&rsquo;s frontend styles and UX into a unified framework in an attempt to standardize the look and feel of the site.</p>
+
+<p>However, in working with our designers, I realized that they weren&rsquo;t talking to each other. Designers in one department had opposing design aesthetics from designers in another. This was causing problems in the code, because the frontend framework itself was becoming fragmented. You could see it in the code. Version A of the styleguide went into Department A&rsquo;s products. Version B of the styleguide went to Department B&rsquo;s products.</p>
+
+<p>In this case, as we kept rolling out this framework, I realized our organization had no single owner for the design language of the site. Why? I had to wonder if it had to do with some deeper communication issues between the heads of the two departments.</p>
+
+<p>Code can be a good canary to organizational issues, and call out larger human issues at hand. In this case, Conway&rsquo;s Law helps us root out and bring into the light structural concerns. Leaders can pay attention to these concerns and check themselves to become more open communicators.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Andrew Hao</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-11-01T18:38:00-07:00" pubdate data-updated="true">Nov 1<span>st</span>, 2014</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/category/conways-law/'>conway's law</a>, <a class='category' href='/category/engineering/'>engineering</a>, <a class='category' href='/category/management/'>management</a>, <a class='category' href='/category/management-theory/'>management theory</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://www.g9labs.com/2014/11/01/conways-law-for-humans/" data-via="andrewhao" data-counturl="http://www.g9labs.com/2014/11/01/conways-law-for-humans/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/2014/06/21/mocks-arent-stubs/" title="Previous Post: Mocks aren't stubs: mockist & classic testing">&laquo; Mocks aren't stubs: mockist & classic testing</a>
+      
+      
+        <a class="basic-alignment right" href="/2014/11/05/qcon-sf-2014/" title="Next Post: Recap: QCon SF 2014">Recap: QCon SF 2014 &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2015/03/19/docker-rails-and-docker-compose-in-your-development-workflow/">Docker, Rails, and Docker Compose in your development workflow</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2014/11/29/explorations-in-logic-programming/">Explorations in logic programming</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2014/11/15/my-own-robot-training-buddy/">My own robot training buddy.</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2014/11/05/qcon-sf-2014/">Recap: QCon SF 2014</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2014/11/01/conways-law-for-humans/">Conway's Law for humans</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/andrewhao">@andrewhao</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'andrewhao',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2015 - Andrew Hao -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'g9labs';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://www.g9labs.com/2014/11/01/conways-law-for-humans/';
+        var disqus_url = 'http://www.g9labs.com/2014/11/01/conways-law-for-humans/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: conference | The Sweet Spot]]></title>
+  <link href="http://www.g9labs.com/category/conference/atom.xml" rel="self"/>
+  <link href="http://www.g9labs.com/"/>
+  <updated>2015-03-19T14:39:53-07:00</updated>
+  <id>http://www.g9labs.com/</id>
+  <author>
+    <name><![CDATA[Andrew Hao]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Recap: QCon SF 2014]]></title>
+    <link href="http://www.g9labs.com/2014/11/05/qcon-sf-2014/"/>
+    <updated>2014-11-05T19:01:00-08:00</updated>
+    <id>http://www.g9labs.com/2014/11/05/qcon-sf-2014</id>
+    <content type="html"><![CDATA[<p>Blurb sent me off to QCon SF 2014 for three days.</p>
+
+<h2>Notes</h2>
+
+<p>I took a series of notes each day in attendance:</p>
+
+<ul>
+<li><a href="/notes/2014-11-03-qconsf-day-one.html">Day One: Architectures, Functional</a></li>
+<li><a href="/notes/2014-11-04-qconsf-day-two.html">Day Two: Rx Systems, API Platforms</a></li>
+<li><a href="/notes/2014-11-05-qconsf-day-three.html">Day Three: Microservices, Culture</a></li>
+</ul>
+
+
+<h2>Summary</h2>
+
+<ul>
+<li>Big trends in continuous delivery and deployment &mdash; deploy more often, smaller feedback loops</li>
+<li>A lot of emphasis on event driven architectures + microservices. Lots of emphasis on DDD as a design tool.</li>
+<li>Reactive systems with functional implementations were widely discussed as a scaling tool (backpressure-sensitive) and as a coordination tool between multiple async services.</li>
+<li>Big data/realtime streaming talks were interesting &mdash; my personal experience with them is limited, but it seems there is a debate over the merits of existing Lambda architecture practice.</li>
+<li>A lot of talk about microservice orchestration tools &mdash; acknowledging the pain of configuration and management of many services.</li>
+<li>Scala got a lotttt of attention. Probably because of its presence in bigger companies like Netflix, Twitter, LinkedIn. Wonder what smaller startups are using.</li>
+<li>Web Components were a big upcoming trend in frontend technologies. Strong modularization of views + behaviors in HTML documents.</li>
+</ul>
+
+
+<h2>Questions</h2>
+
+<ul>
+<li>If I could do a startup over again, would I begin an app in Rails? Where is the sweet spot for that sort of application architecture?</li>
+<li>How can I design systems such that they can be extractible into focused components/services as early as possible?</li>
+<li>How can we plan for failures (<a href="http://en.wikipedia.org/wiki/Fault_injection">fault injection</a>)?</li>
+<li>How does one implement change in software engineering organizations? Bottom-up (organic initiatives bubbling up through management) vs top-down (management/software leaders direct org to implement).</li>
+<li>How are we doing with encouraging women and minorities who traditionally are underrepresented in our industry?</li>
+<li>What are places in our hiring funnels that, unbeknownst to us, may be turning away or detracting women and minorities?</li>
+</ul>
+
+]]></content>
+  </entry>
+  
+</feed>

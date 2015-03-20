@@ -1,0 +1,535 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>QConSF: Day One - The Sweet Spot</title>
+  <meta name="author" content="Andrew Hao">
+
+  
+  <meta name="description" content="Bruce Schneier: Security We don&rsquo;t have control over our infrastructure. Handing more data to the cloud
+THe future: we might see more vendor &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://www.g9labs.com/notes/2014-11-03-qconsf-day-one.html">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="The Sweet Spot" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-2330913-9']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">The Sweet Spot</a></h1>
+  
+    <h2>Andrew Hao's thoughts about software engineering, design, and anything shiny.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:www.g9labs.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/notes">Notes</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">QConSF: Day One</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-11-03T09:21:00-08:00" pubdate data-updated="true">Nov 3<span>rd</span>, 2014</time>
+        
+         | <a href="#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><h2>Bruce Schneier: Security</h2>
+
+<ul>
+<li>We don&rsquo;t have control over our infrastructure. Handing more data to the cloud</li>
+<li>THe future: we might see more vendor control over our OSes &mdash; app store updates, etc. Windows 8, Yosemite look more like mobile OSes.</li>
+<li>Nowadays, there are a wider variety of attack(er)s. Hackers now have standard tools.</li>
+<li>Advanced persistent threats: Hackers just trying to grab a block of credit cards. Targeted threats: politically motivated hacking.</li>
+<li>IP theft as well as hacktivism</li>
+<li>&ldquo;The entire supply chain is now complete.&rdquo; Stealing credentials &ndash;> turning account control</li>
+</ul>
+
+
+<h3>Increased gov&rsquo;t involvment in cyberstates</h3>
+
+<ul>
+<li>infrastructure</li>
+<li>legal involvement</li>
+<li>cyber arms race: people building offensive weapons</li>
+</ul>
+
+
+<h3>Economics of IT</h3>
+
+<h4>Network effects</h4>
+
+<p>Value of a network is the number of connections that can be made.</p>
+
+<h4>Fixed vs marginal cost</h4>
+
+<p>fixed cost is the development of the tool.
+marginal cost is low. This is why it&rsquo;s profitable to steal</p>
+
+<h4>Switching cost</h4>
+
+<p>Cost to switch from a competitive product</p>
+
+<p>(IR: Instant response)</p>
+
+<h4>Describing psychology principle: <a href="http://en.wikipedia.org/wiki/Prospect_theory">prospect theory</a></h4>
+
+<p>We are risk averse when it comes to gains and we are risk seeking when it comes to losses. Evolutionary theory describes: short, guaranteed small gain is better for survival.</p>
+
+<p>This makes security hard to sell: we got by OK last time. Why do we need security now? This is the boss flipping the coin.</p>
+
+<p>If we get hacked, we all have to leave and get a new job. THe economics for prevention are hard to sell. See analogy to selling insurance.</p>
+
+<p>Principle: remove humans from the system as much as possible. Problem: humans cannot be completely eliminated from the process.</p>
+
+<h3>Protection, detection and response</h3>
+
+<ul>
+<li>Response is the arena where better products can do better. This is because technology is in charge to enable humans to detect and respond.</li>
+<li>Just like in public service: police, firemen, medical.</li>
+</ul>
+
+
+<h3>Tools and OODA</h3>
+
+<ul>
+<li>OODA loops: observe, orient, decide, act. Air Force captain. The faster you can eval this loop, the more advantage you have.</li>
+<li>What I want in IR is tools to get into the attacker&rsquo;s OODA loops.</li>
+</ul>
+
+
+<h4>Observe</h4>
+
+<ul>
+<li>we need</li>
+</ul>
+
+
+<p>tl;dr:
+We will always underspend on preventative security
+instant response tools is an arena of software tooling that the better products will beat out the worse</p>
+
+<h2>Architecture at Netflix</h2>
+
+<ul>
+<li>20% of org is dedicated to maintaining platform &mdash; internal PaaS</li>
+<li>Microservice architectures organized around teams</li>
+<li>Automate everything you can: tools, builds, images.</li>
+<li>You want your revenue to grow faster than your org</li>
+<li>Continuous integration &ndash; code deployed as soon as possible.</li>
+<li>Self service: Try to make everything as self-service as possible. Make it easy for engineers to set up their own deployments, their own monitoring.</li>
+<li>Monitoring: Do it from the beginning! Emitting events. See Etsy. Open sourcing the system soon. Make sure that they own the dashboard, so they can</li>
+<li>Break things on production: Embrace failure. See: Netflix Simian Army.</li>
+<li>Incident review: Blameless culture</li>
+</ul>
+
+
+<h4>Data replication</h4>
+
+<ul>
+<li>Shared state should not be stored within a shared service. You need to make sure there are failovers of your data. Multi data centers across AWS availability zones.</li>
+<li>Don&rsquo;t keep your secret keys on an instance.</li>
+</ul>
+
+
+<h4>Queues</h4>
+
+<p>Use queues for their operational value in helping you scale.</p>
+
+<p>They give you a buffer between your users and your systems. You don&rsquo;t have to worry about the rate of change. They can buffer you from</p>
+
+<p>Monitor your queue lengths so you can scale.</p>
+
+<h4>Caching</h4>
+
+<p>Huge way to give users best experience. Write data to cache + queue.</p>
+
+<h4>Sharding</h4>
+
+<p>Splitting writes across multi servers based on data coming in</p>
+
+<ul>
+<li>Cassandra: used for consistent key hashing
+multi data center
+Think of SSD as cheap ram, not expensive disk</li>
+</ul>
+
+
+<h4>Lambda/Kappa Architecture</h4>
+
+<ul>
+<li>Lambda: Idea of having two parallel data streams. One is accurate, slow, one is approximate, fast. Have queries combine the two.</li>
+<li>Kappa: Always use the correct stream</li>
+</ul>
+
+
+<h2>LinkedIn Software Dev/Engineering</h2>
+
+<h3>Startup mode</h3>
+
+<p>Systems built during startup lifetimes can&rsquo;t stand public growth.</p>
+
+<p>300+ code projects in a single SVN repo</p>
+
+<p>Testing code locally meant deploy every service locally!</p>
+
+<p>24 hrs of integration testing &ndash; you find you broke master</p>
+
+<p>3 hours writing code, you check it in, 3 days to commit it.</p>
+
+<p>Do what the OSS does</p>
+
+<p>monolith => individual git repos</p>
+
+<h3>SDLC changes</h3>
+
+<ul>
+<li>All code have owners</li>
+<li>pre-push checks</li>
+</ul>
+
+
+<p>Canary builds &ndash; swaps one machine with new build with production traffic:</p>
+
+<p>CPU/memory increases
+fan-in fanout increases
+error rate increases</p>
+
+<h3>Architectural practices</h3>
+
+<p>Kafka is realtime signal ranking
+HOw to solve for locality and multi data centers</p>
+
+<p>IP routing based on location
+How to solve data integrity? cassandra does it. linkedin used oracle + kafka.</p>
+
+<p>Keep a local Kafka in each DC. Kafka just broadcasts to a global kafka</p>
+
+<h3>LinkedIn Search</h3>
+
+<ul>
+<li>LinkedIn archives several indices</li>
+<li>each search engine has its own search score</li>
+<li>LI tries to guess your intent when you search and query the right indices.</li>
+<li>query rewriting: &ldquo;sr swe&rdquo; can be &ldquo;senior software eng&rdquo; or &ldquo;sr soft engineer&rdquo;</li>
+<li>Galene Architecture: built on lucene. real time indexer, updates indices between hadoop builds</li>
+</ul>
+
+
+<h2>Tumblr: bits to gifs</h2>
+
+<ul>
+<li>sharding: jetpants</li>
+<li>php, haproxy, hdfs</li>
+<li><p>s3 for image storage</p></li>
+<li><p>Scala services: 90% of the time. Built in a world where Go didn&rsquo;t exist</p></li>
+<li>finagle &ndash;> colossus</li>
+<li>Thrift</li>
+<li>Protobuf</li>
+<li>hbase stores notifications</li>
+<li>firehose</li>
+<li><p>job queue: gearman</p></li>
+<li><p>Varnish caching: using DJB2 hashing for consistent hashes &ndash; balanced against</p></li>
+</ul>
+
+
+<h3>Server management</h3>
+
+<ul>
+<li>source of truth: Central repository of active servers</li>
+<li>Collins: self-serve servers. figure out what to provision</li>
+<li>&ldquo;provision me a new server&rdquo;</li>
+</ul>
+
+
+<h3>Deployment</h3>
+
+<ul>
+<li>deployment used to take an hour for 500 servers</li>
+<li>DUI is deployment tool</li>
+<li>Need 2 people from your team + staff/sr engineer</li>
+<li>get into an IRC deploy queue</li>
+<li>Deploy canary first</li>
+<li>Tumblr deploys over 40x a day</li>
+<li>Fibr is a graphing tool. so everyone can feel empowered to see root problems</li>
+<li>your engineers need to be empowered to understand tools.</li>
+<li>func is installed on any server at any point in time. &ldquo;give me the server&rdquo;</li>
+</ul>
+
+
+<h2>FP at Twitter</h2>
+
+<ul>
+<li>Key component is managing/reducing incidental complexity</li>
+<li>(scala): Futures: containers for value. Use composition operations.</li>
+<li>Presenter demonstrating how to build a search engine in scala with composable operations</li>
+<li>FP helps in &ldquo;separating mechanics from semantics&rdquo; &ndash; the bind function</li>
+<li>A service is an async function: takes a request and returns a Future reply.</li>
+<li>&ldquo;your server as a function&rdquo;: <a href="http://monkey.org/~marius/funsrv.pdf">http://monkey.org/~marius/funsrv.pdf</a></li>
+</ul>
+
+
+<h3>Service discovery</h3>
+
+<ul>
+<li>backed by zookeeper</li>
+<li>maintains a convergent view of the system</li>
+<li>zookeeper is hard to deal with. has strong guarantees.</li>
+<li>exploiting the declarative nature of these abstractions</li>
+</ul>
+
+
+<h3>By modeling apps as composable services, you can reason well about your programs.</h3>
+
+<p>Example is finagle, which is just a composition of services</p>
+
+<ul>
+<li>&ldquo;composability is one of the great ideas of functional&rdquo;</li>
+<li>Good tool for enforcing modularity</li>
+</ul>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Andrew Hao</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-11-03T09:21:00-08:00" pubdate data-updated="true">Nov 3<span>rd</span>, 2014</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/category/conference/'>conference</a>, <a class='category' href='/category/functional-programming/'>functional programming</a>, <a class='category' href='/category/qconsf/'>qconsf</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://www.g9labs.com/notes/2014-11-03-qconsf-day-one.html" data-via="andrewhao" data-counturl="http://www.g9labs.com/notes/2014-11-03-qconsf-day-one.html" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2015/03/19/docker-rails-and-docker-compose-in-your-development-workflow/">Docker, Rails, and Docker Compose in your development workflow</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2014/11/29/explorations-in-logic-programming/">Explorations in logic programming</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2014/11/15/my-own-robot-training-buddy/">My own robot training buddy.</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2014/11/05/qcon-sf-2014/">Recap: QCon SF 2014</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2014/11/01/conways-law-for-humans/">Conway's Law for humans</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/andrewhao">@andrewhao</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'andrewhao',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2015 - Andrew Hao -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'g9labs';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://www.g9labs.com/notes/2014-11-03-qconsf-day-one.html';
+        var disqus_url = 'http://www.g9labs.com/notes/2014-11-03-qconsf-day-one.html';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

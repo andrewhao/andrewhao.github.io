@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Andrew 2.0 | The Sweet Spot]]></title>
+  <link href="http://www.g9labs.com/category/andrew-2-dot-0/atom.xml" rel="self"/>
+  <link href="http://www.g9labs.com/"/>
+  <updated>2015-03-19T14:39:53-07:00</updated>
+  <id>http://www.g9labs.com/</id>
+  <author>
+    <name><![CDATA[Andrew Hao]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Deploying Janky on Ubuntu]]></title>
+    <link href="http://www.g9labs.com/2012/10/04/deploying-janky-on-ubuntu/"/>
+    <updated>2012-10-04T03:29:58-07:00</updated>
+    <id>http://www.g9labs.com/2012/10/04/deploying-janky-on-ubuntu</id>
+    <content type="html"><![CDATA[<p><a href="https://github.com/blog/1013-janky">Janky</a> is a Github-developed <a href="https://github.com/github/hubot">Hubot</a> + Jenkins control interface. It&rsquo;s developed to be deployed on Heroku. However, what if you need it to live on an internal VM? Here&rsquo;s how I got it running on a Ubuntu (12.04 Precise) VM.</p>
+
+<h2>Make sure you have the correct MySQL libs installed:</h2>
+
+<pre><code>sudo apt-get install mysql-server libmysqlclient-dev
+</code></pre>
+
+<h2>Clone janky from the <a href="https://github.com/github/janky">Github repository</a></h2>
+
+<pre><code>git clone https://github.com/github/janky.git
+cd janky
+</code></pre>
+
+<h2>Bootstrap your environment</h2>
+
+<p>The following steps are taken nearly verbatim from the &ldquo;Hacking&rdquo; section on the Janky README:</p>
+
+<pre><code>script/bootstrap
+
+mysqladmin -uroot create janky_development
+mysqladmin -uroot create janky_test
+
+RACK_ENV=development bin/rake db:migrate
+RACK_ENV=test bin/rake db:migrate
+
+RACK_ENV=development bundle exec rake db:seed
+</code></pre>
+
+<h2>Configure Thin</h2>
+
+<p>Open <code>Gemfile</code> in your text editor and add:</p>
+
+<pre><code>gem "foreman"
+</code></pre>
+
+<p>Then install it:</p>
+
+<pre><code>bundle install
+</code></pre>
+
+<p>Then create a Procfile:</p>
+
+<pre><code>touch Procfile
+</code></pre>
+
+<p>Open the Procfile in your text editor and add the following line:</p>
+
+<pre><code>web: bundle exec thin start -p $PORT
+</code></pre>
+
+<p>Add the JANKY_* variables to your environment according to the janky README. I use zsh, so I added these as export statements in my ~/.zshenv</p>
+
+<h2>Start your server</h2>
+
+<pre><code>bundle exec foreman start
+</code></pre>
+
+<p>Note that the server starts on port 5000 by default, and you can override it like so:</p>
+
+<pre><code>PORT=8080 bundle exec foreman start
+</code></pre>
+
+<h2>That&rsquo;s it!</h2>
+
+<p>Let me know how that works for you!</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Updating max file limit on OSX Lion]]></title>
+    <link href="http://www.g9labs.com/2012/06/20/updating-max-file-limit-on-osx-lion/"/>
+    <updated>2012-06-20T02:28:13-07:00</updated>
+    <id>http://www.g9labs.com/2012/06/20/updating-max-file-limit-on-osx-lion</id>
+    <content type="html"><![CDATA[<p>I&rsquo;ve been hitting a lot of &ldquo;Maximum file limit exceeded&rdquo; dialogs after a long day at work &mdash; at any point in time I&rsquo;ve got a kajillion Chrome tabs open, five or six Rails envs running (for dev and test) + Guard/Spork actively watching tests, and Sublime with another kajillion tabs open.</p>
+
+<p>Turns out that OSX limits the number of open file descriptors per process to 256. Time to bump up the limit:</p>
+
+<p>First, check out your current file limit:</p>
+
+<p><code>$ launchctl limit</code></p>
+
+<pre><code>    cpu         unlimited      unlimited      
+    filesize    unlimited      unlimited      
+    data        unlimited      unlimited      
+    stack       8388608        67104768       
+    core        0              unlimited      
+    rss         unlimited      unlimited      
+    memlock     unlimited      unlimited      
+    maxproc     709            1064           
+    maxfiles    256            unlimited
+</code></pre>
+
+<p>Okay, let&rsquo;s crank &lsquo;er up. First let&rsquo;s create <code>/etc/launchctl.conf</code></p>
+
+<p><code>$ sudo touch /etc/launchctl.conf</code></p>
+
+<p>And let&rsquo;s open it with your editor of choice. Add the following line to the new file:</p>
+
+<p><code>limit maxfiles 16384 32768</code></p>
+
+<p>Restart your computer. Boom. Easy.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Backup, backup, backup]]></title>
+    <link href="http://www.g9labs.com/2012/04/23/backup-backup-backup/"/>
+    <updated>2012-04-23T01:02:05-07:00</updated>
+    <id>http://www.g9labs.com/2012/04/23/backup-backup-backup</id>
+    <content type="html"><![CDATA[<p>Well, the inevitable happened: I finally experienced a hard drive failure. It&rsquo;s pretty incredible that in the twenty-odd years I&rsquo;ve been around computers I&rsquo;ve never had the horror of losing a drive.</p>
+
+<p>Friday rolls around and my Macbook Pro decides to freeze up on me. <em>Strange, </em>I think to myself. It&rsquo;s making a clicking noise. Crap.</p>
+
+<p>Luckily, I&rsquo;ve been fairly good about making backups and copies of my work. Here&rsquo;s my general strategy:</p>
+
+<ul>
+<li><p>Work/code: keeping local changes on a separate branch and pushing it to a remote Git branch every so often.</p></li>
+<li><p>Everything else: I keep one local copy here with me in Oakland, and have another copy offsite. I rsync my files out to my server at home, which has a cronjob set up to sync with the offsite copy at my parents' home (I run a <a href="http://pogoplug.com/">Pogoplug</a> with <a href="http://archlinuxarm.org/platforms/armv6/pogoplug-provideov3">Archlinux</a> and a couple of external drives connected to it &mdash; fantastic and totally recommended for a cheap and low-power server setup).</p></li>
+</ul>
+
+
+<p>There was a minor scare this time around though &mdash; I had some photography work (and an engagement photoshoot!) lying around that almost didn&rsquo;t make it to the first stage rsync with my local server. Fortunately, I had the foresight to keep my photos backed up to a random local hard disk, and the rest remained on the memory cards (and some even on a shared Dropbox folder that saved my butt!). Most frustrating thing was learning that I had forgotten to back up my Lightroom catalog, so all my edits were lost. At least I have the original shots.</p>
+
+<p>One thing I think I&rsquo;ll try doing from here on out &mdash; saving my Develop settings/presets directly to the DNGs themselves before backing up. That way if I ever lose my LR catalog, the edit settings are still embedded in the original files.</p>
+
+<p>Jeff Atwood reminds us to <a href="http://www.codinghorror.com/blog/2008/01/whats-your-backup-strategy.html">keep backups around on multiple disks</a>. With the price of storage so low, what&rsquo;s your data worth to you? How are you keeping your backups?</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[RSpec order-agnostic array matching]]></title>
+    <link href="http://www.g9labs.com/2012/03/23/rspec-order-agnostic-array-matching/"/>
+    <updated>2012-03-23T11:09:40-07:00</updated>
+    <id>http://www.g9labs.com/2012/03/23/rspec-order-agnostic-array-matching</id>
+    <content type="html"><![CDATA[<p>What&rsquo;s that? <a href="http://stackoverflow.com/questions/2978922/rspec-array-should-another-array-but-without-concern-for-order">You want to write an expectation for an array but your method returns the Array in a nondeterministic ordering</a>?</p>
+
+<p>Simple. Write:</p>
+
+<pre><code>my_method.should =~ &lt;my_expectation&gt;
+</code></pre>
+
+<p>See the <a href="https://github.com/dchelimsky/rspec/blob/master/lib/spec/matchers/match_array.rb">source</a>.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Ohm gotchas]]></title>
+    <link href="http://www.g9labs.com/2012/01/20/ohm-gotchas/"/>
+    <updated>2012-01-20T10:19:50-08:00</updated>
+    <id>http://www.g9labs.com/2012/01/20/ohm-gotchas</id>
+    <content type="html"><![CDATA[<p>Here&rsquo;s a list of things that have been annoying, or at least a bit frustrating using <a href="http://ohm.keyvalue.org">Ohm</a>, the Redis ORM, in a Rails app. Beware to those who assume Ohm is ActiveRecord in new clothes. It is, but it&rsquo;s not:</p>
+
+<h2>CRUD</h2>
+
+<p>Don&rsquo;t make the mistake of treating your Ohm objects like AR:</p>
+
+<table>
+<thead>
+<tr>
+<th>ActiveRecord        </th>
+<th> Ohm</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>`destroy            </td>
+<td> <code>delete</code></td>
+</tr>
+<tr>
+<td><code>self.find(id)</code>     </td>
+<td> <code>self[id]</code></td>
+</tr>
+<tr>
+<td><code>update_attributes</code> </td>
+<td> <code>update</code></td>
+</tr>
+<tr>
+<td><code>create</code>            </td>
+<td> <code>create</code></td>
+</tr>
+</tbody>
+</table>
+
+
+<p>Also note that Ohm&rsquo;s <code>update_attributes</code> behaves differently from Rails` &mdash; it doesn&rsquo;t persist the updates to DB. That owned me for the good part of the day.</p>
+
+<h2>Callbacks</h2>
+
+<p>Thankfully, these are ActiveRecord-like with the addition of <a href="http://cyx.github.com/ohm-contrib/doc/"><code>ohm/contrib</code></a>.</p>
+
+<h2>Associations</h2>
+
+<table>
+<thead>
+<tr>
+<th>ActiveRecord            </th>
+<th> Ohm</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>has_a</code> or <code>belongs_to</code> </td>
+<td> <code>reference</code></td>
+</tr>
+<tr>
+<td><code>has_many</code>              </td>
+<td> <code>collection</code></td>
+</tr>
+</tbody>
+</table>
+
+
+<p>Read <a href="http://blog.citrusbyte.com/2010/04/12/mixing-ohm-with-activerecord-datamapper-and-sequel/">this article</a> if you&rsquo;re considering creating associations from AR objects to Ohm objects and the other way &lsquo;round.</p>
+]]></content>
+  </entry>
+  
+</feed>
