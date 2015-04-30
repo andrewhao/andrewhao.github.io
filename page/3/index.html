@@ -9,7 +9,7 @@
   <meta name="author" content="Andrew Hao">
 
   
-  <meta name="description" content="I should have mentioned this long ago, but I started work at Blurb in early August. It&rsquo;s been a quick ramp-up and I&rsquo;m loving it there, &hellip;">
+  <meta name="description" content="Here&rsquo;s a list of things that have been annoying, or at least a bit frustrating using Ohm, the Redis ORM, in a Rails app. Beware to those who &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -78,6 +78,106 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2012/01/20/ohm-gotchas/">Ohm gotchas</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-01-20T10:19:50-08:00" pubdate data-updated="true">Jan 20<span>th</span>, 2012</time>
+        
+         | <a href="/2012/01/20/ohm-gotchas/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Here&rsquo;s a list of things that have been annoying, or at least a bit frustrating using <a href="http://ohm.keyvalue.org">Ohm</a>, the Redis ORM, in a Rails app. Beware to those who assume Ohm is ActiveRecord in new clothes. It is, but it&rsquo;s not:</p>
+
+<h2>CRUD</h2>
+
+<p>Don&rsquo;t make the mistake of treating your Ohm objects like AR:</p>
+
+<table>
+<thead>
+<tr>
+<th>ActiveRecord        </th>
+<th> Ohm</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>`destroy            </td>
+<td> <code>delete</code></td>
+</tr>
+<tr>
+<td><code>self.find(id)</code>     </td>
+<td> <code>self[id]</code></td>
+</tr>
+<tr>
+<td><code>update_attributes</code> </td>
+<td> <code>update</code></td>
+</tr>
+<tr>
+<td><code>create</code>            </td>
+<td> <code>create</code></td>
+</tr>
+</tbody>
+</table>
+
+
+<p>Also note that Ohm&rsquo;s <code>update_attributes</code> behaves differently from Rails` &mdash; it doesn&rsquo;t persist the updates to DB. That owned me for the good part of the day.</p>
+
+<h2>Callbacks</h2>
+
+<p>Thankfully, these are ActiveRecord-like with the addition of <a href="http://cyx.github.com/ohm-contrib/doc/"><code>ohm/contrib</code></a>.</p>
+
+<h2>Associations</h2>
+
+<table>
+<thead>
+<tr>
+<th>ActiveRecord            </th>
+<th> Ohm</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>has_a</code> or <code>belongs_to</code> </td>
+<td> <code>reference</code></td>
+</tr>
+<tr>
+<td><code>has_many</code>              </td>
+<td> <code>collection</code></td>
+</tr>
+</tbody>
+</table>
+
+
+<p>Read <a href="http://blog.citrusbyte.com/2010/04/12/mixing-ohm-with-activerecord-datamapper-and-sequel/">this article</a> if you&rsquo;re considering creating associations from AR objects to Ohm objects and the other way &lsquo;round.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -613,50 +713,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/2011/02/14/arduino-and-python-firmata/">Arduino and python-firmata</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-02-14T21:29:07-08:00" pubdate data-updated="true">Feb 14<span>th</span>, 2011</time>
-        
-         | <a href="/2011/02/14/arduino-and-python-firmata/#disqus_thread">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I just spent five hours trying to figure out why  none of the <a href="http://arduino.cc/playground/Interfacing/Python">Firmata libraries for Python</a> were working over my serial connection. I was wondering why the previous program remained on the board and none of the signals sent were hot.</p>
-
-<p>Hint: you need to load Firmata first onto the board before it can understand the protocol. Oh. Duh.</p>
-
-<p>[caption id=&ldquo;attachment_1032&rdquo; align=&ldquo;alignnone&rdquo; width=&ldquo;500&rdquo; caption=&ldquo;Don&rsquo;t forget to load up &#8220;OldStandardFirmata&rdquo;&ldquo;]<a href="http://www.g9labs.com/2011/02/15/arduino-and-python-firmata/screen-shot-2011-02-15-at-4-24-47-am/"><img src="http://www.g9labs.com/wp-content/uploads/2011/02/Screen-shot-2011-02-15-at-4.24.47-AM-500x312.png" alt="" /></a>[/caption]</p>
-
-<p>Only &ldquo;OldStandardFirmata&rdquo; (Firmata 2.0) seems to work with my version of <a href="https://github.com/lupeke/python-firmata">python-firmata</a>. The newer Firmata PDEs can talk Firmata 2.1 and 2.2, but I&rsquo;m too tired to figure them out.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/page/4/">&larr; Older</a>
@@ -674,6 +730,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/2015/04/30/building-gpx-stats-through-frp-principles-on-bacon-dot-js/">Building GPX stats through FRP principles on Bacon.js</a>
+      </li>
+    
+      <li class="post">
         <a href="/2015/03/19/docker-rails-and-docker-compose-in-your-development-workflow/">Docker, Rails, and Docker Compose in your development workflow</a>
       </li>
     
@@ -687,10 +747,6 @@
     
       <li class="post">
         <a href="/2014/11/05/qcon-sf-2014/">Recap: QCon SF 2014</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2014/11/01/conways-law-for-humans/">Conway&#8217;s Law for humans</a>
       </li>
     
   </ul>

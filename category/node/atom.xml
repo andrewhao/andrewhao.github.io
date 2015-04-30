@@ -4,7 +4,7 @@
   <title><![CDATA[Category: node | The Sweet Spot]]></title>
   <link href="http://www.g9labs.com/category/node/atom.xml" rel="self"/>
   <link href="http://www.g9labs.com/"/>
-  <updated>2015-03-19T14:39:53-07:00</updated>
+  <updated>2015-04-30T13:22:54-07:00</updated>
   <id>http://www.g9labs.com/</id>
   <author>
     <name><![CDATA[Andrew Hao]]></name>
@@ -12,6 +12,21 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Building GPX stats through FRP principles on Bacon.js]]></title>
+    <link href="http://www.g9labs.com/2015/04/30/building-gpx-stats-through-frp-principles-on-bacon-dot-js/"/>
+    <updated>2015-04-30T12:54:00-07:00</updated>
+    <id>http://www.g9labs.com/2015/04/30/building-gpx-stats-through-frp-principles-on-bacon-dot-js</id>
+    <content type="html"><![CDATA[<p>With my current fascination with <a href="http://github.com/andrewhao/stressfactor">tracking workouts and location-based-activities</a>, I have been interested in how I might be able to rewrite some of my stats logic with FRP principles.</p>
+
+<h3>What is FRP?</h3>
+
+<p>FRP, or Functional Reactive Programming, is often defined as &ldquo;functional programming over values that change over time&rdquo;. It uses functional composition for streams of data that may appear in an infinite stream of data for some far indeterminate future &ndash; these types of use cases are served well by FRP which <a href="http://en.wikipedia.org/wiki/Functional_reactive_programming">&ldquo;(simplifies) these problems by explicitly modeling time&rdquo;</a>.</p>
+
+<p>For example, you may want to</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Running Mocha tests with ES6/AMD modules]]></title>

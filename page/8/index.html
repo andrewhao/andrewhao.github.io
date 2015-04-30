@@ -9,8 +9,7 @@
   <meta name="author" content="Andrew Hao">
 
   
-  <meta name="description" content=" Only a geek could take a picture of his computer&hellip; and be proud of it.
-">
+  <meta name="description" content="I restored a database by hand from the Rails production log and the console. We had forgotten to run a backup cronjob (and good thing we&rsquo;re &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -79,6 +78,46 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2007/10/11/oh-well-lessons-learned-the-hard-way/">Oh well! Lessons learned the hard way</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-10-11T11:37:57-07:00" pubdate data-updated="true">Oct 11<span>th</span>, 2007</time>
+        
+         | <a href="/2007/10/11/oh-well-lessons-learned-the-hard-way/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I restored a database by hand from the Rails production log and the console. We had forgotten to run a backup cronjob (and good thing we&rsquo;re stealth! Otherwise folks would have our heads :D) Shall never do dumb things like that (or run with scissors) again.</p>
+
+<p><a href="http://blog.wejoinin.com/2007/10/11/lessons-learned/">Wejoinin Blog » Blog Archive » Lessons learned</a></p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -486,66 +525,6 @@ Requested by : Jill</p>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/2007/03/28/verilogical/">Verilogical</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2007-03-28T13:50:00-07:00" pubdate data-updated="true">Mar 28<span>th</span>, 2007</time>
-        
-         | <a href="/2007/03/28/verilogical/#disqus_thread">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Oftentimes in <a href="http://en.wikipedia.org/wiki/Verilog">Verilog</a> code, we build testbenches (test fixtures). A common thing to do is to instantiate a module and plug in wires of the same names.</p>
-
-<p>Now a common hack is to copy and paste the module declaration line (the &ldquo;prototype,&rdquo; if you will). The prototype looks like this:</p>
-
-<blockquote><p>module    Foo(    bar,<br></br>       baz,<br></br>       &hellip;<br></br>    );  <br></br></p></blockquote>
-
-<p>The HDL synthesizer can correctly wire inputs, regardless of instantiated order, by surrounding the names of the local wires with the input names as declared in the prototype in a format such as:</p>
-
-<blockquote><p>Foo foo_instance (    .bar(bar),<br></br>         .baz(baz),<br></br>         &hellip;<br></br>        );<br></br></p></blockquote>
-
-<p>So to do so is a rather painful matter of adding a period before the input name, copy and pasting the input name and pasting it after the name, bracketed by parentheses.</p>
-
-<p>But what do you do if your module has thirty inputs? Our previous solution was to surrender our wrists to inevitable Repetitive Stress Injuries. Today, I realized that I should have used a freakin&#8217; elementary <a href="http://en.wikipedia.org/wiki/Regular_expression">regular expression</a>.</p>
-
-<blockquote><p>Search:       (.*),<br></br>Replace:  .$1($1),<br></br></p></blockquote>
-
-<p>Wah-lah! I&rsquo;m kicking myself for not thinking of this earlier. And it has taken me 10 minutes to tell you how I saved forty-five seconds and my poor wrists. Anything to avoid more work (shh, don&rsquo;t tell Alex) :)</p>
-
-<p><a href="http://www.xanga.com/Amazon/Click.aspx?asin=B00004XONN&amp;user=378399"><img src="http://ec1.images-amazon.com/images/P/B00004XONN.01._SCTHUMBZZZ_.jpg" alt="" /></a>
-<strong>Currently Listening</strong><br/>
-<a href="http://www.xanga.com/Amazon/Click.aspx?asin=B00004XONN&amp;user=378399"><strong>Kid A</strong></a><br/>
-By Radiohead<br/>
-<a href="http://www.xanga.com/Amazon/Click.aspx?asin=B00004XONN&amp;user=378399&amp;related=1">see related</a></p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/page/9/">&larr; Older</a>
@@ -563,6 +542,10 @@ By Radiohead<br/>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/2015/04/30/building-gpx-stats-through-frp-principles-on-bacon-dot-js/">Building GPX stats through FRP principles on Bacon.js</a>
+      </li>
+    
+      <li class="post">
         <a href="/2015/03/19/docker-rails-and-docker-compose-in-your-development-workflow/">Docker, Rails, and Docker Compose in your development workflow</a>
       </li>
     
@@ -576,10 +559,6 @@ By Radiohead<br/>
     
       <li class="post">
         <a href="/2014/11/05/qcon-sf-2014/">Recap: QCon SF 2014</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2014/11/01/conways-law-for-humans/">Conway&#8217;s Law for humans</a>
       </li>
     
   </ul>

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Javascript | The Sweet Spot]]></title>
+  <title><![CDATA[Category: javascript | The Sweet Spot]]></title>
   <link href="http://www.g9labs.com/category/javascript/atom.xml" rel="self"/>
   <link href="http://www.g9labs.com/"/>
-  <updated>2015-03-19T14:39:53-07:00</updated>
+  <updated>2015-04-30T13:22:54-07:00</updated>
   <id>http://www.g9labs.com/</id>
   <author>
     <name><![CDATA[Andrew Hao]]></name>
@@ -14,191 +14,17 @@
 
   
   <entry>
-    <title type="html"><![CDATA[mmtss, a collaborative loop station]]></title>
-    <link href="http://www.g9labs.com/2011/10/02/mmtss-a-collaborative-loop-station/"/>
-    <updated>2011-10-02T03:53:45-07:00</updated>
-    <id>http://www.g9labs.com/2011/10/02/mmtss-a-collaborative-loop-station</id>
-    <content type="html"><![CDATA[<h2>mmtss is a loop station built for live performances.</h2>
+    <title type="html"><![CDATA[Building GPX stats through FRP principles on Bacon.js]]></title>
+    <link href="http://www.g9labs.com/2015/04/30/building-gpx-stats-through-frp-principles-on-bacon-dot-js/"/>
+    <updated>2015-04-30T12:54:00-07:00</updated>
+    <id>http://www.g9labs.com/2015/04/30/building-gpx-stats-through-frp-principles-on-bacon-dot-js</id>
+    <content type="html"><![CDATA[<p>With my current fascination with <a href="http://github.com/andrewhao/stressfactor">tracking workouts and location-based-activities</a>, I have been interested in how I might be able to rewrite some of my stats logic with FRP principles.</p>
 
-<p>Let&rsquo;s make music together! This project simplifies a traditional loop tracking station and is designed for interactive collaborative music performances.</p>
+<h3>What is FRP?</h3>
 
-<p>The idea: Everybody adds or modifies one &ldquo;part&rdquo; of a 32-bar loop. The user gets to play an instrument over the existing mix and record the 32-bar phrase when she or he is ready. Once the person is finished, the project selects another instrument at random for the next viewer to record.</p>
+<p>FRP, or Functional Reactive Programming, is often defined as &ldquo;functional programming over values that change over time&rdquo;. It uses functional composition for streams of data that may appear in an infinite stream of data for some far indeterminate future &ndash; these types of use cases are served well by FRP which <a href="http://en.wikipedia.org/wiki/Functional_reactive_programming">&ldquo;(simplifies) these problems by explicitly modeling time&rdquo;</a>.</p>
 
-<p>It&rsquo;s an Ableton Live controller serving a Webkit view, backed by node.js on the backend and socket.io + RaphaelJS on the front. Communication is done through a LiveOSC Live plugin via sockets.</p>
-
-<p>Displayed at the Regeneration &ldquo;We Collaborate&rdquo; art show in Oakland, CA. 9/24/2011.</p>
-
-<h3>Screenshots</h3>
-
-<p><img src="https://a248.e.akamai.net/assets.github.com/img/64abaefb0d10744dda42f362b6cd991522a88da4/687474703a2f2f6661726d372e7374617469632e666c69636b722e636f6d2f363136392f363138383336363537375f376261343864333864315f7a2e6a7067" alt="Practice mode" /></p>
-
-<p>mmtss in practice/playback mode. Here the user is able to practice/mess around with the current instrument to prepare to record the next track.</p>
-
-<p><img src="https://a248.e.akamai.net/assets.github.com/img/3f0c633b9b8d9d35970efe73f84c0f67bf68c6a8/687474703a2f2f6661726d372e7374617469632e666c69636b722e636f6d2f363132312f363138383838363131345f396436643531393937325f7a2e6a7067" alt="Cued mode" /></p>
-
-<p>Pressing &ldquo;record&rdquo; puts the user in a wait state. They are prompted to begin recording when all the black boxes count down and disappear.</p>
-
-<p><img src="https://a248.e.akamai.net/assets.github.com/img/650dc62a52d8ca6441eff57e697307325390caaa/687474703a2f2f6661726d372e7374617469632e666c69636b722e636f6d2f363137372f363138383336373135315f636135623738323733355f7a2e6a7067" alt="Record mode" /></p>
-
-<p>mmtss in record mode.</p>
-
-<p>More screenshots: <a href="http://www.flickr.com/photos/andrewhao/sets/72157627640840853/">http://www.flickr.com/photos/andrewhao/sets/72157627640840853/</a></p>
-
-<h3>Source code</h3>
-
-<p>Github: <a href="http://www.github.com/andrewhao/mmtss.">http://www.github.com/andrewhao/mmtss.</a></p>
-
-<p>MIT/GPL-sourced for your coding pleasure.</p>
-
-<h3>Installation</h3>
-
-<ul>
-<li><p>Make sure you have npm installed: <a href="http://www.npmjs.org/">http://www.npmjs.org</a></p></li>
-<li><p>Copy <code>lib/LiveOSC</code> into <code>/Applications/Live x.y.z OS X/Live.app/Contents/App-Resources/MIDI\ Remote\ Scripts/</code> folder</p></li>
-<li><p>Set it as your MIDI remote in the Ableton Live Preferences pane, in the &ldquo;MIDI Remote&rdquo; tab.</p></li>
-</ul>
-
-
-<h3>Running it</h3>
-
-<ul>
-<li><p>Open <code>Mmtss_0.als</code> as a sample Live project.</p></li>
-<li><p>Install all project dependencies with <code>npm install</code> from the project root.</p></li>
-<li><p>Start the Node server with <code>node app.js</code> from the root directory.</p></li>
-<li><p>Open a Web browser and visit <code>localhost:3000</code></p></li>
-</ul>
-
-
-<h3>Modifying the sample project</h3>
-
-<p>You can modify this project to suit your own needs. Note that there are two sets of tracks; instrument (MIDI input) tracks and loop tracks that actually store clips.</p>
-
-<p>For <code>n</code> tracks, you can add or remove your own instruments. Just make sure that instrument at track <code>x</code> corresponds to track <code>x</code> + <code>n</code>.</p>
-
-<h3>Credits</h3>
-
-<ul>
-<li><p>Design and architectural inspiration taken from <a href="http://github.com/vnoise/vtouch">vtouch</a>, a HTML5/Node/Canvas Ableton controller.</p></li>
-<li><p>Original LiveOSC source is found at: <a href="http://monome.q3f.org/browser/trunk/LiveOSC">http://monome.q3f.org/browser/trunk/LiveOSC</a>. We use a different fork of the project at:<a href="http://github.com/vnoise/vtouch">http://github.com/vnoise/vtouch</a>.</p></li>
-<li><p>Super sweet CSS3 rocker widgets courtesy of <a href="http://www.simurai.com/">Simurai</a>: <a href="http://lab.simurai.com/css/umbrui/">UmbrUI</a></p></li>
-</ul>
-
-
-<h3>License</h3>
-
-<p><a href="http://www.opensource.org/licenses/mit-license.php">MIT</a> and <a href="http://www.gnu.org/copyleft/gpl.html">GPLv3</a> licensed. Go for it.</p>
-
-<p>You will, however, need to get a license for <a href="http://www.ableton.com/live">Ableton Live</a> yourself.</p>
-
-<h3>The handsome collaborators</h3>
-
-<ul>
-<li><p>Andrew Hao: <a href="http://www.g9labs.com/">http://www.g9labs.com</a></p></li>
-<li><p>David Luoh: <a href="http://www.inkproj.com/">http://www.inkproj.com</a></p></li>
-</ul>
-
-
-<h3></h3>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Chat App - Frontend Prototype]]></title>
-    <link href="http://www.g9labs.com/2011/07/01/chat-app-frontend-prototype/"/>
-    <updated>2011-07-01T11:21:05-07:00</updated>
-    <id>http://www.g9labs.com/2011/07/01/chat-app-frontend-prototype</id>
-    <content type="html"><![CDATA[<p><a href="http://www.flickr.com/photos/andrewhao/5885861130/"><img src="http://farm6.static.flickr.com/5261/5885861130_71e25f2beb.jpg" alt="Chat View - 1" /></a></p>
-
-<p><a href="http://www.flickr.com/photos/andrewhao/5885860254/"><img src="http://farm7.static.flickr.com/6053/5885860254_a2aa7f7895.jpg" alt="Interview View" /></a></p>
-
-<p>Some UI work I did for a stealth startup in early &lsquo;11. Responsible for look &amp; feel and frontend chat interactions. jQuery/UI communicating to a CakePHP/nodejs backend.</p>
-
-<p>We developed this prototype with <a href="http://www.wisdom.weizmann.ac.il/~dharel/SCANNED.PAPERS/Statecharts.pdf">statecharts</a>, a concept commonly found in event-driven programming and with which I first learned from <a href="http://frozencanuck.wordpress.com/2011/03/09/sproutcore-statecharts-vs-controllers/">Sproutcore</a>. I found it really helped map out all the complex user interactions we had to deal with on the page.</p>
-
-<p><a href="http://www.flickr.com/photos/andrewhao/sets/72157626954648391/with/5885860254/">See more screenshots from the set</a>.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Aristo, the shiniest jQuery UI theme of them all.]]></title>
-    <link href="http://www.g9labs.com/2010/12/01/aristo-the-shiniest-jquery-ui-theme-of-them-all/"/>
-    <updated>2010-12-01T09:54:40-08:00</updated>
-    <id>http://www.g9labs.com/2010/12/01/aristo-the-shiniest-jquery-ui-theme-of-them-all</id>
-    <content type="html"><![CDATA[<p>Let&rsquo;s face it: <a href="http://jqueryui.com/themeroller/">jQuery UI skins</a> suck. They&rsquo;re flat, they&rsquo;re boring, they don&rsquo;t pop.</p>
-
-<p>Enter <a href="http://taitems.tumblr.com/post/482577430/introducing-aristo-a-jquery-ui-theme">Aristo</a>, a jQuery UI port of the <a href="http://cappuccino.org/">Cappuccino Javascript framework</a> theme.</p>
-
-<p><a href="http://www.g9labs.com/2010/12/01/aristo-the-shiniest-jquery-ui-theme-of-them-all/screen-shot-2010-12-01-at-4-47-58-pm/"><img src="http://www.g9labs.com/wp-content/uploads/2010/12/Screen-shot-2010-12-01-at-4.47.58-PM.png" alt="" /></a></p>
-
-<p>Much better. Clone the <a href="https://github.com/taitems/Aristo-jQuery-UI-Theme">repo from GitHub</a> here, or check out a <a href="http://www.warfuric.com/taitems/demo.html">demo</a>.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[YUI 3 Widget lazy instantiation]]></title>
-    <link href="http://www.g9labs.com/2010/04/26/yui-widget-lazy-instantiation/"/>
-    <updated>2010-04-26T19:09:01-07:00</updated>
-    <id>http://www.g9labs.com/2010/04/26/yui-widget-lazy-instantiation</id>
-    <content type="html"><![CDATA[<p>At work, we make good use of <a href="http://developer.yahoo.com/yui/">YUI 3</a>. It&rsquo;s a really well-thought-out framework, from sandboxing and deep namespaces to CSS3 selector support and lazy-loading modules through the Yahoo! CDN. One of YUI 3&rsquo;s biggest features is the Widget framework, which specifies an object on the page that the user can tweak to his or her whims.</p>
-
-<p>Now typically, a YUI widget must be instantiated, then rendered onto the page. The render method is responsible for:</p>
-
-<ol>
-<li><p> Writing the widget&rsquo;s DOM elements out to the page</p></li>
-<li><p> Binding handlers onto the DOM object.</p></li>
-<li><p> Updating the widget state to match the JS object state.</p></li>
-</ol>
-
-
-<p>(This information didn&rsquo;t come easily. I had to dig around in some YUI slides and found this in <a href="http://developer.yahoo.com/yui/theater/video.php?v=desai-yuiconf2009-widgets">Satyen Desai&rsquo;s &ldquo;A Widget Walkthrough&rdquo; presentation</a> at YUIConf 2009.)</p>
-
-<p><a href="http://www.g9labs.com/2010/04/27/yui-widget-lazy-instantiation/screenshot5/"><img src="http://www.g9labs.com/wp-content/uploads/2010/04/screenshot5-499x374.png" alt="" /></a></p>
-
-<p>Now we have a page that generates hundreds if not thousands of these tooltips. Instantiating each tooltip, rendering them into the DOM and generating event handlers for each was wasteful and slowed IE browsers down to a crawl. So this brought us to the decision to lazily instantiate each Tooltip instance. My first thought was that I should be able to overwrite the render() method to write to the DOM only after a mouseover onto the Tooltip trigger.</p>
-
-<p>Here&rsquo;s the folly: note that in the previous slide, the event handlers don&rsquo;t go live until after the widget HTML is rendered into the DOM. Rats. Is there any way I can get around this?</p>
-
-<p>Here&rsquo;s some peculiar code for the Tooltip wrapper:</p>
-
-<pre><code>function ttWrapper(triggerNode) {
-  this.tt = null;
-  /* First mouseover will instantiate the real TooltipWidget. */
-  var mOver = Y.on('mouseover', function (e) {
-    this.tt = new TooltipWidget(/*config*/).render();
-    /* Detach this listener so it won't intercept any more mouseovers */
-    mOver.detach();
-    /* A second mouseover must be simulated on the real TooltipWidget */
-    Y.Event.simulate(triggerNode, 'mouseover'); 
-  }, triggerNode);
-
-
-
-
-}
-</code></pre>
-
-<p>The code installs a mouseover listener on the trigger node, then swaps itself out for the real mouseover listener that gets attached to the triggerNode when TooltipWidget gets instantiated. Event.simulate() is a strange, yet smart way to solve this problem.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[First look at SproutCore and Cappuccino]]></title>
-    <link href="http://www.g9labs.com/2008/10/02/first-look-at-sproutcore-and-cappuccino/"/>
-    <updated>2008-10-02T03:39:40-07:00</updated>
-    <id>http://www.g9labs.com/2008/10/02/first-look-at-sproutcore-and-cappuccino</id>
-    <content type="html"><![CDATA[<p>One trend on the Web these days is to move away from traditional full-stack frameworks (like <a href="http://rubyonrails.org">Rails</a>) toward client-side, full-stack Javascript frameworks (among them <a href="http://dojotoolkit.org/">Dojo</a>, <a href="http://code.google.com/webtoolkit/">GWT</a>, <a href="http://sproutcore.com">SproutCore</a>, and <a href="http://cappuccino.org">Cappuccino</a>). There&rsquo;s been a lot of buzz about <a href="http://www.sproutcore.com">SproutCore</a> and <a href="http://www.cappuccino.org">Cappuccino</a>, because of their design elegance, shiny Mac-ness and promises of really rich client experiences. I&rsquo;ve been checking them out and here&rsquo;s some of my observations so far:</p>
-
-<ul>
-<li><p>They&rsquo;re both really young: SproutCore and Cappuccino have emerged only in the last three months. I haven&rsquo;t heard of any deployed Cappuccino apps asides from the storied <a href="http://280slides.com/">280 Slides app</a>. Same with SproutCore, looks like asides from <a href="http://www.me.com">MobileMe</a>, they&rsquo;re only beginning to see user-created apps come out (see: <a href="http://blog.otherinbox.com/">OtherInbox</a>).</p></li>
-<li><p>The two frameworks are beautiful. Because they both model on Cocoa, they both take on the same icon set, window chrome, pane behaviors, and so on. Nice work, lifting the good UI work from the Mac and placing it on the Web.</p></li>
-<li><p>Objective-J sounds cool. I just can&rsquo;t see non-Cocoa programmers just picking it up, though. Even though I picked up Cocoa over the summer and I think it&rsquo;s pretty awesome, there was no way I would have the energy to pick up Objective-J on my own (unless Cappuccino proves itself to be THAT big of a draw).</p></li>
-<li><p>Okay, but to be fair, the idea of &ldquo;Cocoa on the Web&rdquo; is phenomenal. I wonder if we&rsquo;ll see a surge of ported Cocoa-to-Web apps. Aligning Cappuccino with AppKit is a great idea, and it&rsquo;s clearly the &ldquo;Web framework for Cocoa apps moving to the Web&rdquo; and you&rsquo;re gonna want to use it for sure if you&rsquo;re a proven Cocoa hacker. I wonder, however, if it can capture users who aren&rsquo;t Cocoa programmers.</p></li>
-<li><p>I&rsquo;m a big sucker for looks. Nothing gets me excited like SproutCore applications do in all their Aqua-like goodness. GWT in comparison looks pretty frumpy. I really like OS X-looking widgets. What can I say, I was brainwashed :)</p></li>
-<li><p>SproutCore and Cappuccino apps are simply not going to be able to out-perform GWT apps: they simply can&rsquo;t beat the compiler optimizations of compiled and optimized JS in GWT. Then again&hellip; we&rsquo;re going to have crazy fast JS engines in the next year or so. We&rsquo;ll see if performance is an issue.</p></li>
-</ul>
-
-
-<p>Even though these two frameworks are only beginning to gather momentum, I&rsquo;m excited at the direction they&rsquo;re moving the Web in. Anybody else want to weigh in?</p>
+<p>For example, you may want to</p>
 ]]></content>
   </entry>
   

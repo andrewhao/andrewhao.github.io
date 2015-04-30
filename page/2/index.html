@@ -9,9 +9,8 @@
   <meta name="author" content="Andrew Hao">
 
   
-  <meta name="description" content="I&rsquo;ve noticed a bit of the buzz around Ember App Kit
-recently and decided to move Hendrix, my music management app, over from
-a Yeoman-generated &hellip;">
+  <meta name="description" content="In recent conversations with coworkers, the topic of Domain-Driven Design has
+arisen on more than a few occasions in design and architecture meetings &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -80,6 +79,205 @@ a Yeoman-generated &hellip;">
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2014/02/02/blogging-through-implementing-domain-driven-design/">Blogging through: Implementing Domain-Driven Design</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-02-02T11:31:00-08:00" pubdate data-updated="true">Feb 2<span>nd</span>, 2014</time>
+        
+         | <a href="/2014/02/02/blogging-through-implementing-domain-driven-design/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>In recent conversations with coworkers, the topic of Domain-Driven Design has
+arisen on more than a few occasions in design and architecture meetings.
+&ldquo;Have you read it?&rdquo; a coworker asked, &ldquo;I think it&rsquo;d help us a lot.&rdquo;</p>
+
+<p>I&rsquo;ve gotten my hands on a copy of <a href="http://www.amazon.com/Implementing-Domain-Driven-Design-Vaughn-Vernon/dp/0321834577">Implementing Domain-Driven Design</a>
+by <a href="https://vaughnvernon.co/">Vaughn Vernon</a>, which is a more pragmatic
+approach to DDD than the original <a href="http://www.amazon.com/Domain-Driven-Design-Tackling-Complexity-Software/dp/0321125215/ref=pd_bxgy_b_text_y">Domain-Driven Design</a> book by Eric Evans.</p>
+
+<p>My desire is to share my outlines of the book chapter-by-chapter,
+hopefully once a week.</p>
+
+<h2>Chapter 1: Getting Started with DDD</h2>
+
+<h3>Can I DDD?</h3>
+
+<ul>
+<li>DDD helps us design software models where &ldquo;our design is exactly how
+the software works&rdquo; (1).</li>
+<li>DDD isn&rsquo;t a technology, it&rsquo;s a set of principles that involve
+discussion, listening, and business value so you can <em>centralize
+knowledge</em>.</li>
+<li>The main principle here is that we must &ldquo;understand the business in
+which our software works&rdquo; (3). This means we learn from domain experts
+in our field.</li>
+<li>What is a domain model? an object model where objects have
+data/persistence concerns with an accurate business meaning.</li>
+</ul>
+
+
+<h3>Why You Should Do DDD</h3>
+
+<ul>
+<li>Domain experts and devs on same playing field, cooperation required as
+one team. (Agile teams, anyone?)</li>
+<li>The business can learn more about itself through the questions asked
+about itself.</li>
+<li>Knowledge is centralized.</li>
+<li>Zero translations between domain experts and software devs and
+software.</li>
+<li>&ldquo;The design is the code, and code is the design.&rdquo; (7)</li>
+<li>It is not without up-front cost</li>
+</ul>
+
+
+<h4>The problem</h4>
+
+<ul>
+<li>The schism between business domain experts and software developers
+puts your project (and your business) at a risk.</li>
+<li>The more time passes, the greater the divide grows.</li>
+</ul>
+
+
+<h4>Solution</h4>
+
+<ul>
+<li>DDD brings domain experts and software developers together to develop
+software that reflects the business domain mental model.</li>
+<li>Oftentimes this requires that they jointly develop a &ldquo;Ubiquitous
+Language&rdquo; &ndash; a shared vocabulary and set of concepts that are jointly
+spoken by everybody.</li>
+<li>DDD produces software that is better designed &amp; architected &ndash;> better testable &ndash;>
+clearer code.</li>
+<li>Take heed: DDD should only be used to simplify your domain. If the net
+cost of implementing DDD is only going to add complexity, then you
+should stay away.</li>
+</ul>
+
+
+<h4>Domain model health</h4>
+
+<ul>
+<li>As time passes, our domain models can become
+<a href="http://www.martinfowler.com/bliki/AnemicDomainModel.html">anemic</a>,
+and lose their expressive capabilities and clean boundaries. This can
+lead to spaghetti code and a violation of object responsibilities.</li>
+<li>Why do anemic domain models hurt us? They claim to be well-formed
+models but they hide a badly designed system that is still unfocused
+in what it does. (Andrew: I&rsquo;ve seen a lot of Service objects that
+claim to be services but really are long scripts to get things done.
+There might be a cost of designing the Service interface, but inside
+things are just as messy as before we got there.)</li>
+<li>Seems like Vernon is blaming the influence of IDEs for Visual Basic as
+they influenced Java libraries &mdash; too many explicit getters and
+setters.</li>
+<li>Vernon throws up some code samples comparing two different code
+samples &mdash; one with an anemic model that looks like a long string of
+commands and another with descriptive method names. He makes the case
+that simply reading the code is documentation of the domain itself.</li>
+</ul>
+
+
+<h4>How to do DDD</h4>
+
+<ul>
+<li>Have a <a href="http://martinfowler.com/bliki/UbiquitousLanguage.html"><em>Ubiquitous Language</em></a>
+where the team of domain experts share the language together, from
+domain experts to programmers.</li>
+<li><p>Steps to coming up with a language:</p>
+
+<ol>
+<li>Draw out the domain and label it.</li>
+<li>Make a glossary of terms and definitions.</li>
+<li>Have the team review the language document.</li>
+</ol>
+</li>
+<li><p>Note that a Ubiquitous Language is specific to the context it is
+implemented in. In other words, there is one Ubiquitous Language per
+Bounded Context.</p></li>
+</ul>
+
+
+<h3>Business value of DDD</h3>
+
+<ol>
+<li>The organization gains a useful model of its domain</li>
+<li>The precise definition of the business is developed</li>
+<li>Domain experts contribute to software design.</li>
+<li>A better user experience is gained.</li>
+<li>Clean boundaries for models keep them pure.</li>
+<li>Enterprise architecture is better designed.</li>
+<li>Continuous modeling is used &mdash; the working software we produce is the
+model we worked so hard to create.</li>
+<li>New tools and patterns are used.</li>
+</ol>
+
+
+<h4>Challenges</h4>
+
+<ul>
+<li>The time and effort required to think about the busines domain,
+research concepts, and converse with domain experts.</li>
+<li>It may be hard to get a domain expert involved due to their
+availability.</li>
+<li>There is a lot of thought required to clarify pure models and do
+domain modeling.</li>
+</ul>
+
+
+<h4>Tactical modeling</h4>
+
+<ul>
+<li>The <em>Core Domain</em> is the part of your application that has key and
+important business value &mdash; and may require high thought and attention
+to design.</li>
+<li>Sometimes DDD may not be the right fit for you &mdash; if you have a lot of
+experienced developers who are very comfortable with domain modeling,
+you may be better off trusting their opinion.</li>
+</ul>
+
+
+<h4>DDD is not heavy.</h4>
+
+<ul>
+<li>It fits into any Agile or XP framework. It leans into TDD, eg: you use
+TDD to develop a new domain model that describes how it interacts with
+other existing models. You go through the red-green-refactor cycle.</li>
+<li>DDD promotes lightweight development. As domain experts read the code, they
+are able to provide in-flight feedback to the development of the
+system.</li>
+</ul>
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -827,106 +1025,6 @@ end
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/2012/01/20/ohm-gotchas/">Ohm gotchas</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-01-20T10:19:50-08:00" pubdate data-updated="true">Jan 20<span>th</span>, 2012</time>
-        
-         | <a href="/2012/01/20/ohm-gotchas/#disqus_thread">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Here&rsquo;s a list of things that have been annoying, or at least a bit frustrating using <a href="http://ohm.keyvalue.org">Ohm</a>, the Redis ORM, in a Rails app. Beware to those who assume Ohm is ActiveRecord in new clothes. It is, but it&rsquo;s not:</p>
-
-<h2>CRUD</h2>
-
-<p>Don&rsquo;t make the mistake of treating your Ohm objects like AR:</p>
-
-<table>
-<thead>
-<tr>
-<th>ActiveRecord        </th>
-<th> Ohm</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>`destroy            </td>
-<td> <code>delete</code></td>
-</tr>
-<tr>
-<td><code>self.find(id)</code>     </td>
-<td> <code>self[id]</code></td>
-</tr>
-<tr>
-<td><code>update_attributes</code> </td>
-<td> <code>update</code></td>
-</tr>
-<tr>
-<td><code>create</code>            </td>
-<td> <code>create</code></td>
-</tr>
-</tbody>
-</table>
-
-
-<p>Also note that Ohm&rsquo;s <code>update_attributes</code> behaves differently from Rails` &mdash; it doesn&rsquo;t persist the updates to DB. That owned me for the good part of the day.</p>
-
-<h2>Callbacks</h2>
-
-<p>Thankfully, these are ActiveRecord-like with the addition of <a href="http://cyx.github.com/ohm-contrib/doc/"><code>ohm/contrib</code></a>.</p>
-
-<h2>Associations</h2>
-
-<table>
-<thead>
-<tr>
-<th>ActiveRecord            </th>
-<th> Ohm</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>has_a</code> or <code>belongs_to</code> </td>
-<td> <code>reference</code></td>
-</tr>
-<tr>
-<td><code>has_many</code>              </td>
-<td> <code>collection</code></td>
-</tr>
-</tbody>
-</table>
-
-
-<p>Read <a href="http://blog.citrusbyte.com/2010/04/12/mixing-ohm-with-activerecord-datamapper-and-sequel/">this article</a> if you&rsquo;re considering creating associations from AR objects to Ohm objects and the other way &lsquo;round.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/page/3/">&larr; Older</a>
@@ -944,6 +1042,10 @@ end
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/2015/04/30/building-gpx-stats-through-frp-principles-on-bacon-dot-js/">Building GPX stats through FRP principles on Bacon.js</a>
+      </li>
+    
+      <li class="post">
         <a href="/2015/03/19/docker-rails-and-docker-compose-in-your-development-workflow/">Docker, Rails, and Docker Compose in your development workflow</a>
       </li>
     
@@ -957,10 +1059,6 @@ end
     
       <li class="post">
         <a href="/2014/11/05/qcon-sf-2014/">Recap: QCon SF 2014</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2014/11/01/conways-law-for-humans/">Conway&#8217;s Law for humans</a>
       </li>
     
   </ul>

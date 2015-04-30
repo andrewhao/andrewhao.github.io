@@ -4,7 +4,7 @@
   <title><![CDATA[The Sweet Spot]]></title>
   <link href="http://www.g9labs.com/atom.xml" rel="self"/>
   <link href="http://www.g9labs.com/"/>
-  <updated>2015-03-19T14:39:53-07:00</updated>
+  <updated>2015-04-30T13:22:54-07:00</updated>
   <id>http://www.g9labs.com/</id>
   <author>
     <name><![CDATA[Andrew Hao]]></name>
@@ -12,6 +12,21 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Building GPX stats through FRP principles on Bacon.js]]></title>
+    <link href="http://www.g9labs.com/2015/04/30/building-gpx-stats-through-frp-principles-on-bacon-dot-js/"/>
+    <updated>2015-04-30T12:54:00-07:00</updated>
+    <id>http://www.g9labs.com/2015/04/30/building-gpx-stats-through-frp-principles-on-bacon-dot-js</id>
+    <content type="html"><![CDATA[<p>With my current fascination with <a href="http://github.com/andrewhao/stressfactor">tracking workouts and location-based-activities</a>, I have been interested in how I might be able to rewrite some of my stats logic with FRP principles.</p>
+
+<h3>What is FRP?</h3>
+
+<p>FRP, or Functional Reactive Programming, is often defined as &ldquo;functional programming over values that change over time&rdquo;. It uses functional composition for streams of data that may appear in an infinite stream of data for some far indeterminate future &ndash; these types of use cases are served well by FRP which <a href="http://en.wikipedia.org/wiki/Functional_reactive_programming">&ldquo;(simplifies) these problems by explicitly modeling time&rdquo;</a>.</p>
+
+<p>For example, you may want to</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Docker, Rails, and Docker Compose in your development workflow]]></title>
@@ -1933,77 +1948,6 @@ end
 </code></pre>
 
 <p>See the <a href="https://github.com/dchelimsky/rspec/blob/master/lib/spec/matchers/match_array.rb">source</a>.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Ohm gotchas]]></title>
-    <link href="http://www.g9labs.com/2012/01/20/ohm-gotchas/"/>
-    <updated>2012-01-20T10:19:50-08:00</updated>
-    <id>http://www.g9labs.com/2012/01/20/ohm-gotchas</id>
-    <content type="html"><![CDATA[<p>Here&rsquo;s a list of things that have been annoying, or at least a bit frustrating using <a href="http://ohm.keyvalue.org">Ohm</a>, the Redis ORM, in a Rails app. Beware to those who assume Ohm is ActiveRecord in new clothes. It is, but it&rsquo;s not:</p>
-
-<h2>CRUD</h2>
-
-<p>Don&rsquo;t make the mistake of treating your Ohm objects like AR:</p>
-
-<table>
-<thead>
-<tr>
-<th>ActiveRecord        </th>
-<th> Ohm</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>`destroy            </td>
-<td> <code>delete</code></td>
-</tr>
-<tr>
-<td><code>self.find(id)</code>     </td>
-<td> <code>self[id]</code></td>
-</tr>
-<tr>
-<td><code>update_attributes</code> </td>
-<td> <code>update</code></td>
-</tr>
-<tr>
-<td><code>create</code>            </td>
-<td> <code>create</code></td>
-</tr>
-</tbody>
-</table>
-
-
-<p>Also note that Ohm&rsquo;s <code>update_attributes</code> behaves differently from Rails` &mdash; it doesn&rsquo;t persist the updates to DB. That owned me for the good part of the day.</p>
-
-<h2>Callbacks</h2>
-
-<p>Thankfully, these are ActiveRecord-like with the addition of <a href="http://cyx.github.com/ohm-contrib/doc/"><code>ohm/contrib</code></a>.</p>
-
-<h2>Associations</h2>
-
-<table>
-<thead>
-<tr>
-<th>ActiveRecord            </th>
-<th> Ohm</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>has_a</code> or <code>belongs_to</code> </td>
-<td> <code>reference</code></td>
-</tr>
-<tr>
-<td><code>has_many</code>              </td>
-<td> <code>collection</code></td>
-</tr>
-</tbody>
-</table>
-
-
-<p>Read <a href="http://blog.citrusbyte.com/2010/04/12/mixing-ohm-with-activerecord-datamapper-and-sequel/">this article</a> if you&rsquo;re considering creating associations from AR objects to Ohm objects and the other way &lsquo;round.</p>
 ]]></content>
   </entry>
   
