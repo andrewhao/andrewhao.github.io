@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Implementing DDD: Chapter 2"
+title: "Implementing DDD: Domains, Subdomains and Bounded Contexts"
 date: 2014-04-26 08:43
 comments: true
 categories: 
