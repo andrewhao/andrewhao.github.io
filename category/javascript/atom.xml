@@ -4,7 +4,7 @@
   <title><![CDATA[Category: javascript | The Sweet Spot]]></title>
   <link href="http://www.g9labs.com/category/javascript/atom.xml" rel="self"/>
   <link href="http://www.g9labs.com/"/>
-  <updated>2015-04-30T13:25:06-07:00</updated>
+  <updated>2015-04-30T13:28:59-07:00</updated>
   <id>http://www.g9labs.com/</id>
   <author>
     <name><![CDATA[Andrew Hao]]></name>
@@ -82,9 +82,13 @@ locationStream.slidingWindow(2)</p>
 
 <p>However, the latter functional example accounts for changing values of time as they appear over the stream &ndash; as soon as a new value shows up in the stream, the velocity is changed instantly.</p>
 
-<h3>Some more location-based experiments</h3>
+<h3>Some more location-based experiments: rxlocation</h3>
 
-<p>I wrote up a library to parse various facts from a changing stream of GPS events, from instantaneous velocity, average velocity, moving/stopped status, etc. You can check it out here: <a href="https://github.com/andrewhao/rxlocation">rxlocation</a>.</p>
+<p>I wrote up a library to parse various facts from a changing stream of GPS events, from instantaneous velocity, average velocity, moving/stopped status, etc.</p>
+
+<p>I investigated different reactive frameworks, mainly <a href="https://github.com/Reactive-Extensions/RxJS/">RxJS</a> and <a href="https://github.com/baconjs/bacon.js/">Bacon.js</a>. My takeaways were that RxJS does everything and the kitchen sink, but I got lost trying to reconcile Node streams with RxJS cold streams. Bacon.js just seemed to work for me, out of the box. I&rsquo;m still learning, so I hope to have a better understanding of the core issues here.</p>
+
+<p>You can check it out here: <a href="https://github.com/andrewhao/rxlocation">rxlocation</a>.</p>
 ]]></content>
   </entry>
   
