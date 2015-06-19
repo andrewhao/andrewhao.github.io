@@ -9,7 +9,7 @@
   <meta name="author" content="Andrew Hao">
 
   
-  <meta name="description" content="I just spent five hours trying to figure out why  none of the Firmata libraries for Python were working over my serial connection. I was wondering &hellip;">
+  <meta name="description" content="Here&rsquo;s how the installation looked on the day of the art show. [caption id=&ldquo;&rdquo; align=&ldquo;alignnone&rdquo; width=&ldquo;333&rdquo &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -78,6 +78,82 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2011/02/23/save-our-souls-a-twitter-art-installation/">Save our souls - a Twitter art installation</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-02-23T02:51:37-08:00" pubdate data-updated="true">Feb 23<span>rd</span>, 2011</time>
+        
+         | <a href="/2011/02/23/save-our-souls-a-twitter-art-installation/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Here&rsquo;s how the installation looked on the day of the art show.</p>
+
+<p>[caption id=&ldquo;&rdquo; align=&ldquo;alignnone&rdquo; width=&ldquo;333&rdquo; caption=&ldquo;We mounted the installation on the inside of the Regeneration cafe. The Arduino lies behind the Macbook behind the monitor.&rdquo;]<a href="http://www.flickr.com/photos/andrewhao/5467033003/"><img src="http://farm6.static.flickr.com/5180/5467033003_c1c14c5dc0.jpg" alt="Installation" /></a>[/caption]</p>
+
+<p>[caption id=&ldquo;&rdquo; align=&ldquo;alignnone&rdquo; width=&ldquo;333&rdquo; caption=&ldquo;The LEDs are mounted on breadboards suspended on fishing wire, binder clips, rubber bands, chopsticks, and a prayer.&rdquo;]<a href="http://www.flickr.com/photos/andrewhao/5471602272/"><img src="http://farm6.static.flickr.com/5296/5471602272_85203b475e.jpg" alt="Mounted LED array" /></a>[/caption]</p>
+
+<p>[caption id=&ldquo;&rdquo; align=&ldquo;alignnone&rdquo; width=&ldquo;333&rdquo; caption=&ldquo;Finished it just in time.&rdquo;]<a href="http://www.flickr.com/photos/andrewhao/5471598060/"><img src="http://farm6.static.flickr.com/5057/5471598060_f1bb64a83f.jpg" alt="In action" /></a>[/caption]</p>
+
+<p><a href="http://vimeo.com/20267056">Save our souls &ndash; Twitter art installation</a> from <a href="http://vimeo.com/user807863">Andrew Hao</a> on <a href="http://vimeo.com">Vimeo</a>.</p>
+
+<blockquote><p>What are people saying about the ashes in the world today? This installation visualizes a live Twitter stream on heartache, injustice, loss, and our city and matches them up with the redemptive promises of Isaiah.</p></blockquote>
+
+<p>Life is difficult, and redemption is something we all long for. What changes do you hope for in your life or in the world? Send a response from your Twitter account to @sos_61 and watch the installation react. If you&rsquo;d like to be kept anonymous, send your response in a DM to @sos_61.</p>
+
+<p>&ldquo;I hope for <strong><strong>&rdquo;
+&ldquo;I wish that </strong></strong>&rdquo;
+&ldquo;I want to see ____&rdquo;</p>
+
+<h3>A few notes</h3>
+
+<ul>
+<li><p>Web interface is a fullscreen Google Chrome window. <a href="http://socket.io/">socket.io</a> is the Websocket interface to the <a href="http://nodejs.org">node.js</a> backend. The slide transition is animated via a CSS3 animation, and the red overlay is a simple SVG shape plotted with the help of <a href="http://raphaeljs.com">RaphaëlJS</a>.</p></li>
+<li><p>The Twitter backend is a collection of four self-updating Twitter searches, one for heartache (&ldquo;i feel lonely, sad, depressed&rdquo;), injustice (&ldquo;violence, war, oppression, justice&rdquo;), death (&ldquo;rest in peace, passed away&rdquo;), and Oakland (&ldquo;oakland&rdquo;). A blacklist filters out undesirable tweet keywords (&ldquo;justin bieber&rdquo;).</p></li>
+<li><p>Additionally, the backend connects to Twitter via the <a href="http://dev.twitter.com/pages/streaming_api">Streaming API</a> and displays a special animation for users who reply via tweet to the <a href="http://www.twitter.com/sos_61">@sos_61</a> account.</p></li>
+<li><p>The installation picks a tweet to display and pulses the LED array corresponding to the right tweet.</p></li>
+<li><p>Communication to the Arduino happens via a python script over the Firmata protocol, using the <a href="https://github.com/lupeke/python-firmata">python-firmata</a> library. The nodejs server signals the script over a socket connection which will run the pulse animation on the correct pin.</p></li>
+<li><p>I printed the graphic on an oversize printer with the good folks at <a href="http://alamedacopy.com">Alameda Copy</a>. Friendly service, fast turnaround, very reasonable prices. Ask for Joe.</p></li>
+</ul>
+
+
+<h3>Links</h3>
+
+<ul>
+<li><p><a href="http://www.github.com/andrewhao/isaiah-61-project">Source code on github.</a></p></li>
+<li><p><a href="http://www.flickr.com/photos/andrewhao/sets/72157626107989740/">Flickr photos from the art show.</a></p></li>
+<li><p><a href="http://www.flickr.com/photos/andrewhao/sets/72157625956085386/">Photos of the creation process.</a></p></li>
+<li><p>Other posts on the process: <a href="http://www.g9labs.com/2011/02/01/the-making-of-sos-intro/">[1]</a>, <a href="http://www.g9labs.com/2011/02/11/update/">[2]</a>, <a href="http://www.g9labs.com/2011/02/12/currently-frustrated/">[3]</a>, <a href="http://www.g9labs.com/2011/02/15/arduino-and-python-firmata/">[4]</a></p></li>
+</ul>
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -566,82 +642,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/2010/04/26/yui-widget-lazy-instantiation/">YUI 3 Widget lazy instantiation</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2010-04-26T19:09:01-07:00" pubdate data-updated="true">Apr 26<span>th</span>, 2010</time>
-        
-         | <a href="/2010/04/26/yui-widget-lazy-instantiation/#disqus_thread">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>At work, we make good use of <a href="http://developer.yahoo.com/yui/">YUI 3</a>. It&rsquo;s a really well-thought-out framework, from sandboxing and deep namespaces to CSS3 selector support and lazy-loading modules through the Yahoo! CDN. One of YUI 3&rsquo;s biggest features is the Widget framework, which specifies an object on the page that the user can tweak to his or her whims.</p>
-
-<p>Now typically, a YUI widget must be instantiated, then rendered onto the page. The render method is responsible for:</p>
-
-<ol>
-<li><p> Writing the widget&rsquo;s DOM elements out to the page</p></li>
-<li><p> Binding handlers onto the DOM object.</p></li>
-<li><p> Updating the widget state to match the JS object state.</p></li>
-</ol>
-
-
-<p>(This information didn&rsquo;t come easily. I had to dig around in some YUI slides and found this in <a href="http://developer.yahoo.com/yui/theater/video.php?v=desai-yuiconf2009-widgets">Satyen Desai&rsquo;s &ldquo;A Widget Walkthrough&rdquo; presentation</a> at YUIConf 2009.)</p>
-
-<p><a href="http://www.g9labs.com/2010/04/27/yui-widget-lazy-instantiation/screenshot5/"><img src="http://www.g9labs.com/wp-content/uploads/2010/04/screenshot5-499x374.png" alt="" /></a></p>
-
-<p>Now we have a page that generates hundreds if not thousands of these tooltips. Instantiating each tooltip, rendering them into the DOM and generating event handlers for each was wasteful and slowed IE browsers down to a crawl. So this brought us to the decision to lazily instantiate each Tooltip instance. My first thought was that I should be able to overwrite the render() method to write to the DOM only after a mouseover onto the Tooltip trigger.</p>
-
-<p>Here&rsquo;s the folly: note that in the previous slide, the event handlers don&rsquo;t go live until after the widget HTML is rendered into the DOM. Rats. Is there any way I can get around this?</p>
-
-<p>Here&rsquo;s some peculiar code for the Tooltip wrapper:</p>
-
-<pre><code>function ttWrapper(triggerNode) {
-  this.tt = null;
-  /* First mouseover will instantiate the real TooltipWidget. */
-  var mOver = Y.on('mouseover', function (e) {
-    this.tt = new TooltipWidget(/*config*/).render();
-    /* Detach this listener so it won't intercept any more mouseovers */
-    mOver.detach();
-    /* A second mouseover must be simulated on the real TooltipWidget */
-    Y.Event.simulate(triggerNode, 'mouseover'); 
-  }, triggerNode);
-
-
-
-
-}
-</code></pre>
-
-<p>The code installs a mouseover listener on the trigger node, then swaps itself out for the real mouseover listener that gets attached to the triggerNode when TooltipWidget gets instantiated. Event.simulate() is a strange, yet smart way to solve this problem.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/page/5/">&larr; Older</a>
@@ -659,6 +659,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/2015/06/01/toolbox-learning-swift-and-viper/">Toolbox: learning Swift and VIPER</a>
+      </li>
+    
+      <li class="post">
         <a href="/2015/04/30/building-gpx-stats-through-frp-principles-on-bacon-dot-js/">Building GPX stats through FRP principles with Bacon.js</a>
       </li>
     
@@ -672,10 +676,6 @@
     
       <li class="post">
         <a href="/2014/11/15/my-own-robot-training-buddy/">My own robot training buddy.</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2014/11/05/qcon-sf-2014/">Recap: QCon SF 2014</a>
       </li>
     
   </ul>

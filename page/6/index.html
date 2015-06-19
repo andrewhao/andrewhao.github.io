@@ -9,7 +9,7 @@
   <meta name="author" content="Andrew Hao">
 
   
-  <meta name="description" content="I have to admit, I am an unabashed fan of Google Chrome, the new Web browser on the block. Why? UI design that shows attention to detail and a really &hellip;">
+  <meta name="description" content="In Spring 2008, I took an information architecture course in the UC Berkeley School of Information, taught by Erik Wilde (disclaimer: I dropped the &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -78,6 +78,92 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2008/09/16/a-laymans-guide-to-the-oai-ore-data-aggregation-protocol/">A layman&#8217;s guide to the OAI-ORE data aggregation protocol</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-09-16T18:37:12-07:00" pubdate data-updated="true">Sep 16<span>th</span>, 2008</time>
+        
+         | <a href="/2008/09/16/a-laymans-guide-to-the-oai-ore-data-aggregation-protocol/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>In Spring 2008, I took an information architecture course in the <a href="http://ischool.berkeley.edu">UC Berkeley School of Information</a>, taught by <a href="http://dret.typepad.com">Erik Wilde</a> (disclaimer: I dropped the course after a month because of schedule conflicts). An interesting part of my research for that class involved investigating the nascent <a href="http://www.openarchives.org/ore/">Object Reuse and Exchange (OAI-ORE)</a> protocol, a way of organizing groups of resources across the Web. I&rsquo;m going to try to describe in laymen&rsquo;s terms what I learned from my research and explain why it&rsquo;s significant.</p>
+
+<h3>Group things together on the Web</h3>
+
+<p>Let&rsquo;s say you&rsquo;re looking for a book online. You&rsquo;ll hit up JStor or Google Books and browse through the pages of that book you found. Easy enough, right?</p>
+
+<p>In reality, the <em>physical, electronic representation</em> of the book online is actually more than just &ldquo;that book on JStor&rdquo; or &ldquo;<a href="http://www.jstor.com/book">http://www.jstor.com/book</a>&rdquo;. It&rsquo;s actually a collection of images on a Web server. We need a uniform way to descibe that jStor&#8217; specific online version of &ldquo;War and Peace&rdquo; is actually comprised of &ldquo;page1.jpg&rdquo;, &ldquo;page2.jpg&rdquo;, et cetera.</p>
+
+<p>As another example, let&rsquo;s say that the local public library wants to create a digital representation of its materials on Jimi Hendrix. Well, the library&rsquo;s got Jimi Hendrix CDs, Jimi Hendrix books, Jimi Hendrix magazine articles, and so on. With the OAI-ORE protocol, we can create a digital &ldquo;Jimi Hendrix @ Your Local Public Library&rdquo; object that lists out each CD, book and magazine article contained in the library.</p>
+
+<p>Let&rsquo;s say on top of that, a certain Jimi Hendrix biography references &ldquo;Little Wing&rdquo; on pages 12, 141 and 254. This &ldquo;Jimi Hendrix&rdquo; object is capable of encoding that reference from those pages to &ldquo;Little Wing&rdquo; on the &ldquo;Axis: Bold as Love&rdquo; album in the library.</p>
+
+<h3>Why even have a description framework?</h3>
+
+<p>As the Web gets more connected and as we&rsquo;re seeing the rise of interoperable Web services, it becomes increasingly important to have a standard resource description language. Various protocols (such as RDF) have built a foundation on which to describe relationships between electronic resources.</p>
+
+<p>Think of OAI-ORE as a way of organizing information for re-use by others. If every library created its own &ldquo;Jimi Hendrix&rdquo; resource object and made them accessible to others, we could potentially create programs and Web services to collect all &ldquo;Jimi Hendrix&rdquo; objects from across the globe and reconstruct the ultimate, canonical Jimi Hendrix electronic resource library. We could note which books made references to &ldquo;Little Wing.&rdquo; We could view &ldquo;Little Wing&rdquo; as an WMA file, an MP3 file, or as lyrics.</p>
+
+<p>The key is that by standardizing a description language, we <strong>enable programmatic ways to collect and synthesize data</strong> that can potentially add to the value of the world&rsquo;s sum knowledge.</p>
+
+<h3>Resource maps &amp; implementation formats</h3>
+
+<p>OAI-ORE is a specification that defines relationships between resources through an object called the <em>resource map</em>. The resource map is a resource file enumerating a collection of resources and describing the relationships between each resource. Each resource map has its own URI, so it can be discoverable and accessible.</p>
+
+<p>There is no standard file format to encode resource maps. Currently, the OAI-ORE working group has suggested the following description formats (HT: <a href="http://www.natlib.govt.nz/downloads/IT19-Hunter-OAI-ORE-Oct30.ppt">Univ. of Queensland</a>):</p>
+
+<ul>
+<li><p><a href="http://www.w3.org/TR/REC-rdf-syntax/">RDF</a> (Resource Description Framework)</p></li>
+<li><p><a href="http://en.wikipedia.org/wiki/Atom_(standard">Atom</a>) syndication format</p></li>
+<li><p><a href="http://nurture.nature.com/yads">YADS</a></p></li>
+<li><p><a href="http://www.w3.org/2004/03/trix/">TriX</a> (RDF triples in XML)</p></li>
+</ul>
+
+
+<p>The <a href="http://www.openarchives.org/ore/0.9/rdfxml">recommended method of describing a resource map is in RDF/XML</a>. I&rsquo;m not very familiar with the RDF syntax, however, and the TriX format, which affords us RDF triples that can easiliy express relationships between objects and resources, seems to make more sense to me.. However, there is a <a href="http://www.openarchives.org/ore/0.1/atom">complete Atom implementation of the protocol</a>, used when syndication is preferred.</p>
+
+<p>I&rsquo;d definitely refer the reader to the <a href="http://www.natlib.govt.nz/downloads/IT19-Hunter-OAI-ORE-Oct30.ppt">Univ. of Queensland&rsquo;s OAI-ORE PDF overview</a> for a broader overview of the protocol and its potential implementations.</p>
+
+<h3>The nitty-gritty</h3>
+
+<blockquote><p><strong>Collections</strong>: Multiple resources can be grouped together, but only via an &ldquo;aggregate object&rdquo; or a &ldquo;collection&rdquo;, which maintains pointers to each object in a collection.</p>
+
+<p><strong>Links</strong>: Links describe relationships between objects in a resource map, such as &ldquo;has-part&rdquo; (&ldquo;War &amp; Peace &rdquo;-has-part-&ldquo;page 2&rdquo;) or &ldquo;derived-from&rdquo; (&ldquo;Radiohead &ndash; 15 Step Remix&rdquo;-derived-from-&ldquo;Radiohead &ndash; 15 Step&rdquo;). Actual relationships depend on selected vocabularies and namespaces (meaning you can change the link relationships to be whatever you need them to be). There is a <a href="http://www.openarchives.org/ore/0.9/primer.html#Namespaces">list of default namespaces on the spec</a>.</p></blockquote>
+
+<h3>In conclusion</h3>
+
+<p>I took a high-level and somewhat abstract tack in describing the protocol, and would direct you to the <a href="http://www.openarchives.org/ore/0.9/primer.html">OAI-ORE Primer</a> for more implementation specifics. Apologies to those of you who were completely lost in this discussion.</p>
+
+<p>I&rsquo;m excited about developing standards like these because resource mapping protocols such as OAI-ORE are an instrumental step in connecting resources, services and information on the Web. They&rsquo;ll help us &ldquo;connect the tubes&rdquo; and create the infrastructure needed to link the world&rsquo;s information together. Now that&rsquo;s pretty cool.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -596,52 +682,6 @@ So there&rsquo;s a nagging little voice that warns me that Google&rsquo;s seriou
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/2008/02/17/noam-chomsky-is-the-man/">Noam Chomsky is The Man</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2008-02-17T15:53:54-08:00" pubdate data-updated="true">Feb 17<span>th</span>, 2008</time>
-        
-         | <a href="/2008/02/17/noam-chomsky-is-the-man/#disqus_thread">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Why?</p>
-
-<p>The man is a respected thinker, theorist and activist. I&rsquo;ve had several Mass Communications classes devote a couple of sections to his thoughts about mass media and its effect in forming dissent and complacency in the masses.</p>
-
-<p>The man took a period of his life in the 50&rsquo;s devoted to formalizing computer languages (he is by profession, a linguist). We just went over <a href="http://en.wikipedia.org/wiki/Chomsky_normal_form">Chomsky normal form</a> in my CS164 (compilers) course&mdash;a recursive method for generating languages from a set of rules.</p>
-
-<p>My CS and humanities world collide, but this man has done it way before. How stunning. <a href="http://en.wikipedia.org/wiki/Noam_Chomsky">Noam Chomsky</a> is The Man.</p>
-
-<p>(Disclaimer: I don&rsquo;t agree with very many of his views, but the purpose of this post is to point out that Mr. Chomsky is a man who&rsquo;s pretty much Done It All).</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/page/7/">&larr; Older</a>
@@ -659,6 +699,10 @@ So there&rsquo;s a nagging little voice that warns me that Google&rsquo;s seriou
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/2015/06/01/toolbox-learning-swift-and-viper/">Toolbox: learning Swift and VIPER</a>
+      </li>
+    
+      <li class="post">
         <a href="/2015/04/30/building-gpx-stats-through-frp-principles-on-bacon-dot-js/">Building GPX stats through FRP principles with Bacon.js</a>
       </li>
     
@@ -672,10 +716,6 @@ So there&rsquo;s a nagging little voice that warns me that Google&rsquo;s seriou
     
       <li class="post">
         <a href="/2014/11/15/my-own-robot-training-buddy/">My own robot training buddy.</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2014/11/05/qcon-sf-2014/">Recap: QCon SF 2014</a>
       </li>
     
   </ul>
