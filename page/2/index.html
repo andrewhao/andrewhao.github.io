@@ -9,7 +9,7 @@
   <meta name="author" content="Andrew Hao">
 
   
-  <meta name="description" content="It&rsquo;s been approximately six months since I&rsquo;ve entered engineering management. Here are some thoughts reflecting back on that season now. &hellip;">
+  <meta name="description" content="Chapter 2: Domains, Subdomains, and Bounded Contexts A Domain is what a business does and the surrounding context of how it does business. It is &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -84,6 +84,96 @@
       
   <header>
     
+      <h1 class="entry-title"><a href="/2014/04/26/implementing-ddd-chapter-2/">Implementing DDD: Domains, Subdomains and Bounded Contexts</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-04-26T08:43:00-05:00" pubdate data-updated="true">Apr 26<span>th</span>, 2014</time>
+        
+         | <a href="/2014/04/26/implementing-ddd-chapter-2/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2>Chapter 2: Domains, Subdomains, and Bounded Contexts</h2>
+
+<p>A <em>Domain</em> is what a business does and the surrounding context of how it does business. It is important to model out its supported <em>Subdomains</em> &mdash; that is, the smaller components of the business that collaborate in real, day-to-day operations of the business. The book describes these as <em>Core Domains</em>.</p>
+
+<p>Finally, a <em>Bounded Context</em> is the physical manifestation of the solution space as software &mdash; models living in a real application. Its key feature in the context of DDD is as a linguistic barrier between different domains.</p>
+
+<p>In an ideal world, each <em>Subdomain</em> maps directly to one <em>Bounded Context</em>. In the real world, this is less common since we tend to build things into monolithic systems. Still &mdash; many monolithic applications have several components that could in themselves be bounded contexts.</p>
+
+<h6>Side note: In Rails, one could think of Engines as a <em>Bounded Context</em>. But that might be a blog post for another time.</h6>
+
+<p>It is important to get these ideas and concepts down correctly because we need correct modeling of our systems to determine what they do.</p>
+
+<h3>Bounded Contexts and terms</h3>
+
+<p>It&rsquo;s not usually realistic to get the entire organization agreeing on a universal linguistic definition for every term. Instead, DDD assumes that different terms have different meanings in different contexts.</p>
+
+<p>The author then dives into the an example of a book, where a <em>book</em> means several different things to different people in different contexts. A book is touched upon by authors, graphic designers, editors, marketing folks. In each of these contexts, the features of a book mean different things at different times. It is impossible to develop an all-knowing Book model without disagreement between stakeholders. DDD, instead, acknowledges these differences and allows stakeholders to use linguistic terms from within their unique Bounded Contexts.</p>
+
+<p>Bounded Contexts may include things like:</p>
+
+<ul>
+<li>Object models</li>
+<li>A database schema / persistence layer</li>
+<li>A SOAP or REST API</li>
+<li>A user interface</li>
+</ul>
+
+
+<h3>Bounded context antipatterns</h3>
+
+<p>You may be tempted to divide up a bounded context by architectural concerns, or because you want to assign smaller tasks to developers (resource allocation). Beware that this kind of work tends to fragment the language.</p>
+
+<p>DDD operates on <em>linquistic drivers</em>. The unity, cohesion and domain-adherence of the bounded context should be the first priority in the design.</p>
+
+<p>Assigning two teams to the same bounded context results in fragmentation of the bounded context.</p>
+
+<p>Ideally: we strive to assign one team to work on one Bounded Context with one Ubiquitous Language at a time.</p>
+
+<h6>In Rails, what are the bounded contexts? It could be the top-level Rails application, or an engine, or a gem, that define the context boundaries._</h6>
+
+<h3>A story&hellip;</h3>
+
+<p>The chapter then goes on to describe their fictional team designing through three iterations off their DDD strategy:</p>
+
+<p>A system in which all domains live within the same bounded context. They see the folly of this and refactor with some tactical patterns, like creating services.</p>
+
+<p>This is, however, missing the point. They realized they needed to listen to business and their domain experts to find out exactly where the right places were to segregate the contexts. The team discovers that the business has a desire to go in a new direction which allows them to segregate the domain in such a way that would enable future directions for the business.</p>
+
+<h6>How often are we as developers in conversation with our product owners and asking where the business <em>wants</em> to go in the future?</h6>
+
+<p>Conversations with the business reveal an intention to develop an add-on product to the core product. This implies the development of two subdomains. However, further investigation reveals that the shared overlap of certain domain models (like users, roles, and access management) cannot simply be identically shared between two systems, since their <em>linguistic meanings</em> in the two systems differ slightly. Instead, the developers use the linguistic problem to develop a third bounded context.</p>
+
+<p>The developers separate their app into three bounded contexts built as three software systems.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/2014/03/08/six-months-as-a-manager/">Six months as a manager</a></h1>
     
     
@@ -100,7 +190,7 @@
   
 
 
-<time datetime="2014-03-08T16:15:00-08:00" pubdate data-updated="true">Mar 8<span>th</span>, 2014</time>
+<time datetime="2014-03-08T16:15:00-06:00" pubdate data-updated="true">Mar 8<span>th</span>, 2014</time>
         
          | <a href="/2014/03/08/six-months-as-a-manager/#disqus_thread">Comments</a>
         
@@ -195,7 +285,7 @@
   
 
 
-<time datetime="2014-02-02T11:31:00-08:00" pubdate data-updated="true">Feb 2<span>nd</span>, 2014</time>
+<time datetime="2014-02-02T11:31:00-06:00" pubdate data-updated="true">Feb 2<span>nd</span>, 2014</time>
         
          | <a href="/2014/02/02/blogging-through-implementing-domain-driven-design/#disqus_thread">Comments</a>
         
@@ -394,7 +484,7 @@ system.</li>
   
 
 
-<time datetime="2014-01-26T23:32:00-08:00" pubdate data-updated="true">Jan 26<span>th</span>, 2014</time>
+<time datetime="2014-01-26T23:32:00-06:00" pubdate data-updated="true">Jan 26<span>th</span>, 2014</time>
         
          | <a href="/2014/01/26/moving-to-ember-app-kit/#disqus_thread">Comments</a>
         
@@ -534,7 +624,7 @@ the Resolver for: <code>appkit/routes/songs/index</code>. Renaming the file to:<
   
 
 
-<time datetime="2013-12-27T16:22:00-08:00" pubdate data-updated="true">Dec 27<span>th</span>, 2013</time>
+<time datetime="2013-12-27T16:22:00-06:00" pubdate data-updated="true">Dec 27<span>th</span>, 2013</time>
         
          | <a href="/2013/12/27/ember-data-rails-cors-and-you/#disqus_thread">Comments</a>
         
@@ -711,7 +801,7 @@ post</a></p>
   
 
 
-<time datetime="2012-12-26T04:46:09-08:00" pubdate data-updated="true">Dec 26<span>th</span>, 2012</time>
+<time datetime="2012-12-26T06:46:09-06:00" pubdate data-updated="true">Dec 26<span>th</span>, 2012</time>
         
          | <a href="/2012/12/26/decomposing-fat-models/#disqus_thread">Comments</a>
         
@@ -760,7 +850,7 @@ post</a></p>
   
 
 
-<time datetime="2012-10-04T03:29:58-07:00" pubdate data-updated="true">Oct 4<span>th</span>, 2012</time>
+<time datetime="2012-10-04T05:29:58-05:00" pubdate data-updated="true">Oct 4<span>th</span>, 2012</time>
         
          | <a href="/2012/10/04/deploying-janky-on-ubuntu/#disqus_thread">Comments</a>
         
@@ -862,7 +952,7 @@ RACK_ENV=development bundle exec rake db:seed
   
 
 
-<time datetime="2012-06-20T02:28:13-07:00" pubdate data-updated="true">Jun 20<span>th</span>, 2012</time>
+<time datetime="2012-06-20T04:28:13-05:00" pubdate data-updated="true">Jun 20<span>th</span>, 2012</time>
         
          | <a href="/2012/06/20/updating-max-file-limit-on-osx-lion/#disqus_thread">Comments</a>
         
@@ -927,7 +1017,7 @@ RACK_ENV=development bundle exec rake db:seed
   
 
 
-<time datetime="2012-04-27T10:27:17-07:00" pubdate data-updated="true">Apr 27<span>th</span>, 2012</time>
+<time datetime="2012-04-27T12:27:17-05:00" pubdate data-updated="true">Apr 27<span>th</span>, 2012</time>
         
          | <a href="/2012/04/27/speeding-up-rspeccucumber-feedback-times-without-sacrificing-coverage/#disqus_thread">Comments</a>
         
@@ -980,7 +1070,7 @@ View more <a href="http://www.slideshare.net/">presentations</a> from <a href="h
   
 
 
-<time datetime="2012-04-23T01:02:05-07:00" pubdate data-updated="true">Apr 23<span>rd</span>, 2012</time>
+<time datetime="2012-04-23T03:02:05-05:00" pubdate data-updated="true">Apr 23<span>rd</span>, 2012</time>
         
          | <a href="/2012/04/23/backup-backup-backup/#disqus_thread">Comments</a>
         
@@ -1013,67 +1103,6 @@ View more <a href="http://www.slideshare.net/">presentations</a> from <a href="h
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/2012/04/12/haml-object-references/">HAML object references</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-04-12T07:40:09-07:00" pubdate data-updated="true">Apr 12<span>th</span>, 2012</time>
-        
-         | <a href="/2012/04/12/haml-object-references/#disqus_thread">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Did you guys know that you can use the &lsquo;[ ]&rsquo; brackets in HAML to automatically set the id and class on a tag, kind of like Rails&#8217; <a href="http://api.rubyonrails.org/classes/ActionView/Helpers/TagHelper.html#method-i-tag">tag</a> helper?</p>
-
-<pre><code># file: app/controllers/users_controller.rb
-
-def show
-  @user = CrazyUser.find(15)
-end
-
--# file: app/views/users/show.haml
-
-%div[@user, :greeting]
-  %bar[290]/
-  Hello!
-</code></pre>
-
-<p>is compiled to:</p>
-
-<pre><code>&lt;div class='greeting_crazy_user' id='greeting_crazy_user_15'&gt;
-  &lt;bar class='fixnum' id='fixnum_581' /&gt;
-  Hello!
-&lt;/div&gt;
-</code></pre>
-
-<p>Keeps things nice, concise and DRY. See the <a href="http://haml-lang.com/docs/yardoc/file.HAML_REFERENCE.html#object_reference_">HAML documentation</a>.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/page/3/">&larr; Older</a>
@@ -1091,6 +1120,10 @@ end
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/2015/06/29/notes-on-performance-tuning-a-puma-server/">Notes on performance tuning a Puma server</a>
+      </li>
+    
+      <li class="post">
         <a href="/2015/06/01/toolbox-learning-swift-and-viper/">Toolbox: learning Swift and VIPER</a>
       </li>
     
@@ -1104,10 +1137,6 @@ end
     
       <li class="post">
         <a href="/2014/11/29/explorations-in-logic-programming/">Explorations in logic programming</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2014/11/15/my-own-robot-training-buddy/">My own robot training buddy.</a>
       </li>
     
   </ul>

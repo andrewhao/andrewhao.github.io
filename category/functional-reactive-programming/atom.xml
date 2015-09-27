@@ -4,7 +4,7 @@
   <title><![CDATA[Category: functional reactive programming | The Sweet Spot]]></title>
   <link href="http://www.g9labs.com/category/functional-reactive-programming/atom.xml" rel="self"/>
   <link href="http://www.g9labs.com/"/>
-  <updated>2015-06-19T16:14:47-07:00</updated>
+  <updated>2015-09-27T15:38:26-05:00</updated>
   <id>http://www.g9labs.com/</id>
   <author>
     <name><![CDATA[Andrew Hao]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Building GPX stats through FRP principles with Bacon.js]]></title>
     <link href="http://www.g9labs.com/2015/04/30/building-gpx-stats-through-frp-principles-on-bacon-dot-js/"/>
-    <updated>2015-04-30T12:54:00-07:00</updated>
+    <updated>2015-04-30T12:54:00-05:00</updated>
     <id>http://www.g9labs.com/2015/04/30/building-gpx-stats-through-frp-principles-on-bacon-dot-js</id>
     <content type="html"><![CDATA[<p>With my current fascination with <a href="http://github.com/andrewhao/stressfactor">tracking workouts and location-based-activities</a>, I have been interested in how I might be able to rewrite some of my stats logic with FRP principles.</p>
 

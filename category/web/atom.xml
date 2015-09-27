@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Web | The Sweet Spot]]></title>
   <link href="http://www.g9labs.com/category/web/atom.xml" rel="self"/>
   <link href="http://www.g9labs.com/"/>
-  <updated>2015-06-19T16:14:47-07:00</updated>
+  <updated>2015-09-27T15:38:26-05:00</updated>
   <id>http://www.g9labs.com/</id>
   <author>
     <name><![CDATA[Andrew Hao]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[HAML object references]]></title>
     <link href="http://www.g9labs.com/2012/04/12/haml-object-references/"/>
-    <updated>2012-04-12T07:40:09-07:00</updated>
+    <updated>2012-04-12T09:40:09-05:00</updated>
     <id>http://www.g9labs.com/2012/04/12/haml-object-references</id>
     <content type="html"><![CDATA[<p>Did you guys know that you can use the &lsquo;[ ]&rsquo; brackets in HAML to automatically set the id and class on a tag, kind of like Rails' <a href="http://api.rubyonrails.org/classes/ActionView/Helpers/TagHelper.html#method-i-tag">tag</a> helper?</p>
 
@@ -48,7 +48,7 @@ end
   <entry>
     <title type="html"><![CDATA[The making of SOS: Intro]]></title>
     <link href="http://www.g9labs.com/2011/02/01/the-making-of-sos-intro/"/>
-    <updated>2011-02-01T10:40:40-08:00</updated>
+    <updated>2011-02-01T12:40:40-06:00</updated>
     <id>http://www.g9labs.com/2011/02/01/the-making-of-sos-intro</id>
     <content type="html"><![CDATA[<p><a href="http://www.flickr.com/photos/andrewhao/5408231821/"><img src="http://farm6.static.flickr.com/5095/5408231821_b4d0fd6837.jpg" alt="Save Our Souls - Logo" /></a></p>
 
@@ -99,7 +99,7 @@ end
   <entry>
     <title type="html"><![CDATA[Thoughts on rural computing in Botswana]]></title>
     <link href="http://www.g9labs.com/2009/02/15/thoughts-on-rural-computing-in-botswana/"/>
-    <updated>2009-02-15T06:02:41-08:00</updated>
+    <updated>2009-02-15T08:02:41-06:00</updated>
     <id>http://www.g9labs.com/2009/02/15/thoughts-on-rural-computing-in-botswana</id>
     <content type="html"><![CDATA[<p>I&rsquo;m currently in Botswana, doing volunteer work at a nonprofit Christian agency called <a href="http://lovebotswana.org">Love Botswana Outreach Mission</a>. Among my responsibilities are helping out with the organization&rsquo;s IT needs. I was pleasantly surprised to discover that the organization is wired for 24/7 Internet access, despite being located about 10km out from the center of Maun, a medium-sized village.</p>
 
@@ -162,7 +162,7 @@ end
   <entry>
     <title type="html"><![CDATA[First look at SproutCore and Cappuccino]]></title>
     <link href="http://www.g9labs.com/2008/10/02/first-look-at-sproutcore-and-cappuccino/"/>
-    <updated>2008-10-02T03:39:40-07:00</updated>
+    <updated>2008-10-02T05:39:40-05:00</updated>
     <id>http://www.g9labs.com/2008/10/02/first-look-at-sproutcore-and-cappuccino</id>
     <content type="html"><![CDATA[<p>One trend on the Web these days is to move away from traditional full-stack frameworks (like <a href="http://rubyonrails.org">Rails</a>) toward client-side, full-stack Javascript frameworks (among them <a href="http://dojotoolkit.org/">Dojo</a>, <a href="http://code.google.com/webtoolkit/">GWT</a>, <a href="http://sproutcore.com">SproutCore</a>, and <a href="http://cappuccino.org">Cappuccino</a>). There&rsquo;s been a lot of buzz about <a href="http://www.sproutcore.com">SproutCore</a> and <a href="http://www.cappuccino.org">Cappuccino</a>, because of their design elegance, shiny Mac-ness and promises of really rich client experiences. I&rsquo;ve been checking them out and here&rsquo;s some of my observations so far:</p>
 
@@ -183,7 +183,7 @@ end
   <entry>
     <title type="html"><![CDATA[GWT vs. SproutCore vs. Cappuccino]]></title>
     <link href="http://www.g9labs.com/2008/10/01/gwt-vs-sproutcore-vs-cappuccino/"/>
-    <updated>2008-10-01T17:55:10-07:00</updated>
+    <updated>2008-10-01T19:55:10-05:00</updated>
     <id>http://www.g9labs.com/2008/10/01/gwt-vs-sproutcore-vs-cappuccino</id>
     <content type="html"><![CDATA[<p>I&rsquo;m looking to develop a Web application with a full-stack Javascript framework like <a href="http://code.google.com/webtoolkit/">GWT</a>, <a href="http://www.sproutcore.com">SproutCore</a> or <a href="http://www.cappuccino.org">Cappuccino</a>. I&rsquo;m making the decision to go with a Javascript framework over a traditional full-stack framework (like Rails) because:</p>
 

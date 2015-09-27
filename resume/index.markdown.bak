@@ -96,7 +96,7 @@
   
 
 
-<time datetime="2014-09-23T03:18:08-07:00" pubdate data-updated="true">Sep 23<span>rd</span>, 2014</time></p>
+<time datetime="2014-09-23T05:18:08-05:00" pubdate data-updated="true">Sep 23<span>rd</span>, 2014</time></p>
   </header>
   
   # Andrew Hao
@@ -206,7 +206,7 @@ Agile/Scrum, Lean UX, user-centered design, Domain-Driven Design
   
 
 
-<time datetime="2014-09-23T03:18:08-07:00" pubdate data-updated="true">Sep 23<span>rd</span>, 2014</time>
+<time datetime="2014-09-23T05:18:08-05:00" pubdate data-updated="true">Sep 23<span>rd</span>, 2014</time>
         
       </p>
       
@@ -232,6 +232,10 @@ Agile/Scrum, Lean UX, user-centered design, Domain-Driven Design
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/2015/06/29/notes-on-performance-tuning-a-puma-server/">Notes on performance tuning a Puma server</a>
+      </li>
+    
+      <li class="post">
         <a href="/2015/06/01/toolbox-learning-swift-and-viper/">Toolbox: learning Swift and VIPER</a>
       </li>
     
@@ -245,10 +249,6 @@ Agile/Scrum, Lean UX, user-centered design, Domain-Driven Design
     
       <li class="post">
         <a href="/2014/11/29/explorations-in-logic-programming/">Explorations in logic programming</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2014/11/15/my-own-robot-training-buddy/">My own robot training buddy.</a>
       </li>
     
   </ul>

@@ -4,7 +4,7 @@
   <title><![CDATA[The Sweet Spot]]></title>
   <link href="http://www.g9labs.com/atom.xml" rel="self"/>
   <link href="http://www.g9labs.com/"/>
-  <updated>2015-06-19T16:14:47-07:00</updated>
+  <updated>2015-09-27T15:38:26-05:00</updated>
   <id>http://www.g9labs.com/</id>
   <author>
     <name><![CDATA[Andrew Hao]]></name>
@@ -14,9 +14,128 @@
 
   
   <entry>
+    <title type="html"><![CDATA[Notes on performance tuning a Puma server]]></title>
+    <link href="http://www.g9labs.com/2015/06/29/notes-on-performance-tuning-a-puma-server/"/>
+    <updated>2015-06-29T11:47:00-05:00</updated>
+    <id>http://www.g9labs.com/2015/06/29/notes-on-performance-tuning-a-puma-server</id>
+    <content type="html"><![CDATA[<p>A couple of months ago, I was tuning a Rails app for one of our clients.
+This client wanted to know how performant their app would be under load.</p>
+
+<p>To do that, you can do several different things:</p>
+
+<ol>
+<li>Tune the thread/process balance within the VM</li>
+<li>Horizontally scale with your cloud platform.</li>
+</ol>
+
+
+<p>This is a discussion of the former (#1):</p>
+
+<h2>1) Set up the test</h2>
+
+<h3>Drive with a synthetic script</h3>
+
+<p>Our application had a synthetic load driver that would run Selenium to
+execute various app tasks. This synthetic driver could be parallelized
+across many notes via Rainforest QA, Sauce Labs or Browserify.</p>
+
+<p>In our case, I only needed to run our synthetic load script on a single
+node in multiple processes, which simulated enough load to anticipate
+another order of magnitude of traffic.</p>
+
+<h3>Know how to inspect the server under load.</h3>
+
+<p>Commands you will want to know:</p>
+
+<pre><code>$ free -m # Find the total amount of free memory on your machine
+$ ps uH p &lt;pid&gt; # List out process threads
+$ kill -TTIN &lt;puma_master_pid&gt; # Add a puma worker
+$ kill -TTOU &lt;puma_master_pid&gt; # Remove a puma worker
+$ kill -USR2 &lt;puma_master_pid&gt; # Kill the puma master &amp; workers
+</code></pre>
+
+<h2>Generating more load: use external load testing services, or plain tools.</h2>
+
+<p>Try using <a href="http://www.flood.io">Flood.io</a> or JMeter for performance load.</p>
+
+<p>I tried looking into the <a href="https://github.com/schneems/puma_auto_tune">puma_auto_tune</a> gem, but it required a higher level of production instrumentation than I was ready to give it.</p>
+
+<h2>Analysis: New Relic scalability analysis</h2>
+
+<p>New Relic gave us a scalability analysis scatter plot, plotting
+throughput against average application response time. In essence, it
+allows you to see spikes in response times as correlated to throughput.</p>
+
+<h2>Process:</h2>
+
+<p>My approach was to use the synthetic script to generate productionlike
+node and ramp up the # of load actors in 5m increments. Each run would
+test the following Puma process/thread balance:</p>
+
+<p>Run #1: Single-process, multi threads.
+Run #2: Multiple processes, single threaded.
+Run #3: Multiple processes, multiple threads.</p>
+
+<blockquote><h3>Aside: <em>how many</em> of these threads/processes should I be using?</h3>
+
+<p>Note that your numbers will be different on the execution
+characteristics of your app and your server environment. Tweak it for
+yourself. You&rsquo;re designing an experiment.</p>
+
+<p>If you&rsquo;re curious, our Rails app started out with 4 threads on 2
+workers. We made the # of Puma workers (both min and max) environment
+variables so we could tweak the variables easily without deploying.</p></blockquote>
+
+<p>The strategy was then to look at the perf characteristics of each run in
+the scatter plot. If there were any spikes in the graph with the
+increase of load, then that would be noted. Even minor features like an
+increase in slope would be noted &ndash; at that point, the incremental cost
+of each request increases with overall system load.</p>
+
+<h2>Results</h2>
+
+<p>I don&rsquo;t have the New Relic data on hand to show, now, but in our case we
+discovered two things:</p>
+
+<ol>
+<li>The server easily scaled from ~10 &ndash;> ~500 rpm with a virtually flat
+line for all runs.</li>
+<li>The app exhibited no noticeable performance differences when flipped
+between uniprocess-multithreaded, multiprocess-unithreaded, and
+multiprocess-multithreaded modes. Any performance gains were under a
+tolerable threshold.</li>
+</ol>
+
+
+<p>How do we parse these results?</p>
+
+<ul>
+<li>We note that we didn&rsquo;t really push the performance threshold on this
+app (it&rsquo;s not meant to be a public web site and 95% of it is behind a
+login wall to a specialized group of users). Thus, if we pushed the
+concurrent connections even more, we may have seen more of a pronounced
+difference.</li>
+<li>The <em>absence</em> of any major red flags was itself a validation. The
+question we wanted answered coming into this experiment was &ldquo;how close
+are we to maxing out our single-node EC2 configuration such that we will
+have to begin configuring horizontal scaling?&rdquo;? The answer was: we can
+safely scale further out in the near-term future, and cross the bridge
+of horizontal scaling/bursting when we get there.</li>
+<li>We did not have enough statistically significant differences in
+performance for #threads/#processes in Puma. However, if we wanted to
+truly find the optimal performance in our app, we would have turned to
+tools like <a href="https://github.com/schneems/puma_auto_tune">puma_auto_tune</a> to answer those questions.</li>
+</ul>
+
+
+<p>Let me know in the comments if you have any questions!</p>
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[Toolbox: learning Swift and VIPER]]></title>
     <link href="http://www.g9labs.com/2015/06/01/toolbox-learning-swift-and-viper/"/>
-    <updated>2015-06-01T17:04:00-07:00</updated>
+    <updated>2015-06-01T17:04:00-05:00</updated>
     <id>http://www.g9labs.com/2015/06/01/toolbox-learning-swift-and-viper</id>
     <content type="html"><![CDATA[<p>The following are some notes I&rsquo;m compiling as I&rsquo;m beginning a journey
 down the rabbit hole, writing an app in Swift utilizing the <a href="http://www.objc.io/issue-13/viper.html">VIPER app development methodology</a></p>
@@ -100,7 +219,7 @@ clicking the checkbox &ldquo;Create Groups for any Added Folders&rdquo;</p>
   <entry>
     <title type="html"><![CDATA[Building GPX stats through FRP principles with Bacon.js]]></title>
     <link href="http://www.g9labs.com/2015/04/30/building-gpx-stats-through-frp-principles-on-bacon-dot-js/"/>
-    <updated>2015-04-30T12:54:00-07:00</updated>
+    <updated>2015-04-30T12:54:00-05:00</updated>
     <id>http://www.g9labs.com/2015/04/30/building-gpx-stats-through-frp-principles-on-bacon-dot-js</id>
     <content type="html"><![CDATA[<p>With my current fascination with <a href="http://github.com/andrewhao/stressfactor">tracking workouts and location-based-activities</a>, I have been interested in how I might be able to rewrite some of my stats logic with FRP principles.</p>
 
@@ -201,7 +320,7 @@ clicking the checkbox &ldquo;Create Groups for any Added Folders&rdquo;</p>
   <entry>
     <title type="html"><![CDATA[Docker, Rails, and Docker Compose in your development workflow]]></title>
     <link href="http://www.g9labs.com/2015/03/19/docker-rails-and-docker-compose-in-your-development-workflow/"/>
-    <updated>2015-03-19T13:29:00-07:00</updated>
+    <updated>2015-03-19T13:29:00-05:00</updated>
     <id>http://www.g9labs.com/2015/03/19/docker-rails-and-docker-compose-in-your-development-workflow</id>
     <content type="html"><![CDATA[<p>(This post <a href="http://blog.carbonfive.com/2015/03/17/docker-rails-docker-compose-together-in-your-development-workflow/">originally appeared</a> on the Carbon Five blog.)</p>
 
@@ -672,7 +791,7 @@ each container. You should see output that indicates that both our <code>web</co
   <entry>
     <title type="html"><![CDATA[Explorations in logic programming]]></title>
     <link href="http://www.g9labs.com/2014/11/29/explorations-in-logic-programming/"/>
-    <updated>2014-11-29T16:40:00-08:00</updated>
+    <updated>2014-11-29T16:40:00-06:00</updated>
     <id>http://www.g9labs.com/2014/11/29/explorations-in-logic-programming</id>
     <content type="html"><![CDATA[<p>Out of <a href="https://github.com/andrewhao/storybook">Storybook</a>, a side project I&rsquo;ve been doing for a friend, I had the opportunity to model the problem domain as a constraint satisfaction problem (CSP). It goes:</p>
 
@@ -812,7 +931,7 @@ each container. You should see output that indicates that both our <code>web</co
   <entry>
     <title type="html"><![CDATA[My own robot training buddy.]]></title>
     <link href="http://www.g9labs.com/2014/11/15/my-own-robot-training-buddy/"/>
-    <updated>2014-11-15T10:03:00-08:00</updated>
+    <updated>2014-11-15T10:03:00-06:00</updated>
     <id>http://www.g9labs.com/2014/11/15/my-own-robot-training-buddy</id>
     <content type="html"><![CDATA[<p>As an ultra runner, I am really into the mountains. As a software engineer, I&rsquo;m really into data. So naturally, I&rsquo;m interested in the intersection of both.</p>
 
@@ -870,7 +989,7 @@ each container. You should see output that indicates that both our <code>web</co
   <entry>
     <title type="html"><![CDATA[Recap: QCon SF 2014]]></title>
     <link href="http://www.g9labs.com/2014/11/05/qcon-sf-2014/"/>
-    <updated>2014-11-05T19:01:00-08:00</updated>
+    <updated>2014-11-05T19:01:00-06:00</updated>
     <id>http://www.g9labs.com/2014/11/05/qcon-sf-2014</id>
     <content type="html"><![CDATA[<p>Blurb sent me off to QCon SF 2014 for three days.</p>
 
@@ -915,7 +1034,7 @@ each container. You should see output that indicates that both our <code>web</co
   <entry>
     <title type="html"><![CDATA[Conway's Law for humans]]></title>
     <link href="http://www.g9labs.com/2014/11/01/conways-law-for-humans/"/>
-    <updated>2014-11-01T18:38:00-07:00</updated>
+    <updated>2014-11-01T18:38:00-05:00</updated>
     <id>http://www.g9labs.com/2014/11/01/conways-law-for-humans</id>
     <content type="html"><![CDATA[<p>If you&rsquo;re familiar with <a href="http://en.wikipedia.org/wiki/Conway's_law">Conway&rsquo;s Law</a>, it states:</p>
 
@@ -946,7 +1065,7 @@ each container. You should see output that indicates that both our <code>web</co
   <entry>
     <title type="html"><![CDATA[Mocks aren't stubs: mockist & classic testing]]></title>
     <link href="http://www.g9labs.com/2014/06/21/mocks-arent-stubs/"/>
-    <updated>2014-06-21T17:55:00-07:00</updated>
+    <updated>2014-06-21T17:55:00-05:00</updated>
     <id>http://www.g9labs.com/2014/06/21/mocks-arent-stubs</id>
     <content type="html"><![CDATA[<p>With the famed &ldquo;TDD is dead&rdquo; debate around the Rails community largely
 coming to an end, I found myself referencing Martin Fowler&rsquo;s article,
@@ -1100,7 +1219,7 @@ state instead of the <code>api_client</code>.</p>
   <entry>
     <title type="html"><![CDATA[Running Mocha tests with ES6/AMD modules]]></title>
     <link href="http://www.g9labs.com/2014/06/06/running-mocha-tests-with-es6-amd-modules/"/>
-    <updated>2014-06-06T15:11:00-07:00</updated>
+    <updated>2014-06-06T15:11:00-05:00</updated>
     <id>http://www.g9labs.com/2014/06/06/running-mocha-tests-with-es6-amd-modules</id>
     <content type="html"><![CDATA[<p>In one of my personal projects (<a href="https://github.com/andrewhao/chordmeister">Chordmeister</a>), I&rsquo;ve been trying to
 upgrade the code to be written in <a href="http://wiki.ecmascript.org/doku.php?id=harmony:modules#export_declarations">ES6 modules</a> and transpile down to AMD modules with Square&rsquo;s <a href="https://github.com/square/es6-module-transpiler">very excellent es6-module-transpiler project</a>.</p>
@@ -1340,9 +1459,9 @@ finding myself having problems compiling from Coffeescript &ndash;> ES5 JS &ndas
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[Implementing DDD: Chapter 2]]></title>
+    <title type="html"><![CDATA[Implementing DDD: Domains, Subdomains and Bounded Contexts]]></title>
     <link href="http://www.g9labs.com/2014/04/26/implementing-ddd-chapter-2/"/>
-    <updated>2014-04-26T08:43:00-07:00</updated>
+    <updated>2014-04-26T08:43:00-05:00</updated>
     <id>http://www.g9labs.com/2014/04/26/implementing-ddd-chapter-2</id>
     <content type="html"><![CDATA[<h2>Chapter 2: Domains, Subdomains, and Bounded Contexts</h2>
 
@@ -1403,7 +1522,7 @@ finding myself having problems compiling from Coffeescript &ndash;> ES5 JS &ndas
   <entry>
     <title type="html"><![CDATA[Six months as a manager]]></title>
     <link href="http://www.g9labs.com/2014/03/08/six-months-as-a-manager/"/>
-    <updated>2014-03-08T16:15:00-08:00</updated>
+    <updated>2014-03-08T16:15:00-06:00</updated>
     <id>http://www.g9labs.com/2014/03/08/six-months-as-a-manager</id>
     <content type="html"><![CDATA[<p>It&rsquo;s been approximately six months since I&rsquo;ve entered engineering management. Here are some thoughts reflecting back on that season now.</p>
 
@@ -1469,7 +1588,7 @@ finding myself having problems compiling from Coffeescript &ndash;> ES5 JS &ndas
   <entry>
     <title type="html"><![CDATA[Blogging through: Implementing Domain-Driven Design]]></title>
     <link href="http://www.g9labs.com/2014/02/02/blogging-through-implementing-domain-driven-design/"/>
-    <updated>2014-02-02T11:31:00-08:00</updated>
+    <updated>2014-02-02T11:31:00-06:00</updated>
     <id>http://www.g9labs.com/2014/02/02/blogging-through-implementing-domain-driven-design</id>
     <content type="html"><![CDATA[<p>In recent conversations with coworkers, the topic of Domain-Driven Design has
 arisen on more than a few occasions in design and architecture meetings.
@@ -1639,7 +1758,7 @@ system.</li>
   <entry>
     <title type="html"><![CDATA[Moving to Ember App Kit]]></title>
     <link href="http://www.g9labs.com/2014/01/26/moving-to-ember-app-kit/"/>
-    <updated>2014-01-26T23:32:00-08:00</updated>
+    <updated>2014-01-26T23:32:00-06:00</updated>
     <id>http://www.g9labs.com/2014/01/26/moving-to-ember-app-kit</id>
     <content type="html"><![CDATA[<p>I&rsquo;ve noticed a bit of the buzz around <a href="https://github.com/stefanpenner/ember-app-kit">Ember App Kit</a>
 recently and decided to move Hendrix, my music management app, over from
@@ -1750,7 +1869,7 @@ the Resolver for: <code>appkit/routes/songs/index</code>. Renaming the file to:<
   <entry>
     <title type="html"><![CDATA[Ember Data, Rails, CORS, and you!]]></title>
     <link href="http://www.g9labs.com/2013/12/27/ember-data-rails-cors-and-you/"/>
-    <updated>2013-12-27T16:22:00-08:00</updated>
+    <updated>2013-12-27T16:22:00-06:00</updated>
     <id>http://www.g9labs.com/2013/12/27/ember-data-rails-cors-and-you</id>
     <content type="html"><![CDATA[<p>I&rsquo;m starting up a new personal project involving Ember-Data and Rails
 (more to come). The gist of it is that it&rsquo;s a pure frontend app engine
@@ -1898,7 +2017,7 @@ post</a></p>
   <entry>
     <title type="html"><![CDATA[Decomposing Fat Models]]></title>
     <link href="http://www.g9labs.com/2012/12/26/decomposing-fat-models/"/>
-    <updated>2012-12-26T04:46:09-08:00</updated>
+    <updated>2012-12-26T06:46:09-06:00</updated>
     <id>http://www.g9labs.com/2012/12/26/decomposing-fat-models</id>
     <content type="html"><![CDATA[<p>Heard an awesome Ruby Rogues podcast recently: <a href="http://rubyrogues.com/083-rr-decomposing-fat-models-with-bryan-helmkamp/">&ldquo;Decomposing Fat Models&rdquo;</a>.</p>
 
@@ -1918,7 +2037,7 @@ post</a></p>
   <entry>
     <title type="html"><![CDATA[Deploying Janky on Ubuntu]]></title>
     <link href="http://www.g9labs.com/2012/10/04/deploying-janky-on-ubuntu/"/>
-    <updated>2012-10-04T03:29:58-07:00</updated>
+    <updated>2012-10-04T05:29:58-05:00</updated>
     <id>http://www.g9labs.com/2012/10/04/deploying-janky-on-ubuntu</id>
     <content type="html"><![CDATA[<p><a href="https://github.com/blog/1013-janky">Janky</a> is a Github-developed <a href="https://github.com/github/hubot">Hubot</a> + Jenkins control interface. It&rsquo;s developed to be deployed on Heroku. However, what if you need it to live on an internal VM? Here&rsquo;s how I got it running on a Ubuntu (12.04 Precise) VM.</p>
 
@@ -1991,7 +2110,7 @@ RACK_ENV=development bundle exec rake db:seed
   <entry>
     <title type="html"><![CDATA[Updating max file limit on OSX Lion]]></title>
     <link href="http://www.g9labs.com/2012/06/20/updating-max-file-limit-on-osx-lion/"/>
-    <updated>2012-06-20T02:28:13-07:00</updated>
+    <updated>2012-06-20T04:28:13-05:00</updated>
     <id>http://www.g9labs.com/2012/06/20/updating-max-file-limit-on-osx-lion</id>
     <content type="html"><![CDATA[<p>I&rsquo;ve been hitting a lot of &ldquo;Maximum file limit exceeded&rdquo; dialogs after a long day at work &mdash; at any point in time I&rsquo;ve got a kajillion Chrome tabs open, five or six Rails envs running (for dev and test) + Guard/Spork actively watching tests, and Sublime with another kajillion tabs open.</p>
 
@@ -2027,7 +2146,7 @@ RACK_ENV=development bundle exec rake db:seed
   <entry>
     <title type="html"><![CDATA[Speeding up Rspec/Cucumber feedback times without sacrificing coverage]]></title>
     <link href="http://www.g9labs.com/2012/04/27/speeding-up-rspeccucumber-feedback-times-without-sacrificing-coverage/"/>
-    <updated>2012-04-27T10:27:17-07:00</updated>
+    <updated>2012-04-27T12:27:17-05:00</updated>
     <id>http://www.g9labs.com/2012/04/27/speeding-up-rspeccucumber-feedback-times-without-sacrificing-coverage</id>
     <content type="html"><![CDATA[<iframe src="http://www.slideshare.net/slideshow/embed_code/4479466" width="512" height="421" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:1px solid #CCC;border-width:1px 1px 0;margin-bottom:5px" allowfullscreen>
 </iframe>
@@ -2051,7 +2170,7 @@ View more <a href="http://www.slideshare.net/">presentations</a> from <a href="h
   <entry>
     <title type="html"><![CDATA[Backup, backup, backup]]></title>
     <link href="http://www.g9labs.com/2012/04/23/backup-backup-backup/"/>
-    <updated>2012-04-23T01:02:05-07:00</updated>
+    <updated>2012-04-23T03:02:05-05:00</updated>
     <id>http://www.g9labs.com/2012/04/23/backup-backup-backup</id>
     <content type="html"><![CDATA[<p>Well, the inevitable happened: I finally experienced a hard drive failure. It&rsquo;s pretty incredible that in the twenty-odd years I&rsquo;ve been around computers I&rsquo;ve never had the horror of losing a drive.</p>
 
@@ -2070,38 +2189,6 @@ View more <a href="http://www.slideshare.net/">presentations</a> from <a href="h
 <p>One thing I think I&rsquo;ll try doing from here on out &mdash; saving my Develop settings/presets directly to the DNGs themselves before backing up. That way if I ever lose my LR catalog, the edit settings are still embedded in the original files.</p>
 
 <p>Jeff Atwood reminds us to <a href="http://www.codinghorror.com/blog/2008/01/whats-your-backup-strategy.html">keep backups around on multiple disks</a>. With the price of storage so low, what&rsquo;s your data worth to you? How are you keeping your backups?</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[HAML object references]]></title>
-    <link href="http://www.g9labs.com/2012/04/12/haml-object-references/"/>
-    <updated>2012-04-12T07:40:09-07:00</updated>
-    <id>http://www.g9labs.com/2012/04/12/haml-object-references</id>
-    <content type="html"><![CDATA[<p>Did you guys know that you can use the &lsquo;[ ]&rsquo; brackets in HAML to automatically set the id and class on a tag, kind of like Rails&#8217; <a href="http://api.rubyonrails.org/classes/ActionView/Helpers/TagHelper.html#method-i-tag">tag</a> helper?</p>
-
-<pre><code># file: app/controllers/users_controller.rb
-
-def show
-  @user = CrazyUser.find(15)
-end
-
--# file: app/views/users/show.haml
-
-%div[@user, :greeting]
-  %bar[290]/
-  Hello!
-</code></pre>
-
-<p>is compiled to:</p>
-
-<pre><code>&lt;div class='greeting_crazy_user' id='greeting_crazy_user_15'&gt;
-  &lt;bar class='fixnum' id='fixnum_581' /&gt;
-  Hello!
-&lt;/div&gt;
-</code></pre>
-
-<p>Keeps things nice, concise and DRY. See the <a href="http://haml-lang.com/docs/yardoc/file.HAML_REFERENCE.html#object_reference_">HAML documentation</a>.</p>
 ]]></content>
   </entry>
   

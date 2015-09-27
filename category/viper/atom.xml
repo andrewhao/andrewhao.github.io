@@ -4,7 +4,7 @@
   <title><![CDATA[Category: viper | The Sweet Spot]]></title>
   <link href="http://www.g9labs.com/category/viper/atom.xml" rel="self"/>
   <link href="http://www.g9labs.com/"/>
-  <updated>2015-06-19T16:14:47-07:00</updated>
+  <updated>2015-09-27T15:38:26-05:00</updated>
   <id>http://www.g9labs.com/</id>
   <author>
     <name><![CDATA[Andrew Hao]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Toolbox: learning Swift and VIPER]]></title>
     <link href="http://www.g9labs.com/2015/06/01/toolbox-learning-swift-and-viper/"/>
-    <updated>2015-06-01T17:04:00-07:00</updated>
+    <updated>2015-06-01T17:04:00-05:00</updated>
     <id>http://www.g9labs.com/2015/06/01/toolbox-learning-swift-and-viper</id>
     <content type="html"><![CDATA[<p>The following are some notes I&rsquo;m compiling as I&rsquo;m beginning a journey
 down the rabbit hole, writing an app in Swift utilizing the <a href="http://www.objc.io/issue-13/viper.html">VIPER app development methodology</a></p>

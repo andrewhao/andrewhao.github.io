@@ -4,7 +4,7 @@
   <title><![CDATA[Category: mocks | The Sweet Spot]]></title>
   <link href="http://www.g9labs.com/category/mocks/atom.xml" rel="self"/>
   <link href="http://www.g9labs.com/"/>
-  <updated>2015-06-19T16:14:47-07:00</updated>
+  <updated>2015-09-27T15:38:26-05:00</updated>
   <id>http://www.g9labs.com/</id>
   <author>
     <name><![CDATA[Andrew Hao]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Mocks aren't stubs: mockist & classic testing]]></title>
     <link href="http://www.g9labs.com/2014/06/21/mocks-arent-stubs/"/>
-    <updated>2014-06-21T17:55:00-07:00</updated>
+    <updated>2014-06-21T17:55:00-05:00</updated>
     <id>http://www.g9labs.com/2014/06/21/mocks-arent-stubs</id>
     <content type="html"><![CDATA[<p>With the famed &ldquo;TDD is dead&rdquo; debate around the Rails community largely
 coming to an end, I found myself referencing Martin Fowler&rsquo;s article,

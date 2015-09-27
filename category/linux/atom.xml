@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Linux | The Sweet Spot]]></title>
   <link href="http://www.g9labs.com/category/linux/atom.xml" rel="self"/>
   <link href="http://www.g9labs.com/"/>
-  <updated>2015-06-19T16:14:47-07:00</updated>
+  <updated>2015-09-27T15:38:26-05:00</updated>
   <id>http://www.g9labs.com/</id>
   <author>
     <name><![CDATA[Andrew Hao]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Backup, backup, backup]]></title>
     <link href="http://www.g9labs.com/2012/04/23/backup-backup-backup/"/>
-    <updated>2012-04-23T01:02:05-07:00</updated>
+    <updated>2012-04-23T03:02:05-05:00</updated>
     <id>http://www.g9labs.com/2012/04/23/backup-backup-backup</id>
     <content type="html"><![CDATA[<p>Well, the inevitable happened: I finally experienced a hard drive failure. It&rsquo;s pretty incredible that in the twenty-odd years I&rsquo;ve been around computers I&rsquo;ve never had the horror of losing a drive.</p>
 
@@ -41,7 +41,7 @@
   <entry>
     <title type="html"><![CDATA[post-review, git-svn and Review Board]]></title>
     <link href="http://www.g9labs.com/2010/06/02/post-review-git-svn-and-review-board/"/>
-    <updated>2010-06-02T04:26:02-07:00</updated>
+    <updated>2010-06-02T06:26:02-05:00</updated>
     <id>http://www.g9labs.com/2010/06/02/post-review-git-svn-and-review-board</id>
     <content type="html"><![CDATA[<p>Here&rsquo;s how to set up the excellent VMware-developed open-source <a href="http://www.reviewboard.org/">Review Board</a> and its <code>[post-review](http://www.reviewboard.org/docs/releasenotes/dev/rbtools/0.2/)</code> command line review creation utility to work with git and git-svn on your computer.</p>
 
@@ -70,7 +70,7 @@
   <entry>
     <title type="html"><![CDATA[Today's Geek Hijinks]]></title>
     <link href="http://www.g9labs.com/2008/02/18/todays-geek-hijinks/"/>
-    <updated>2008-02-18T09:32:42-08:00</updated>
+    <updated>2008-02-18T11:32:42-06:00</updated>
     <id>http://www.g9labs.com/2008/02/18/todays-geek-hijinks</id>
     <content type="html"><![CDATA[<h3>Morning: Woke up and attempted to mount a Samba file share under Ubuntu.</h3>
 

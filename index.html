@@ -9,8 +9,8 @@
   <meta name="author" content="Andrew Hao">
 
   
-  <meta name="description" content="The following are some notes I&rsquo;m compiling as I&rsquo;m beginning a journey
-down the rabbit hole, writing an app in Swift utilizing the VIPER &hellip;">
+  <meta name="description" content="A couple of months ago, I was tuning a Rails app for one of our clients.
+This client wanted to know how performant their app would be under load. To &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -85,6 +85,154 @@ down the rabbit hole, writing an app in Swift utilizing the VIPER &hellip;">
       
   <header>
     
+      <h1 class="entry-title"><a href="/2015/06/29/notes-on-performance-tuning-a-puma-server/">Notes on performance tuning a Puma server</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-06-29T11:47:00-05:00" pubdate data-updated="true">Jun 29<span>th</span>, 2015</time>
+        
+         | <a href="/2015/06/29/notes-on-performance-tuning-a-puma-server/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>A couple of months ago, I was tuning a Rails app for one of our clients.
+This client wanted to know how performant their app would be under load.</p>
+
+<p>To do that, you can do several different things:</p>
+
+<ol>
+<li>Tune the thread/process balance within the VM</li>
+<li>Horizontally scale with your cloud platform.</li>
+</ol>
+
+
+<p>This is a discussion of the former (#1):</p>
+
+<h2>1) Set up the test</h2>
+
+<h3>Drive with a synthetic script</h3>
+
+<p>Our application had a synthetic load driver that would run Selenium to
+execute various app tasks. This synthetic driver could be parallelized
+across many notes via Rainforest QA, Sauce Labs or Browserify.</p>
+
+<p>In our case, I only needed to run our synthetic load script on a single
+node in multiple processes, which simulated enough load to anticipate
+another order of magnitude of traffic.</p>
+
+<h3>Know how to inspect the server under load.</h3>
+
+<p>Commands you will want to know:</p>
+
+<pre><code>$ free -m # Find the total amount of free memory on your machine
+$ ps uH p &lt;pid&gt; # List out process threads
+$ kill -TTIN &lt;puma_master_pid&gt; # Add a puma worker
+$ kill -TTOU &lt;puma_master_pid&gt; # Remove a puma worker
+$ kill -USR2 &lt;puma_master_pid&gt; # Kill the puma master &amp; workers
+</code></pre>
+
+<h2>Generating more load: use external load testing services, or plain tools.</h2>
+
+<p>Try using <a href="http://www.flood.io">Flood.io</a> or JMeter for performance load.</p>
+
+<p>I tried looking into the <a href="https://github.com/schneems/puma_auto_tune">puma_auto_tune</a> gem, but it required a higher level of production instrumentation than I was ready to give it.</p>
+
+<h2>Analysis: New Relic scalability analysis</h2>
+
+<p>New Relic gave us a scalability analysis scatter plot, plotting
+throughput against average application response time. In essence, it
+allows you to see spikes in response times as correlated to throughput.</p>
+
+<h2>Process:</h2>
+
+<p>My approach was to use the synthetic script to generate productionlike
+node and ramp up the # of load actors in 5m increments. Each run would
+test the following Puma process/thread balance:</p>
+
+<p>Run #1: Single-process, multi threads.
+Run #2: Multiple processes, single threaded.
+Run #3: Multiple processes, multiple threads.</p>
+
+<blockquote><h3>Aside: <em>how many</em> of these threads/processes should I be using?</h3>
+
+<p>Note that your numbers will be different on the execution
+characteristics of your app and your server environment. Tweak it for
+yourself. You&rsquo;re designing an experiment.</p>
+
+<p>If you&rsquo;re curious, our Rails app started out with 4 threads on 2
+workers. We made the # of Puma workers (both min and max) environment
+variables so we could tweak the variables easily without deploying.</p></blockquote>
+
+<p>The strategy was then to look at the perf characteristics of each run in
+the scatter plot. If there were any spikes in the graph with the
+increase of load, then that would be noted. Even minor features like an
+increase in slope would be noted &ndash; at that point, the incremental cost
+of each request increases with overall system load.</p>
+
+<h2>Results</h2>
+
+<p>I don&rsquo;t have the New Relic data on hand to show, now, but in our case we
+discovered two things:</p>
+
+<ol>
+<li>The server easily scaled from ~10 &ndash;> ~500 rpm with a virtually flat
+line for all runs.</li>
+<li>The app exhibited no noticeable performance differences when flipped
+between uniprocess-multithreaded, multiprocess-unithreaded, and
+multiprocess-multithreaded modes. Any performance gains were under a
+tolerable threshold.</li>
+</ol>
+
+
+<p>How do we parse these results?</p>
+
+<ul>
+<li>We note that we didn&rsquo;t really push the performance threshold on this
+app (it&rsquo;s not meant to be a public web site and 95% of it is behind a
+login wall to a specialized group of users). Thus, if we pushed the
+concurrent connections even more, we may have seen more of a pronounced
+difference.</li>
+<li>The <em>absence</em> of any major red flags was itself a validation. The
+question we wanted answered coming into this experiment was &ldquo;how close
+are we to maxing out our single-node EC2 configuration such that we will
+have to begin configuring horizontal scaling?&rdquo;? The answer was: we can
+safely scale further out in the near-term future, and cross the bridge
+of horizontal scaling/bursting when we get there.</li>
+<li>We did not have enough statistically significant differences in
+performance for #threads/#processes in Puma. However, if we wanted to
+truly find the optimal performance in our app, we would have turned to
+tools like <a href="https://github.com/schneems/puma_auto_tune">puma_auto_tune</a> to answer those questions.</li>
+</ul>
+
+
+<p>Let me know in the comments if you have any questions!</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/2015/06/01/toolbox-learning-swift-and-viper/">Toolbox: learning Swift and VIPER</a></h1>
     
     
@@ -101,7 +249,7 @@ down the rabbit hole, writing an app in Swift utilizing the VIPER &hellip;">
   
 
 
-<time datetime="2015-06-01T17:04:00-07:00" pubdate data-updated="true">Jun 1<span>st</span>, 2015</time>
+<time datetime="2015-06-01T17:04:00-05:00" pubdate data-updated="true">Jun 1<span>st</span>, 2015</time>
         
          | <a href="/2015/06/01/toolbox-learning-swift-and-viper/#disqus_thread">Comments</a>
         
@@ -214,7 +362,7 @@ clicking the checkbox &ldquo;Create Groups for any Added Folders&rdquo;</p>
   
 
 
-<time datetime="2015-04-30T12:54:00-07:00" pubdate data-updated="true">Apr 30<span>th</span>, 2015</time>
+<time datetime="2015-04-30T12:54:00-05:00" pubdate data-updated="true">Apr 30<span>th</span>, 2015</time>
         
          | <a href="/2015/04/30/building-gpx-stats-through-frp-principles-on-bacon-dot-js/#disqus_thread">Comments</a>
         
@@ -344,7 +492,7 @@ clicking the checkbox &ldquo;Create Groups for any Added Folders&rdquo;</p>
   
 
 
-<time datetime="2015-03-19T13:29:00-07:00" pubdate data-updated="true">Mar 19<span>th</span>, 2015</time>
+<time datetime="2015-03-19T13:29:00-05:00" pubdate data-updated="true">Mar 19<span>th</span>, 2015</time>
         
          | <a href="/2015/03/19/docker-rails-and-docker-compose-in-your-development-workflow/#disqus_thread">Comments</a>
         
@@ -844,7 +992,7 @@ each container. You should see output that indicates that both our <code>web</co
   
 
 
-<time datetime="2014-11-29T16:40:00-08:00" pubdate data-updated="true">Nov 29<span>th</span>, 2014</time>
+<time datetime="2014-11-29T16:40:00-06:00" pubdate data-updated="true">Nov 29<span>th</span>, 2014</time>
         
          | <a href="/2014/11/29/explorations-in-logic-programming/#disqus_thread">Comments</a>
         
@@ -1013,7 +1161,7 @@ each container. You should see output that indicates that both our <code>web</co
   
 
 
-<time datetime="2014-11-15T10:03:00-08:00" pubdate data-updated="true">Nov 15<span>th</span>, 2014</time>
+<time datetime="2014-11-15T10:03:00-06:00" pubdate data-updated="true">Nov 15<span>th</span>, 2014</time>
         
          | <a href="/2014/11/15/my-own-robot-training-buddy/#disqus_thread">Comments</a>
         
@@ -1100,7 +1248,7 @@ each container. You should see output that indicates that both our <code>web</co
   
 
 
-<time datetime="2014-11-05T19:01:00-08:00" pubdate data-updated="true">Nov 5<span>th</span>, 2014</time>
+<time datetime="2014-11-05T19:01:00-06:00" pubdate data-updated="true">Nov 5<span>th</span>, 2014</time>
         
          | <a href="/2014/11/05/qcon-sf-2014/#disqus_thread">Comments</a>
         
@@ -1174,7 +1322,7 @@ each container. You should see output that indicates that both our <code>web</co
   
 
 
-<time datetime="2014-11-01T18:38:00-07:00" pubdate data-updated="true">Nov 1<span>st</span>, 2014</time>
+<time datetime="2014-11-01T18:38:00-05:00" pubdate data-updated="true">Nov 1<span>st</span>, 2014</time>
         
          | <a href="/2014/11/01/conways-law-for-humans/#disqus_thread">Comments</a>
         
@@ -1234,7 +1382,7 @@ each container. You should see output that indicates that both our <code>web</co
   
 
 
-<time datetime="2014-06-21T17:55:00-07:00" pubdate data-updated="true">Jun 21<span>st</span>, 2014</time>
+<time datetime="2014-06-21T17:55:00-05:00" pubdate data-updated="true">Jun 21<span>st</span>, 2014</time>
         
          | <a href="/2014/06/21/mocks-arent-stubs/#disqus_thread">Comments</a>
         
@@ -1417,7 +1565,7 @@ state instead of the <code>api_client</code>.</p>
   
 
 
-<time datetime="2014-06-06T15:11:00-07:00" pubdate data-updated="true">Jun 6<span>th</span>, 2014</time>
+<time datetime="2014-06-06T15:11:00-05:00" pubdate data-updated="true">Jun 6<span>th</span>, 2014</time>
         
          | <a href="/2014/06/06/running-mocha-tests-with-es6-amd-modules/#disqus_thread">Comments</a>
         
@@ -1667,96 +1815,6 @@ finding myself having problems compiling from Coffeescript &ndash;> ES5 JS &ndas
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/2014/04/26/implementing-ddd-chapter-2/">Implementing DDD: Chapter 2</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-04-26T08:43:00-07:00" pubdate data-updated="true">Apr 26<span>th</span>, 2014</time>
-        
-         | <a href="/2014/04/26/implementing-ddd-chapter-2/#disqus_thread">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h2>Chapter 2: Domains, Subdomains, and Bounded Contexts</h2>
-
-<p>A <em>Domain</em> is what a business does and the surrounding context of how it does business. It is important to model out its supported <em>Subdomains</em> &mdash; that is, the smaller components of the business that collaborate in real, day-to-day operations of the business. The book describes these as <em>Core Domains</em>.</p>
-
-<p>Finally, a <em>Bounded Context</em> is the physical manifestation of the solution space as software &mdash; models living in a real application. Its key feature in the context of DDD is as a linguistic barrier between different domains.</p>
-
-<p>In an ideal world, each <em>Subdomain</em> maps directly to one <em>Bounded Context</em>. In the real world, this is less common since we tend to build things into monolithic systems. Still &mdash; many monolithic applications have several components that could in themselves be bounded contexts.</p>
-
-<h6>Side note: In Rails, one could think of Engines as a <em>Bounded Context</em>. But that might be a blog post for another time.</h6>
-
-<p>It is important to get these ideas and concepts down correctly because we need correct modeling of our systems to determine what they do.</p>
-
-<h3>Bounded Contexts and terms</h3>
-
-<p>It&rsquo;s not usually realistic to get the entire organization agreeing on a universal linguistic definition for every term. Instead, DDD assumes that different terms have different meanings in different contexts.</p>
-
-<p>The author then dives into the an example of a book, where a <em>book</em> means several different things to different people in different contexts. A book is touched upon by authors, graphic designers, editors, marketing folks. In each of these contexts, the features of a book mean different things at different times. It is impossible to develop an all-knowing Book model without disagreement between stakeholders. DDD, instead, acknowledges these differences and allows stakeholders to use linguistic terms from within their unique Bounded Contexts.</p>
-
-<p>Bounded Contexts may include things like:</p>
-
-<ul>
-<li>Object models</li>
-<li>A database schema / persistence layer</li>
-<li>A SOAP or REST API</li>
-<li>A user interface</li>
-</ul>
-
-
-<h3>Bounded context antipatterns</h3>
-
-<p>You may be tempted to divide up a bounded context by architectural concerns, or because you want to assign smaller tasks to developers (resource allocation). Beware that this kind of work tends to fragment the language.</p>
-
-<p>DDD operates on <em>linquistic drivers</em>. The unity, cohesion and domain-adherence of the bounded context should be the first priority in the design.</p>
-
-<p>Assigning two teams to the same bounded context results in fragmentation of the bounded context.</p>
-
-<p>Ideally: we strive to assign one team to work on one Bounded Context with one Ubiquitous Language at a time.</p>
-
-<h6>In Rails, what are the bounded contexts? It could be the top-level Rails application, or an engine, or a gem, that define the context boundaries._</h6>
-
-<h3>A story&hellip;</h3>
-
-<p>The chapter then goes on to describe their fictional team designing through three iterations off their DDD strategy:</p>
-
-<p>A system in which all domains live within the same bounded context. They see the folly of this and refactor with some tactical patterns, like creating services.</p>
-
-<p>This is, however, missing the point. They realized they needed to listen to business and their domain experts to find out exactly where the right places were to segregate the contexts. The team discovers that the business has a desire to go in a new direction which allows them to segregate the domain in such a way that would enable future directions for the business.</p>
-
-<h6>How often are we as developers in conversation with our product owners and asking where the business <em>wants</em> to go in the future?</h6>
-
-<p>Conversations with the business reveal an intention to develop an add-on product to the core product. This implies the development of two subdomains. However, further investigation reveals that the shared overlap of certain domain models (like users, roles, and access management) cannot simply be identically shared between two systems, since their <em>linguistic meanings</em> in the two systems differ slightly. Instead, the developers use the linguistic problem to develop a third bounded context.</p>
-
-<p>The developers separate their app into three bounded contexts built as three software systems.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/page/2/">&larr; Older</a>
@@ -1772,6 +1830,10 @@ finding myself having problems compiling from Coffeescript &ndash;> ES5 JS &ndas
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/2015/06/29/notes-on-performance-tuning-a-puma-server/">Notes on performance tuning a Puma server</a>
+      </li>
+    
+      <li class="post">
         <a href="/2015/06/01/toolbox-learning-swift-and-viper/">Toolbox: learning Swift and VIPER</a>
       </li>
     
@@ -1785,10 +1847,6 @@ finding myself having problems compiling from Coffeescript &ndash;> ES5 JS &ndas
     
       <li class="post">
         <a href="/2014/11/29/explorations-in-logic-programming/">Explorations in logic programming</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2014/11/15/my-own-robot-training-buddy/">My own robot training buddy.</a>
       </li>
     
   </ul>

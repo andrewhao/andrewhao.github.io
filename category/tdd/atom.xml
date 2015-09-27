@@ -4,7 +4,7 @@
   <title><![CDATA[Category: TDD | The Sweet Spot]]></title>
   <link href="http://www.g9labs.com/category/tdd/atom.xml" rel="self"/>
   <link href="http://www.g9labs.com/"/>
-  <updated>2015-06-19T16:14:47-07:00</updated>
+  <updated>2015-09-27T15:38:26-05:00</updated>
   <id>http://www.g9labs.com/</id>
   <author>
     <name><![CDATA[Andrew Hao]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Mocks aren't stubs: mockist & classic testing]]></title>
     <link href="http://www.g9labs.com/2014/06/21/mocks-arent-stubs/"/>
-    <updated>2014-06-21T17:55:00-07:00</updated>
+    <updated>2014-06-21T17:55:00-05:00</updated>
     <id>http://www.g9labs.com/2014/06/21/mocks-arent-stubs</id>
     <content type="html"><![CDATA[<p>With the famed &ldquo;TDD is dead&rdquo; debate around the Rails community largely
 coming to an end, I found myself referencing Martin Fowler&rsquo;s article,
@@ -151,7 +151,7 @@ state instead of the <code>api_client</code>.</p>
   <entry>
     <title type="html"><![CDATA[Running Mocha tests with ES6/AMD modules]]></title>
     <link href="http://www.g9labs.com/2014/06/06/running-mocha-tests-with-es6-amd-modules/"/>
-    <updated>2014-06-06T15:11:00-07:00</updated>
+    <updated>2014-06-06T15:11:00-05:00</updated>
     <id>http://www.g9labs.com/2014/06/06/running-mocha-tests-with-es6-amd-modules</id>
     <content type="html"><![CDATA[<p>In one of my personal projects (<a href="https://github.com/andrewhao/chordmeister">Chordmeister</a>), I&rsquo;ve been trying to
 upgrade the code to be written in <a href="http://wiki.ecmascript.org/doku.php?id=harmony:modules#export_declarations">ES6 modules</a> and transpile down to AMD modules with Square&rsquo;s <a href="https://github.com/square/es6-module-transpiler">very excellent es6-module-transpiler project</a>.</p>
@@ -326,7 +326,7 @@ require(["chordmeister/parser"], function(parser) {
   <entry>
     <title type="html"><![CDATA[Speeding up Rspec/Cucumber feedback times without sacrificing coverage]]></title>
     <link href="http://www.g9labs.com/2012/04/27/speeding-up-rspeccucumber-feedback-times-without-sacrificing-coverage/"/>
-    <updated>2012-04-27T10:27:17-07:00</updated>
+    <updated>2012-04-27T12:27:17-05:00</updated>
     <id>http://www.g9labs.com/2012/04/27/speeding-up-rspeccucumber-feedback-times-without-sacrificing-coverage</id>
     <content type="html"><![CDATA[<iframe src="http://www.slideshare.net/slideshow/embed_code/4479466" width="512" height="421" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:1px solid #CCC;border-width:1px 1px 0;margin-bottom:5px" allowfullscreen>
 </iframe>

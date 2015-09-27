@@ -9,7 +9,7 @@
   <meta name="author" content="Andrew Hao">
 
   
-  <meta name="description" content="Why? The man is a respected thinker, theorist and activist. I&rsquo;ve had several Mass Communications classes devote a couple of sections to his &hellip;">
+  <meta name="description" content="Morning: Woke up and attempted to mount a Samba file share under Ubuntu. My Gutsy server in the living room is getting a second life as a backup file &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -84,6 +84,90 @@
       
   <header>
     
+      <h1 class="entry-title"><a href="/2008/02/18/todays-geek-hijinks/">Today&#8217;s Geek Hijinks</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-02-18T11:32:42-06:00" pubdate data-updated="true">Feb 18<span>th</span>, 2008</time>
+        
+         | <a href="/2008/02/18/todays-geek-hijinks/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h3>Morning: Woke up and attempted to mount a Samba file share under Ubuntu.</h3>
+
+<p>My Gutsy server in the living room is getting a second life as a backup file server. I need to mount it in my filesystem so I can rsync certain directories on my desktop over to the server.</p>
+
+<p><code>mount -t //my_server_ip/share_folder /media/mount_folder</code></p>
+
+<p>Alas! I couldn&rsquo;t get write access into the mount point! At first I thought this was a chmod problem, so I added myself as the mount_folder owner.</p>
+
+<p><code>sudo chown username mount_folder/</code></p>
+
+<p>To no avail. So then I attempted to use the &ldquo;permit all&rdquo; chmod sledgehammer:</p>
+
+<p><code>sudo chmod 777 mount_folder/</code></p>
+
+<p>Argh! STILL no good!</p>
+
+<p>So then I went back to the drawing board and did some investigating. I could, 50% of the time, gain write access to child subfolders on the Samba share via GNOME Nautilus interface (smb://my_server_ip). Weird! Was this a Samba config problem? I didn&rsquo;t have the cajones to find out.</p>
+
+<p>As a last-ditch attempt, I tried to modify my fstab file to mount the Samba share (I read somewhere that the uid and gid option flags give you the win). Side note: you can find your username&rsquo;s uid and gid numbers from the <code>/etc/passwd file</code>.</p>
+
+<pre><code># TEMPORARY SAMBA SHARE FROM LIVINGROOM SERVER
+
+# @author Andrew
+
+//my_server_ip/archive /media/archive smbfs noauto,rw,uid=1000,gid=1000 0 0
+</code></pre>
+
+<p><em>Still</em> no good! Arghs! At this point, I gave up and simply SFTP-ed in to dump my files. Admitting defeat is a sad, sad thing.</p>
+
+<h3>Afternoon: Designed some logo comps for a Web company.</h3>
+
+<p><a href="http://blog.g9labs.com/wp-content/uploads/2008/02/logo.png"><img src="http://blog.g9labs.com/wp-content/uploads/2008/02/logo.png" alt="Logo I started on." /></a></p>
+
+<p>I&rsquo;m working under contract from Ryan Waliany. This site should be doing some cool things. Unfortunately, I can&rsquo;t reveal too much. All this to say that I&rsquo;ve taken a long hiatus from design and I really miss it.</p>
+
+<h3>Late Afternoon: Set up Google Apps for g9labs.com</h3>
+
+<p>I gave in to the hype, and began setting up a Google Apps For Your Domain (GFYD) account for this g9labs site, primarily so I can hook into the awesome GMail interface instead of being chained to the Thunderbird client.</p>
+
+<p>This was a multi-step process of:</p>
+
+<ol>
+<li><p> <strong>Verifying ownership of your domain. </strong>Google has you modify a CNAME entry on your domain so they can ping it to check that it&rsquo;s changed. I marched happily over to the <a href="http://dreamhost.com">Dreamhost</a> panel where I found the DNS page for <a href="http://g9labs.com">g9labs.com</a>. There I added a CNAME value of googlexxxxxxxxx (a unique value given to you) and set its CNAME value to &ldquo;google.com&rdquo;.</p></li>
+<li><p> While Google takes 48 hours to verify you&rsquo;ve done the right steps, you can go ahead and <strong>modify the MX records for your domain </strong>so mail gets sent on over to Google instead of your Dreamhost server. This was easily set in the Dreamhost panel under Mail >> MX Records. You change your MX records to Google&rsquo;s special MX server, and you&rsquo;re on your way!</p></li>
+<li><p> I&rsquo;m waiting for verification to go through, then I&rsquo;ll talk about how to get <strong>IMAP for GFYD working</strong>.</p></li>
+</ol>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/2008/02/17/noam-chomsky-is-the-man/">Noam Chomsky is The Man</a></h1>
     
     
@@ -100,7 +184,7 @@
   
 
 
-<time datetime="2008-02-17T15:53:54-08:00" pubdate data-updated="true">Feb 17<span>th</span>, 2008</time>
+<time datetime="2008-02-17T17:53:54-06:00" pubdate data-updated="true">Feb 17<span>th</span>, 2008</time>
         
          | <a href="/2008/02/17/noam-chomsky-is-the-man/#disqus_thread">Comments</a>
         
@@ -146,7 +230,7 @@
   
 
 
-<time datetime="2008-02-03T07:38:52-08:00" pubdate data-updated="true">Feb 3<span>rd</span>, 2008</time>
+<time datetime="2008-02-03T09:38:52-06:00" pubdate data-updated="true">Feb 3<span>rd</span>, 2008</time>
         
          | <a href="/2008/02/03/a-new-blog-is-coming/#disqus_thread">Comments</a>
         
@@ -192,7 +276,7 @@
   
 
 
-<time datetime="2008-01-27T14:48:04-08:00" pubdate data-updated="true">Jan 27<span>th</span>, 2008</time>
+<time datetime="2008-01-27T16:48:04-06:00" pubdate data-updated="true">Jan 27<span>th</span>, 2008</time>
         
          | <a href="/2008/01/27/wordpress-bughunt/#disqus_thread">Comments</a>
         
@@ -244,7 +328,7 @@
   
 
 
-<time datetime="2007-12-11T11:24:15-08:00" pubdate data-updated="true">Dec 11<span>th</span>, 2007</time>
+<time datetime="2007-12-11T13:24:15-06:00" pubdate data-updated="true">Dec 11<span>th</span>, 2007</time>
         
          | <a href="/2007/12/11/im-ready-for-the-winter/#disqus_thread">Comments</a>
         
@@ -297,7 +381,7 @@
   
 
 
-<time datetime="2007-12-05T02:55:08-08:00" pubdate data-updated="true">Dec 5<span>th</span>, 2007</time>
+<time datetime="2007-12-05T04:55:08-06:00" pubdate data-updated="true">Dec 5<span>th</span>, 2007</time>
         
          | <a href="/2007/12/05/feeling-awesome-today/#disqus_thread">Comments</a>
         
@@ -345,7 +429,7 @@
   
 
 
-<time datetime="2007-12-03T17:45:30-08:00" pubdate data-updated="true">Dec 3<span>rd</span>, 2007</time>
+<time datetime="2007-12-03T19:45:30-06:00" pubdate data-updated="true">Dec 3<span>rd</span>, 2007</time>
         
          | <a href="/2007/12/03/meeting-joe-hewitt/#disqus_thread">Comments</a>
         
@@ -385,7 +469,7 @@
   
 
 
-<time datetime="2007-11-15T06:10:47-08:00" pubdate data-updated="true">Nov 15<span>th</span>, 2007</time>
+<time datetime="2007-11-15T08:10:47-06:00" pubdate data-updated="true">Nov 15<span>th</span>, 2007</time>
         
          | <a href="/2007/11/15/more-scenes/#disqus_thread">Comments</a>
         
@@ -433,7 +517,7 @@
   
 
 
-<time datetime="2007-10-25T19:24:16-07:00" pubdate data-updated="true">Oct 25<span>th</span>, 2007</time>
+<time datetime="2007-10-25T21:24:16-05:00" pubdate data-updated="true">Oct 25<span>th</span>, 2007</time>
         
          | <a href="/2007/10/25/sensations-6/#disqus_thread">Comments</a>
         
@@ -471,7 +555,7 @@
   
 
 
-<time datetime="2007-10-24T15:00:30-07:00" pubdate data-updated="true">Oct 24<span>th</span>, 2007</time>
+<time datetime="2007-10-24T17:00:30-05:00" pubdate data-updated="true">Oct 24<span>th</span>, 2007</time>
         
          | <a href="/2007/10/24/sensations-5/#disqus_thread">Comments</a>
         
@@ -481,99 +565,6 @@
 
 
   <div class="entry-content"><p><a href="http://www.flickr.com/photos/andrewhao/1738876421/"><img src="http://farm3.static.flickr.com/2051/1738876421_c2e2aa4ec8.jpg" alt="Sensations - Rocks Cry Out" /></a></p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/2007/10/19/yahoo-university-hack-day/">Yahoo! University Hack Day</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2007-10-19T19:20:08-07:00" pubdate data-updated="true">Oct 19<span>th</span>, 2007</time>
-        
-         | <a href="/2007/10/19/yahoo-university-hack-day/#disqus_thread">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>So Hsiu-fan and I had floated the idea of doing a hack for <a href="http://developer.yahoo.com/hacku/">Yahoo! University Hack Day</a>. We had even polled some of our friends about it, and the consensus seemed to be &ldquo;We&rsquo;ll see what we can do with the time we&rsquo;re given.&rdquo;</p>
-
-<p>Well it turned out we didn&rsquo;t have very much time. Today I opened up my email inbox to discover that Hack Day was today, and the actual time to hack was only from 2PM to 6PM.</p>
-
-<p>So I head on over to the Woz with the intention of:</p>
-
-<ol>
-<li><p> Eating free food</p></li>
-<li><p> Grabbing a t-shirt or two</p></li>
-<li><p> Talking to some of the Yahoo! devs</p></li>
-<li><p> Giving a couple of hours as a freelance developer.</p></li>
-</ol>
-
-
-<p>While I easily managed to achieve #1, 2 and 3, #4 (joining a random group) was something that I didn&rsquo;t expect to do.</p>
-
-<p>Hsiu-Fan showed up half-way through the competition and told me &ldquo;Okay, I have 50 minutes. What do you want to do?&rdquo; We had floated the idea of doing the <a href="http://blog.g9labs.com/2007/08/10/thinking-about-writing-a-rhapsody-scrobbler/">Rhapsody scrobbler</a>. &ldquo;Okay,&rdquo; he tells me. &ldquo;I think I can do that in 50 minutes.&rdquo;</p>
-
-<p>But by then, I&rsquo;ve been snagged by this other group, composed of folks mainly from the <a href="http://csua.berkeley.edu">CS Undergrad Association</a>. The idea? The creation of a <strong>commuter Web application</strong> that would take peoples&#8217; commute details and sort them into carpools based on convenience.</p>
-
-<p>The problem? These guys were serious Java heads. I was the lone Web developer. We were going to have problems. Fortunately we managed to hash out a somewhat working hack using the skill sets that we had.</p>
-
-<p>Okay, it was a &ldquo;hack&rdquo; in every sense of the word. The other guys didn&rsquo;t want to implement a database (which means no locking, no synchronization). I was parsing browser inputs through PHP and writing them out to a flat file. Then something got slurped by our Java backend and requests were shot back and forth between Yahoo! Maps and our service. Then the resulting routes were written out to a flat file and a PHP script consumed it on demand, displaying calculated routes.</p>
-
-<p>My job? I was the frontend guy, interface guy, PHP guy, and client-side guy. I put together a pretty quick-and-dirty interface (see below) using <a href="http://developer.yahoo.com/yui/grids/">YUI grids and reset</a>. Then I did a pretty massive Frankenstein CSS job, piecing bits of code from the <a href="http://code.google.com/p/blueprintcss/">Blueprint CSS framework</a>, previous projects and <a href="http://www.wejoinin.com">Wejoinin</a>.</p>
-
-<p>(Aside: If there&rsquo;s one thing I appreciate about a CSS framework, it&rsquo;s the flexibility and speed it affords you. I love, particularly with Blueprint (which I would have preferred to use on this project but didn&rsquo;t because it <em>is</em> a Yahoo! Hack Day), the ability to lay out a grid-based layout using CSS selectors in a fraction of the time it takes you to build it again from scratch.)</p>
-
-<p>Then I took a deep breath and summoned up enough of the PHP left in the recesses of my brain.</p>
-
-<p>Oh yeah, Hsiu-Fan didn&rsquo;t manage to finish the Scrobbler on time (50 minutes was pretty optimistic), but we&rsquo;re looking into finishing it up sometime, somewhere else. And it will be cool and we will feel fuzzy.</p>
-
-<h4>Hack day lessons</h4>
-
-<ul>
-<li><p>Come in with a cool idea with a cool team ready to execute. Don&rsquo;t assemble something together last minute.</p></li>
-<li><p>Yahoo! cares more about people that are passionate than  about people who  have impressive resumes.</p></li>
-<li><p>Your project idea should be limited enough in scope to be polished.</p></li>
-<li><p>Even if your team strengths don&rsquo;t align well, you&rsquo;ll always find a way to do [your hack].</p></li>
-<li><p>Come on, Yahoo!, could we get a little more than 4 hours to finish? :)</p></li>
-</ul>
-
-
-<p>All in all, a bunch of fun. I&rsquo;d definitely do it again. And I&rsquo;d pray that I&rsquo;d have a little more time to execute. And hope that people don&rsquo;t give me any more weird looks when I tell them I was at a &ldquo;programming contest.&rdquo;</p>
-
-<p><a href="http://blog.g9labs.com/wp-content/uploads/2007/10/commuter_screenshot_2.png"><img src="http://blog.g9labs.com/wp-content/uploads/2007/10/commuter_screenshot_2.thumbnail.png" alt="Commuter Interface" /></a><a href="http://blog.g9labs.com/wp-content/uploads/2007/10/commuter_screenshot_1.png"><img src="http://blog.g9labs.com/wp-content/uploads/2007/10/commuter_screenshot_1.thumbnail.png" alt="Commuter Interface" /></a></p>
-
-<p>&mdash; Edit:</p>
-
-<p><a href="http://flickr.com/photos/rckenned/1646789668/in/set-72157602538180791/"><img src="http://farm3.static.flickr.com/2368/1646789668_342a79679b_m.jpg" alt="" /></a></p>
-
-<blockquote><p>Berkeley Hack Day happened Friday at a frenetic pace.  We invaded the Woz in Soda Hall and students were trickling in and out all day with a core group of four hack teams staying for the duration and a couple of teams working remotely.  The teams fought Java, Python, C++ and PHP all day long, with Java defeating at least a couple of team members with its multiple layers of input streams required just to pull in a simple text file.  We also fought with RSS feeds from Craigslist, news archives and local Berkeley event listings.</p></blockquote>
-
-<p>In the end it was a very close race between two hacks that rose above the rest: an extremely useful carpool commuter application that matched up peoples&#8217; addresses and their daily destinations and tried to organize the most efficient combination of carpools, and a magnificent hack that provided a cell phone interface to the old game of Twenty Questions.  The impressive mix of technologies required to answer the call automatically, acquire the data for the twenty questions, do the text-to-speech translation and issue the FFT code to decipher the user responses from the cell phone won over the judges to take the top prize.</p>
-
-<p><a href="http://developer.yahoo.net/blog/archives/2007/10/berkeley_univer.html">Berkeley University Hack Day Wrap-Up Yahoo Developer Network blog</a></p>
 </div>
   
   
@@ -598,6 +589,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/2015/06/29/notes-on-performance-tuning-a-puma-server/">Notes on performance tuning a Puma server</a>
+      </li>
+    
+      <li class="post">
         <a href="/2015/06/01/toolbox-learning-swift-and-viper/">Toolbox: learning Swift and VIPER</a>
       </li>
     
@@ -611,10 +606,6 @@
     
       <li class="post">
         <a href="/2014/11/29/explorations-in-logic-programming/">Explorations in logic programming</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2014/11/15/my-own-robot-training-buddy/">My own robot training buddy.</a>
       </li>
     
   </ul>

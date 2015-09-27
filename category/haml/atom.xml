@@ -4,7 +4,7 @@
   <title><![CDATA[Category: HAML | The Sweet Spot]]></title>
   <link href="http://www.g9labs.com/category/haml/atom.xml" rel="self"/>
   <link href="http://www.g9labs.com/"/>
-  <updated>2015-06-19T16:14:47-07:00</updated>
+  <updated>2015-09-27T15:38:26-05:00</updated>
   <id>http://www.g9labs.com/</id>
   <author>
     <name><![CDATA[Andrew Hao]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[HAML object references]]></title>
     <link href="http://www.g9labs.com/2012/04/12/haml-object-references/"/>
-    <updated>2012-04-12T07:40:09-07:00</updated>
+    <updated>2012-04-12T09:40:09-05:00</updated>
     <id>http://www.g9labs.com/2012/04/12/haml-object-references</id>
     <content type="html"><![CDATA[<p>Did you guys know that you can use the &lsquo;[ ]&rsquo; brackets in HAML to automatically set the id and class on a tag, kind of like Rails' <a href="http://api.rubyonrails.org/classes/ActionView/Helpers/TagHelper.html#method-i-tag">tag</a> helper?</p>
 

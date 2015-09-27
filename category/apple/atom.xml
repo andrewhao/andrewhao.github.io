@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Apple | The Sweet Spot]]></title>
   <link href="http://www.g9labs.com/category/apple/atom.xml" rel="self"/>
   <link href="http://www.g9labs.com/"/>
-  <updated>2015-06-19T16:14:47-07:00</updated>
+  <updated>2015-09-27T15:38:26-05:00</updated>
   <id>http://www.g9labs.com/</id>
   <author>
     <name><![CDATA[Andrew Hao]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Updating max file limit on OSX Lion]]></title>
     <link href="http://www.g9labs.com/2012/06/20/updating-max-file-limit-on-osx-lion/"/>
-    <updated>2012-06-20T02:28:13-07:00</updated>
+    <updated>2012-06-20T04:28:13-05:00</updated>
     <id>http://www.g9labs.com/2012/06/20/updating-max-file-limit-on-osx-lion</id>
     <content type="html"><![CDATA[<p>I&rsquo;ve been hitting a lot of &ldquo;Maximum file limit exceeded&rdquo; dialogs after a long day at work &mdash; at any point in time I&rsquo;ve got a kajillion Chrome tabs open, five or six Rails envs running (for dev and test) + Guard/Spork actively watching tests, and Sublime with another kajillion tabs open.</p>
 
@@ -52,7 +52,7 @@
   <entry>
     <title type="html"><![CDATA[On selling my soul and switching to Mac]]></title>
     <link href="http://www.g9labs.com/2010/08/03/on-selling-my-soul-and-switching-to-mac/"/>
-    <updated>2010-08-03T14:44:45-07:00</updated>
+    <updated>2010-08-03T16:44:45-05:00</updated>
     <id>http://www.g9labs.com/2010/08/03/on-selling-my-soul-and-switching-to-mac</id>
     <content type="html"><![CDATA[<p>A month ago I bought an &lsquo;07 MacBook on Craigslist. No, it&rsquo;s not one of those sexy aluminum hot rods, but it sure is pretty.</p>
 

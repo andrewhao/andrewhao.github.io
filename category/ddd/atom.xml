@@ -4,7 +4,7 @@
   <title><![CDATA[Category: DDD | The Sweet Spot]]></title>
   <link href="http://www.g9labs.com/category/ddd/atom.xml" rel="self"/>
   <link href="http://www.g9labs.com/"/>
-  <updated>2015-06-19T16:14:47-07:00</updated>
+  <updated>2015-09-27T15:38:26-05:00</updated>
   <id>http://www.g9labs.com/</id>
   <author>
     <name><![CDATA[Andrew Hao]]></name>
@@ -14,9 +14,9 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Implementing DDD: Chapter 2]]></title>
+    <title type="html"><![CDATA[Implementing DDD: Domains, Subdomains and Bounded Contexts]]></title>
     <link href="http://www.g9labs.com/2014/04/26/implementing-ddd-chapter-2/"/>
-    <updated>2014-04-26T08:43:00-07:00</updated>
+    <updated>2014-04-26T08:43:00-05:00</updated>
     <id>http://www.g9labs.com/2014/04/26/implementing-ddd-chapter-2</id>
     <content type="html"><![CDATA[<h2>Chapter 2: Domains, Subdomains, and Bounded Contexts</h2>
 
@@ -77,7 +77,7 @@
   <entry>
     <title type="html"><![CDATA[Blogging through: Implementing Domain-Driven Design]]></title>
     <link href="http://www.g9labs.com/2014/02/02/blogging-through-implementing-domain-driven-design/"/>
-    <updated>2014-02-02T11:31:00-08:00</updated>
+    <updated>2014-02-02T11:31:00-06:00</updated>
     <id>http://www.g9labs.com/2014/02/02/blogging-through-implementing-domain-driven-design</id>
     <content type="html"><![CDATA[<p>In recent conversations with coworkers, the topic of Domain-Driven Design has
 arisen on more than a few occasions in design and architecture meetings.

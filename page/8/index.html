@@ -9,7 +9,7 @@
   <meta name="author" content="Andrew Hao">
 
   
-  <meta name="description" content="What gives you more geek fuzzies than seeing an Evite competitor with an ASCII logo? Crusher website ~ Send invites for free Fun, simple, bare-bones &hellip;">
+  <meta name="description" content="So Hsiu-fan and I had floated the idea of doing a hack for Yahoo! University Hack Day. We had even polled some of our friends about it, and the &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -84,6 +84,99 @@
       
   <header>
     
+      <h1 class="entry-title"><a href="/2007/10/19/yahoo-university-hack-day/">Yahoo! University Hack Day</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-10-19T21:20:08-05:00" pubdate data-updated="true">Oct 19<span>th</span>, 2007</time>
+        
+         | <a href="/2007/10/19/yahoo-university-hack-day/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>So Hsiu-fan and I had floated the idea of doing a hack for <a href="http://developer.yahoo.com/hacku/">Yahoo! University Hack Day</a>. We had even polled some of our friends about it, and the consensus seemed to be &ldquo;We&rsquo;ll see what we can do with the time we&rsquo;re given.&rdquo;</p>
+
+<p>Well it turned out we didn&rsquo;t have very much time. Today I opened up my email inbox to discover that Hack Day was today, and the actual time to hack was only from 2PM to 6PM.</p>
+
+<p>So I head on over to the Woz with the intention of:</p>
+
+<ol>
+<li><p> Eating free food</p></li>
+<li><p> Grabbing a t-shirt or two</p></li>
+<li><p> Talking to some of the Yahoo! devs</p></li>
+<li><p> Giving a couple of hours as a freelance developer.</p></li>
+</ol>
+
+
+<p>While I easily managed to achieve #1, 2 and 3, #4 (joining a random group) was something that I didn&rsquo;t expect to do.</p>
+
+<p>Hsiu-Fan showed up half-way through the competition and told me &ldquo;Okay, I have 50 minutes. What do you want to do?&rdquo; We had floated the idea of doing the <a href="http://blog.g9labs.com/2007/08/10/thinking-about-writing-a-rhapsody-scrobbler/">Rhapsody scrobbler</a>. &ldquo;Okay,&rdquo; he tells me. &ldquo;I think I can do that in 50 minutes.&rdquo;</p>
+
+<p>But by then, I&rsquo;ve been snagged by this other group, composed of folks mainly from the <a href="http://csua.berkeley.edu">CS Undergrad Association</a>. The idea? The creation of a <strong>commuter Web application</strong> that would take peoples&#8217; commute details and sort them into carpools based on convenience.</p>
+
+<p>The problem? These guys were serious Java heads. I was the lone Web developer. We were going to have problems. Fortunately we managed to hash out a somewhat working hack using the skill sets that we had.</p>
+
+<p>Okay, it was a &ldquo;hack&rdquo; in every sense of the word. The other guys didn&rsquo;t want to implement a database (which means no locking, no synchronization). I was parsing browser inputs through PHP and writing them out to a flat file. Then something got slurped by our Java backend and requests were shot back and forth between Yahoo! Maps and our service. Then the resulting routes were written out to a flat file and a PHP script consumed it on demand, displaying calculated routes.</p>
+
+<p>My job? I was the frontend guy, interface guy, PHP guy, and client-side guy. I put together a pretty quick-and-dirty interface (see below) using <a href="http://developer.yahoo.com/yui/grids/">YUI grids and reset</a>. Then I did a pretty massive Frankenstein CSS job, piecing bits of code from the <a href="http://code.google.com/p/blueprintcss/">Blueprint CSS framework</a>, previous projects and <a href="http://www.wejoinin.com">Wejoinin</a>.</p>
+
+<p>(Aside: If there&rsquo;s one thing I appreciate about a CSS framework, it&rsquo;s the flexibility and speed it affords you. I love, particularly with Blueprint (which I would have preferred to use on this project but didn&rsquo;t because it <em>is</em> a Yahoo! Hack Day), the ability to lay out a grid-based layout using CSS selectors in a fraction of the time it takes you to build it again from scratch.)</p>
+
+<p>Then I took a deep breath and summoned up enough of the PHP left in the recesses of my brain.</p>
+
+<p>Oh yeah, Hsiu-Fan didn&rsquo;t manage to finish the Scrobbler on time (50 minutes was pretty optimistic), but we&rsquo;re looking into finishing it up sometime, somewhere else. And it will be cool and we will feel fuzzy.</p>
+
+<h4>Hack day lessons</h4>
+
+<ul>
+<li><p>Come in with a cool idea with a cool team ready to execute. Don&rsquo;t assemble something together last minute.</p></li>
+<li><p>Yahoo! cares more about people that are passionate than  about people who  have impressive resumes.</p></li>
+<li><p>Your project idea should be limited enough in scope to be polished.</p></li>
+<li><p>Even if your team strengths don&rsquo;t align well, you&rsquo;ll always find a way to do [your hack].</p></li>
+<li><p>Come on, Yahoo!, could we get a little more than 4 hours to finish? :)</p></li>
+</ul>
+
+
+<p>All in all, a bunch of fun. I&rsquo;d definitely do it again. And I&rsquo;d pray that I&rsquo;d have a little more time to execute. And hope that people don&rsquo;t give me any more weird looks when I tell them I was at a &ldquo;programming contest.&rdquo;</p>
+
+<p><a href="http://blog.g9labs.com/wp-content/uploads/2007/10/commuter_screenshot_2.png"><img src="http://blog.g9labs.com/wp-content/uploads/2007/10/commuter_screenshot_2.thumbnail.png" alt="Commuter Interface" /></a><a href="http://blog.g9labs.com/wp-content/uploads/2007/10/commuter_screenshot_1.png"><img src="http://blog.g9labs.com/wp-content/uploads/2007/10/commuter_screenshot_1.thumbnail.png" alt="Commuter Interface" /></a></p>
+
+<p>&mdash; Edit:</p>
+
+<p><a href="http://flickr.com/photos/rckenned/1646789668/in/set-72157602538180791/"><img src="http://farm3.static.flickr.com/2368/1646789668_342a79679b_m.jpg" alt="" /></a></p>
+
+<blockquote><p>Berkeley Hack Day happened Friday at a frenetic pace.  We invaded the Woz in Soda Hall and students were trickling in and out all day with a core group of four hack teams staying for the duration and a couple of teams working remotely.  The teams fought Java, Python, C++ and PHP all day long, with Java defeating at least a couple of team members with its multiple layers of input streams required just to pull in a simple text file.  We also fought with RSS feeds from Craigslist, news archives and local Berkeley event listings.</p></blockquote>
+
+<p>In the end it was a very close race between two hacks that rose above the rest: an extremely useful carpool commuter application that matched up peoples&#8217; addresses and their daily destinations and tried to organize the most efficient combination of carpools, and a magnificent hack that provided a cell phone interface to the old game of Twenty Questions.  The impressive mix of technologies required to answer the call automatically, acquire the data for the twenty questions, do the text-to-speech translation and issue the FFT code to decipher the user responses from the cell phone won over the judges to take the top prize.</p>
+
+<p><a href="http://developer.yahoo.net/blog/archives/2007/10/berkeley_univer.html">Berkeley University Hack Day Wrap-Up Yahoo Developer Network blog</a></p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/2007/10/17/crusher-website/">Crusher website</a></h1>
     
     
@@ -100,7 +193,7 @@
   
 
 
-<time datetime="2007-10-17T06:43:26-07:00" pubdate data-updated="true">Oct 17<span>th</span>, 2007</time>
+<time datetime="2007-10-17T08:43:26-05:00" pubdate data-updated="true">Oct 17<span>th</span>, 2007</time>
         
          | <a href="/2007/10/17/crusher-website/#disqus_thread">Comments</a>
         
@@ -142,7 +235,7 @@
   
 
 
-<time datetime="2007-10-11T11:37:57-07:00" pubdate data-updated="true">Oct 11<span>th</span>, 2007</time>
+<time datetime="2007-10-11T13:37:57-05:00" pubdate data-updated="true">Oct 11<span>th</span>, 2007</time>
         
          | <a href="/2007/10/11/oh-well-lessons-learned-the-hard-way/#disqus_thread">Comments</a>
         
@@ -182,7 +275,7 @@
   
 
 
-<time datetime="2007-09-11T14:06:12-07:00" pubdate data-updated="true">Sep 11<span>th</span>, 2007</time>
+<time datetime="2007-09-11T16:06:12-05:00" pubdate data-updated="true">Sep 11<span>th</span>, 2007</time>
         
          | <a href="/2007/09/11/hello-awesome/#disqus_thread">Comments</a>
         
@@ -222,7 +315,7 @@
   
 
 
-<time datetime="2007-08-31T02:32:11-07:00" pubdate data-updated="true">Aug 31<span>st</span>, 2007</time>
+<time datetime="2007-08-31T04:32:11-05:00" pubdate data-updated="true">Aug 31<span>st</span>, 2007</time>
         
          | <a href="/2007/08/31/sensations-4/#disqus_thread">Comments</a>
         
@@ -260,7 +353,7 @@
   
 
 
-<time datetime="2007-08-10T05:10:11-07:00" pubdate data-updated="true">Aug 10<span>th</span>, 2007</time>
+<time datetime="2007-08-10T07:10:11-05:00" pubdate data-updated="true">Aug 10<span>th</span>, 2007</time>
         
          | <a href="/2007/08/10/thinking-about-writing-a-rhapsody-scrobbler/#disqus_thread">Comments</a>
         
@@ -302,7 +395,7 @@
   
 
 
-<time datetime="2007-08-01T03:00:42-07:00" pubdate data-updated="true">Aug 1<span>st</span>, 2007</time>
+<time datetime="2007-08-01T05:00:42-05:00" pubdate data-updated="true">Aug 1<span>st</span>, 2007</time>
         
          | <a href="/2007/08/01/a-web-site-for-word-geeks/#disqus_thread">Comments</a>
         
@@ -342,7 +435,7 @@
   
 
 
-<time datetime="2007-04-29T19:23:00-07:00" pubdate data-updated="true">Apr 29<span>th</span>, 2007</time>
+<time datetime="2007-04-29T21:23:00-05:00" pubdate data-updated="true">Apr 29<span>th</span>, 2007</time>
         
          | <a href="/2007/04/29/taiwan-roundup-ii/#disqus_thread">Comments</a>
         
@@ -392,7 +485,7 @@
   
 
 
-<time datetime="2007-04-22T17:14:00-07:00" pubdate data-updated="true">Apr 22<span>nd</span>, 2007</time>
+<time datetime="2007-04-22T19:14:00-05:00" pubdate data-updated="true">Apr 22<span>nd</span>, 2007</time>
         
          | <a href="/2007/04/22/blog-habits-evolution/#disqus_thread">Comments</a>
         
@@ -434,7 +527,7 @@
   
 
 
-<time datetime="2007-04-15T18:11:00-07:00" pubdate data-updated="true">Apr 15<span>th</span>, 2007</time>
+<time datetime="2007-04-15T20:11:00-05:00" pubdate data-updated="true">Apr 15<span>th</span>, 2007</time>
         
          | <a href="/2007/04/15/sensations-3/#disqus_thread">Comments</a>
         
@@ -448,80 +541,6 @@
 <p> <img src="http://www.g9labs.com/img/blogart/03-fishing-dream-2.png" alt="we were fishing together" /></p>
 
 <p> <img src="http://www.g9labs.com/img/blogart/03-fishing-dream-3.png" alt="(i've never been fishing)" /></p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/2007/04/04/mixtaped/">Mixtaped</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2007-04-04T07:05:00-07:00" pubdate data-updated="true">Apr 4<span>th</span>, 2007</time>
-        
-         | <a href="/2007/04/04/mixtaped/#disqus_thread">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Found over at &ldquo;<a href="http://www.tinymixtapes.com/-Mix-Tapes-">Tiny Mix Tapes</a>&rdquo; &mdash; a mixtape suggestion/request service. Surprisingly poetic (well, most). Gives you a good glimpse into music uses &amp; gratifications.</p>
-
-<blockquote><p>after you left i had nothing to come home to anymore<br/>
-requested by: dee</p></blockquote>
-
-<p>I need a bank robbinï¿½ mix.<br/>
-Requested By: Bonnie</p>
-
-<p>And at once it came. Out of the darkness of the doorway.<br/>
-Requested by: csl</p>
-
-<p>A mix for that sunny Sunday late morning/early afternoon, when youï¿½re sort of lying in bed and staring at the ceiling or out the window with lots of natural light pouring onto you, warming you with the feeling that youï¿½ve got nothing to do today but think.<br/>
-Requested by: Spencer</p>
-
-<p>songs to put ikea furniture together to<br/>
-requested by: allen wrench</p>
-
-<p>Iï¿½m a high school drop out and sheï¿½s almost through her masters program.<br/>
-Requested by: Joey</p>
-
-<p>You make me morning poetry and fajitas, how could I not love you?<br/>
-Requested by: ARE</p>
-
-<p>sweetheart of the rodeo<br/>
-Requested by: minimal</p>
-
-<p>Sad songs for freckled girls.<br/>
-Requested by: Kev Bot</p>
-
-<p>Songs for that ugly period of time between winter and spring.<br/>
-Requested by : Jill</p>
-
-<p>(At the moment, I&rsquo;m doing research into <a href="http://en.wikipedia.org/wiki/Mixtape">mix tape culture</a>).</p>
-
-<p>&mdash;-EDIT</p>
-
-<p>Dex Digital, over at the <a href="http://www.mixtapeshow.net">Mix Tape Show</a> hip-hop podcast opens up his shows with &ldquo;hey, what&rsquo;s good&rdquo; or &ldquo;hey, what&rsquo;s wonderful.&rdquo; I really like that.</p>
 </div>
   
   
@@ -546,6 +565,10 @@ Requested by : Jill</p>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/2015/06/29/notes-on-performance-tuning-a-puma-server/">Notes on performance tuning a Puma server</a>
+      </li>
+    
+      <li class="post">
         <a href="/2015/06/01/toolbox-learning-swift-and-viper/">Toolbox: learning Swift and VIPER</a>
       </li>
     
@@ -559,10 +582,6 @@ Requested by : Jill</p>
     
       <li class="post">
         <a href="/2014/11/29/explorations-in-logic-programming/">Explorations in logic programming</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2014/11/15/my-own-robot-training-buddy/">My own robot training buddy.</a>
       </li>
     
   </ul>

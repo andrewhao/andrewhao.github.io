@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Docker | The Sweet Spot]]></title>
   <link href="http://www.g9labs.com/category/docker/atom.xml" rel="self"/>
   <link href="http://www.g9labs.com/"/>
-  <updated>2015-06-19T16:14:47-07:00</updated>
+  <updated>2015-09-27T15:38:26-05:00</updated>
   <id>http://www.g9labs.com/</id>
   <author>
     <name><![CDATA[Andrew Hao]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Docker, Rails, and Docker Compose in your development workflow]]></title>
     <link href="http://www.g9labs.com/2015/03/19/docker-rails-and-docker-compose-in-your-development-workflow/"/>
-    <updated>2015-03-19T13:29:00-07:00</updated>
+    <updated>2015-03-19T13:29:00-05:00</updated>
     <id>http://www.g9labs.com/2015/03/19/docker-rails-and-docker-compose-in-your-development-workflow</id>
     <content type="html"><![CDATA[<p>(This post <a href="http://blog.carbonfive.com/2015/03/17/docker-rails-docker-compose-together-in-your-development-workflow/">originally appeared</a> on the Carbon Five blog.)</p>
 

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: rails | The Sweet Spot]]></title>
   <link href="http://www.g9labs.com/category/rails/atom.xml" rel="self"/>
   <link href="http://www.g9labs.com/"/>
-  <updated>2015-06-19T16:14:47-07:00</updated>
+  <updated>2015-09-27T15:38:26-05:00</updated>
   <id>http://www.g9labs.com/</id>
   <author>
     <name><![CDATA[Andrew Hao]]></name>
@@ -14,9 +14,128 @@
 
   
   <entry>
+    <title type="html"><![CDATA[Notes on performance tuning a Puma server]]></title>
+    <link href="http://www.g9labs.com/2015/06/29/notes-on-performance-tuning-a-puma-server/"/>
+    <updated>2015-06-29T11:47:00-05:00</updated>
+    <id>http://www.g9labs.com/2015/06/29/notes-on-performance-tuning-a-puma-server</id>
+    <content type="html"><![CDATA[<p>A couple of months ago, I was tuning a Rails app for one of our clients.
+This client wanted to know how performant their app would be under load.</p>
+
+<p>To do that, you can do several different things:</p>
+
+<ol>
+<li>Tune the thread/process balance within the VM</li>
+<li>Horizontally scale with your cloud platform.</li>
+</ol>
+
+
+<p>This is a discussion of the former (#1):</p>
+
+<h2>1) Set up the test</h2>
+
+<h3>Drive with a synthetic script</h3>
+
+<p>Our application had a synthetic load driver that would run Selenium to
+execute various app tasks. This synthetic driver could be parallelized
+across many notes via Rainforest QA, Sauce Labs or Browserify.</p>
+
+<p>In our case, I only needed to run our synthetic load script on a single
+node in multiple processes, which simulated enough load to anticipate
+another order of magnitude of traffic.</p>
+
+<h3>Know how to inspect the server under load.</h3>
+
+<p>Commands you will want to know:</p>
+
+<pre><code>$ free -m # Find the total amount of free memory on your machine
+$ ps uH p &lt;pid&gt; # List out process threads
+$ kill -TTIN &lt;puma_master_pid&gt; # Add a puma worker
+$ kill -TTOU &lt;puma_master_pid&gt; # Remove a puma worker
+$ kill -USR2 &lt;puma_master_pid&gt; # Kill the puma master &amp; workers
+</code></pre>
+
+<h2>Generating more load: use external load testing services, or plain tools.</h2>
+
+<p>Try using <a href="http://www.flood.io">Flood.io</a> or JMeter for performance load.</p>
+
+<p>I tried looking into the <a href="https://github.com/schneems/puma_auto_tune">puma_auto_tune</a> gem, but it required a higher level of production instrumentation than I was ready to give it.</p>
+
+<h2>Analysis: New Relic scalability analysis</h2>
+
+<p>New Relic gave us a scalability analysis scatter plot, plotting
+throughput against average application response time. In essence, it
+allows you to see spikes in response times as correlated to throughput.</p>
+
+<h2>Process:</h2>
+
+<p>My approach was to use the synthetic script to generate productionlike
+node and ramp up the # of load actors in 5m increments. Each run would
+test the following Puma process/thread balance:</p>
+
+<p>Run #1: Single-process, multi threads.
+Run #2: Multiple processes, single threaded.
+Run #3: Multiple processes, multiple threads.</p>
+
+<blockquote><h3>Aside: <em>how many</em> of these threads/processes should I be using?</h3>
+
+<p>Note that your numbers will be different on the execution
+characteristics of your app and your server environment. Tweak it for
+yourself. You&rsquo;re designing an experiment.</p>
+
+<p>If you&rsquo;re curious, our Rails app started out with 4 threads on 2
+workers. We made the # of Puma workers (both min and max) environment
+variables so we could tweak the variables easily without deploying.</p></blockquote>
+
+<p>The strategy was then to look at the perf characteristics of each run in
+the scatter plot. If there were any spikes in the graph with the
+increase of load, then that would be noted. Even minor features like an
+increase in slope would be noted &ndash; at that point, the incremental cost
+of each request increases with overall system load.</p>
+
+<h2>Results</h2>
+
+<p>I don&rsquo;t have the New Relic data on hand to show, now, but in our case we
+discovered two things:</p>
+
+<ol>
+<li>The server easily scaled from ~10 &ndash;> ~500 rpm with a virtually flat
+line for all runs.</li>
+<li>The app exhibited no noticeable performance differences when flipped
+between uniprocess-multithreaded, multiprocess-unithreaded, and
+multiprocess-multithreaded modes. Any performance gains were under a
+tolerable threshold.</li>
+</ol>
+
+
+<p>How do we parse these results?</p>
+
+<ul>
+<li>We note that we didn&rsquo;t really push the performance threshold on this
+app (it&rsquo;s not meant to be a public web site and 95% of it is behind a
+login wall to a specialized group of users). Thus, if we pushed the
+concurrent connections even more, we may have seen more of a pronounced
+difference.</li>
+<li>The <em>absence</em> of any major red flags was itself a validation. The
+question we wanted answered coming into this experiment was &ldquo;how close
+are we to maxing out our single-node EC2 configuration such that we will
+have to begin configuring horizontal scaling?&rdquo;? The answer was: we can
+safely scale further out in the near-term future, and cross the bridge
+of horizontal scaling/bursting when we get there.</li>
+<li>We did not have enough statistically significant differences in
+performance for #threads/#processes in Puma. However, if we wanted to
+truly find the optimal performance in our app, we would have turned to
+tools like <a href="https://github.com/schneems/puma_auto_tune">puma_auto_tune</a> to answer those questions.</li>
+</ul>
+
+
+<p>Let me know in the comments if you have any questions!</p>
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[Ember Data, Rails, CORS, and you!]]></title>
     <link href="http://www.g9labs.com/2013/12/27/ember-data-rails-cors-and-you/"/>
-    <updated>2013-12-27T16:22:00-08:00</updated>
+    <updated>2013-12-27T16:22:00-06:00</updated>
     <id>http://www.g9labs.com/2013/12/27/ember-data-rails-cors-and-you</id>
     <content type="html"><![CDATA[<p>I&rsquo;m starting up a new personal project involving Ember-Data and Rails
 (more to come). The gist of it is that it&rsquo;s a pure frontend app engine
