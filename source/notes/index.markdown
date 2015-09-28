@@ -7,6 +7,12 @@ sharing: true
 footer: true
 ---
 
+## Strange Loop 2015
+
+Carbon Five sent a group of co-workers to Strange Loop in 2015.
+
+* [Strange Loop 2015: Notes and Reflections]()
+
 ## QCon SF 2014
 
 Blurb sent me to QCon SF for three days:
