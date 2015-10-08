@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: strangeloop | The Sweet Spot]]></title>
+  <link href="http://www.g9labs.com/category/strangeloop/atom.xml" rel="self"/>
+  <link href="http://www.g9labs.com/"/>
+  <updated>2015-10-07T21:02:52-07:00</updated>
+  <id>http://www.g9labs.com/</id>
+  <author>
+    <name><![CDATA[Andrew Hao]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Strange Loop 2015: Notes & Reflections]]></title>
+    <link href="http://www.g9labs.com/2015/09/27/strange-loop-2015-reflections/"/>
+    <updated>2015-09-27T15:40:00-07:00</updated>
+    <id>http://www.g9labs.com/2015/09/27/strange-loop-2015-reflections</id>
+    <content type="html"><![CDATA[<p>Going to Strange Loop was a huge check off my conference bucket list
+(lanyard?). I&rsquo;d always heard about this slightly-weird, highly academic
+collision between academia and industry, skewing toward programming
+languages you haven&rsquo;t heard of (or, at the very least, you&rsquo;ve never used
+in production). I anticipated sitting at the feet of gray-haired wizards
+and bright-eyed hipsters with Ph.Ds.</p>
+
+<p>The conference did not disappoint. And it was not quite what I
+expected-I less sat at the feet of geniuses than I did talk with them,
+peer-to-peer, about topics of interest. All around me people were saying
+&ldquo;Don&rsquo;t be afraid to ask questions. Don&rsquo;t feel stupid &ndash; nobody knows
+everything.&rdquo; Speakers were tweeting about how much they were learning.
+It was comforting, because lots of topics I had come to see were those
+in which I had no. freakin. clue. about.</p>
+
+<p>The following is culled from my notes from different sessions I
+attended. I will focus on brevity. I will keep it clear. Here we go:</p>
+
+<h3>Opening Keynote: &ldquo;I see what you mean&rdquo;</h3>
+
+<ul>
+<li>Instructions, behaviors &amp; outcomes.</li>
+<li>It &ldquo;feels good&rdquo; to write in C (a hardcord 1000 liner)</li>
+<li>But a declarative program (e.g. SQL) works well, but is harder to come
+up with.</li>
+<li>The declarative world &ndash; as described in the work done in Datalog</li>
+<li>How can we take concepts from Datalog and apply to real-world
+resources like network actors (distributed systems)?</li>
+<li>It becomes easier to model these systems declaratively when we
+explicitly capture time.</li>
+<li>Enter Dedalus: extension to Datalog where time is a modeling
+construct.</li>
+<li>(Show off usage of <code>@next</code> and <code>@async</code> annotations</li>
+<li>Computation is redezvous &ndash; the only thing that you know is what YOU
+know at that point in time.</li>
+<li>Takeaway: Abstractions leak. Model them better (e.g. with time)</li>
+<li>Inventing languages is dope.</li>
+</ul>
+
+
+<h3>Have your Causality and your Wall Clocks Too (Jon Moore)</h3>
+
+<ul>
+<li>Take concept of Lamport clocks and extend them with hybrid clocks.</li>
+<li>And extend them one further with: Distributed Monotonic Clocks</li>
+<li>These DMCs use population protocol (flocking) to each actor in the
+system communicate with another, updating their source of truth to
+eventually agree on a media time w/in the group</li>
+<li>DMC components:
+
+<ol>
+<li>Have a reset button by adding epoch bit</li>
+<li>Use flocking (via population protocol) to avoid resets</li>
+<li>Accomodates for some clockless nodes</li>
+<li>Explicitly reflects causality</li>
+</ol>
+</li>
+</ul>
+
+
+<h3>Isomorphic JS</h3>
+
+<ul>
+<li>Vevo needed better SEO for SPAs. Old soln was to snapshot page and upload to S3.</li>
+<li>Beneficial for SEO crawlers</li>
+<li>React in frontend. Node in backend.</li>
+<li>Vevo-developed <a href="">pellet</a> project as Flux-like framework to organize
+files.</li>
+<li>Webpack aliases/shims</li>
+<li>Server hands off to browser, bootstraps React in client.</li>
+<li>Alternatives: Relay, Ember</li>
+</ul>
+
+
+<h3>Designing for the Worst Case: Peter Bailis (@pbailis)</h3>
+
+<ul>
+<li>Designing for worst case often penalizes average case</li>
+<li>But what if designing for the worst case actually helps avg case?</li>
+<li>Examples from dstbd systems:
+
+<ul>
+<li>Worst case of disconnected data centers, packet loss/link loss. Fix
+by introducing coordination-free protocols. Boom, you&rsquo;ve now made your
+network more scalable, performant, resistent to downtime.</li>
+<li>Worst case: hard to coordinate a distributed transaction between
+services. What do you do? You implement something like buffered writes
+out of process.
+
+<ul>
+<li>CRDT, RAMP, HAT, bloom</li>
+<li>Suddenly, you have fault tolerance</li>
+</ul>
+</li>
+<li>Tail latency problem in microservices: the more microservices you
+query, the higher the probability of hitting a slow server response.
+
+<ul>
+<li>Your service&rsquo;s corner case is your user&rsquo;s average case</li>
+</ul>
+</li>
+<li>HCI: accessibility guidelines in W3C lift standards for all. Make
+webpages easier to navigate. Side effect of better page performance,
+higher conversion.</li>
+<li>Netflix designing CC subtitles also benefits other users.</li>
+<li>Curb cuts in the real world to help ADA/mobility-assisted folks also
+benefit normal folks too</li>
+</ul>
+</li>
+<li>Best has pitfalls too: your notion of best may be hard to hit, or
+risky. You may want to optimize for &ldquo;stable&rdquo; solution. (Robust
+optimization)</li>
+<li>When to design for worst case?
+
+<ul>
+<li>common corner cases</li>
+<li>environmental conditions vary</li>
+<li>&ldquo;normal&rdquo; isn&rsquo;t normal</li>
+</ul>
+</li>
+<li>worst forces a conversation
+
+<ul>
+<li>how do we plan for failures?</li>
+<li>what is our scale-out strategy?</li>
+<li>how do we audit failures? data breaches?</li>
+</ul>
+</li>
+</ul>
+
+
+<h3>Ideology by Gary Bernardt</h3>
+
+<ul>
+<li>Rumsfeld: known knowns, known unknowns, and unknown unknowns.</li>
+<li>Ideology is the thing you know you do not know you know</li>
+<li>Conflict between typed vs dynamic programmers:
+
+<ul>
+<li>Typed: &ldquo;I don&rsquo;t need tests, I have types&rdquo;</li>
+<li>Dynamic: &ldquo;I write tests, so I don&rsquo;t need types&rdquo;</li>
+</ul>
+</li>
+<li>In reality, they are solving different places in the problem domain,
+but they have different beliefs about the world that are hidden in the
+shadows:
+
+<ul>
+<li>Typed: &ldquo;Correctness comes solely from types&rdquo;</li>
+<li>Dynamic: &ldquo;Correctness comes solely from example&rdquo;</li>
+</ul>
+</li>
+</ul>
+
+]]></content>
+  </entry>
+  
+</feed>

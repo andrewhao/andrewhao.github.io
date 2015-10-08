@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Information Architecture | The Sweet Spot]]></title>
   <link href="http://www.g9labs.com/category/information-architecture/atom.xml" rel="self"/>
   <link href="http://www.g9labs.com/"/>
-  <updated>2015-09-27T15:38:26-05:00</updated>
+  <updated>2015-10-07T21:02:52-07:00</updated>
   <id>http://www.g9labs.com/</id>
   <author>
     <name><![CDATA[Andrew Hao]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[A layman's guide to the OAI-ORE data aggregation protocol]]></title>
     <link href="http://www.g9labs.com/2008/09/16/a-laymans-guide-to-the-oai-ore-data-aggregation-protocol/"/>
-    <updated>2008-09-16T20:37:12-05:00</updated>
+    <updated>2008-09-16T18:37:12-07:00</updated>
     <id>http://www.g9labs.com/2008/09/16/a-laymans-guide-to-the-oai-ore-data-aggregation-protocol</id>
     <content type="html"><![CDATA[<p>In Spring 2008, I took an information architecture course in the <a href="http://ischool.berkeley.edu">UC Berkeley School of Information</a>, taught by <a href="http://dret.typepad.com">Erik Wilde</a> (disclaimer: I dropped the course after a month because of schedule conflicts). An interesting part of my research for that class involved investigating the nascent <a href="http://www.openarchives.org/ore/">Object Reuse and Exchange (OAI-ORE)</a> protocol, a way of organizing groups of resources across the Web. I&rsquo;m going to try to describe in laymen&rsquo;s terms what I learned from my research and explain why it&rsquo;s significant.</p>
 

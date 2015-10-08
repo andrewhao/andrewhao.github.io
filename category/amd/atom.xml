@@ -4,7 +4,7 @@
   <title><![CDATA[Category: AMD | The Sweet Spot]]></title>
   <link href="http://www.g9labs.com/category/amd/atom.xml" rel="self"/>
   <link href="http://www.g9labs.com/"/>
-  <updated>2015-09-27T15:38:26-05:00</updated>
+  <updated>2015-10-07T21:02:52-07:00</updated>
   <id>http://www.g9labs.com/</id>
   <author>
     <name><![CDATA[Andrew Hao]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Running Mocha tests with ES6/AMD modules]]></title>
     <link href="http://www.g9labs.com/2014/06/06/running-mocha-tests-with-es6-amd-modules/"/>
-    <updated>2014-06-06T15:11:00-05:00</updated>
+    <updated>2014-06-06T15:11:00-07:00</updated>
     <id>http://www.g9labs.com/2014/06/06/running-mocha-tests-with-es6-amd-modules</id>
     <content type="html"><![CDATA[<p>In one of my personal projects (<a href="https://github.com/andrewhao/chordmeister">Chordmeister</a>), I&rsquo;ve been trying to
 upgrade the code to be written in <a href="http://wiki.ecmascript.org/doku.php?id=harmony:modules#export_declarations">ES6 modules</a> and transpile down to AMD modules with Square&rsquo;s <a href="https://github.com/square/es6-module-transpiler">very excellent es6-module-transpiler project</a>.</p>

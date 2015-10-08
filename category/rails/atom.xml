@@ -4,7 +4,7 @@
   <title><![CDATA[Category: rails | The Sweet Spot]]></title>
   <link href="http://www.g9labs.com/category/rails/atom.xml" rel="self"/>
   <link href="http://www.g9labs.com/"/>
-  <updated>2015-09-27T15:38:26-05:00</updated>
+  <updated>2015-10-07T21:02:52-07:00</updated>
   <id>http://www.g9labs.com/</id>
   <author>
     <name><![CDATA[Andrew Hao]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Notes on performance tuning a Puma server]]></title>
     <link href="http://www.g9labs.com/2015/06/29/notes-on-performance-tuning-a-puma-server/"/>
-    <updated>2015-06-29T11:47:00-05:00</updated>
+    <updated>2015-06-29T11:47:00-07:00</updated>
     <id>http://www.g9labs.com/2015/06/29/notes-on-performance-tuning-a-puma-server</id>
     <content type="html"><![CDATA[<p>A couple of months ago, I was tuning a Rails app for one of our clients.
 This client wanted to know how performant their app would be under load.</p>
@@ -135,7 +135,7 @@ tools like <a href="https://github.com/schneems/puma_auto_tune">puma_auto_tune</
   <entry>
     <title type="html"><![CDATA[Ember Data, Rails, CORS, and you!]]></title>
     <link href="http://www.g9labs.com/2013/12/27/ember-data-rails-cors-and-you/"/>
-    <updated>2013-12-27T16:22:00-06:00</updated>
+    <updated>2013-12-27T16:22:00-08:00</updated>
     <id>http://www.g9labs.com/2013/12/27/ember-data-rails-cors-and-you</id>
     <content type="html"><![CDATA[<p>I&rsquo;m starting up a new personal project involving Ember-Data and Rails
 (more to come). The gist of it is that it&rsquo;s a pure frontend app engine

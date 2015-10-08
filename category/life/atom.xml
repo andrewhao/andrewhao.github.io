@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Life | The Sweet Spot]]></title>
   <link href="http://www.g9labs.com/category/life/atom.xml" rel="self"/>
   <link href="http://www.g9labs.com/"/>
-  <updated>2015-09-27T15:38:26-05:00</updated>
+  <updated>2015-10-07T21:02:52-07:00</updated>
   <id>http://www.g9labs.com/</id>
   <author>
     <name><![CDATA[Andrew Hao]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Now at Blurb]]></title>
     <link href="http://www.g9labs.com/2011/11/21/now-at-blurb/"/>
-    <updated>2011-11-21T06:12:53-06:00</updated>
+    <updated>2011-11-21T04:12:53-08:00</updated>
     <id>http://www.g9labs.com/2011/11/21/now-at-blurb</id>
     <content type="html"><![CDATA[<p>I should have mentioned this long ago, but I started work at Blurb in early August. It&rsquo;s been a quick ramp-up and I&rsquo;m loving it there, surrounded by smart engineers and great designers. I do Rails/JS work there, and I&rsquo;m building a lot of chops around Agile/TDD methodologies.</p>
 
@@ -29,7 +29,7 @@
   <entry>
     <title type="html"><![CDATA[I'm ready for the winter.]]></title>
     <link href="http://www.g9labs.com/2007/12/11/im-ready-for-the-winter/"/>
-    <updated>2007-12-11T13:24:15-06:00</updated>
+    <updated>2007-12-11T11:24:15-08:00</updated>
     <id>http://www.g9labs.com/2007/12/11/im-ready-for-the-winter</id>
     <content type="html"><![CDATA[<p>Okay, I confess. I&rsquo;ve been daydreaming about winter break:</p>
 
@@ -53,7 +53,7 @@
   <entry>
     <title type="html"><![CDATA[Feeling awesome today]]></title>
     <link href="http://www.g9labs.com/2007/12/05/feeling-awesome-today/"/>
-    <updated>2007-12-05T04:55:08-06:00</updated>
+    <updated>2007-12-05T02:55:08-08:00</updated>
     <id>http://www.g9labs.com/2007/12/05/feeling-awesome-today</id>
     <content type="html"><![CDATA[<p>So for our <a href="http://inst.eecs.berkeley.edu/~cs188/fa07/announcements.html">CS188 (Artificial Intelligence)</a> project, <a href="http://inst.eecs.berkeley.edu/~cs188/fa07/projects/contest/contest.html">Capture-the-Flag Pac-Man</a>, I&rsquo;m responsible for writing a script that does some processing and analysis on a game board, simulating a Pac-Man agent (my other group members are responsible for far cooler things, like inference and heuristics, but humor me here).</p>
 

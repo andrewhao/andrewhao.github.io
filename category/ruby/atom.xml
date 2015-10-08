@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Ruby | The Sweet Spot]]></title>
   <link href="http://www.g9labs.com/category/ruby/atom.xml" rel="self"/>
   <link href="http://www.g9labs.com/"/>
-  <updated>2015-09-27T15:38:26-05:00</updated>
+  <updated>2015-10-07T21:02:52-07:00</updated>
   <id>http://www.g9labs.com/</id>
   <author>
     <name><![CDATA[Andrew Hao]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Decomposing Fat Models]]></title>
     <link href="http://www.g9labs.com/2012/12/26/decomposing-fat-models/"/>
-    <updated>2012-12-26T06:46:09-06:00</updated>
+    <updated>2012-12-26T04:46:09-08:00</updated>
     <id>http://www.g9labs.com/2012/12/26/decomposing-fat-models</id>
     <content type="html"><![CDATA[<p>Heard an awesome Ruby Rogues podcast recently: <a href="http://rubyrogues.com/083-rr-decomposing-fat-models-with-bryan-helmkamp/">&ldquo;Decomposing Fat Models&rdquo;</a>.</p>
 
@@ -36,7 +36,7 @@
   <entry>
     <title type="html"><![CDATA[Speeding up Rspec/Cucumber feedback times without sacrificing coverage]]></title>
     <link href="http://www.g9labs.com/2012/04/27/speeding-up-rspeccucumber-feedback-times-without-sacrificing-coverage/"/>
-    <updated>2012-04-27T12:27:17-05:00</updated>
+    <updated>2012-04-27T10:27:17-07:00</updated>
     <id>http://www.g9labs.com/2012/04/27/speeding-up-rspeccucumber-feedback-times-without-sacrificing-coverage</id>
     <content type="html"><![CDATA[<iframe src="http://www.slideshare.net/slideshow/embed_code/4479466" width="512" height="421" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:1px solid #CCC;border-width:1px 1px 0;margin-bottom:5px" allowfullscreen>
 </iframe>
@@ -60,7 +60,7 @@ View more <a href="http://www.slideshare.net/">presentations</a> from <a href="h
   <entry>
     <title type="html"><![CDATA[HAML object references]]></title>
     <link href="http://www.g9labs.com/2012/04/12/haml-object-references/"/>
-    <updated>2012-04-12T09:40:09-05:00</updated>
+    <updated>2012-04-12T07:40:09-07:00</updated>
     <id>http://www.g9labs.com/2012/04/12/haml-object-references</id>
     <content type="html"><![CDATA[<p>Did you guys know that you can use the &lsquo;[ ]&rsquo; brackets in HAML to automatically set the id and class on a tag, kind of like Rails' <a href="http://api.rubyonrails.org/classes/ActionView/Helpers/TagHelper.html#method-i-tag">tag</a> helper?</p>
 
@@ -92,7 +92,7 @@ end
   <entry>
     <title type="html"><![CDATA[RSpec order-agnostic array matching]]></title>
     <link href="http://www.g9labs.com/2012/03/23/rspec-order-agnostic-array-matching/"/>
-    <updated>2012-03-23T13:09:40-05:00</updated>
+    <updated>2012-03-23T11:09:40-07:00</updated>
     <id>http://www.g9labs.com/2012/03/23/rspec-order-agnostic-array-matching</id>
     <content type="html"><![CDATA[<p>What&rsquo;s that? <a href="http://stackoverflow.com/questions/2978922/rspec-array-should-another-array-but-without-concern-for-order">You want to write an expectation for an array but your method returns the Array in a nondeterministic ordering</a>?</p>
 

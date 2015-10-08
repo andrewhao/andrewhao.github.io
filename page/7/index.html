@@ -9,7 +9,7 @@
   <meta name="author" content="Andrew Hao">
 
   
-  <meta name="description" content="Morning: Woke up and attempted to mount a Samba file share under Ubuntu. My Gutsy server in the living room is getting a second life as a backup file &hellip;">
+  <meta name="description" content="I think I must preface this post with a bit of context: A month ago I added a new blog (blog.andrewhao.com). I wanted that blog to become my personal &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -84,6 +84,135 @@
       
   <header>
     
+      <h1 class="entry-title"><a href="/2008/03/12/after-site-duplication-an-htaccess-redirect-for-old-wordpress-posts/">After site duplication, an .htaccess redirect for old Wordpress posts</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-03-12T11:46:29-07:00" pubdate data-updated="true">Mar 12<span>th</span>, 2008</time>
+        
+         | <a href="/2008/03/12/after-site-duplication-an-htaccess-redirect-for-old-wordpress-posts/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I think I must preface this post with a bit of context:</p>
+
+<p>A month ago I added a new blog (<a href="http://blog.andrewhao.com">blog.andrewhao.com</a>). I wanted that blog to become my personal blog and let this blog (<a href="http://blog.g9labs.com">blog.g9labs.com</a>) transition into a technical blog.</p>
+
+<p>Here comes a technical post about transforming a personal blog into a technical blog.</p>
+
+<p>So here were the problem(s) I faced:</p>
+
+<ul>
+<li><p>Most of my posts here at blog.g9labs.com were of personal nature, many which dated all the way back to 2002, my sophomore year of high school!</p></li>
+<li><p>However, I had begun to write technical posts for a year or two&mdash;some thoughts on interface design, an occasional programming trick, cool regex expressions, et cetera.</p></li>
+<li><p>Many of my posts have been linked all around the Internet.</p></li>
+</ul>
+
+
+<p>Essentially, I wanted to:</p>
+
+<ul>
+<li><p>Move the personal contents of the g9labs blog to the andrewhao blog,</p></li>
+<li><p>While keeping all in-links to old g9labs content alive.</p></li>
+</ul>
+
+
+<p>My solution was two-fold:</p>
+
+<ol>
+<li><p> I made a copy of my g9Labs<em> blog to the andrewhao blog. This was harder than I anticipated&mdash;I initially expected to simply use the WP export plugin to dump data from g9Labs</em> and import into andrewhao. However, this lost much of my metadata&mdash;comments, categories, tags. So I just decided to completely copy my g9Labs* WP database and WP directory into andrewhao. Yeah, hacky, I know. I&rsquo;m not very proud of it.</p></li>
+<li><p> I added an .htaccess file to blog.g9labs.com that did some magic. It identifies requests for posts that are earlier than the date of the blog fork and redirects those requests to andrewhao.com, which is hosting a mirror of the post.</p>
+
+<h1>redirecting requests to posts older than 2008-02-02 to blog.andrewhao.com</h1>
+
+<h1>pass the requester a 301 code (permanently removed)</h1>
+
+<h1>@author: Andrew Hao</h1>
+
+<h1>Lexically compare regex groups $1-$3 with the date: Feb. 03, 2008.</h1>
+
+<h1>Note that the RewriteRule below is reached only if the condition is true.</h1>
+
+<h1>Finally, note that $1-$3 are regex groups from the RewriteRule regex below.</h1>
+
+<p>RewriteCond $1$2$3 &lt;20080203</p>
+
+<h1>Match the incoming request: /YYYY/MM/DD/post-title and redirect the browser</h1>
+
+<h1>to <a href="http://blog.andrewhao.com/YYYY/MM/DD/post-title">http://blog.andrewhao.com/YYYY/MM/DD/post-title</a></h1>
+
+<p>RewriteRule ^([0-9]+)/([0-9]+)/([0-9]+)/([^/]+)/*$ <a href="http://blog.andrewhao.com/$1">http://blog.andrewhao.com/$1</a>
+/$2/$3/$4/ [L,R=301]
+&hellip; rest of .htaccess &hellip;</p></li>
+</ol>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2008/02/24/quad-core-and-the-nerd/">Quad Core and the Nerd</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-02-24T10:15:34-08:00" pubdate data-updated="true">Feb 24<span>th</span>, 2008</time>
+        
+         | <a href="/2008/02/24/quad-core-and-the-nerd/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>My apartmentmate Mike just upgraded his computer to an Intel Core 2 Quad-core processor. Once he got it up and running, he opened up Task Manager and summoned me over to gaze at the beauty of four CPU utilization graphs, one for each core. We had to fight the urge to beat our chests and make low, guttural grunts.</p>
+
+<p>Welcome to 2008, may he who has the most cores win.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/2008/02/18/todays-geek-hijinks/">Today&#8217;s Geek Hijinks</a></h1>
     
     
@@ -100,7 +229,7 @@
   
 
 
-<time datetime="2008-02-18T11:32:42-06:00" pubdate data-updated="true">Feb 18<span>th</span>, 2008</time>
+<time datetime="2008-02-18T09:32:42-08:00" pubdate data-updated="true">Feb 18<span>th</span>, 2008</time>
         
          | <a href="/2008/02/18/todays-geek-hijinks/#disqus_thread">Comments</a>
         
@@ -184,7 +313,7 @@
   
 
 
-<time datetime="2008-02-17T17:53:54-06:00" pubdate data-updated="true">Feb 17<span>th</span>, 2008</time>
+<time datetime="2008-02-17T15:53:54-08:00" pubdate data-updated="true">Feb 17<span>th</span>, 2008</time>
         
          | <a href="/2008/02/17/noam-chomsky-is-the-man/#disqus_thread">Comments</a>
         
@@ -230,7 +359,7 @@
   
 
 
-<time datetime="2008-02-03T09:38:52-06:00" pubdate data-updated="true">Feb 3<span>rd</span>, 2008</time>
+<time datetime="2008-02-03T07:38:52-08:00" pubdate data-updated="true">Feb 3<span>rd</span>, 2008</time>
         
          | <a href="/2008/02/03/a-new-blog-is-coming/#disqus_thread">Comments</a>
         
@@ -276,7 +405,7 @@
   
 
 
-<time datetime="2008-01-27T16:48:04-06:00" pubdate data-updated="true">Jan 27<span>th</span>, 2008</time>
+<time datetime="2008-01-27T14:48:04-08:00" pubdate data-updated="true">Jan 27<span>th</span>, 2008</time>
         
          | <a href="/2008/01/27/wordpress-bughunt/#disqus_thread">Comments</a>
         
@@ -328,7 +457,7 @@
   
 
 
-<time datetime="2007-12-11T13:24:15-06:00" pubdate data-updated="true">Dec 11<span>th</span>, 2007</time>
+<time datetime="2007-12-11T11:24:15-08:00" pubdate data-updated="true">Dec 11<span>th</span>, 2007</time>
         
          | <a href="/2007/12/11/im-ready-for-the-winter/#disqus_thread">Comments</a>
         
@@ -381,7 +510,7 @@
   
 
 
-<time datetime="2007-12-05T04:55:08-06:00" pubdate data-updated="true">Dec 5<span>th</span>, 2007</time>
+<time datetime="2007-12-05T02:55:08-08:00" pubdate data-updated="true">Dec 5<span>th</span>, 2007</time>
         
          | <a href="/2007/12/05/feeling-awesome-today/#disqus_thread">Comments</a>
         
@@ -429,7 +558,7 @@
   
 
 
-<time datetime="2007-12-03T19:45:30-06:00" pubdate data-updated="true">Dec 3<span>rd</span>, 2007</time>
+<time datetime="2007-12-03T17:45:30-08:00" pubdate data-updated="true">Dec 3<span>rd</span>, 2007</time>
         
          | <a href="/2007/12/03/meeting-joe-hewitt/#disqus_thread">Comments</a>
         
@@ -469,7 +598,7 @@
   
 
 
-<time datetime="2007-11-15T08:10:47-06:00" pubdate data-updated="true">Nov 15<span>th</span>, 2007</time>
+<time datetime="2007-11-15T06:10:47-08:00" pubdate data-updated="true">Nov 15<span>th</span>, 2007</time>
         
          | <a href="/2007/11/15/more-scenes/#disqus_thread">Comments</a>
         
@@ -496,82 +625,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/2007/10/25/sensations-6/">Sensations</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2007-10-25T21:24:16-05:00" pubdate data-updated="true">Oct 25<span>th</span>, 2007</time>
-        
-         | <a href="/2007/10/25/sensations-6/#disqus_thread">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><a href="http://www.flickr.com/photos/andrewhao/1756742112/"><img src="http://farm3.static.flickr.com/2379/1756742112_a54cf5e9a8.jpg" alt="Sensations - Awaken the Dawn" /></a></p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/2007/10/24/sensations-5/">Sensations</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2007-10-24T17:00:30-05:00" pubdate data-updated="true">Oct 24<span>th</span>, 2007</time>
-        
-         | <a href="/2007/10/24/sensations-5/#disqus_thread">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><a href="http://www.flickr.com/photos/andrewhao/1738876421/"><img src="http://farm3.static.flickr.com/2051/1738876421_c2e2aa4ec8.jpg" alt="Sensations - Rocks Cry Out" /></a></p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/page/8/">&larr; Older</a>
@@ -589,6 +642,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/2015/09/27/strange-loop-2015-reflections/">Strange Loop 2015: Notes & Reflections</a>
+      </li>
+    
+      <li class="post">
         <a href="/2015/06/29/notes-on-performance-tuning-a-puma-server/">Notes on performance tuning a Puma server</a>
       </li>
     
@@ -601,11 +658,7 @@
       </li>
     
       <li class="post">
-        <a href="/2015/03/19/docker-rails-and-docker-compose-in-your-development-workflow/">Docker, Rails, and Docker Compose in your development workflow</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2014/11/29/explorations-in-logic-programming/">Explorations in logic programming</a>
+        <a href="/2015/03/23/implementing-ddd-context-maps/">Implementing DDD: Context Maps</a>
       </li>
     
   </ul>

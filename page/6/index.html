@@ -9,7 +9,7 @@
   <meta name="author" content="Andrew Hao">
 
   
-  <meta name="description" content="Since I&rsquo;m in the process of doing some housekeeping around the blog, I&rsquo;ve begun moving my old design portfolio over to Flickr. This is &hellip;">
+  <meta name="description" content="One trend on the Web these days is to move away from traditional full-stack frameworks (like Rails) toward client-side, full-stack Javascript &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -84,6 +84,119 @@
       
   <header>
     
+      <h1 class="entry-title"><a href="/2008/10/02/first-look-at-sproutcore-and-cappuccino/">First look at SproutCore and Cappuccino</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-10-02T03:39:40-07:00" pubdate data-updated="true">Oct 2<span>nd</span>, 2008</time>
+        
+         | <a href="/2008/10/02/first-look-at-sproutcore-and-cappuccino/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>One trend on the Web these days is to move away from traditional full-stack frameworks (like <a href="http://rubyonrails.org">Rails</a>) toward client-side, full-stack Javascript frameworks (among them <a href="http://dojotoolkit.org/">Dojo</a>, <a href="http://code.google.com/webtoolkit/">GWT</a>, <a href="http://sproutcore.com">SproutCore</a>, and <a href="http://cappuccino.org">Cappuccino</a>). There&rsquo;s been a lot of buzz about <a href="http://www.sproutcore.com">SproutCore</a> and <a href="http://www.cappuccino.org">Cappuccino</a>, because of their design elegance, shiny Mac-ness and promises of really rich client experiences. I&rsquo;ve been checking them out and here&rsquo;s some of my observations so far:</p>
+
+<ul>
+<li><p>They&rsquo;re both really young: SproutCore and Cappuccino have emerged only in the last three months. I haven&rsquo;t heard of any deployed Cappuccino apps asides from the storied <a href="http://280slides.com/">280 Slides app</a>. Same with SproutCore, looks like asides from <a href="http://www.me.com">MobileMe</a>, they&rsquo;re only beginning to see user-created apps come out (see: <a href="http://blog.otherinbox.com/">OtherInbox</a>).</p></li>
+<li><p>The two frameworks are beautiful. Because they both model on Cocoa, they both take on the same icon set, window chrome, pane behaviors, and so on. Nice work, lifting the good UI work from the Mac and placing it on the Web.</p></li>
+<li><p>Objective-J sounds cool. I just can&rsquo;t see non-Cocoa programmers just picking it up, though. Even though I picked up Cocoa over the summer and I think it&rsquo;s pretty awesome, there was no way I would have the energy to pick up Objective-J on my own (unless Cappuccino proves itself to be THAT big of a draw).</p></li>
+<li><p>Okay, but to be fair, the idea of &ldquo;Cocoa on the Web&rdquo; is phenomenal. I wonder if we&rsquo;ll see a surge of ported Cocoa-to-Web apps. Aligning Cappuccino with AppKit is a great idea, and it&rsquo;s clearly the &ldquo;Web framework for Cocoa apps moving to the Web&rdquo; and you&rsquo;re gonna want to use it for sure if you&rsquo;re a proven Cocoa hacker. I wonder, however, if it can capture users who aren&rsquo;t Cocoa programmers.</p></li>
+<li><p>I&rsquo;m a big sucker for looks. Nothing gets me excited like SproutCore applications do in all their Aqua-like goodness. GWT in comparison looks pretty frumpy. I really like OS X-looking widgets. What can I say, I was brainwashed :)</p></li>
+<li><p>SproutCore and Cappuccino apps are simply not going to be able to out-perform GWT apps: they simply can&rsquo;t beat the compiler optimizations of compiled and optimized JS in GWT. Then again&hellip; we&rsquo;re going to have crazy fast JS engines in the next year or so. We&rsquo;ll see if performance is an issue.</p></li>
+</ul>
+
+
+<p>Even though these two frameworks are only beginning to gather momentum, I&rsquo;m excited at the direction they&rsquo;re moving the Web in. Anybody else want to weigh in?</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2008/10/01/gwt-vs-sproutcore-vs-cappuccino/">GWT vs. SproutCore vs. Cappuccino</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-10-01T17:55:10-07:00" pubdate data-updated="true">Oct 1<span>st</span>, 2008</time>
+        
+         | <a href="/2008/10/01/gwt-vs-sproutcore-vs-cappuccino/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I&rsquo;m looking to develop a Web application with a full-stack Javascript framework like <a href="http://code.google.com/webtoolkit/">GWT</a>, <a href="http://www.sproutcore.com">SproutCore</a> or <a href="http://www.cappuccino.org">Cappuccino</a>. I&rsquo;m making the decision to go with a Javascript framework over a traditional full-stack framework (like Rails) because:</p>
+
+<ul>
+<li><p>I get richer, desktop-like functionality in the browser.</p></li>
+<li><p>I can offload much of the work from the server onto the client.</p></li>
+<li><p>There&rsquo;s less Javascript hand-coding so I don&rsquo;t reinvent the wheel.</p></li>
+<li><p>I can bring the desktop app programming paradigm straight to the client.</p></li>
+</ul>
+
+
+<p>I&rsquo;ve been taking a look at <a href="http://code.google.com/webtoolkit/">GWT</a> (Google Web Toolkit), <a href="http://www.sproutcore.com">SproutCore</a> and <a href="http://www.cappuccino.org">Cappuccino</a>, and here&rsquo;s some of my observations so far:</p>
+
+<ul>
+<li><p>GWT is the most mature framework out of the three at 2 years. SproutCore and Cappuccino have emerged only in the last three months.</p></li>
+<li><p>SproutCore is really, really, beautiful. Just look at MobileMe. I&rsquo;m sure Cappuccino looks much the same. It&rsquo;s probably because both emulate Cocoa, and so take on the same icon set, window chrome, pane behaviors, and so on.</p></li>
+<li><p>Objective-J sounds cool. I picked up Cocoa over the summer, and to have it on a Web browser is going to be phenomenal.</p></li>
+<li><p>Cappuccino is so new that there aren&rsquo;t that many apps out there (asides from the storied <a href="http://280slides.com/">280 Slides app</a>). I&rsquo;m worried that it could be buggy and docs are too sparse.</p></li>
+<li><p>Something about Java in GWT makes me cringe. Maybe it&rsquo;s just because I&rsquo;m not used to that extra compilation step. Maybe it&rsquo;s because I&rsquo;ve been mucking in dynamic languages for too long of a time.</p></li>
+<li><p>I&rsquo;m a big sucker for looks. GWT looks pretty frumpy. Honestly, it doesn&rsquo;t get me excited like SproutCore applications do in all their Aqua-like goodness.</p></li>
+<li><p>The Ext widgets from <a href="http://extjs.com/products/gxt/">Ext-GWT</a> are only slightly better. I guess I shouldn&rsquo;t complain&hellip; but gosh, I really like OS X-looking widgets. What can I say, I was brainwashed :)</p></li>
+<li><p>SproutCore and Cappuccino are slower: they simply can&rsquo;t beat the compiler optimizations of compiled and optimized JS in GWT. Then again&hellip; we&rsquo;re going to have crazy fast JS engines in the next year or so.</p></li>
+<li><p>I considered <a href="http://dojotoolkit.org/">Dojo</a>. Sort of. I like it because it&rsquo;s more mature than SC, but it&rsquo;s slower than GWT and doesn&rsquo;t have as many widgets as Ext.</p></li>
+</ul>
+
+
+<p>Honestly, even though my &ldquo;ooh-shiny&rdquo; sense wants to use SproutCore, my objective reasoning tells me to go for GWT for its stronger support, more maturity, better performance and a fuller set of widgets. Anybody else want to weigh in?</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/2008/09/24/updated-portfolio-sort-of/">Updated portfolio&#8230; sort of.</a></h1>
     
     
@@ -100,7 +213,7 @@
   
 
 
-<time datetime="2008-09-24T18:25:26-05:00" pubdate data-updated="true">Sep 24<span>th</span>, 2008</time>
+<time datetime="2008-09-24T16:25:26-07:00" pubdate data-updated="true">Sep 24<span>th</span>, 2008</time>
         
          | <a href="/2008/09/24/updated-portfolio-sort-of/#disqus_thread">Comments</a>
         
@@ -142,7 +255,7 @@
   
 
 
-<time datetime="2008-09-16T20:37:12-05:00" pubdate data-updated="true">Sep 16<span>th</span>, 2008</time>
+<time datetime="2008-09-16T18:37:12-07:00" pubdate data-updated="true">Sep 16<span>th</span>, 2008</time>
         
          | <a href="/2008/09/16/a-laymans-guide-to-the-oai-ore-data-aggregation-protocol/#disqus_thread">Comments</a>
         
@@ -228,7 +341,7 @@
   
 
 
-<time datetime="2008-09-03T15:25:30-05:00" pubdate data-updated="true">Sep 3<span>rd</span>, 2008</time>
+<time datetime="2008-09-03T13:25:30-07:00" pubdate data-updated="true">Sep 3<span>rd</span>, 2008</time>
         
          | <a href="/2008/09/03/i-like-google-chrome/#disqus_thread">Comments</a>
         
@@ -283,7 +396,7 @@ So there&rsquo;s a nagging little voice that warns me that Google&rsquo;s seriou
   
 
 
-<time datetime="2008-08-14T19:32:42-05:00" pubdate data-updated="true">Aug 14<span>th</span>, 2008</time>
+<time datetime="2008-08-14T17:32:42-07:00" pubdate data-updated="true">Aug 14<span>th</span>, 2008</time>
         
          | <a href="/2008/08/14/work-series-graphics-good-shepherd-christian-church/#disqus_thread">Comments</a>
         
@@ -327,7 +440,7 @@ So there&rsquo;s a nagging little voice that warns me that Google&rsquo;s seriou
   
 
 
-<time datetime="2008-07-01T17:46:01-05:00" pubdate data-updated="true">Jul 1<span>st</span>, 2008</time>
+<time datetime="2008-07-01T15:46:01-07:00" pubdate data-updated="true">Jul 1<span>st</span>, 2008</time>
         
          | <a href="/2008/07/01/wisdom-series-graphic-good-shepherd-christian-church/#disqus_thread">Comments</a>
         
@@ -369,7 +482,7 @@ So there&rsquo;s a nagging little voice that warns me that Google&rsquo;s seriou
   
 
 
-<time datetime="2008-04-26T03:46:14-05:00" pubdate data-updated="true">Apr 26<span>th</span>, 2008</time>
+<time datetime="2008-04-26T01:46:14-07:00" pubdate data-updated="true">Apr 26<span>th</span>, 2008</time>
         
          | <a href="/2008/04/26/sensations-negotiating-noise/#disqus_thread">Comments</a>
         
@@ -409,7 +522,7 @@ So there&rsquo;s a nagging little voice that warns me that Google&rsquo;s seriou
   
 
 
-<time datetime="2008-04-07T12:33:04-05:00" pubdate data-updated="true">Apr 7<span>th</span>, 2008</time>
+<time datetime="2008-04-07T10:33:04-07:00" pubdate data-updated="true">Apr 7<span>th</span>, 2008</time>
         
          | <a href="/2008/04/07/designing-the-thinkanywhere-logo/#disqus_thread">Comments</a>
         
@@ -461,7 +574,7 @@ So there&rsquo;s a nagging little voice that warns me that Google&rsquo;s seriou
   
 
 
-<time datetime="2008-03-29T10:52:29-05:00" pubdate data-updated="true">Mar 29<span>th</span>, 2008</time>
+<time datetime="2008-03-29T08:52:29-07:00" pubdate data-updated="true">Mar 29<span>th</span>, 2008</time>
         
          | <a href="/2008/03/29/tales-from-the-crypt/#disqus_thread">Comments</a>
         
@@ -511,135 +624,6 @@ So there&rsquo;s a nagging little voice that warns me that Google&rsquo;s seriou
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/2008/03/12/after-site-duplication-an-htaccess-redirect-for-old-wordpress-posts/">After site duplication, an .htaccess redirect for old Wordpress posts</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2008-03-12T13:46:29-05:00" pubdate data-updated="true">Mar 12<span>th</span>, 2008</time>
-        
-         | <a href="/2008/03/12/after-site-duplication-an-htaccess-redirect-for-old-wordpress-posts/#disqus_thread">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I think I must preface this post with a bit of context:</p>
-
-<p>A month ago I added a new blog (<a href="http://blog.andrewhao.com">blog.andrewhao.com</a>). I wanted that blog to become my personal blog and let this blog (<a href="http://blog.g9labs.com">blog.g9labs.com</a>) transition into a technical blog.</p>
-
-<p>Here comes a technical post about transforming a personal blog into a technical blog.</p>
-
-<p>So here were the problem(s) I faced:</p>
-
-<ul>
-<li><p>Most of my posts here at blog.g9labs.com were of personal nature, many which dated all the way back to 2002, my sophomore year of high school!</p></li>
-<li><p>However, I had begun to write technical posts for a year or two&mdash;some thoughts on interface design, an occasional programming trick, cool regex expressions, et cetera.</p></li>
-<li><p>Many of my posts have been linked all around the Internet.</p></li>
-</ul>
-
-
-<p>Essentially, I wanted to:</p>
-
-<ul>
-<li><p>Move the personal contents of the g9labs blog to the andrewhao blog,</p></li>
-<li><p>While keeping all in-links to old g9labs content alive.</p></li>
-</ul>
-
-
-<p>My solution was two-fold:</p>
-
-<ol>
-<li><p> I made a copy of my g9Labs<em> blog to the andrewhao blog. This was harder than I anticipated&mdash;I initially expected to simply use the WP export plugin to dump data from g9Labs</em> and import into andrewhao. However, this lost much of my metadata&mdash;comments, categories, tags. So I just decided to completely copy my g9Labs* WP database and WP directory into andrewhao. Yeah, hacky, I know. I&rsquo;m not very proud of it.</p></li>
-<li><p> I added an .htaccess file to blog.g9labs.com that did some magic. It identifies requests for posts that are earlier than the date of the blog fork and redirects those requests to andrewhao.com, which is hosting a mirror of the post.</p>
-
-<h1>redirecting requests to posts older than 2008-02-02 to blog.andrewhao.com</h1>
-
-<h1>pass the requester a 301 code (permanently removed)</h1>
-
-<h1>@author: Andrew Hao</h1>
-
-<h1>Lexically compare regex groups $1-$3 with the date: Feb. 03, 2008.</h1>
-
-<h1>Note that the RewriteRule below is reached only if the condition is true.</h1>
-
-<h1>Finally, note that $1-$3 are regex groups from the RewriteRule regex below.</h1>
-
-<p>RewriteCond $1$2$3 &lt;20080203</p>
-
-<h1>Match the incoming request: /YYYY/MM/DD/post-title and redirect the browser</h1>
-
-<h1>to <a href="http://blog.andrewhao.com/YYYY/MM/DD/post-title">http://blog.andrewhao.com/YYYY/MM/DD/post-title</a></h1>
-
-<p>RewriteRule ^([0-9]+)/([0-9]+)/([0-9]+)/([^/]+)/*$ <a href="http://blog.andrewhao.com/$1">http://blog.andrewhao.com/$1</a>
-/$2/$3/$4/ [L,R=301]
-&hellip; rest of .htaccess &hellip;</p></li>
-</ol>
-
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/2008/02/24/quad-core-and-the-nerd/">Quad Core and the Nerd</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2008-02-24T12:15:34-06:00" pubdate data-updated="true">Feb 24<span>th</span>, 2008</time>
-        
-         | <a href="/2008/02/24/quad-core-and-the-nerd/#disqus_thread">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>My apartmentmate Mike just upgraded his computer to an Intel Core 2 Quad-core processor. Once he got it up and running, he opened up Task Manager and summoned me over to gaze at the beauty of four CPU utilization graphs, one for each core. We had to fight the urge to beat our chests and make low, guttural grunts.</p>
-
-<p>Welcome to 2008, may he who has the most cores win.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/page/7/">&larr; Older</a>
@@ -657,6 +641,10 @@ So there&rsquo;s a nagging little voice that warns me that Google&rsquo;s seriou
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/2015/09/27/strange-loop-2015-reflections/">Strange Loop 2015: Notes & Reflections</a>
+      </li>
+    
+      <li class="post">
         <a href="/2015/06/29/notes-on-performance-tuning-a-puma-server/">Notes on performance tuning a Puma server</a>
       </li>
     
@@ -669,11 +657,7 @@ So there&rsquo;s a nagging little voice that warns me that Google&rsquo;s seriou
       </li>
     
       <li class="post">
-        <a href="/2015/03/19/docker-rails-and-docker-compose-in-your-development-workflow/">Docker, Rails, and Docker Compose in your development workflow</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2014/11/29/explorations-in-logic-programming/">Explorations in logic programming</a>
+        <a href="/2015/03/23/implementing-ddd-context-maps/">Implementing DDD: Context Maps</a>
       </li>
     
   </ul>

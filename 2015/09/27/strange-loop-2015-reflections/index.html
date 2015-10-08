@@ -1,0 +1,437 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Strange Loop 2015: Notes & Reflections - The Sweet Spot</title>
+  <meta name="author" content="Andrew Hao">
+
+  
+  <meta name="description" content="Going to Strange Loop was a huge check off my conference bucket list
+(lanyard?). I&rsquo;d always heard about this slightly-weird, highly academic &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://www.g9labs.com/2015/09/27/strange-loop-2015-reflections">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="The Sweet Spot" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-2330913-9']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">The Sweet Spot</a></h1>
+  
+    <h2>Andrew Hao's thoughts about software engineering, design, and anything shiny.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:www.g9labs.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/notes">Notes</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Strange Loop 2015: Notes & Reflections</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-09-27T15:40:00-07:00" pubdate data-updated="true">Sep 27<span>th</span>, 2015</time>
+        
+         | <a href="#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Going to Strange Loop was a huge check off my conference bucket list
+(lanyard?). I&rsquo;d always heard about this slightly-weird, highly academic
+collision between academia and industry, skewing toward programming
+languages you haven&rsquo;t heard of (or, at the very least, you&rsquo;ve never used
+in production). I anticipated sitting at the feet of gray-haired wizards
+and bright-eyed hipsters with Ph.Ds.</p>
+
+<p>The conference did not disappoint. And it was not quite what I
+expected-I less sat at the feet of geniuses than I did talk with them,
+peer-to-peer, about topics of interest. All around me people were saying
+&ldquo;Don&rsquo;t be afraid to ask questions. Don&rsquo;t feel stupid &ndash; nobody knows
+everything.&rdquo; Speakers were tweeting about how much they were learning.
+It was comforting, because lots of topics I had come to see were those
+in which I had no. freakin. clue. about.</p>
+
+<p>The following is culled from my notes from different sessions I
+attended. I will focus on brevity. I will keep it clear. Here we go:</p>
+
+<h3>Opening Keynote: &ldquo;I see what you mean&rdquo;</h3>
+
+<ul>
+<li>Instructions, behaviors &amp; outcomes.</li>
+<li>It &ldquo;feels good&rdquo; to write in C (a hardcord 1000 liner)</li>
+<li>But a declarative program (e.g. SQL) works well, but is harder to come
+up with.</li>
+<li>The declarative world &ndash; as described in the work done in Datalog</li>
+<li>How can we take concepts from Datalog and apply to real-world
+resources like network actors (distributed systems)?</li>
+<li>It becomes easier to model these systems declaratively when we
+explicitly capture time.</li>
+<li>Enter Dedalus: extension to Datalog where time is a modeling
+construct.</li>
+<li>(Show off usage of <code>@next</code> and <code>@async</code> annotations</li>
+<li>Computation is redezvous &ndash; the only thing that you know is what YOU
+know at that point in time.</li>
+<li>Takeaway: Abstractions leak. Model them better (e.g. with time)</li>
+<li>Inventing languages is dope.</li>
+</ul>
+
+
+<h3>Have your Causality and your Wall Clocks Too (Jon Moore)</h3>
+
+<ul>
+<li>Take concept of Lamport clocks and extend them with hybrid clocks.</li>
+<li>And extend them one further with: Distributed Monotonic Clocks</li>
+<li>These DMCs use population protocol (flocking) to each actor in the
+system communicate with another, updating their source of truth to
+eventually agree on a media time w/in the group</li>
+<li>DMC components:
+
+<ol>
+<li>Have a reset button by adding epoch bit</li>
+<li>Use flocking (via population protocol) to avoid resets</li>
+<li>Accomodates for some clockless nodes</li>
+<li>Explicitly reflects causality</li>
+</ol>
+</li>
+</ul>
+
+
+<h3>Isomorphic JS</h3>
+
+<ul>
+<li>Vevo needed better SEO for SPAs. Old soln was to snapshot page and upload to S3.</li>
+<li>Beneficial for SEO crawlers</li>
+<li>React in frontend. Node in backend.</li>
+<li>Vevo-developed <a href="">pellet</a> project as Flux-like framework to organize
+files.</li>
+<li>Webpack aliases/shims</li>
+<li>Server hands off to browser, bootstraps React in client.</li>
+<li>Alternatives: Relay, Ember</li>
+</ul>
+
+
+<h3>Designing for the Worst Case: Peter Bailis (@pbailis)</h3>
+
+<ul>
+<li>Designing for worst case often penalizes average case</li>
+<li>But what if designing for the worst case actually helps avg case?</li>
+<li>Examples from dstbd systems:
+
+<ul>
+<li>Worst case of disconnected data centers, packet loss/link loss. Fix
+by introducing coordination-free protocols. Boom, you&rsquo;ve now made your
+network more scalable, performant, resistent to downtime.</li>
+<li>Worst case: hard to coordinate a distributed transaction between
+services. What do you do? You implement something like buffered writes
+out of process.
+
+<ul>
+<li>CRDT, RAMP, HAT, bloom</li>
+<li>Suddenly, you have fault tolerance</li>
+</ul>
+</li>
+<li>Tail latency problem in microservices: the more microservices you
+query, the higher the probability of hitting a slow server response.
+
+<ul>
+<li>Your service&rsquo;s corner case is your user&rsquo;s average case</li>
+</ul>
+</li>
+<li>HCI: accessibility guidelines in W3C lift standards for all. Make
+webpages easier to navigate. Side effect of better page performance,
+higher conversion.</li>
+<li>Netflix designing CC subtitles also benefits other users.</li>
+<li>Curb cuts in the real world to help ADA/mobility-assisted folks also
+benefit normal folks too</li>
+</ul>
+</li>
+<li>Best has pitfalls too: your notion of best may be hard to hit, or
+risky. You may want to optimize for &ldquo;stable&rdquo; solution. (Robust
+optimization)</li>
+<li>When to design for worst case?
+
+<ul>
+<li>common corner cases</li>
+<li>environmental conditions vary</li>
+<li>&ldquo;normal&rdquo; isn&rsquo;t normal</li>
+</ul>
+</li>
+<li>worst forces a conversation
+
+<ul>
+<li>how do we plan for failures?</li>
+<li>what is our scale-out strategy?</li>
+<li>how do we audit failures? data breaches?</li>
+</ul>
+</li>
+</ul>
+
+
+<h3>Ideology by Gary Bernardt</h3>
+
+<ul>
+<li>Rumsfeld: known knowns, known unknowns, and unknown unknowns.</li>
+<li>Ideology is the thing you know you do not know you know</li>
+<li>Conflict between typed vs dynamic programmers:
+
+<ul>
+<li>Typed: &ldquo;I don&rsquo;t need tests, I have types&rdquo;</li>
+<li>Dynamic: &ldquo;I write tests, so I don&rsquo;t need types&rdquo;</li>
+</ul>
+</li>
+<li>In reality, they are solving different places in the problem domain,
+but they have different beliefs about the world that are hidden in the
+shadows:
+
+<ul>
+<li>Typed: &ldquo;Correctness comes solely from types&rdquo;</li>
+<li>Dynamic: &ldquo;Correctness comes solely from example&rdquo;</li>
+</ul>
+</li>
+</ul>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Andrew Hao</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-09-27T15:40:00-07:00" pubdate data-updated="true">Sep 27<span>th</span>, 2015</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/category/conference/'>conference</a>, <a class='category' href='/category/distributed-systems/'>distributed systems</a>, <a class='category' href='/category/functional-programming/'>functional programming</a>, <a class='category' href='/category/software/'>software</a>, <a class='category' href='/category/strangeloop/'>strangeloop</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://www.g9labs.com/2015/09/27/strange-loop-2015-reflections/" data-via="andrewhao" data-counturl="http://www.g9labs.com/2015/09/27/strange-loop-2015-reflections/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/2015/06/29/notes-on-performance-tuning-a-puma-server/" title="Previous Post: Notes on performance tuning a Puma server">&laquo; Notes on performance tuning a Puma server</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2015/09/27/strange-loop-2015-reflections/">Strange Loop 2015: Notes & Reflections</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2015/06/29/notes-on-performance-tuning-a-puma-server/">Notes on performance tuning a Puma server</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2015/06/01/toolbox-learning-swift-and-viper/">Toolbox: learning Swift and VIPER</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2015/04/30/building-gpx-stats-through-frp-principles-on-bacon-dot-js/">Building GPX stats through FRP principles with Bacon.js</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2015/03/23/implementing-ddd-context-maps/">Implementing DDD: Context Maps</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/andrewhao">@andrewhao</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'andrewhao',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2015 - Andrew Hao -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'g9labs';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://www.g9labs.com/2015/09/27/strange-loop-2015-reflections/';
+        var disqus_url = 'http://www.g9labs.com/2015/09/27/strange-loop-2015-reflections/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

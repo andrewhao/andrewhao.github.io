@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Andrew 2.0 | The Sweet Spot]]></title>
   <link href="http://www.g9labs.com/category/andrew-2-dot-0/atom.xml" rel="self"/>
   <link href="http://www.g9labs.com/"/>
-  <updated>2015-09-27T15:38:26-05:00</updated>
+  <updated>2015-10-07T21:02:52-07:00</updated>
   <id>http://www.g9labs.com/</id>
   <author>
     <name><![CDATA[Andrew Hao]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Deploying Janky on Ubuntu]]></title>
     <link href="http://www.g9labs.com/2012/10/04/deploying-janky-on-ubuntu/"/>
-    <updated>2012-10-04T05:29:58-05:00</updated>
+    <updated>2012-10-04T03:29:58-07:00</updated>
     <id>http://www.g9labs.com/2012/10/04/deploying-janky-on-ubuntu</id>
     <content type="html"><![CDATA[<p><a href="https://github.com/blog/1013-janky">Janky</a> is a Github-developed <a href="https://github.com/github/hubot">Hubot</a> + Jenkins control interface. It&rsquo;s developed to be deployed on Heroku. However, what if you need it to live on an internal VM? Here&rsquo;s how I got it running on a Ubuntu (12.04 Precise) VM.</p>
 
@@ -89,7 +89,7 @@ RACK_ENV=development bundle exec rake db:seed
   <entry>
     <title type="html"><![CDATA[Updating max file limit on OSX Lion]]></title>
     <link href="http://www.g9labs.com/2012/06/20/updating-max-file-limit-on-osx-lion/"/>
-    <updated>2012-06-20T04:28:13-05:00</updated>
+    <updated>2012-06-20T02:28:13-07:00</updated>
     <id>http://www.g9labs.com/2012/06/20/updating-max-file-limit-on-osx-lion</id>
     <content type="html"><![CDATA[<p>I&rsquo;ve been hitting a lot of &ldquo;Maximum file limit exceeded&rdquo; dialogs after a long day at work &mdash; at any point in time I&rsquo;ve got a kajillion Chrome tabs open, five or six Rails envs running (for dev and test) + Guard/Spork actively watching tests, and Sublime with another kajillion tabs open.</p>
 
@@ -125,7 +125,7 @@ RACK_ENV=development bundle exec rake db:seed
   <entry>
     <title type="html"><![CDATA[Backup, backup, backup]]></title>
     <link href="http://www.g9labs.com/2012/04/23/backup-backup-backup/"/>
-    <updated>2012-04-23T03:02:05-05:00</updated>
+    <updated>2012-04-23T01:02:05-07:00</updated>
     <id>http://www.g9labs.com/2012/04/23/backup-backup-backup</id>
     <content type="html"><![CDATA[<p>Well, the inevitable happened: I finally experienced a hard drive failure. It&rsquo;s pretty incredible that in the twenty-odd years I&rsquo;ve been around computers I&rsquo;ve never had the horror of losing a drive.</p>
 
@@ -150,7 +150,7 @@ RACK_ENV=development bundle exec rake db:seed
   <entry>
     <title type="html"><![CDATA[RSpec order-agnostic array matching]]></title>
     <link href="http://www.g9labs.com/2012/03/23/rspec-order-agnostic-array-matching/"/>
-    <updated>2012-03-23T13:09:40-05:00</updated>
+    <updated>2012-03-23T11:09:40-07:00</updated>
     <id>http://www.g9labs.com/2012/03/23/rspec-order-agnostic-array-matching</id>
     <content type="html"><![CDATA[<p>What&rsquo;s that? <a href="http://stackoverflow.com/questions/2978922/rspec-array-should-another-array-but-without-concern-for-order">You want to write an expectation for an array but your method returns the Array in a nondeterministic ordering</a>?</p>
 
@@ -166,7 +166,7 @@ RACK_ENV=development bundle exec rake db:seed
   <entry>
     <title type="html"><![CDATA[Ohm gotchas]]></title>
     <link href="http://www.g9labs.com/2012/01/20/ohm-gotchas/"/>
-    <updated>2012-01-20T12:19:50-06:00</updated>
+    <updated>2012-01-20T10:19:50-08:00</updated>
     <id>http://www.g9labs.com/2012/01/20/ohm-gotchas</id>
     <content type="html"><![CDATA[<p>Here&rsquo;s a list of things that have been annoying, or at least a bit frustrating using <a href="http://ohm.keyvalue.org">Ohm</a>, the Redis ORM, in a Rails app. Beware to those who assume Ohm is ActiveRecord in new clothes. It is, but it&rsquo;s not:</p>
 

@@ -4,7 +4,7 @@
   <title><![CDATA[The Sweet Spot]]></title>
   <link href="http://www.g9labs.com/atom.xml" rel="self"/>
   <link href="http://www.g9labs.com/"/>
-  <updated>2015-09-27T15:38:26-05:00</updated>
+  <updated>2015-10-07T21:02:52-07:00</updated>
   <id>http://www.g9labs.com/</id>
   <author>
     <name><![CDATA[Andrew Hao]]></name>
@@ -14,9 +14,171 @@
 
   
   <entry>
+    <title type="html"><![CDATA[Strange Loop 2015: Notes & Reflections]]></title>
+    <link href="http://www.g9labs.com/2015/09/27/strange-loop-2015-reflections/"/>
+    <updated>2015-09-27T15:40:00-07:00</updated>
+    <id>http://www.g9labs.com/2015/09/27/strange-loop-2015-reflections</id>
+    <content type="html"><![CDATA[<p>Going to Strange Loop was a huge check off my conference bucket list
+(lanyard?). I&rsquo;d always heard about this slightly-weird, highly academic
+collision between academia and industry, skewing toward programming
+languages you haven&rsquo;t heard of (or, at the very least, you&rsquo;ve never used
+in production). I anticipated sitting at the feet of gray-haired wizards
+and bright-eyed hipsters with Ph.Ds.</p>
+
+<p>The conference did not disappoint. And it was not quite what I
+expected-I less sat at the feet of geniuses than I did talk with them,
+peer-to-peer, about topics of interest. All around me people were saying
+&ldquo;Don&rsquo;t be afraid to ask questions. Don&rsquo;t feel stupid &ndash; nobody knows
+everything.&rdquo; Speakers were tweeting about how much they were learning.
+It was comforting, because lots of topics I had come to see were those
+in which I had no. freakin. clue. about.</p>
+
+<p>The following is culled from my notes from different sessions I
+attended. I will focus on brevity. I will keep it clear. Here we go:</p>
+
+<h3>Opening Keynote: &ldquo;I see what you mean&rdquo;</h3>
+
+<ul>
+<li>Instructions, behaviors &amp; outcomes.</li>
+<li>It &ldquo;feels good&rdquo; to write in C (a hardcord 1000 liner)</li>
+<li>But a declarative program (e.g. SQL) works well, but is harder to come
+up with.</li>
+<li>The declarative world &ndash; as described in the work done in Datalog</li>
+<li>How can we take concepts from Datalog and apply to real-world
+resources like network actors (distributed systems)?</li>
+<li>It becomes easier to model these systems declaratively when we
+explicitly capture time.</li>
+<li>Enter Dedalus: extension to Datalog where time is a modeling
+construct.</li>
+<li>(Show off usage of <code>@next</code> and <code>@async</code> annotations</li>
+<li>Computation is redezvous &ndash; the only thing that you know is what YOU
+know at that point in time.</li>
+<li>Takeaway: Abstractions leak. Model them better (e.g. with time)</li>
+<li>Inventing languages is dope.</li>
+</ul>
+
+
+<h3>Have your Causality and your Wall Clocks Too (Jon Moore)</h3>
+
+<ul>
+<li>Take concept of Lamport clocks and extend them with hybrid clocks.</li>
+<li>And extend them one further with: Distributed Monotonic Clocks</li>
+<li>These DMCs use population protocol (flocking) to each actor in the
+system communicate with another, updating their source of truth to
+eventually agree on a media time w/in the group</li>
+<li>DMC components:
+
+<ol>
+<li>Have a reset button by adding epoch bit</li>
+<li>Use flocking (via population protocol) to avoid resets</li>
+<li>Accomodates for some clockless nodes</li>
+<li>Explicitly reflects causality</li>
+</ol>
+</li>
+</ul>
+
+
+<h3>Isomorphic JS</h3>
+
+<ul>
+<li>Vevo needed better SEO for SPAs. Old soln was to snapshot page and upload to S3.</li>
+<li>Beneficial for SEO crawlers</li>
+<li>React in frontend. Node in backend.</li>
+<li>Vevo-developed <a href="">pellet</a> project as Flux-like framework to organize
+files.</li>
+<li>Webpack aliases/shims</li>
+<li>Server hands off to browser, bootstraps React in client.</li>
+<li>Alternatives: Relay, Ember</li>
+</ul>
+
+
+<h3>Designing for the Worst Case: Peter Bailis (@pbailis)</h3>
+
+<ul>
+<li>Designing for worst case often penalizes average case</li>
+<li>But what if designing for the worst case actually helps avg case?</li>
+<li>Examples from dstbd systems:
+
+<ul>
+<li>Worst case of disconnected data centers, packet loss/link loss. Fix
+by introducing coordination-free protocols. Boom, you&rsquo;ve now made your
+network more scalable, performant, resistent to downtime.</li>
+<li>Worst case: hard to coordinate a distributed transaction between
+services. What do you do? You implement something like buffered writes
+out of process.
+
+<ul>
+<li>CRDT, RAMP, HAT, bloom</li>
+<li>Suddenly, you have fault tolerance</li>
+</ul>
+</li>
+<li>Tail latency problem in microservices: the more microservices you
+query, the higher the probability of hitting a slow server response.
+
+<ul>
+<li>Your service&rsquo;s corner case is your user&rsquo;s average case</li>
+</ul>
+</li>
+<li>HCI: accessibility guidelines in W3C lift standards for all. Make
+webpages easier to navigate. Side effect of better page performance,
+higher conversion.</li>
+<li>Netflix designing CC subtitles also benefits other users.</li>
+<li>Curb cuts in the real world to help ADA/mobility-assisted folks also
+benefit normal folks too</li>
+</ul>
+</li>
+<li>Best has pitfalls too: your notion of best may be hard to hit, or
+risky. You may want to optimize for &ldquo;stable&rdquo; solution. (Robust
+optimization)</li>
+<li>When to design for worst case?
+
+<ul>
+<li>common corner cases</li>
+<li>environmental conditions vary</li>
+<li>&ldquo;normal&rdquo; isn&rsquo;t normal</li>
+</ul>
+</li>
+<li>worst forces a conversation
+
+<ul>
+<li>how do we plan for failures?</li>
+<li>what is our scale-out strategy?</li>
+<li>how do we audit failures? data breaches?</li>
+</ul>
+</li>
+</ul>
+
+
+<h3>Ideology by Gary Bernardt</h3>
+
+<ul>
+<li>Rumsfeld: known knowns, known unknowns, and unknown unknowns.</li>
+<li>Ideology is the thing you know you do not know you know</li>
+<li>Conflict between typed vs dynamic programmers:
+
+<ul>
+<li>Typed: &ldquo;I don&rsquo;t need tests, I have types&rdquo;</li>
+<li>Dynamic: &ldquo;I write tests, so I don&rsquo;t need types&rdquo;</li>
+</ul>
+</li>
+<li>In reality, they are solving different places in the problem domain,
+but they have different beliefs about the world that are hidden in the
+shadows:
+
+<ul>
+<li>Typed: &ldquo;Correctness comes solely from types&rdquo;</li>
+<li>Dynamic: &ldquo;Correctness comes solely from example&rdquo;</li>
+</ul>
+</li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[Notes on performance tuning a Puma server]]></title>
     <link href="http://www.g9labs.com/2015/06/29/notes-on-performance-tuning-a-puma-server/"/>
-    <updated>2015-06-29T11:47:00-05:00</updated>
+    <updated>2015-06-29T11:47:00-07:00</updated>
     <id>http://www.g9labs.com/2015/06/29/notes-on-performance-tuning-a-puma-server</id>
     <content type="html"><![CDATA[<p>A couple of months ago, I was tuning a Rails app for one of our clients.
 This client wanted to know how performant their app would be under load.</p>
@@ -135,7 +297,7 @@ tools like <a href="https://github.com/schneems/puma_auto_tune">puma_auto_tune</
   <entry>
     <title type="html"><![CDATA[Toolbox: learning Swift and VIPER]]></title>
     <link href="http://www.g9labs.com/2015/06/01/toolbox-learning-swift-and-viper/"/>
-    <updated>2015-06-01T17:04:00-05:00</updated>
+    <updated>2015-06-01T17:04:00-07:00</updated>
     <id>http://www.g9labs.com/2015/06/01/toolbox-learning-swift-and-viper</id>
     <content type="html"><![CDATA[<p>The following are some notes I&rsquo;m compiling as I&rsquo;m beginning a journey
 down the rabbit hole, writing an app in Swift utilizing the <a href="http://www.objc.io/issue-13/viper.html">VIPER app development methodology</a></p>
@@ -219,7 +381,7 @@ clicking the checkbox &ldquo;Create Groups for any Added Folders&rdquo;</p>
   <entry>
     <title type="html"><![CDATA[Building GPX stats through FRP principles with Bacon.js]]></title>
     <link href="http://www.g9labs.com/2015/04/30/building-gpx-stats-through-frp-principles-on-bacon-dot-js/"/>
-    <updated>2015-04-30T12:54:00-05:00</updated>
+    <updated>2015-04-30T12:54:00-07:00</updated>
     <id>http://www.g9labs.com/2015/04/30/building-gpx-stats-through-frp-principles-on-bacon-dot-js</id>
     <content type="html"><![CDATA[<p>With my current fascination with <a href="http://github.com/andrewhao/stressfactor">tracking workouts and location-based-activities</a>, I have been interested in how I might be able to rewrite some of my stats logic with FRP principles.</p>
 
@@ -318,9 +480,54 @@ clicking the checkbox &ldquo;Create Groups for any Added Folders&rdquo;</p>
   </entry>
   
   <entry>
+    <title type="html"><![CDATA[Implementing DDD: Context Maps]]></title>
+    <link href="http://www.g9labs.com/2015/03/23/implementing-ddd-context-maps/"/>
+    <updated>2015-03-23T10:56:00-07:00</updated>
+    <id>http://www.g9labs.com/2015/03/23/implementing-ddd-context-maps</id>
+    <content type="html"><![CDATA[<p>This is a multi-part series where I blog through the book: <em>Implementing
+DDD</em> by Vaughn Vernon. Feel free to read my summary of <a href="http://www.g9labs.com/2014/04/26/implementing-ddd-chapter-2/">Chapter 2</a> of
+this series.</p>
+
+<h2>Chapter 3: Context Maps</h2>
+
+<p>The context map is a diagram that illustrates the solution space of the
+problem &ndash; it describes a diagram of &ldquo;what already exists&rdquo; as real,
+living, breathing software.</p>
+
+<p>Its purpose is to describe your specific solution space for your
+specific team. It also has a benefit of facilitating conversations
+between your team, and show you where inter-team communication is very
+important.</p>
+
+<h3>New terms:</h3>
+
+<ul>
+<li><em>Big Ball of Mud</em>: A messy, likely monolithic application that contains code that does not respect best practices, organization, or good coding practices.</li>
+<li><em>Customer-Supplier</em>: The Customer is dependent on the Supplier&rsquo;s system.</li>
+<li><em>Conformist</em>: A type of relationship where the Customer is forced to obey existing system conventions specified by the Supplier.</li>
+<li><em>Partnership</em>: A coorperative relationship between two teams who succeed or fail together.</li>
+<li><em>Shared Kernel</em>: A design strategy that shares some core code components. Care should be taken to define explicit boundaries around the kernel and keep the kernel small.</li>
+<li><em>Anticorruption Layer</em>: A translation layer between two bounded contexts. Its job is to translate domain contexts between one domain and another.</li>
+<li><em>Open Host Service</em>: A protocol that gives access to your system as a set of internal (or public) services, so others may reuse your code.</li>
+</ul>
+
+
+<h3>Drawing a context map</h3>
+
+<p>Use a hand-drawn diagram, nothing fancy. Be sure to identify upstream
+and downstream relationships. Talk to people. Keep it simple. Draw it
+together, and have conversations.</p>
+
+<p>It should turn up integration bottlenecks.</p>
+
+<p>They should be posted in rooms or on a wall.</p>
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[Docker, Rails, and Docker Compose in your development workflow]]></title>
     <link href="http://www.g9labs.com/2015/03/19/docker-rails-and-docker-compose-in-your-development-workflow/"/>
-    <updated>2015-03-19T13:29:00-05:00</updated>
+    <updated>2015-03-19T13:29:00-07:00</updated>
     <id>http://www.g9labs.com/2015/03/19/docker-rails-and-docker-compose-in-your-development-workflow</id>
     <content type="html"><![CDATA[<p>(This post <a href="http://blog.carbonfive.com/2015/03/17/docker-rails-docker-compose-together-in-your-development-workflow/">originally appeared</a> on the Carbon Five blog.)</p>
 
@@ -791,7 +998,7 @@ each container. You should see output that indicates that both our <code>web</co
   <entry>
     <title type="html"><![CDATA[Explorations in logic programming]]></title>
     <link href="http://www.g9labs.com/2014/11/29/explorations-in-logic-programming/"/>
-    <updated>2014-11-29T16:40:00-06:00</updated>
+    <updated>2014-11-29T16:40:00-08:00</updated>
     <id>http://www.g9labs.com/2014/11/29/explorations-in-logic-programming</id>
     <content type="html"><![CDATA[<p>Out of <a href="https://github.com/andrewhao/storybook">Storybook</a>, a side project I&rsquo;ve been doing for a friend, I had the opportunity to model the problem domain as a constraint satisfaction problem (CSP). It goes:</p>
 
@@ -931,7 +1138,7 @@ each container. You should see output that indicates that both our <code>web</co
   <entry>
     <title type="html"><![CDATA[My own robot training buddy.]]></title>
     <link href="http://www.g9labs.com/2014/11/15/my-own-robot-training-buddy/"/>
-    <updated>2014-11-15T10:03:00-06:00</updated>
+    <updated>2014-11-15T10:03:00-08:00</updated>
     <id>http://www.g9labs.com/2014/11/15/my-own-robot-training-buddy</id>
     <content type="html"><![CDATA[<p>As an ultra runner, I am really into the mountains. As a software engineer, I&rsquo;m really into data. So naturally, I&rsquo;m interested in the intersection of both.</p>
 
@@ -989,7 +1196,7 @@ each container. You should see output that indicates that both our <code>web</co
   <entry>
     <title type="html"><![CDATA[Recap: QCon SF 2014]]></title>
     <link href="http://www.g9labs.com/2014/11/05/qcon-sf-2014/"/>
-    <updated>2014-11-05T19:01:00-06:00</updated>
+    <updated>2014-11-05T19:01:00-08:00</updated>
     <id>http://www.g9labs.com/2014/11/05/qcon-sf-2014</id>
     <content type="html"><![CDATA[<p>Blurb sent me off to QCon SF 2014 for three days.</p>
 
@@ -1034,7 +1241,7 @@ each container. You should see output that indicates that both our <code>web</co
   <entry>
     <title type="html"><![CDATA[Conway's Law for humans]]></title>
     <link href="http://www.g9labs.com/2014/11/01/conways-law-for-humans/"/>
-    <updated>2014-11-01T18:38:00-05:00</updated>
+    <updated>2014-11-01T18:38:00-07:00</updated>
     <id>http://www.g9labs.com/2014/11/01/conways-law-for-humans</id>
     <content type="html"><![CDATA[<p>If you&rsquo;re familiar with <a href="http://en.wikipedia.org/wiki/Conway's_law">Conway&rsquo;s Law</a>, it states:</p>
 
@@ -1065,7 +1272,7 @@ each container. You should see output that indicates that both our <code>web</co
   <entry>
     <title type="html"><![CDATA[Mocks aren't stubs: mockist & classic testing]]></title>
     <link href="http://www.g9labs.com/2014/06/21/mocks-arent-stubs/"/>
-    <updated>2014-06-21T17:55:00-05:00</updated>
+    <updated>2014-06-21T17:55:00-07:00</updated>
     <id>http://www.g9labs.com/2014/06/21/mocks-arent-stubs</id>
     <content type="html"><![CDATA[<p>With the famed &ldquo;TDD is dead&rdquo; debate around the Rails community largely
 coming to an end, I found myself referencing Martin Fowler&rsquo;s article,
@@ -1219,7 +1426,7 @@ state instead of the <code>api_client</code>.</p>
   <entry>
     <title type="html"><![CDATA[Running Mocha tests with ES6/AMD modules]]></title>
     <link href="http://www.g9labs.com/2014/06/06/running-mocha-tests-with-es6-amd-modules/"/>
-    <updated>2014-06-06T15:11:00-05:00</updated>
+    <updated>2014-06-06T15:11:00-07:00</updated>
     <id>http://www.g9labs.com/2014/06/06/running-mocha-tests-with-es6-amd-modules</id>
     <content type="html"><![CDATA[<p>In one of my personal projects (<a href="https://github.com/andrewhao/chordmeister">Chordmeister</a>), I&rsquo;ve been trying to
 upgrade the code to be written in <a href="http://wiki.ecmascript.org/doku.php?id=harmony:modules#export_declarations">ES6 modules</a> and transpile down to AMD modules with Square&rsquo;s <a href="https://github.com/square/es6-module-transpiler">very excellent es6-module-transpiler project</a>.</p>
@@ -1461,7 +1668,7 @@ finding myself having problems compiling from Coffeescript &ndash;> ES5 JS &ndas
   <entry>
     <title type="html"><![CDATA[Implementing DDD: Domains, Subdomains and Bounded Contexts]]></title>
     <link href="http://www.g9labs.com/2014/04/26/implementing-ddd-chapter-2/"/>
-    <updated>2014-04-26T08:43:00-05:00</updated>
+    <updated>2014-04-26T08:43:00-07:00</updated>
     <id>http://www.g9labs.com/2014/04/26/implementing-ddd-chapter-2</id>
     <content type="html"><![CDATA[<h2>Chapter 2: Domains, Subdomains, and Bounded Contexts</h2>
 
@@ -1522,7 +1729,7 @@ finding myself having problems compiling from Coffeescript &ndash;> ES5 JS &ndas
   <entry>
     <title type="html"><![CDATA[Six months as a manager]]></title>
     <link href="http://www.g9labs.com/2014/03/08/six-months-as-a-manager/"/>
-    <updated>2014-03-08T16:15:00-06:00</updated>
+    <updated>2014-03-08T16:15:00-08:00</updated>
     <id>http://www.g9labs.com/2014/03/08/six-months-as-a-manager</id>
     <content type="html"><![CDATA[<p>It&rsquo;s been approximately six months since I&rsquo;ve entered engineering management. Here are some thoughts reflecting back on that season now.</p>
 
@@ -1588,7 +1795,7 @@ finding myself having problems compiling from Coffeescript &ndash;> ES5 JS &ndas
   <entry>
     <title type="html"><![CDATA[Blogging through: Implementing Domain-Driven Design]]></title>
     <link href="http://www.g9labs.com/2014/02/02/blogging-through-implementing-domain-driven-design/"/>
-    <updated>2014-02-02T11:31:00-06:00</updated>
+    <updated>2014-02-02T11:31:00-08:00</updated>
     <id>http://www.g9labs.com/2014/02/02/blogging-through-implementing-domain-driven-design</id>
     <content type="html"><![CDATA[<p>In recent conversations with coworkers, the topic of Domain-Driven Design has
 arisen on more than a few occasions in design and architecture meetings.
@@ -1758,7 +1965,7 @@ system.</li>
   <entry>
     <title type="html"><![CDATA[Moving to Ember App Kit]]></title>
     <link href="http://www.g9labs.com/2014/01/26/moving-to-ember-app-kit/"/>
-    <updated>2014-01-26T23:32:00-06:00</updated>
+    <updated>2014-01-26T23:32:00-08:00</updated>
     <id>http://www.g9labs.com/2014/01/26/moving-to-ember-app-kit</id>
     <content type="html"><![CDATA[<p>I&rsquo;ve noticed a bit of the buzz around <a href="https://github.com/stefanpenner/ember-app-kit">Ember App Kit</a>
 recently and decided to move Hendrix, my music management app, over from
@@ -1869,7 +2076,7 @@ the Resolver for: <code>appkit/routes/songs/index</code>. Renaming the file to:<
   <entry>
     <title type="html"><![CDATA[Ember Data, Rails, CORS, and you!]]></title>
     <link href="http://www.g9labs.com/2013/12/27/ember-data-rails-cors-and-you/"/>
-    <updated>2013-12-27T16:22:00-06:00</updated>
+    <updated>2013-12-27T16:22:00-08:00</updated>
     <id>http://www.g9labs.com/2013/12/27/ember-data-rails-cors-and-you</id>
     <content type="html"><![CDATA[<p>I&rsquo;m starting up a new personal project involving Ember-Data and Rails
 (more to come). The gist of it is that it&rsquo;s a pure frontend app engine
@@ -2017,7 +2224,7 @@ post</a></p>
   <entry>
     <title type="html"><![CDATA[Decomposing Fat Models]]></title>
     <link href="http://www.g9labs.com/2012/12/26/decomposing-fat-models/"/>
-    <updated>2012-12-26T06:46:09-06:00</updated>
+    <updated>2012-12-26T04:46:09-08:00</updated>
     <id>http://www.g9labs.com/2012/12/26/decomposing-fat-models</id>
     <content type="html"><![CDATA[<p>Heard an awesome Ruby Rogues podcast recently: <a href="http://rubyrogues.com/083-rr-decomposing-fat-models-with-bryan-helmkamp/">&ldquo;Decomposing Fat Models&rdquo;</a>.</p>
 
@@ -2037,7 +2244,7 @@ post</a></p>
   <entry>
     <title type="html"><![CDATA[Deploying Janky on Ubuntu]]></title>
     <link href="http://www.g9labs.com/2012/10/04/deploying-janky-on-ubuntu/"/>
-    <updated>2012-10-04T05:29:58-05:00</updated>
+    <updated>2012-10-04T03:29:58-07:00</updated>
     <id>http://www.g9labs.com/2012/10/04/deploying-janky-on-ubuntu</id>
     <content type="html"><![CDATA[<p><a href="https://github.com/blog/1013-janky">Janky</a> is a Github-developed <a href="https://github.com/github/hubot">Hubot</a> + Jenkins control interface. It&rsquo;s developed to be deployed on Heroku. However, what if you need it to live on an internal VM? Here&rsquo;s how I got it running on a Ubuntu (12.04 Precise) VM.</p>
 
@@ -2110,7 +2317,7 @@ RACK_ENV=development bundle exec rake db:seed
   <entry>
     <title type="html"><![CDATA[Updating max file limit on OSX Lion]]></title>
     <link href="http://www.g9labs.com/2012/06/20/updating-max-file-limit-on-osx-lion/"/>
-    <updated>2012-06-20T04:28:13-05:00</updated>
+    <updated>2012-06-20T02:28:13-07:00</updated>
     <id>http://www.g9labs.com/2012/06/20/updating-max-file-limit-on-osx-lion</id>
     <content type="html"><![CDATA[<p>I&rsquo;ve been hitting a lot of &ldquo;Maximum file limit exceeded&rdquo; dialogs after a long day at work &mdash; at any point in time I&rsquo;ve got a kajillion Chrome tabs open, five or six Rails envs running (for dev and test) + Guard/Spork actively watching tests, and Sublime with another kajillion tabs open.</p>
 
@@ -2140,55 +2347,6 @@ RACK_ENV=development bundle exec rake db:seed
 <p><code>limit maxfiles 16384 32768</code></p>
 
 <p>Restart your computer. Boom. Easy.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Speeding up Rspec/Cucumber feedback times without sacrificing coverage]]></title>
-    <link href="http://www.g9labs.com/2012/04/27/speeding-up-rspeccucumber-feedback-times-without-sacrificing-coverage/"/>
-    <updated>2012-04-27T12:27:17-05:00</updated>
-    <id>http://www.g9labs.com/2012/04/27/speeding-up-rspeccucumber-feedback-times-without-sacrificing-coverage</id>
-    <content type="html"><![CDATA[<iframe src="http://www.slideshare.net/slideshow/embed_code/4479466" width="512" height="421" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:1px solid #CCC;border-width:1px 1px 0;margin-bottom:5px" allowfullscreen>
-</iframe>
-
-
-<p><a href="http://www.slideshare.net/josephwilk/rocket-fuelled-cucumbers">Rocket Fuelled Cucumbers</a>
-View more <a href="http://www.slideshare.net/">presentations</a> from <a href="http://www.slideshare.net/josephwilk">Joseph Wilk</a></p>
-
-<p>One thing the Blurb devs have been discussing is how we can speed up our test feedback cycles without sacrificing coverage. There&rsquo;s some good tips (mainly Rails+Rspec/Cucumber) in the presentation such as:</p>
-
-<ul>
-<li>Don&rsquo;t run all the tests when developing (tag your tests by function)</li>
-<li>Parallelize, chunk tests over machines/cores using Testjour/<a href="https://github.com/sandro/specjour">Specjour</a>, <a href="https://github.com/ngauthier/hydra">Hydra</a></li>
-<li>Don&rsquo;t run all the tests at once. Tests that never fail should nightly.</li>
-<li>Instead of spinning up a browser for acceptance tests, can you use a js/DOM simulator (e.g. <a href="https://github.com/thatcher/env-js">envjs</a> via <a href="https://github.com/smparkes/capybara-envjs">capybara-envjs</a>, or <a href="https://github.com/jarib/celerity">celerity</a>)</li>
-</ul>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Backup, backup, backup]]></title>
-    <link href="http://www.g9labs.com/2012/04/23/backup-backup-backup/"/>
-    <updated>2012-04-23T03:02:05-05:00</updated>
-    <id>http://www.g9labs.com/2012/04/23/backup-backup-backup</id>
-    <content type="html"><![CDATA[<p>Well, the inevitable happened: I finally experienced a hard drive failure. It&rsquo;s pretty incredible that in the twenty-odd years I&rsquo;ve been around computers I&rsquo;ve never had the horror of losing a drive.</p>
-
-<p>Friday rolls around and my Macbook Pro decides to freeze up on me. <em>Strange, </em>I think to myself. It&rsquo;s making a clicking noise. Crap.</p>
-
-<p>Luckily, I&rsquo;ve been fairly good about making backups and copies of my work. Here&rsquo;s my general strategy:</p>
-
-<ul>
-<li><p>Work/code: keeping local changes on a separate branch and pushing it to a remote Git branch every so often.</p></li>
-<li><p>Everything else: I keep one local copy here with me in Oakland, and have another copy offsite. I rsync my files out to my server at home, which has a cronjob set up to sync with the offsite copy at my parents&#8217; home (I run a <a href="http://pogoplug.com/">Pogoplug</a> with <a href="http://archlinuxarm.org/platforms/armv6/pogoplug-provideov3">Archlinux</a> and a couple of external drives connected to it &mdash; fantastic and totally recommended for a cheap and low-power server setup).</p></li>
-</ul>
-
-
-<p>There was a minor scare this time around though &mdash; I had some photography work (and an engagement photoshoot!) lying around that almost didn&rsquo;t make it to the first stage rsync with my local server. Fortunately, I had the foresight to keep my photos backed up to a random local hard disk, and the rest remained on the memory cards (and some even on a shared Dropbox folder that saved my butt!). Most frustrating thing was learning that I had forgotten to back up my Lightroom catalog, so all my edits were lost. At least I have the original shots.</p>
-
-<p>One thing I think I&rsquo;ll try doing from here on out &mdash; saving my Develop settings/presets directly to the DNGs themselves before backing up. That way if I ever lose my LR catalog, the edit settings are still embedded in the original files.</p>
-
-<p>Jeff Atwood reminds us to <a href="http://www.codinghorror.com/blog/2008/01/whats-your-backup-strategy.html">keep backups around on multiple disks</a>. With the price of storage so low, what&rsquo;s your data worth to you? How are you keeping your backups?</p>
 ]]></content>
   </entry>
   

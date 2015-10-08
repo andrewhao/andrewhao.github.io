@@ -4,7 +4,7 @@
   <title><![CDATA[Category: ember app kit | The Sweet Spot]]></title>
   <link href="http://www.g9labs.com/category/ember-app-kit/atom.xml" rel="self"/>
   <link href="http://www.g9labs.com/"/>
-  <updated>2015-09-27T15:38:26-05:00</updated>
+  <updated>2015-10-07T21:02:52-07:00</updated>
   <id>http://www.g9labs.com/</id>
   <author>
     <name><![CDATA[Andrew Hao]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Moving to Ember App Kit]]></title>
     <link href="http://www.g9labs.com/2014/01/26/moving-to-ember-app-kit/"/>
-    <updated>2014-01-26T23:32:00-06:00</updated>
+    <updated>2014-01-26T23:32:00-08:00</updated>
     <id>http://www.g9labs.com/2014/01/26/moving-to-ember-app-kit</id>
     <content type="html"><![CDATA[<p>I&rsquo;ve noticed a bit of the buzz around <a href="https://github.com/stefanpenner/ember-app-kit">Ember App Kit</a>
 recently and decided to move Hendrix, my music management app, over from

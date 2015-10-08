@@ -4,7 +4,7 @@
   <title><![CDATA[Category: SOS | The Sweet Spot]]></title>
   <link href="http://www.g9labs.com/category/sos/atom.xml" rel="self"/>
   <link href="http://www.g9labs.com/"/>
-  <updated>2015-09-27T15:38:26-05:00</updated>
+  <updated>2015-10-07T21:02:52-07:00</updated>
   <id>http://www.g9labs.com/</id>
   <author>
     <name><![CDATA[Andrew Hao]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Save our souls - a Twitter art installation]]></title>
     <link href="http://www.g9labs.com/2011/02/23/save-our-souls-a-twitter-art-installation/"/>
-    <updated>2011-02-23T04:51:37-06:00</updated>
+    <updated>2011-02-23T02:51:37-08:00</updated>
     <id>http://www.g9labs.com/2011/02/23/save-our-souls-a-twitter-art-installation</id>
     <content type="html"><![CDATA[<p>Here&rsquo;s how the installation looked on the day of the art show.</p>
 
@@ -63,7 +63,7 @@
   <entry>
     <title type="html"><![CDATA[Arduino and python-firmata]]></title>
     <link href="http://www.g9labs.com/2011/02/14/arduino-and-python-firmata/"/>
-    <updated>2011-02-14T23:29:07-06:00</updated>
+    <updated>2011-02-14T21:29:07-08:00</updated>
     <id>http://www.g9labs.com/2011/02/14/arduino-and-python-firmata</id>
     <content type="html"><![CDATA[<p>I just spent five hours trying to figure out why  none of the <a href="http://arduino.cc/playground/Interfacing/Python">Firmata libraries for Python</a> were working over my serial connection. I was wondering why the previous program remained on the board and none of the signals sent were hot.</p>
 
@@ -78,7 +78,7 @@
   <entry>
     <title type="html"><![CDATA[Currently: frustrated]]></title>
     <link href="http://www.g9labs.com/2011/02/12/currently-frustrated/"/>
-    <updated>2011-02-12T11:38:45-06:00</updated>
+    <updated>2011-02-12T09:38:45-08:00</updated>
     <id>http://www.g9labs.com/2011/02/12/currently-frustrated</id>
     <content type="html"><![CDATA[<p>So I got the poster printed, and the LEDs currently show through the board pretty well. This is good:</p>
 
@@ -105,7 +105,7 @@
   <entry>
     <title type="html"><![CDATA[Update]]></title>
     <link href="http://www.g9labs.com/2011/02/10/update/"/>
-    <updated>2011-02-10T18:42:27-06:00</updated>
+    <updated>2011-02-10T16:42:27-08:00</updated>
     <id>http://www.g9labs.com/2011/02/10/update</id>
     <content type="html"><![CDATA[<p>A quick update on the art project:</p>
 
