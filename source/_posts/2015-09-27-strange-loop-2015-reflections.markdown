@@ -29,10 +29,14 @@ in which I had no. freakin. clue. about.
 The following is culled from my notes from different sessions I
 attended. I will focus on brevity. I will keep it clear. Here we go:
 
-### Opening Keynote: "I see what you mean"
+### Opening Keynote: "I see what you mean" - Peter Alvaro
+
+<iframe width="560" height="315"
+src="https://www.youtube.com/embed/R2Aa4PivG0g" frameborder="0"
+allowfullscreen></iframe>
 
 * Instructions, behaviors & outcomes.
-* It "feels good" to write in C (a hardcord 1000 liner)
+* It "feels good" to write in C (a hardcore 1000 liner)
 * But a declarative program (e.g. SQL) works well, but is harder to come
 up with.
 * The declarative world - as described in the work done in Datalog
@@ -50,6 +54,10 @@ know at that point in time.
 
 ### Have your Causality and your Wall Clocks Too (Jon Moore)
 
+<iframe width="560" height="315"
+src="https://www.youtube.com/embed/YqNGbvFHoKM" frameborder="0"
+allowfullscreen></iframe>
+
 - Take concept of Lamport clocks and extend them with hybrid clocks.
 - And extend them one further with: Distributed Monotonic Clocks
 - These DMCs use population protocol (flocking) to each actor in the
@@ -61,7 +69,12 @@ eventually agree on a media time w/in the group
   3. Accomodates for some clockless nodes
   4. Explicitly reflects causality
 
-### Isomorphic JS
+### Building Isomorphic Web Apps with React - Elyse Gordon
+
+<iframe width="560" height="315"
+src="https://www.youtube.com/embed/QPXNb6bl7hc" frameborder="0"
+allowfullscreen></iframe>
+
 - Vevo needed better SEO for SPAs. Old soln was to snapshot page and upload to S3.
 - Beneficial for SEO crawlers
 - React in frontend. Node in backend.
@@ -72,6 +85,11 @@ files.
 - Alternatives: Relay, Ember
 
 ### Designing for the Worst Case: Peter Bailis (@pbailis)
+
+<iframe width="560" height="315"
+src="https://www.youtube.com/embed/ZGIAypUUwoQ" frameborder="0"
+allowfullscreen></iframe>
+
 - Designing for worst case often penalizes average case
 - But what if designing for the worst case actually helps avg case?
 - Examples from dstbd systems:
@@ -105,6 +123,7 @@ optimization)
   - how do we audit failures? data breaches?
 
 ### Ideology by Gary Bernardt
+
 - Rumsfeld: known knowns, known unknowns, and unknown unknowns.
 - Ideology is the thing you know you do not know you know
 - Conflict between typed vs dynamic programmers:
@@ -115,3 +134,83 @@ but they have different beliefs about the world that are hidden in the
 shadows:
   - Typed: "Correctness comes solely from types"
   - Dynamic: "Correctness comes solely from example"
+- "I need nulls" -> You believe nulls are the only way to represent absence
+- "Immutable data structures are slow" -> You believe all immutable types are slow
+- "GC is impractical" -> you believe GC algorithms won't get faster.
+- Read CSE 341 Type systems, Dan Grossman
+
+### Building Scalable, Stateful Services: Caitlin McCaffrey
+
+<iframe width="560" height="315"
+src="https://www.youtube.com/embed/H0i_bXKwujQ" frameborder="0"
+allowfullscreen></iframe>
+
+#### Sticky connection: always talk to the same machine
+Building sticky connections:
+- persistent connections (load balancing cannot rebalance server)
+- implement backpressure (d/c connection)
+
+#### dynamic cluster membership
+
+- gossip protocols -> availability
+- consensus systems -> consistency
+(everybody needs to have the same worldview.
+
+#### work distribution:
+
+##### random:
+- write anywhere, read from all
+
+##### consistent hashing: on session ID
+
+hash space -> node
+dynamoDB, Manhattan
+
+con: can have hotspots, could have uneven distribution of resources cannot move work.
+
+#### distributed hash table
+statefully store hash
+
+#### Real world
+Scuba (Facebook)
+- distributed in-memory DB
+
+Ringpop (Uber)
+- Node.js swim gossip protocol, consistent hashing
+
+Orleans (MS Research)
+- actor model
+- gossip
+- consistent hash
+- distributed hashtable
+
+### Idalin "Abby" Bobé: From Protesting to Programming: Becoming a Tech Activist
+
+<iframe width="560" height="315"
+src="https://www.youtube.com/embed/gy82S8tjJX8" frameborder="0"
+allowfullscreen></iframe>
+
+- Tech to resist exploitation
+- Technologists as activists
+- Idalin Bobé -> Changed name to "Abby" to get a job.
+- Pastor Jenkins - magnifying glass vs paper
+- Philadelphia Partnership Program:
+  - 1st to college
+  - work <> school
+- Difficult to balance.
+- Mills MBA, CS
+- Joined Black Girls Code
+  - Apply technology in the right way
+- Ferguson happened
+  - Thoughtworkers joined on the ground
+  - Hands Up United: www.handsupunited.org
+- "Do not be led by digital metrics" - even though the activists had
+digital tooling, the tools were being used against activists. Phone
+calls, chats monitored. Movement tracked.
+- New group starting up in St. Louis called "Ray Clark, Sr." - named
+after a black man who played a strong role in the founding of Silicon
+Valley.
+- 21st century technologists need 21st century skillsets.
+- Dream Defenders
+- "it is our duty to fight for our freedom/it is our duty to win/we must
+love and support one another/we have nothing to lose but our chains"
