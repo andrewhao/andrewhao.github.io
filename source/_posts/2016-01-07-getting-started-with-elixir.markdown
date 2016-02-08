@@ -3,7 +3,9 @@ layout: post
 title: "Getting started with Elixir"
 date: 2016-01-07 22:06
 comments: true
-categories: 
+published: false
+categories:
+- Elixir
 ---
 
 Some notes on getting started with Elixir:
@@ -19,10 +21,9 @@ mix
 
 compile, compile
 
-
 add mix-test.watch (https://github.com/lpil/mix-test.watch)
 
-how to debug? IEx.pry
+how to debug? `IEx.pry`
 
 Do I need to know about a "type"? How do I find out?
 
@@ -32,7 +33,10 @@ require IEx
 IEx.pry
 ```
 
-    $ iex -S mix test
+$ iex -S mix test
+
+
+### Apex as a pretty formatter
 
 ```elixir
 IO.inspect("foo")
@@ -44,10 +48,9 @@ defmodule Foo do
 end
 ```
 
-Pattern matching is cool.
+Pattern matching is fun. (More on this...?)
 
-
-Arranging files in Elixir project
+Arranging files in Elixir project: modulizing files.
 
 ```elixir
 defmodule Base do
