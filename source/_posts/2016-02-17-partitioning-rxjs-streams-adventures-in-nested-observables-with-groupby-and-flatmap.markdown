@@ -20,14 +20,15 @@ Let's dive into a problem I ran into while working on a personal
 project:
 
 The task at hand is to take a list of GPS moving point data and
-partition the group data into multiple clusters of points, some of which
-are useful, and some which aren't.
+partition the group data into multiple clusters of points, count up each
+group, then return the aggregate stats. As a cyclist is moving, I want
+to know how often they are moving at that specific velocity (speed).
 
 The weapon of choice is the [RxJS groupBy() function](http://reactivex.io/documentation/operators/groupby.html),
 which groups like, contiguous stream values based on a key value you
 define.
 
-![Image of groupBy() at work, with marbles.](http://reactivex.io/documentation/operators/images/groupBy.c.png)
+[![Image of groupBy() at work, with marbles.](http://reactivex.io/documentation/operators/images/groupBy.c.png)](http://reactivex.io/documentation/operators/groupby.html)
 
 OK. Easy enough. So my implementation looked something like this:
 
@@ -36,36 +37,66 @@ gpsPointStream
 .groupBy((point) => point.velocity)
 ```
 
-Now at this point, we have to stop and scratch our heads. OK, so now my
-stream is... many streams? What do I do here? All of my operators I'm
-familiar with in RxJS have to do with operations on a single stream.
+The supplied `(point) => point.velocity` function determines the `index`
+value for the supplied event, which then 1) creates a new Observable
+sequence for that specific `index` value, if it doesn't exist, or 2)
+assigns your event to an existing Observable sequence.
+
+Let's illustrate:
+
+```
+src:     -- { velocity: 0 } --------- { velocity: 1 } ------------------------------------- { velocity: 0 } -->
+groupBy: -- [{Observable index 0}] -- [ { Observable index 0 }, { Observable index 1 } ] -- [ { Observable index 0 }, { Observable index 1 } ] -->
+```
 
 ## Never fear, `flatMap()` to the rescue.
 
-So the story turns to our hero `flatMap()`, which as it turns out is
+So the story turns to our hero
+[`flatMap()`](http://reactivex.io/documentation/operators/flatmap.html), which as it turns out is
 specifically tuned to deal with issues of dealing with multiple streams.
+
+[![Marble diagram for flatMap](http://reactivex.io/documentation/operators/images/flatMap.c.png)](http://reactivex.io/documentation/operators/flatmap.html)
+
+`flatMap` will take a supplied function as its argument, which is the
+operation to apply to each argument within the supplied stream.
 
 ```js
 gpsPointStream
 .groupBy((point) => point.velocity)
 .flatMap((group) => {
-  return group.reduce((acc, g) => g.elapsedTime + acc, 0)
+  return group.count().zip(Observable.just(group.index))
 });
+```
+
+```
+src:     -- { velocity: 0 } --------- { velocity: 1 } ------------------------------------- { velocity: 0 } -->
+groupBy: -- [{Observable index 0}] -- [ { Observable index 0 }, { Observable index 1 } ] -- [ { Observable index 0 }, { Observable index 1 } ] -->
+flatMap: -- [ 1, 0 ] ---------------- [ 1, 1 ] -------------------------------------------- [ 2, 0 ] -->
 ```
 
 What just happened here?
 
 I specified a merging function for the `flatMap()` stream, which
-performed the `reduce()` aggregation on my group before merging the
-stream back into the main stream.
+performed the `count()` aggregation on my group before merging the
+stream back into the main stream. I threw in a `zip`, which annotated my
+aggregate count value with a record of the group index (velocity) that
+this value was computed for.
 
 And thus continues the journey of learning RxJS patterns and the toolkit
 you're offered. The easy things are easy, but then the moderate things,
 sometimes, are less obvious and require some digging.
 
+## Takewaways
+
+When you want to fan out a stream into groups or partitions based on a
+specific stream value, turn to
+[`groupBy`](https://github.com/Reactive-Extensions/RxJS/blob/master/doc/api/core/operators/groupby.md).
+
+When you have a need to combine a stream-of-streams, you want to look at
+[`flatMap`](https://github.com/Reactive-Extensions/RxJS/blob/master/doc/api/core/operators/selectmany.md). You may also consider looking at [`concatMap`](https://github.com/Reactive-Extensions/RxJS/blob/master/doc/api/core/operators/concatmap.md), a close cousin of `flatMap`.
+
 ## Further reading:
 
 * http://blogs.microsoft.co.il/iblogger/2015/08/11/animations-of-rx-operators-groupby/
-
 
 
