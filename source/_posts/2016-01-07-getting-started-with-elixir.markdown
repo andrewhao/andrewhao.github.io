@@ -39,7 +39,7 @@ $ iex -S mix test
 ### Apex as a pretty formatter
 
 ```elixir
-IO.inspect("foo")
+IO.inspect(my_object)
 Apex.ap "Foo"
 
 defmodule Foo do
@@ -76,4 +76,15 @@ defmodule Trackline.Trackpoint do
   @type t :: map
 end
 ```
+
+### Deploying to Heroku
+
+Add buildpack: https://github.com/gjaldon/heroku-buildpack-phoenix-static
+Add second buildpack:
+
+    # Set the buildpack for your Heroku app
+    $ heroku buildpacks:set https://github.com/gjaldon/phoenix-static-buildpack
+
+    # Add this buildpack after the Elixir buildpack
+    $ heroku buildpacks:add --index 1 https://github.com/HashNuke/heroku-buildpack-elixir
 
