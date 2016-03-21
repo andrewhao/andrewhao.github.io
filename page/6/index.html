@@ -9,7 +9,7 @@
   <meta name="author" content="Andrew Hao">
 
   
-  <meta name="description" content="One trend on the Web these days is to move away from traditional full-stack frameworks (like Rails) toward client-side, full-stack Javascript &hellip;">
+  <meta name="description" content="A few weeks ago, I couldn&rsquo;t seem to connect my laptop to the wireless AP in my apartment. Additionally, I&rsquo;d be getting weak signals from &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -78,6 +78,102 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2008/11/05/setting-up-a-multi-ap-wireless-network/">Setting up a multi-AP wireless network</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-11-05T13:21:06-08:00" pubdate data-updated="true">Nov 5<span>th</span>, 2008</time>
+        
+         | <a href="/2008/11/05/setting-up-a-multi-ap-wireless-network/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>A few weeks ago, I couldn&rsquo;t seem to connect my laptop to the wireless AP in my apartment. Additionally, I&rsquo;d be getting weak signals from all these weird corners in my apartment. Since I had a spare AP lying around at home, I decided to do some online research to see if I could get it to behave as a second wireless AP on the same network, extending my network range, allowing our network to handle more wireless users and playing nicely with my laptop.</p>
+
+<h4>The desired setup:</h4>
+
+<ul>
+<li><p>Two wireless routers on the same network: one router acts as the gateway and DHCP server, the other is a simple switch + wireless AP. One router is the Netgear WGR614, the other is the DLink DI-624.</p></li>
+<li><p>Workload: many wired connections, many wireless connections. We have 3 wired computers for me and my roommates&#8217; computers, and up to 10 people connected via wireless at the same time (we tend to have a lot of visitors).</p></li>
+</ul>
+
+
+<p>After a bit of research, I <a href="http://www.dslreports.com/forum/remark,10664212">found a forum thread online</a> that details how to set it up:</p>
+
+<ul>
+<li><p>The host router (the Netgear in my case) stays the DHCP server and broadband gateway. Settings:</p>
+
+<ul>
+<li>Assign a static IP on the MAC address of the secondary router. It&rsquo;s 192.168.1.3 on my network. That way you&rsquo;ll always have an IP address to the second router&rsquo;s admin panel.</li>
+</ul>
+</li>
+<li><p>Run an Ethernet cable from the host router&rsquo;s LAN port in to the LAN port of the second router (the DLink). (Note: it&rsquo;s especially important that you plug this wire in to the LAN port instead of the WAN port).</p></li>
+<li><p>With a computer connected on the network, send your browser on over to the D-Link admin panel at 192.168.1.3. Your settings on the DI-624 should be as follows:</p>
+
+<ul>
+<li><p>&ldquo;WAN Settings&rdquo; section (Note the 20.2.20.x IP is just a random IP address so the AP doesn&rsquo;t go off and try to dynamically resolve a IP address)</p>
+
+<ul>
+<li><p>&ldquo;Static IP Address&rdquo; radio button selected</p></li>
+<li><p>IP Address: 20.2.20.20</p></li>
+<li><p>Subnet mask: 255.255.255.0</p></li>
+<li><p>ISP Gateway Address: 20.2.20.21</p></li>
+<li><p>Primary DNS address: 20.2.20.22</p></li>
+</ul>
+</li>
+<li><p>&ldquo;LAN Settings&rdquo; section:</p>
+
+<ul>
+<li><p>Static IP: 192.168.1.3</p></li>
+<li><p>Subnet mask: 255.255.255.0</p></li>
+<li><p>DNS Relay: Disabled.</p></li>
+</ul>
+</li>
+<li><p>&ldquo;DHCP Settings&rdquo; section:</p>
+
+<ul>
+<li>DHCP Server: Disabled</li>
+</ul>
+</li>
+<li><p>&ldquo;Wireless&rdquo; section:</p>
+
+<ul>
+<li>Set up your wireless AP settings however you&rsquo;d like!</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+
+<p>Though these instructions are specific to setting up the DI-624, I&rsquo;m pretty sure you could get your old router to work on an existing network.You can now extend the range of your home&rsquo;s wireless network without any fancy signal booster tricks or expensive repeater equipment. How cool is that?</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -553,77 +649,6 @@ So there&rsquo;s a nagging little voice that warns me that Google&rsquo;s seriou
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/2008/03/29/tales-from-the-crypt/">Tales from the crypt</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2008-03-29T08:52:29-07:00" pubdate data-updated="true">Mar 29<span>th</span>, 2008</time>
-        
-         | <a href="/2008/03/29/tales-from-the-crypt/#disqus_thread">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Now I remember why I love and hate assembling computers.</p>
-
-<p>You&rsquo;ve got to love the rush of building something cool. The anticipation of the new BIOS screen&mdash;blue letters on black indicating some really high memory size and clock frequency. You are your very own Dr. Frankenstein and the monster is about to liiiiiive&hellip;</p>
-
-<p>But more frequently than not, it plays out like this: after scanning the electronics ads (<a href="http://slickdeals.net">Slickdeals</a>, <a href="http://dealnews.com">Dealnews</a>, the ever-present <a href="http://newspaperads.mercurynews.com/ROP/ads.aspx?advid=32664">Fry&rsquo;s ads on the back of the San Jose Mercury</a>) for what seems like years, you finally get the courage to splurge a couple hundred bucks on assorted parts. You&rsquo;ve done your research; the heatsink fan <em>doesn&rsquo;t</em> collide with the on-board capacitors, your brand of memory doesn&rsquo;t have any motherboard compatibility errors, your motherboard manufacturer is of good repute and doesn&rsquo;t, for the first time, have parts from some no-name Chinese manufacturer (okay, so this is me speaking here).</p>
-
-<p>You get your parts, and spend a couple of hours putting it all together. You painstakingly push clips into place, apply thermal grease as needed, silently curse the motherboard powers-that-be that pack front panel pin connectors so closely together. Your fingers grow raw from turning the screwdriver so many times. You wonder to yourself whether you&rsquo;ll somehow accidentally fry some component by putting it on the table, or whether if by accidentally scraping your screwdriver across the PCB you&rsquo;ve just junked your expensive toy.</p>
-
-<p>I&rsquo;ll spare you the gory details. But essentially, what usually happens is you get it all Assembled Together after an hour or so and then comes the Moment of Truth: you push the power button to witness your machine come gloriously to life and, in a wonderful demonstration of <a href="http://en.wikipedia.org/wiki/Murphy's_law">Murphy&rsquo;s Law</a>, one or more of the following will happen:</p>
-
-<ol>
-<li><p> You witness a bright flash of light, then smoke rises out from the PCB.</p></li>
-<li><p> Your computer will beep at you. Continuously. The screen will stay off, just for dramatic effect.</p></li>
-<li><p> Midway through the OS installation, your computer will freeze.</p></li>
-<li><p> Your hard drive gets corrupted from a rogue reboot.</p></li>
-<li><p> Nothing.</p></li>
-</ol>
-
-
-<p>By the way, these have all happened to me at some point(s) in time.</p>
-
-<p>After aforementioned catastrophe, you exhale deeply, clench your fists and then proceed to Pinpoint The Problem.</p>
-
-<p>Remember the Scientific Method? Remember how you had to isolate one variable&mdash;the independent variable&mdash;while keeping everything else at a &ldquo;control&rdquo;? Well here&rsquo;s the part where you scrounge up all available parts and start switching them in and out, testing each component one by one to see which part the problem resides in.</p>
-
-<p>I hate the Scientific Method.</p>
-
-<p>Here&rsquo;s where you begin the Gradual Spiral Into Despair. It&rsquo;s the sinking feeling you get after a couple of days you realize that you still don&rsquo;t know what the problem is. Look at you, a loner in your room surrounded by junky computer parts all over the place. You&rsquo;ve got red eyes from lack of sleep and staring at monitors. You haven&rsquo;t seen a human being in two days. And when was the last time you showered?</p>
-
-<p>But it&rsquo;s all worth it when you emerge on the other side, bruised and broken but victorious.</p>
-
-<p>Here&rsquo;s to the ones who nevertheless press on. Here&rsquo;s to the ones who will rather take a bullet than give up on your rig. Here&rsquo;s to the ones who scoff at light and food and warmth and human companionship. Here&rsquo;s to you, True Geek. You&rsquo;ve got your scars, now here&rsquo;s your reward: Dual Cores of Computing Sweetness. It&rsquo;s rather worth it, won&rsquo;t you say? Right?</p>
-
-<p>Hey, you still there?</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/page/7/">&larr; Older</a>
@@ -641,6 +666,14 @@ So there&rsquo;s a nagging little voice that warns me that Google&rsquo;s seriou
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/2016/03/21/lossless-rate-limiting-with-rxjs/">Lossless rate limiting with RxJS</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2016/02/17/partitioning-rxjs-streams-adventures-in-nested-observables-with-groupby-and-flatmap/">Partitioning RxJS streams: adventures in nested Observables with groupBy() and flatMap()</a>
+      </li>
+    
+      <li class="post">
         <a href="/2015/09/27/strange-loop-2015-reflections/">Strange Loop 2015: Notes & Reflections</a>
       </li>
     
@@ -650,14 +683,6 @@ So there&rsquo;s a nagging little voice that warns me that Google&rsquo;s seriou
     
       <li class="post">
         <a href="/2015/06/01/toolbox-learning-swift-and-viper/">Toolbox: learning Swift and VIPER</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2015/04/30/building-gpx-stats-through-frp-principles-on-bacon-dot-js/">Building GPX stats through FRP principles with Bacon.js</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2015/03/23/implementing-ddd-context-maps/">Implementing DDD: Context Maps</a>
       </li>
     
   </ul>
@@ -702,7 +727,7 @@ So there&rsquo;s a nagging little voice that warns me that Google&rsquo;s seriou
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2015 - Andrew Hao -
+  Copyright &copy; 2016 - Andrew Hao -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 

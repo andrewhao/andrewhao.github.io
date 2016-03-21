@@ -1,0 +1,432 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Partitioning RxJS streams: adventures in nested Observables with groupBy() and flatMap() - The Sweet Spot</title>
+  <meta name="author" content="Andrew Hao">
+
+  
+  <meta name="description" content="One of the confusing aspects about working with streams is diving into
+Rx operators that take a stream and fan out into multiple streams. Is your &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://www.g9labs.com/2016/02/17/partitioning-rxjs-streams-adventures-in-nested-observables-with-groupby-and-flatmap">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="The Sweet Spot" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-2330913-9']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">The Sweet Spot</a></h1>
+  
+    <h2>Andrew Hao's thoughts about software engineering, design, and anything shiny.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:www.g9labs.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/notes">Notes</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Partitioning RxJS streams: adventures in nested Observables with groupBy() and flatMap()</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2016-02-17T22:47:00-08:00" pubdate data-updated="true">Feb 17<span>th</span>, 2016</time>
+        
+         | <a href="#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>One of the confusing aspects about working with streams is diving into
+Rx operators that take a stream and fan out into multiple streams.</p>
+
+<p>Is your head exploding yet?</p>
+
+<h2>The problem:</h2>
+
+<p>Let&rsquo;s dive into a problem I ran into while working on a personal
+project:</p>
+
+<p>The task at hand is to take a list of GPS moving point data and
+partition the group data into multiple clusters of points, count up each
+group, then return the aggregate stats. As a cyclist is moving, I want
+to know how often they are moving at that specific velocity (speed).</p>
+
+<p>Our weapon of choice is the <a href="http://reactivex.io/documentation/operators/groupby.html">RxJS groupBy() function</a>,
+which groups like stream values based on a key value you define.</p>
+
+<p><a href="http://reactivex.io/documentation/operators/groupby.html"><img src="http://reactivex.io/documentation/operators/images/groupBy.c.png" alt="Image of groupBy() at work, with marbles." /></a></p>
+
+<p>OK. Easy enough. So my implementation looked something like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">gpsPointStream</span>
+</span><span class='line'><span class="p">.</span><span class="nx">groupBy</span><span class="p">((</span><span class="nx">point</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">point</span><span class="p">.</span><span class="nx">velocity</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The supplied <code>(point) =&gt; point.velocity</code> function determines the <code>index</code>
+value for the supplied event, which then 1) creates a new Observable
+sequence for that specific <code>index</code> value, if it doesn&rsquo;t exist, or 2)
+assigns your event to an existing Observable sequence.</p>
+
+<p>Let&rsquo;s illustrate:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">src</span><span class="o">:</span>     <span class="o">--</span> <span class="p">{</span> <span class="nx">velocity</span><span class="o">:</span> <span class="mi">0</span> <span class="p">}</span> <span class="o">------------</span> <span class="p">{</span> <span class="nx">velocity</span><span class="o">:</span> <span class="mf">0.1</span> <span class="p">}</span> <span class="o">---------------------------------------</span> <span class="p">{</span> <span class="nx">velocity</span><span class="o">:</span> <span class="mi">0</span> <span class="p">}</span> <span class="o">--&gt;</span>
+</span><span class='line'><span class="nx">groupBy</span><span class="o">:</span> <span class="o">--</span> <span class="p">[{</span> <span class="nx">Observable</span> <span class="nx">index</span><span class="o">:</span> <span class="mi">0</span> <span class="p">}]</span> <span class="o">--</span> <span class="p">[</span> <span class="p">{</span> <span class="nx">Observable</span> <span class="nx">index</span><span class="o">:</span> <span class="mi">0</span> <span class="p">},</span> <span class="p">{</span> <span class="nx">Observable</span> <span class="nx">index</span><span class="o">:</span> <span class="mf">0.1</span> <span class="p">}</span> <span class="p">]</span> <span class="o">--</span> <span class="p">[</span> <span class="p">{</span> <span class="nx">Observable</span> <span class="nx">index</span><span class="o">:</span> <span class="mi">0</span> <span class="nx">count</span><span class="o">:</span> <span class="mi">2</span> <span class="p">},</span> <span class="p">{</span> <span class="nx">Observable</span> <span class="nx">index</span><span class="o">:</span> <span class="mf">0.1</span> <span class="p">}</span> <span class="p">]</span> <span class="o">--&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Never fear, <code>flatMap()</code> to the rescue.</h2>
+
+<p>So the story turns to our hero
+<a href="http://reactivex.io/documentation/operators/flatmap.html"><code>flatMap()</code></a>, which as it turns out is
+specifically tuned to deal with issues of dealing with multiple streams.</p>
+
+<p><a href="http://reactivex.io/documentation/operators/flatmap.html"><img src="http://reactivex.io/documentation/operators/images/flatMap.c.png" alt="Marble diagram for flatMap" /></a></p>
+
+<p><code>flatMap</code> will take a supplied function as its argument, which is the
+operation to apply to each argument within the supplied stream.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">gpsPointStream</span>
+</span><span class='line'><span class="p">.</span><span class="nx">groupBy</span><span class="p">((</span><span class="nx">point</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">point</span><span class="p">.</span><span class="nx">velocity</span><span class="p">)</span>
+</span><span class='line'><span class="p">.</span><span class="nx">flatMap</span><span class="p">((</span><span class="nx">group</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">return</span> <span class="nx">group</span><span class="p">.</span><span class="nx">scan</span><span class="p">((</span><span class="nx">h</span><span class="p">,</span> <span class="nx">v</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">h</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+</span><span class='line'>              <span class="p">.</span><span class="nx">zip</span><span class="p">(</span><span class="nx">Observable</span><span class="p">.</span><span class="nx">just</span><span class="p">(</span><span class="nx">group</span><span class="p">.</span><span class="nx">index</span><span class="p">))</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">src</span><span class="o">:</span>     <span class="o">--</span> <span class="p">{</span> <span class="nx">velocity</span><span class="o">:</span> <span class="mi">0</span> <span class="p">}</span> <span class="o">------------</span> <span class="p">{</span> <span class="nx">velocity</span><span class="o">:</span> <span class="mf">0.1</span> <span class="p">}</span> <span class="o">---------------------------------------</span> <span class="p">{</span> <span class="nx">velocity</span><span class="o">:</span> <span class="mi">0</span> <span class="p">}</span> <span class="o">----&gt;</span>
+</span><span class='line'><span class="nx">groupBy</span><span class="o">:</span> <span class="o">--</span> <span class="p">[{</span> <span class="nx">Observable</span> <span class="nx">index</span><span class="o">:</span> <span class="mi">0</span> <span class="p">}]</span> <span class="o">--</span> <span class="p">[</span> <span class="p">{</span> <span class="nx">Observable</span> <span class="nx">index</span><span class="o">:</span> <span class="mi">0</span> <span class="p">},</span> <span class="p">{</span> <span class="nx">Observable</span> <span class="nx">index</span><span class="o">:</span> <span class="mf">0.1</span> <span class="p">}</span> <span class="p">]</span> <span class="o">--</span> <span class="p">[</span> <span class="p">{</span> <span class="nx">Observable</span> <span class="nx">index</span><span class="o">:</span> <span class="mi">0</span> <span class="nx">count</span><span class="o">:</span> <span class="mi">2</span> <span class="p">},</span> <span class="p">{</span> <span class="nx">Observable</span> <span class="nx">index</span><span class="o">:</span> <span class="mf">0.1</span> <span class="p">}</span> <span class="p">]</span> <span class="o">--&gt;</span>
+</span><span class='line'><span class="nx">flatMap</span><span class="o">:</span> <span class="o">--</span> <span class="p">[</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span> <span class="p">]</span> <span class="o">-------------------</span> <span class="p">[</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">0.1</span> <span class="p">]</span> <span class="o">--------------------------------------------</span> <span class="p">[</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span> <span class="p">]</span> <span class="o">--&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>What just happened here?</p>
+
+<p>I specified a merging function for the <code>flatMap()</code> stream, which
+performed the <code>scan()</code> counting aggregation on my group before merging the
+stream back into the main stream. I threw in a <code>zip</code>, which annotated my
+aggregate count value with a record of the group index (velocity) that
+this value was computed for.</p>
+
+<h2>Compare it to imperative</h2>
+
+<p>The equivalent of <code>groupBy</code>/<code>flatMap</code> in imperative programming is, quite
+literally, just <code>_.groupBy()</code> and <code>_.flatMap()</code>. With a few key
+differences. Here it is in <a href="https://lodash.com/docs#groupBy">lodash</a>:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="kd">var</span> <span class="nx">grouped</span> <span class="o">=</span> <span class="nx">_</span><span class="p">([</span> <span class="p">{</span> <span class="nx">velocity</span><span class="o">:</span> <span class="mi">0</span> <span class="p">},</span> <span class="p">{</span> <span class="nx">velocity</span><span class="o">:</span> <span class="mf">0.1</span> <span class="p">},</span> <span class="p">{</span> <span class="nx">velocity</span><span class="o">:</span> <span class="mi">0</span> <span class="p">}</span> <span class="p">])</span>
+</span><span class='line'><span class="p">.</span><span class="nx">groupBy</span><span class="p">((</span><span class="nx">point</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">point</span><span class="p">.</span><span class="nx">velocity</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">grouped</span><span class="p">.</span><span class="nx">value</span><span class="p">()</span>
+</span><span class='line'><span class="c1">// { 0: [ { velocity: 0 }, { velocity: 0 } ], 0.1: [ { velocity: 0.1 } ] }</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">var</span> <span class="nx">flatmapped</span> <span class="o">=</span> <span class="nx">grouped</span><span class="p">.</span><span class="nx">flatMap</span><span class="p">((</span><span class="nx">v</span><span class="p">,</span> <span class="nx">k</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">return</span> <span class="p">[</span> <span class="p">[</span><span class="nx">v</span><span class="p">.</span><span class="nx">length</span><span class="p">,</span> <span class="nx">k</span><span class="p">]</span> <span class="p">]</span>
+</span><span class='line'>  <span class="p">})</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">flatmapped</span><span class="p">.</span><span class="nx">value</span><span class="p">()</span>
+</span><span class='line'><span class="c1">// [[2, &quot;0&quot;], [1, &quot;0.1&quot;]]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>So in the end, the end result was the same with one crucial difference &ndash;
+our Observable, reactive version was able to take intermediate accounts
+into time and perform an intermediate calculation as data was flowing
+in. This allowed us to generate an intermediate count for the &ldquo;0&rdquo; velocity
+group.</p>
+
+<h2>Takeaways</h2>
+
+<ul>
+<li>When you want to fan out a stream into groups or partitions based on a
+specific stream value, turn to
+<a href="https://github.com/Reactive-Extensions/RxJS/blob/master/doc/api/core/operators/groupby.md"><code>groupBy</code></a>.</li>
+<li>When you have a need to combine a stream-of-streams, you want to look at
+<a href="https://github.com/Reactive-Extensions/RxJS/blob/master/doc/api/core/operators/selectmany.md"><code>flatMap</code></a>. You may also consider looking at <a href="https://github.com/Reactive-Extensions/RxJS/blob/master/doc/api/core/operators/concatmap.md"><code>concatMap</code></a>, a close cousin of <code>flatMap</code>.</li>
+<li>Reactive programming gives you more expressive abilities to reason
+about time and event ordering. You just have to tilt your head a little
+bit.</li>
+</ul>
+
+
+<h2>Further reading:</h2>
+
+<ul>
+<li><a href="http://blogs.microsoft.co.il/iblogger/2015/08/11/animations-of-rx-operators-groupby/">http://blogs.microsoft.co.il/iblogger/2015/08/11/animations-of-rx-operators-groupby/</a></li>
+</ul>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Andrew Hao</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2016-02-17T22:47:00-08:00" pubdate data-updated="true">Feb 17<span>th</span>, 2016</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/category/observables/'>Observables</a>, <a class='category' href='/category/rxjs/'>RxJS</a>, <a class='category' href='/category/streams/'>Streams</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://www.g9labs.com/2016/02/17/partitioning-rxjs-streams-adventures-in-nested-observables-with-groupby-and-flatmap/" data-via="andrewhao" data-counturl="http://www.g9labs.com/2016/02/17/partitioning-rxjs-streams-adventures-in-nested-observables-with-groupby-and-flatmap/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/2015/09/27/strange-loop-2015-reflections/" title="Previous Post: Strange Loop 2015: Notes & Reflections">&laquo; Strange Loop 2015: Notes & Reflections</a>
+      
+      
+        <a class="basic-alignment right" href="/2016/03/21/lossless-rate-limiting-with-rxjs/" title="Next Post: Lossless rate limiting with RxJS">Lossless rate limiting with RxJS &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2016/03/21/lossless-rate-limiting-with-rxjs/">Lossless rate limiting with RxJS</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2016/02/17/partitioning-rxjs-streams-adventures-in-nested-observables-with-groupby-and-flatmap/">Partitioning RxJS streams: adventures in nested Observables with groupBy() and flatMap()</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2015/09/27/strange-loop-2015-reflections/">Strange Loop 2015: Notes & Reflections</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2015/06/29/notes-on-performance-tuning-a-puma-server/">Notes on performance tuning a Puma server</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2015/06/01/toolbox-learning-swift-and-viper/">Toolbox: learning Swift and VIPER</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/andrewhao">@andrewhao</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'andrewhao',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2016 - Andrew Hao -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'g9labs';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://www.g9labs.com/2016/02/17/partitioning-rxjs-streams-adventures-in-nested-observables-with-groupby-and-flatmap/';
+        var disqus_url = 'http://www.g9labs.com/2016/02/17/partitioning-rxjs-streams-adventures-in-nested-observables-with-groupby-and-flatmap/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

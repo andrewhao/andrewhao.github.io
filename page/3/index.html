@@ -9,8 +9,7 @@
   <meta name="author" content="Andrew Hao">
 
   
-  <meta name="description" content="Rocket Fuelled Cucumbers
-View more presentations from Joseph Wilk One thing the Blurb devs have been discussing is how we can speed up our test &hellip;">
+  <meta name="description" content="I&rsquo;ve been hitting a lot of &ldquo;Maximum file limit exceeded&rdquo; dialogs after a long day at work &mdash; at any point in time I&rsquo;ve &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -79,6 +78,71 @@ View more presentations from Joseph Wilk One thing the Blurb devs have been disc
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2012/06/20/updating-max-file-limit-on-osx-lion/">Updating max file limit on OSX Lion</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-06-20T02:28:13-07:00" pubdate data-updated="true">Jun 20<span>th</span>, 2012</time>
+        
+         | <a href="/2012/06/20/updating-max-file-limit-on-osx-lion/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I&rsquo;ve been hitting a lot of &ldquo;Maximum file limit exceeded&rdquo; dialogs after a long day at work &mdash; at any point in time I&rsquo;ve got a kajillion Chrome tabs open, five or six Rails envs running (for dev and test) + Guard/Spork actively watching tests, and Sublime with another kajillion tabs open.</p>
+
+<p>Turns out that OSX limits the number of open file descriptors per process to 256. Time to bump up the limit:</p>
+
+<p>First, check out your current file limit:</p>
+
+<p><code>$ launchctl limit</code></p>
+
+<pre><code>    cpu         unlimited      unlimited      
+    filesize    unlimited      unlimited      
+    data        unlimited      unlimited      
+    stack       8388608        67104768       
+    core        0              unlimited      
+    rss         unlimited      unlimited      
+    memlock     unlimited      unlimited      
+    maxproc     709            1064           
+    maxfiles    256            unlimited
+</code></pre>
+
+<p>Okay, let&rsquo;s crank &lsquo;er up. First let&rsquo;s create <code>/etc/launchctl.conf</code></p>
+
+<p><code>$ sudo touch /etc/launchctl.conf</code></p>
+
+<p>And let&rsquo;s open it with your editor of choice. Add the following line to the new file:</p>
+
+<p><code>limit maxfiles 16384 32768</code></p>
+
+<p>Restart your computer. Boom. Easy.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -653,48 +717,6 @@ end
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/2011/06/15/brute-labs-ux-project-studentsconnect/">BRUTE LABS UX project: StudentsConnect</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-06-15T02:01:42-07:00" pubdate data-updated="true">Jun 15<span>th</span>, 2011</time>
-        
-         | <a href="/2011/06/15/brute-labs-ux-project-studentsconnect/#disqus_thread">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I&rsquo;m on a team with <a href="http://www.brutelabs.org">BRUTE LABS</a>, a volunteer-led design agency working on StudentsConnect, a prototype project making chatroulette-style interactions connecting students from the global North and South. Here&rsquo;s a UX flow we worked on:</p>
-
-<p><strong><a href="http://www.slideshare.net/andrewhao/brute-labs-wireframes">BRUTE LABS &ndash; StudentsConnect UX</a></strong></p>
-
-<p>View more <a href="http://www.slideshare.net/">presentations</a> from <a href="http://www.slideshare.net/andrewhao">Andrew Hao</a></p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/page/4/">&larr; Older</a>
@@ -712,6 +734,14 @@ end
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/2016/03/21/lossless-rate-limiting-with-rxjs/">Lossless rate limiting with RxJS</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2016/02/17/partitioning-rxjs-streams-adventures-in-nested-observables-with-groupby-and-flatmap/">Partitioning RxJS streams: adventures in nested Observables with groupBy() and flatMap()</a>
+      </li>
+    
+      <li class="post">
         <a href="/2015/09/27/strange-loop-2015-reflections/">Strange Loop 2015: Notes & Reflections</a>
       </li>
     
@@ -721,14 +751,6 @@ end
     
       <li class="post">
         <a href="/2015/06/01/toolbox-learning-swift-and-viper/">Toolbox: learning Swift and VIPER</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2015/04/30/building-gpx-stats-through-frp-principles-on-bacon-dot-js/">Building GPX stats through FRP principles with Bacon.js</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2015/03/23/implementing-ddd-context-maps/">Implementing DDD: Context Maps</a>
       </li>
     
   </ul>
@@ -773,7 +795,7 @@ end
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2015 - Andrew Hao -
+  Copyright &copy; 2016 - Andrew Hao -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 
