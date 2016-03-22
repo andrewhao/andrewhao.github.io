@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Streams | The Sweet Spot]]></title>
   <link href="http://www.g9labs.com/category/streams/atom.xml" rel="self"/>
   <link href="http://www.g9labs.com/"/>
-  <updated>2016-03-21T13:32:22-07:00</updated>
+  <updated>2016-03-22T13:58:13-07:00</updated>
   <id>http://www.g9labs.com/</id>
   <author>
     <name><![CDATA[Andrew Hao]]></name>
@@ -45,16 +45,16 @@ gpsPointStream
 .groupBy((point) =&gt; point.velocity)
 </code></p>
 
-<p>The supplied <code>(point) =&gt; point.velocity</code> function determines the <code>index</code>
+<p>The supplied <code>(point) =&gt; point.velocity</code> function determines the <code>key</code>
 value for the supplied event, which then 1) creates a new Observable
-sequence for that specific <code>index</code> value, if it doesn&rsquo;t exist, or 2)
+sequence for that specific <code>key</code> value, if it doesn&rsquo;t exist, or 2)
 assigns your event to an existing Observable sequence.</p>
 
 <p>Let&rsquo;s illustrate:</p>
 
 <p><code>
-src:     -- { velocity: 0 } ------------ { velocity: 0.1 } --------------------------------------- { velocity: 0 } --&gt;
-groupBy: -- [{ Observable index: 0 }] -- [ { Observable index: 0 }, { Observable index: 0.1 } ] -- [ { Observable index: 0 count: 2 }, { Observable index: 0.1 } ] --&gt;
+src:     -- { velocity: 0 } ---------- { velocity: 0.1 } ----------------------------------- { velocity: 0 } --&gt;
+groupBy: -- [{ Observable key: 0 }] -- [ { Observable key: 0 }, { Observable key: 0.1 } ] -- [ { Observable key: 0 count: 2 }, { Observable key: 0.1 } ] --&gt;
 </code></p>
 
 <h2>Never fear, <code>flatMap()</code> to the rescue.</h2>
@@ -74,16 +74,16 @@ gpsPointStream
 .flatMap((group) => {
   return group.scan((h, v) => h + 1, 0)</p>
 
-<pre><code>          .zip(Observable.just(group.index))
+<pre><code>          .zip(Observable.just(group.key))
 </code></pre>
 
 <p>});
 ```</p>
 
 <p><code>
-src:     -- { velocity: 0 } ------------ { velocity: 0.1 } --------------------------------------- { velocity: 0 } ----&gt;
-groupBy: -- [{ Observable index: 0 }] -- [ { Observable index: 0 }, { Observable index: 0.1 } ] -- [ { Observable index: 0 count: 2 }, { Observable index: 0.1 } ] --&gt;
-flatMap: -- [ 1, 0 ] ------------------- [ 1, 0.1 ] -------------------------------------------- [ 2, 0 ] --&gt;
+src:     -- { velocity: 0 } ---------- { velocity: 0.1 } ----------------------------------- { velocity: 0 } ----&gt;
+groupBy: -- [{ Observable key: 0 }] -- [ { Observable key: 0 }, { Observable key: 0.1 } ] -- [ { Observable key: 0 count: 2 }, { Observable key: 0.1 } ] --&gt;
+flatMap: -- [ 1, 0 ] ----------------- [ 1, 0.1 ] ------------------------------------------ [ 2, 0 ] --&gt;
 </code></p>
 
 <p>What just happened here?</p>
@@ -91,7 +91,7 @@ flatMap: -- [ 1, 0 ] ------------------- [ 1, 0.1 ] ----------------------------
 <p>I specified a merging function for the <code>flatMap()</code> stream, which
 performed the <code>scan()</code> counting aggregation on my group before merging the
 stream back into the main stream. I threw in a <code>zip</code>, which annotated my
-aggregate count value with a record of the group index (velocity) that
+aggregate count value with a record of the group key (velocity) that
 this value was computed for.</p>
 
 <h2>Compare it to imperative</h2>
@@ -141,6 +141,11 @@ bit.</li>
 <li><a href="http://blogs.microsoft.co.il/iblogger/2015/08/11/animations-of-rx-operators-groupby/">http://blogs.microsoft.co.il/iblogger/2015/08/11/animations-of-rx-operators-groupby/</a></li>
 </ul>
 
+
+<p><strong>Update: 2016/03/22</strong></p>
+
+<p>Updated typo where the <code>index</code> variable on a GroupedObservable was
+changed to correctly be <code>key</code>.</p>
 ]]></content>
   </entry>
   

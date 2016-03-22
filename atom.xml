@@ -4,7 +4,7 @@
   <title><![CDATA[The Sweet Spot]]></title>
   <link href="http://www.g9labs.com/atom.xml" rel="self"/>
   <link href="http://www.g9labs.com/"/>
-  <updated>2016-03-21T13:32:22-07:00</updated>
+  <updated>2016-03-22T13:58:13-07:00</updated>
   <id>http://www.g9labs.com/</id>
   <author>
     <name><![CDATA[Andrew Hao]]></name>
@@ -122,17 +122,17 @@ which groups like stream values based on a key value you define.</p>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>The supplied <code>(point) =&gt; point.velocity</code> function determines the <code>index</code>
+<p>The supplied <code>(point) =&gt; point.velocity</code> function determines the <code>key</code>
 value for the supplied event, which then 1) creates a new Observable
-sequence for that specific <code>index</code> value, if it doesn&rsquo;t exist, or 2)
+sequence for that specific <code>key</code> value, if it doesn&rsquo;t exist, or 2)
 assigns your event to an existing Observable sequence.</p>
 
 <p>Let&rsquo;s illustrate:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">src</span><span class="o">:</span>     <span class="o">--</span> <span class="p">{</span> <span class="nx">velocity</span><span class="o">:</span> <span class="mi">0</span> <span class="p">}</span> <span class="o">------------</span> <span class="p">{</span> <span class="nx">velocity</span><span class="o">:</span> <span class="mf">0.1</span> <span class="p">}</span> <span class="o">---------------------------------------</span> <span class="p">{</span> <span class="nx">velocity</span><span class="o">:</span> <span class="mi">0</span> <span class="p">}</span> <span class="o">--&gt;</span>
-</span><span class='line'><span class="nx">groupBy</span><span class="o">:</span> <span class="o">--</span> <span class="p">[{</span> <span class="nx">Observable</span> <span class="nx">index</span><span class="o">:</span> <span class="mi">0</span> <span class="p">}]</span> <span class="o">--</span> <span class="p">[</span> <span class="p">{</span> <span class="nx">Observable</span> <span class="nx">index</span><span class="o">:</span> <span class="mi">0</span> <span class="p">},</span> <span class="p">{</span> <span class="nx">Observable</span> <span class="nx">index</span><span class="o">:</span> <span class="mf">0.1</span> <span class="p">}</span> <span class="p">]</span> <span class="o">--</span> <span class="p">[</span> <span class="p">{</span> <span class="nx">Observable</span> <span class="nx">index</span><span class="o">:</span> <span class="mi">0</span> <span class="nx">count</span><span class="o">:</span> <span class="mi">2</span> <span class="p">},</span> <span class="p">{</span> <span class="nx">Observable</span> <span class="nx">index</span><span class="o">:</span> <span class="mf">0.1</span> <span class="p">}</span> <span class="p">]</span> <span class="o">--&gt;</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">src</span><span class="o">:</span>     <span class="o">--</span> <span class="p">{</span> <span class="nx">velocity</span><span class="o">:</span> <span class="mi">0</span> <span class="p">}</span> <span class="o">----------</span> <span class="p">{</span> <span class="nx">velocity</span><span class="o">:</span> <span class="mf">0.1</span> <span class="p">}</span> <span class="o">-----------------------------------</span> <span class="p">{</span> <span class="nx">velocity</span><span class="o">:</span> <span class="mi">0</span> <span class="p">}</span> <span class="o">--&gt;</span>
+</span><span class='line'><span class="nx">groupBy</span><span class="o">:</span> <span class="o">--</span> <span class="p">[{</span> <span class="nx">Observable</span> <span class="nx">key</span><span class="o">:</span> <span class="mi">0</span> <span class="p">}]</span> <span class="o">--</span> <span class="p">[</span> <span class="p">{</span> <span class="nx">Observable</span> <span class="nx">key</span><span class="o">:</span> <span class="mi">0</span> <span class="p">},</span> <span class="p">{</span> <span class="nx">Observable</span> <span class="nx">key</span><span class="o">:</span> <span class="mf">0.1</span> <span class="p">}</span> <span class="p">]</span> <span class="o">--</span> <span class="p">[</span> <span class="p">{</span> <span class="nx">Observable</span> <span class="nx">key</span><span class="o">:</span> <span class="mi">0</span> <span class="nx">count</span><span class="o">:</span> <span class="mi">2</span> <span class="p">},</span> <span class="p">{</span> <span class="nx">Observable</span> <span class="nx">key</span><span class="o">:</span> <span class="mf">0.1</span> <span class="p">}</span> <span class="p">]</span> <span class="o">--&gt;</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -157,7 +157,7 @@ operation to apply to each argument within the supplied stream.</p>
 </span><span class='line'><span class="p">.</span><span class="nx">groupBy</span><span class="p">((</span><span class="nx">point</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">point</span><span class="p">.</span><span class="nx">velocity</span><span class="p">)</span>
 </span><span class='line'><span class="p">.</span><span class="nx">flatMap</span><span class="p">((</span><span class="nx">group</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
 </span><span class='line'>  <span class="k">return</span> <span class="nx">group</span><span class="p">.</span><span class="nx">scan</span><span class="p">((</span><span class="nx">h</span><span class="p">,</span> <span class="nx">v</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">h</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-</span><span class='line'>              <span class="p">.</span><span class="nx">zip</span><span class="p">(</span><span class="nx">Observable</span><span class="p">.</span><span class="nx">just</span><span class="p">(</span><span class="nx">group</span><span class="p">.</span><span class="nx">index</span><span class="p">))</span>
+</span><span class='line'>              <span class="p">.</span><span class="nx">zip</span><span class="p">(</span><span class="nx">Observable</span><span class="p">.</span><span class="nx">just</span><span class="p">(</span><span class="nx">group</span><span class="p">.</span><span class="nx">key</span><span class="p">))</span>
 </span><span class='line'><span class="p">});</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -167,9 +167,9 @@ operation to apply to each argument within the supplied stream.</p>
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">src</span><span class="o">:</span>     <span class="o">--</span> <span class="p">{</span> <span class="nx">velocity</span><span class="o">:</span> <span class="mi">0</span> <span class="p">}</span> <span class="o">------------</span> <span class="p">{</span> <span class="nx">velocity</span><span class="o">:</span> <span class="mf">0.1</span> <span class="p">}</span> <span class="o">---------------------------------------</span> <span class="p">{</span> <span class="nx">velocity</span><span class="o">:</span> <span class="mi">0</span> <span class="p">}</span> <span class="o">----&gt;</span>
-</span><span class='line'><span class="nx">groupBy</span><span class="o">:</span> <span class="o">--</span> <span class="p">[{</span> <span class="nx">Observable</span> <span class="nx">index</span><span class="o">:</span> <span class="mi">0</span> <span class="p">}]</span> <span class="o">--</span> <span class="p">[</span> <span class="p">{</span> <span class="nx">Observable</span> <span class="nx">index</span><span class="o">:</span> <span class="mi">0</span> <span class="p">},</span> <span class="p">{</span> <span class="nx">Observable</span> <span class="nx">index</span><span class="o">:</span> <span class="mf">0.1</span> <span class="p">}</span> <span class="p">]</span> <span class="o">--</span> <span class="p">[</span> <span class="p">{</span> <span class="nx">Observable</span> <span class="nx">index</span><span class="o">:</span> <span class="mi">0</span> <span class="nx">count</span><span class="o">:</span> <span class="mi">2</span> <span class="p">},</span> <span class="p">{</span> <span class="nx">Observable</span> <span class="nx">index</span><span class="o">:</span> <span class="mf">0.1</span> <span class="p">}</span> <span class="p">]</span> <span class="o">--&gt;</span>
-</span><span class='line'><span class="nx">flatMap</span><span class="o">:</span> <span class="o">--</span> <span class="p">[</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span> <span class="p">]</span> <span class="o">-------------------</span> <span class="p">[</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">0.1</span> <span class="p">]</span> <span class="o">--------------------------------------------</span> <span class="p">[</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span> <span class="p">]</span> <span class="o">--&gt;</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">src</span><span class="o">:</span>     <span class="o">--</span> <span class="p">{</span> <span class="nx">velocity</span><span class="o">:</span> <span class="mi">0</span> <span class="p">}</span> <span class="o">----------</span> <span class="p">{</span> <span class="nx">velocity</span><span class="o">:</span> <span class="mf">0.1</span> <span class="p">}</span> <span class="o">-----------------------------------</span> <span class="p">{</span> <span class="nx">velocity</span><span class="o">:</span> <span class="mi">0</span> <span class="p">}</span> <span class="o">----&gt;</span>
+</span><span class='line'><span class="nx">groupBy</span><span class="o">:</span> <span class="o">--</span> <span class="p">[{</span> <span class="nx">Observable</span> <span class="nx">key</span><span class="o">:</span> <span class="mi">0</span> <span class="p">}]</span> <span class="o">--</span> <span class="p">[</span> <span class="p">{</span> <span class="nx">Observable</span> <span class="nx">key</span><span class="o">:</span> <span class="mi">0</span> <span class="p">},</span> <span class="p">{</span> <span class="nx">Observable</span> <span class="nx">key</span><span class="o">:</span> <span class="mf">0.1</span> <span class="p">}</span> <span class="p">]</span> <span class="o">--</span> <span class="p">[</span> <span class="p">{</span> <span class="nx">Observable</span> <span class="nx">key</span><span class="o">:</span> <span class="mi">0</span> <span class="nx">count</span><span class="o">:</span> <span class="mi">2</span> <span class="p">},</span> <span class="p">{</span> <span class="nx">Observable</span> <span class="nx">key</span><span class="o">:</span> <span class="mf">0.1</span> <span class="p">}</span> <span class="p">]</span> <span class="o">--&gt;</span>
+</span><span class='line'><span class="nx">flatMap</span><span class="o">:</span> <span class="o">--</span> <span class="p">[</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span> <span class="p">]</span> <span class="o">-----------------</span> <span class="p">[</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">0.1</span> <span class="p">]</span> <span class="o">------------------------------------------</span> <span class="p">[</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span> <span class="p">]</span> <span class="o">--&gt;</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -178,7 +178,7 @@ operation to apply to each argument within the supplied stream.</p>
 <p>I specified a merging function for the <code>flatMap()</code> stream, which
 performed the <code>scan()</code> counting aggregation on my group before merging the
 stream back into the main stream. I threw in a <code>zip</code>, which annotated my
-aggregate count value with a record of the group index (velocity) that
+aggregate count value with a record of the group key (velocity) that
 this value was computed for.</p>
 
 <h2>Compare it to imperative</h2>
@@ -240,6 +240,11 @@ bit.</li>
 <li><a href="http://blogs.microsoft.co.il/iblogger/2015/08/11/animations-of-rx-operators-groupby/">http://blogs.microsoft.co.il/iblogger/2015/08/11/animations-of-rx-operators-groupby/</a></li>
 </ul>
 
+
+<p><strong>Update: 2016/03/22</strong></p>
+
+<p>Updated typo where the <code>index</code> variable on a GroupedObservable was
+changed to correctly be <code>key</code>.</p>
 ]]></content>
   </entry>
   
