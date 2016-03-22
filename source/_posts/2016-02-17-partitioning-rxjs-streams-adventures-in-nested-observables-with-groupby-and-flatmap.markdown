@@ -36,16 +36,16 @@ gpsPointStream
 .groupBy((point) => point.velocity)
 ```
 
-The supplied `(point) => point.velocity` function determines the `index`
+The supplied `(point) => point.velocity` function determines the `key`
 value for the supplied event, which then 1) creates a new Observable
-sequence for that specific `index` value, if it doesn't exist, or 2)
+sequence for that specific `key` value, if it doesn't exist, or 2)
 assigns your event to an existing Observable sequence.
 
 Let's illustrate:
 
 ```
-src:     -- { velocity: 0 } ------------ { velocity: 0.1 } --------------------------------------- { velocity: 0 } -->
-groupBy: -- [{ Observable index: 0 }] -- [ { Observable index: 0 }, { Observable index: 0.1 } ] -- [ { Observable index: 0 count: 2 }, { Observable index: 0.1 } ] -->
+src:     -- { velocity: 0 } ---------- { velocity: 0.1 } ----------------------------------- { velocity: 0 } -->
+groupBy: -- [{ Observable key: 0 }] -- [ { Observable key: 0 }, { Observable key: 0.1 } ] -- [ { Observable key: 0 count: 2 }, { Observable key: 0.1 } ] -->
 ```
 
 ## Never fear, `flatMap()` to the rescue.
@@ -64,14 +64,14 @@ gpsPointStream
 .groupBy((point) => point.velocity)
 .flatMap((group) => {
   return group.scan((h, v) => h + 1, 0)
-              .zip(Observable.just(group.index))
+              .zip(Observable.just(group.key))
 });
 ```
 
 ```
-src:     -- { velocity: 0 } ------------ { velocity: 0.1 } --------------------------------------- { velocity: 0 } ---->
-groupBy: -- [{ Observable index: 0 }] -- [ { Observable index: 0 }, { Observable index: 0.1 } ] -- [ { Observable index: 0 count: 2 }, { Observable index: 0.1 } ] -->
-flatMap: -- [ 1, 0 ] ------------------- [ 1, 0.1 ] -------------------------------------------- [ 2, 0 ] -->
+src:     -- { velocity: 0 } ---------- { velocity: 0.1 } ----------------------------------- { velocity: 0 } ---->
+groupBy: -- [{ Observable key: 0 }] -- [ { Observable key: 0 }, { Observable key: 0.1 } ] -- [ { Observable key: 0 count: 2 }, { Observable key: 0.1 } ] -->
+flatMap: -- [ 1, 0 ] ----------------- [ 1, 0.1 ] ------------------------------------------ [ 2, 0 ] -->
 ```
 
 What just happened here?
@@ -79,7 +79,7 @@ What just happened here?
 I specified a merging function for the `flatMap()` stream, which
 performed the `scan()` counting aggregation on my group before merging the
 stream back into the main stream. I threw in a `zip`, which annotated my
-aggregate count value with a record of the group index (velocity) that
+aggregate count value with a record of the group key (velocity) that
 this value was computed for.
 
 ## Compare it to imperative
@@ -124,4 +124,7 @@ bit.
 
 * http://blogs.microsoft.co.il/iblogger/2015/08/11/animations-of-rx-operators-groupby/
 
+__Update: 2016/03/22__
 
+Updated typo where the `index` variable on a GroupedObservable was
+changed to correctly be `key`.
