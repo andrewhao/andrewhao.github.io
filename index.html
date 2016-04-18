@@ -9,10 +9,8 @@
   <meta name="author" content="Andrew Hao">
 
   
-  <meta name="description" content="Much of RxJS involves working with
-backpressure &ndash; how to reconcile
-streams that emit/process data at different rates, without overloading
-the &hellip;">
+  <meta name="description" content="As follows are some code snippets for using Knex.js for executing
+Postgres and PostGIS queries. Execute raw SQL in migration I often find this useful &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -81,6 +79,132 @@ the &hellip;">
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2016/04/08/knex-dot-js-and-bookshelf-dot-js-cheat-sheet/">Knex.js and PostGIS cheat sheet</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2016-04-08T12:33:00-07:00" pubdate data-updated="true">Apr 8<span>th</span>, 2016</time>
+        
+         | <a href="/2016/04/08/knex-dot-js-and-bookshelf-dot-js-cheat-sheet/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>As follows are some code snippets for using <a href="http://knexjs.org/">Knex.js</a> for executing
+Postgres and PostGIS queries.</p>
+
+<h3>Execute raw SQL in migration</h3>
+
+<p>I often find this useful for fancy SQL, like creating views.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">exports</span><span class="p">.</span><span class="nx">up</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">knex</span><span class="p">,</span> <span class="nx">Promise</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">return</span> <span class="nx">knex</span><span class="p">.</span><span class="nx">raw</span><span class="p">(</span><span class="err">`</span><span class="nx">YOUR</span> <span class="nx">RAW</span> <span class="nx">SQL</span><span class="err">`</span><span class="p">);</span>
+</span><span class='line'><span class="p">};</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Add a PostGIS Point type to a table in a migration:</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="k">return</span> <span class="nx">knex</span><span class="p">.</span><span class="nx">schema</span><span class="p">.</span><span class="nx">table</span><span class="p">(</span><span class="s1">&#39;events&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">table</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">table</span><span class="p">.</span><span class="nx">specificType</span><span class="p">(</span><span class="s1">&#39;point&#39;</span><span class="p">,</span> <span class="s1">&#39;geometry(point, 4326)&#39;</span><span class="p">);</span>
+</span><span class='line'><span class="p">})</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Add a foreign key to another table.</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="k">return</span> <span class="nx">knex</span><span class="p">.</span><span class="nx">schema</span><span class="p">.</span><span class="nx">table</span><span class="p">(</span><span class="s1">&#39;events&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">table</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">table</span><span class="p">.</span><span class="nx">integer</span><span class="p">(</span><span class="s1">&#39;device_id&#39;</span><span class="p">).</span><span class="nx">references</span><span class="p">(</span><span class="s1">&#39;id&#39;</span><span class="p">).</span><span class="nx">inTable</span><span class="p">(</span><span class="s1">&#39;devices&#39;</span><span class="p">);</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Add a multi-column unique index</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="k">return</span> <span class="nx">knex</span><span class="p">.</span><span class="nx">schema</span><span class="p">.</span><span class="nx">table</span><span class="p">(</span><span class="s1">&#39;events&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">table</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">table</span><span class="p">.</span><span class="nx">unique</span><span class="p">([</span><span class="s1">&#39;start_time&#39;</span><span class="p">,</span> <span class="s1">&#39;end_time&#39;</span><span class="p">,</span> <span class="s1">&#39;start_location&#39;</span><span class="p">,</span> <span class="s1">&#39;end_location&#39;</span><span class="p">,</span> <span class="s1">&#39;distance_miles&#39;</span><span class="p">]);</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Find a collection</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">knex</span><span class="p">.</span><span class="nx">select</span><span class="p">(</span><span class="s1">&#39;*&#39;</span><span class="p">)</span>
+</span><span class='line'><span class="p">.</span><span class="nx">from</span><span class="p">(</span><span class="s1">&#39;participants&#39;</span><span class="p">)</span>
+</span><span class='line'><span class="p">.</span><span class="nx">where</span><span class="p">({</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;Jason&#39;</span> <span class="p">})</span>
+</span><span class='line'><span class="p">.</span><span class="nx">andWhere</span><span class="p">(</span><span class="s1">&#39;age&#39;</span><span class="p">,</span> <span class="s1">&#39;&gt;=&#39;</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Custom operations in SELECT clause</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">knex</span><span class="p">(</span><span class="s1">&#39;trips&#39;</span><span class="p">)</span>
+</span><span class='line'><span class="p">.</span><span class="nx">select</span><span class="p">(</span><span class="nx">knex</span><span class="p">.</span><span class="nx">raw</span><span class="p">(</span><span class="s1">&#39;miles * passengers as passenger_miles&#39;</span><span class="p">))</span>
+</span><span class='line'><span class="p">.</span><span class="nx">select</span><span class="p">(</span><span class="nx">knex</span><span class="p">.</span><span class="nx">raw</span><span class="p">(</span><span class="s2">&quot;CONCAT(&#39;Hello, &#39;, name) as greeting_message&quot;</span><span class="p">))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Return PostGIS data from a spatial column:</h3>
+
+<p>We use <a href="https://github.com/jfgodoy/knex-postgis">knex-postgis</a> to gain access to PostGIS functions in Postgres. Here, we return a &lsquo;point&rsquo; column with <code>ST_AsGeoJSON</code>:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="kr">const</span> <span class="nx">knexPostgis</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;knex-postgis&#39;</span><span class="p">)(</span><span class="nx">knex</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">knex</span><span class="p">(</span><span class="s1">&#39;events&#39;</span><span class="p">)</span>
+</span><span class='line'><span class="p">.</span><span class="nx">select</span><span class="p">(</span><span class="s1">&#39;*&#39;</span><span class="p">,</span> <span class="nx">knexPostgis</span><span class="p">.</span><span class="nx">asGeoJSON</span><span class="p">(</span><span class="s1">&#39;point&#39;</span><span class="p">));</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>See <a href="https://github.com/jfgodoy/knex-postgis">knex-postgis</a> documentation for a list of other PostGIS functions that are supported.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1840,80 +1964,6 @@ each container. You should see output that indicates that both our <code>web</co
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/2014/11/05/qcon-sf-2014/">Recap: QCon SF 2014</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-11-05T19:01:00-08:00" pubdate data-updated="true">Nov 5<span>th</span>, 2014</time>
-        
-         | <a href="/2014/11/05/qcon-sf-2014/#disqus_thread">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Blurb sent me off to QCon SF 2014 for three days.</p>
-
-<h2>Notes</h2>
-
-<p>I took a series of notes each day in attendance:</p>
-
-<ul>
-<li><a href="/notes/2014-11-03-qconsf-day-one.html">Day One: Architectures, Functional</a></li>
-<li><a href="/notes/2014-11-04-qconsf-day-two.html">Day Two: Rx Systems, API Platforms</a></li>
-<li><a href="/notes/2014-11-05-qconsf-day-three.html">Day Three: Microservices, Culture</a></li>
-</ul>
-
-
-<h2>Summary</h2>
-
-<ul>
-<li>Big trends in continuous delivery and deployment &mdash; deploy more often, smaller feedback loops</li>
-<li>A lot of emphasis on event driven architectures + microservices. Lots of emphasis on DDD as a design tool.</li>
-<li>Reactive systems with functional implementations were widely discussed as a scaling tool (backpressure-sensitive) and as a coordination tool between multiple async services.</li>
-<li>Big data/realtime streaming talks were interesting &mdash; my personal experience with them is limited, but it seems there is a debate over the merits of existing Lambda architecture practice.</li>
-<li>A lot of talk about microservice orchestration tools &mdash; acknowledging the pain of configuration and management of many services.</li>
-<li>Scala got a lotttt of attention. Probably because of its presence in bigger companies like Netflix, Twitter, LinkedIn. Wonder what smaller startups are using.</li>
-<li>Web Components were a big upcoming trend in frontend technologies. Strong modularization of views + behaviors in HTML documents.</li>
-</ul>
-
-
-<h2>Questions</h2>
-
-<ul>
-<li>If I could do a startup over again, would I begin an app in Rails? Where is the sweet spot for that sort of application architecture?</li>
-<li>How can I design systems such that they can be extractible into focused components/services as early as possible?</li>
-<li>How can we plan for failures (<a href="http://en.wikipedia.org/wiki/Fault_injection">fault injection</a>)?</li>
-<li>How does one implement change in software engineering organizations? Bottom-up (organic initiatives bubbling up through management) vs top-down (management/software leaders direct org to implement).</li>
-<li>How are we doing with encouraging women and minorities who traditionally are underrepresented in our industry?</li>
-<li>What are places in our hiring funnels that, unbeknownst to us, may be turning away or detracting women and minorities?</li>
-</ul>
-
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/page/2/">&larr; Older</a>
@@ -1929,6 +1979,10 @@ each container. You should see output that indicates that both our <code>web</co
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/2016/04/08/knex-dot-js-and-bookshelf-dot-js-cheat-sheet/">Knex.js and PostGIS cheat sheet</a>
+      </li>
+    
+      <li class="post">
         <a href="/2016/03/21/lossless-rate-limiting-with-rxjs/">Lossless rate limiting with RxJS</a>
       </li>
     
@@ -1942,10 +1996,6 @@ each container. You should see output that indicates that both our <code>web</co
     
       <li class="post">
         <a href="/2015/06/29/notes-on-performance-tuning-a-puma-server/">Notes on performance tuning a Puma server</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2015/06/01/toolbox-learning-swift-and-viper/">Toolbox: learning Swift and VIPER</a>
       </li>
     
   </ul>

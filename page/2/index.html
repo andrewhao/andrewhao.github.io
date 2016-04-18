@@ -9,7 +9,8 @@
   <meta name="author" content="Andrew Hao">
 
   
-  <meta name="description" content="If you&rsquo;re familiar with Conway&rsquo;s Law, it states: Any organization that designs a system (defined broadly) will produce a design whose &hellip;">
+  <meta name="description" content="Blurb sent me off to QCon SF 2014 for three days. Notes I took a series of notes each day in attendance: Day One: Architectures, Functional
+Day Two: &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -78,6 +79,80 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2014/11/05/qcon-sf-2014/">Recap: QCon SF 2014</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-11-05T19:01:00-08:00" pubdate data-updated="true">Nov 5<span>th</span>, 2014</time>
+        
+         | <a href="/2014/11/05/qcon-sf-2014/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Blurb sent me off to QCon SF 2014 for three days.</p>
+
+<h2>Notes</h2>
+
+<p>I took a series of notes each day in attendance:</p>
+
+<ul>
+<li><a href="/notes/2014-11-03-qconsf-day-one.html">Day One: Architectures, Functional</a></li>
+<li><a href="/notes/2014-11-04-qconsf-day-two.html">Day Two: Rx Systems, API Platforms</a></li>
+<li><a href="/notes/2014-11-05-qconsf-day-three.html">Day Three: Microservices, Culture</a></li>
+</ul>
+
+
+<h2>Summary</h2>
+
+<ul>
+<li>Big trends in continuous delivery and deployment &mdash; deploy more often, smaller feedback loops</li>
+<li>A lot of emphasis on event driven architectures + microservices. Lots of emphasis on DDD as a design tool.</li>
+<li>Reactive systems with functional implementations were widely discussed as a scaling tool (backpressure-sensitive) and as a coordination tool between multiple async services.</li>
+<li>Big data/realtime streaming talks were interesting &mdash; my personal experience with them is limited, but it seems there is a debate over the merits of existing Lambda architecture practice.</li>
+<li>A lot of talk about microservice orchestration tools &mdash; acknowledging the pain of configuration and management of many services.</li>
+<li>Scala got a lotttt of attention. Probably because of its presence in bigger companies like Netflix, Twitter, LinkedIn. Wonder what smaller startups are using.</li>
+<li>Web Components were a big upcoming trend in frontend technologies. Strong modularization of views + behaviors in HTML documents.</li>
+</ul>
+
+
+<h2>Questions</h2>
+
+<ul>
+<li>If I could do a startup over again, would I begin an app in Rails? Where is the sweet spot for that sort of application architecture?</li>
+<li>How can I design systems such that they can be extractible into focused components/services as early as possible?</li>
+<li>How can we plan for failures (<a href="http://en.wikipedia.org/wiki/Fault_injection">fault injection</a>)?</li>
+<li>How does one implement change in software engineering organizations? Bottom-up (organic initiatives bubbling up through management) vs top-down (management/software leaders direct org to implement).</li>
+<li>How are we doing with encouraging women and minorities who traditionally are underrepresented in our industry?</li>
+<li>What are places in our hiring funnels that, unbeknownst to us, may be turning away or detracting women and minorities?</li>
+</ul>
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1343,108 +1418,6 @@ post</a></p>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/2012/10/04/deploying-janky-on-ubuntu/">Deploying Janky on Ubuntu</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-10-04T03:29:58-07:00" pubdate data-updated="true">Oct 4<span>th</span>, 2012</time>
-        
-         | <a href="/2012/10/04/deploying-janky-on-ubuntu/#disqus_thread">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><a href="https://github.com/blog/1013-janky">Janky</a> is a Github-developed <a href="https://github.com/github/hubot">Hubot</a> + Jenkins control interface. It&rsquo;s developed to be deployed on Heroku. However, what if you need it to live on an internal VM? Here&rsquo;s how I got it running on a Ubuntu (12.04 Precise) VM.</p>
-
-<h2>Make sure you have the correct MySQL libs installed:</h2>
-
-<pre><code>sudo apt-get install mysql-server libmysqlclient-dev
-</code></pre>
-
-<h2>Clone janky from the <a href="https://github.com/github/janky">Github repository</a></h2>
-
-<pre><code>git clone https://github.com/github/janky.git
-cd janky
-</code></pre>
-
-<h2>Bootstrap your environment</h2>
-
-<p>The following steps are taken nearly verbatim from the &ldquo;Hacking&rdquo; section on the Janky README:</p>
-
-<pre><code>script/bootstrap
-
-mysqladmin -uroot create janky_development
-mysqladmin -uroot create janky_test
-
-RACK_ENV=development bin/rake db:migrate
-RACK_ENV=test bin/rake db:migrate
-
-RACK_ENV=development bundle exec rake db:seed
-</code></pre>
-
-<h2>Configure Thin</h2>
-
-<p>Open <code>Gemfile</code> in your text editor and add:</p>
-
-<pre><code>gem "foreman"
-</code></pre>
-
-<p>Then install it:</p>
-
-<pre><code>bundle install
-</code></pre>
-
-<p>Then create a Procfile:</p>
-
-<pre><code>touch Procfile
-</code></pre>
-
-<p>Open the Procfile in your text editor and add the following line:</p>
-
-<pre><code>web: bundle exec thin start -p $PORT
-</code></pre>
-
-<p>Add the JANKY_* variables to your environment according to the janky README. I use zsh, so I added these as export statements in my ~/.zshenv</p>
-
-<h2>Start your server</h2>
-
-<pre><code>bundle exec foreman start
-</code></pre>
-
-<p>Note that the server starts on port 5000 by default, and you can override it like so:</p>
-
-<pre><code>PORT=8080 bundle exec foreman start
-</code></pre>
-
-<h2>That&rsquo;s it!</h2>
-
-<p>Let me know how that works for you!</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/page/3/">&larr; Older</a>
@@ -1462,6 +1435,10 @@ RACK_ENV=development bundle exec rake db:seed
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/2016/04/08/knex-dot-js-and-bookshelf-dot-js-cheat-sheet/">Knex.js and PostGIS cheat sheet</a>
+      </li>
+    
+      <li class="post">
         <a href="/2016/03/21/lossless-rate-limiting-with-rxjs/">Lossless rate limiting with RxJS</a>
       </li>
     
@@ -1475,10 +1452,6 @@ RACK_ENV=development bundle exec rake db:seed
     
       <li class="post">
         <a href="/2015/06/29/notes-on-performance-tuning-a-puma-server/">Notes on performance tuning a Puma server</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2015/06/01/toolbox-learning-swift-and-viper/">Toolbox: learning Swift and VIPER</a>
       </li>
     
   </ul>

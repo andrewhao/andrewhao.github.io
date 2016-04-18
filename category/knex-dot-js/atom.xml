@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Knex.js | The Sweet Spot]]></title>
+  <link href="http://www.g9labs.com/category/knex-dot-js/atom.xml" rel="self"/>
+  <link href="http://www.g9labs.com/"/>
+  <updated>2016-04-18T15:46:19-07:00</updated>
+  <id>http://www.g9labs.com/</id>
+  <author>
+    <name><![CDATA[Andrew Hao]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Knex.js and PostGIS cheat sheet]]></title>
+    <link href="http://www.g9labs.com/2016/04/08/knex-dot-js-and-bookshelf-dot-js-cheat-sheet/"/>
+    <updated>2016-04-08T12:33:00-07:00</updated>
+    <id>http://www.g9labs.com/2016/04/08/knex-dot-js-and-bookshelf-dot-js-cheat-sheet</id>
+    <content type="html"><![CDATA[<p>As follows are some code snippets for using <a href="http://knexjs.org/">Knex.js</a> for executing
+Postgres and PostGIS queries.</p>
+
+<h3>Execute raw SQL in migration</h3>
+
+<p>I often find this useful for fancy SQL, like creating views.</p>
+
+<p><code>js
+exports.up = function(knex, Promise) {
+  return knex.raw(`YOUR RAW SQL`);
+};
+</code></p>
+
+<h3>Add a PostGIS Point type to a table in a migration:</h3>
+
+<p><code>js
+return knex.schema.table('events', function(table) {
+  table.specificType('point', 'geometry(point, 4326)');
+})
+</code></p>
+
+<h3>Add a foreign key to another table.</h3>
+
+<p>```js
+return knex.schema.table(&lsquo;events&rsquo;, function(table) {</p>
+
+<pre><code>table.integer('device_id').references('id').inTable('devices');
+</code></pre>
+
+<p>});
+```</p>
+
+<h3>Add a multi-column unique index</h3>
+
+<p><code>js
+return knex.schema.table('events', function(table) {
+  table.unique(['start_time', 'end_time', 'start_location', 'end_location', 'distance_miles']);
+});
+</code></p>
+
+<h3>Find a collection</h3>
+
+<p><code>js
+knex.select('*')
+.from('participants')
+.where({ name: 'Jason' })
+.andWhere('age', '&gt;=', 20)
+</code></p>
+
+<h3>Custom operations in SELECT clause</h3>
+
+<p><code>js
+knex('trips')
+.select(knex.raw('miles * passengers as passenger_miles'))
+.select(knex.raw("CONCAT('Hello, ', name) as greeting_message"))
+</code></p>
+
+<h3>Return PostGIS data from a spatial column:</h3>
+
+<p>We use <a href="https://github.com/jfgodoy/knex-postgis">knex-postgis</a> to gain access to PostGIS functions in Postgres. Here, we return a &lsquo;point&rsquo; column with <code>ST_AsGeoJSON</code>:</p>
+
+<p>```js
+const knexPostgis = require(&lsquo;knex-postgis&rsquo;)(knex);</p>
+
+<p>knex(&lsquo;events&rsquo;)
+.select(&lsquo;*&rsquo;, knexPostgis.asGeoJSON(&lsquo;point&rsquo;));
+```</p>
+
+<p>See <a href="https://github.com/jfgodoy/knex-postgis">knex-postgis</a> documentation for a list of other PostGIS functions that are supported.</p>
+]]></content>
+  </entry>
+  
+</feed>

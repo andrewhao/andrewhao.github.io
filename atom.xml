@@ -4,7 +4,7 @@
   <title><![CDATA[The Sweet Spot]]></title>
   <link href="http://www.g9labs.com/atom.xml" rel="self"/>
   <link href="http://www.g9labs.com/"/>
-  <updated>2016-03-22T13:58:13-07:00</updated>
+  <updated>2016-04-18T15:46:19-07:00</updated>
   <id>http://www.g9labs.com/</id>
   <author>
     <name><![CDATA[Andrew Hao]]></name>
@@ -12,6 +12,103 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Knex.js and PostGIS cheat sheet]]></title>
+    <link href="http://www.g9labs.com/2016/04/08/knex-dot-js-and-bookshelf-dot-js-cheat-sheet/"/>
+    <updated>2016-04-08T12:33:00-07:00</updated>
+    <id>http://www.g9labs.com/2016/04/08/knex-dot-js-and-bookshelf-dot-js-cheat-sheet</id>
+    <content type="html"><![CDATA[<p>As follows are some code snippets for using <a href="http://knexjs.org/">Knex.js</a> for executing
+Postgres and PostGIS queries.</p>
+
+<h3>Execute raw SQL in migration</h3>
+
+<p>I often find this useful for fancy SQL, like creating views.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">exports</span><span class="p">.</span><span class="nx">up</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">knex</span><span class="p">,</span> <span class="nx">Promise</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">return</span> <span class="nx">knex</span><span class="p">.</span><span class="nx">raw</span><span class="p">(</span><span class="err">`</span><span class="nx">YOUR</span> <span class="nx">RAW</span> <span class="nx">SQL</span><span class="err">`</span><span class="p">);</span>
+</span><span class='line'><span class="p">};</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Add a PostGIS Point type to a table in a migration:</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="k">return</span> <span class="nx">knex</span><span class="p">.</span><span class="nx">schema</span><span class="p">.</span><span class="nx">table</span><span class="p">(</span><span class="s1">&#39;events&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">table</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">table</span><span class="p">.</span><span class="nx">specificType</span><span class="p">(</span><span class="s1">&#39;point&#39;</span><span class="p">,</span> <span class="s1">&#39;geometry(point, 4326)&#39;</span><span class="p">);</span>
+</span><span class='line'><span class="p">})</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Add a foreign key to another table.</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="k">return</span> <span class="nx">knex</span><span class="p">.</span><span class="nx">schema</span><span class="p">.</span><span class="nx">table</span><span class="p">(</span><span class="s1">&#39;events&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">table</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">table</span><span class="p">.</span><span class="nx">integer</span><span class="p">(</span><span class="s1">&#39;device_id&#39;</span><span class="p">).</span><span class="nx">references</span><span class="p">(</span><span class="s1">&#39;id&#39;</span><span class="p">).</span><span class="nx">inTable</span><span class="p">(</span><span class="s1">&#39;devices&#39;</span><span class="p">);</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Add a multi-column unique index</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="k">return</span> <span class="nx">knex</span><span class="p">.</span><span class="nx">schema</span><span class="p">.</span><span class="nx">table</span><span class="p">(</span><span class="s1">&#39;events&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">table</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">table</span><span class="p">.</span><span class="nx">unique</span><span class="p">([</span><span class="s1">&#39;start_time&#39;</span><span class="p">,</span> <span class="s1">&#39;end_time&#39;</span><span class="p">,</span> <span class="s1">&#39;start_location&#39;</span><span class="p">,</span> <span class="s1">&#39;end_location&#39;</span><span class="p">,</span> <span class="s1">&#39;distance_miles&#39;</span><span class="p">]);</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Find a collection</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">knex</span><span class="p">.</span><span class="nx">select</span><span class="p">(</span><span class="s1">&#39;*&#39;</span><span class="p">)</span>
+</span><span class='line'><span class="p">.</span><span class="nx">from</span><span class="p">(</span><span class="s1">&#39;participants&#39;</span><span class="p">)</span>
+</span><span class='line'><span class="p">.</span><span class="nx">where</span><span class="p">({</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;Jason&#39;</span> <span class="p">})</span>
+</span><span class='line'><span class="p">.</span><span class="nx">andWhere</span><span class="p">(</span><span class="s1">&#39;age&#39;</span><span class="p">,</span> <span class="s1">&#39;&gt;=&#39;</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Custom operations in SELECT clause</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">knex</span><span class="p">(</span><span class="s1">&#39;trips&#39;</span><span class="p">)</span>
+</span><span class='line'><span class="p">.</span><span class="nx">select</span><span class="p">(</span><span class="nx">knex</span><span class="p">.</span><span class="nx">raw</span><span class="p">(</span><span class="s1">&#39;miles * passengers as passenger_miles&#39;</span><span class="p">))</span>
+</span><span class='line'><span class="p">.</span><span class="nx">select</span><span class="p">(</span><span class="nx">knex</span><span class="p">.</span><span class="nx">raw</span><span class="p">(</span><span class="s2">&quot;CONCAT(&#39;Hello, &#39;, name) as greeting_message&quot;</span><span class="p">))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Return PostGIS data from a spatial column:</h3>
+
+<p>We use <a href="https://github.com/jfgodoy/knex-postgis">knex-postgis</a> to gain access to PostGIS functions in Postgres. Here, we return a &lsquo;point&rsquo; column with <code>ST_AsGeoJSON</code>:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="kr">const</span> <span class="nx">knexPostgis</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;knex-postgis&#39;</span><span class="p">)(</span><span class="nx">knex</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">knex</span><span class="p">(</span><span class="s1">&#39;events&#39;</span><span class="p">)</span>
+</span><span class='line'><span class="p">.</span><span class="nx">select</span><span class="p">(</span><span class="s1">&#39;*&#39;</span><span class="p">,</span> <span class="nx">knexPostgis</span><span class="p">.</span><span class="nx">asGeoJSON</span><span class="p">(</span><span class="s1">&#39;point&#39;</span><span class="p">));</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>See <a href="https://github.com/jfgodoy/knex-postgis">knex-postgis</a> documentation for a list of other PostGIS functions that are supported.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Lossless rate limiting with RxJS]]></title>
@@ -2555,79 +2652,6 @@ post</a></p>
 <li><p>The Open/Closed Principle as applied to Ruby: using delegators, decorators.</p></li>
 </ul>
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Deploying Janky on Ubuntu]]></title>
-    <link href="http://www.g9labs.com/2012/10/04/deploying-janky-on-ubuntu/"/>
-    <updated>2012-10-04T03:29:58-07:00</updated>
-    <id>http://www.g9labs.com/2012/10/04/deploying-janky-on-ubuntu</id>
-    <content type="html"><![CDATA[<p><a href="https://github.com/blog/1013-janky">Janky</a> is a Github-developed <a href="https://github.com/github/hubot">Hubot</a> + Jenkins control interface. It&rsquo;s developed to be deployed on Heroku. However, what if you need it to live on an internal VM? Here&rsquo;s how I got it running on a Ubuntu (12.04 Precise) VM.</p>
-
-<h2>Make sure you have the correct MySQL libs installed:</h2>
-
-<pre><code>sudo apt-get install mysql-server libmysqlclient-dev
-</code></pre>
-
-<h2>Clone janky from the <a href="https://github.com/github/janky">Github repository</a></h2>
-
-<pre><code>git clone https://github.com/github/janky.git
-cd janky
-</code></pre>
-
-<h2>Bootstrap your environment</h2>
-
-<p>The following steps are taken nearly verbatim from the &ldquo;Hacking&rdquo; section on the Janky README:</p>
-
-<pre><code>script/bootstrap
-
-mysqladmin -uroot create janky_development
-mysqladmin -uroot create janky_test
-
-RACK_ENV=development bin/rake db:migrate
-RACK_ENV=test bin/rake db:migrate
-
-RACK_ENV=development bundle exec rake db:seed
-</code></pre>
-
-<h2>Configure Thin</h2>
-
-<p>Open <code>Gemfile</code> in your text editor and add:</p>
-
-<pre><code>gem "foreman"
-</code></pre>
-
-<p>Then install it:</p>
-
-<pre><code>bundle install
-</code></pre>
-
-<p>Then create a Procfile:</p>
-
-<pre><code>touch Procfile
-</code></pre>
-
-<p>Open the Procfile in your text editor and add the following line:</p>
-
-<pre><code>web: bundle exec thin start -p $PORT
-</code></pre>
-
-<p>Add the JANKY_* variables to your environment according to the janky README. I use zsh, so I added these as export statements in my ~/.zshenv</p>
-
-<h2>Start your server</h2>
-
-<pre><code>bundle exec foreman start
-</code></pre>
-
-<p>Note that the server starts on port 5000 by default, and you can override it like so:</p>
-
-<pre><code>PORT=8080 bundle exec foreman start
-</code></pre>
-
-<h2>That&rsquo;s it!</h2>
-
-<p>Let me know how that works for you!</p>
 ]]></content>
   </entry>
   

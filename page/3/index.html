@@ -9,7 +9,7 @@
   <meta name="author" content="Andrew Hao">
 
   
-  <meta name="description" content="I&rsquo;ve been hitting a lot of &ldquo;Maximum file limit exceeded&rdquo; dialogs after a long day at work &mdash; at any point in time I&rsquo;ve &hellip;">
+  <meta name="description" content="Janky is a Github-developed Hubot + Jenkins control interface. It&rsquo;s developed to be deployed on Heroku. However, what if you need it to live on &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -78,6 +78,108 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2012/10/04/deploying-janky-on-ubuntu/">Deploying Janky on Ubuntu</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-10-04T03:29:58-07:00" pubdate data-updated="true">Oct 4<span>th</span>, 2012</time>
+        
+         | <a href="/2012/10/04/deploying-janky-on-ubuntu/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><a href="https://github.com/blog/1013-janky">Janky</a> is a Github-developed <a href="https://github.com/github/hubot">Hubot</a> + Jenkins control interface. It&rsquo;s developed to be deployed on Heroku. However, what if you need it to live on an internal VM? Here&rsquo;s how I got it running on a Ubuntu (12.04 Precise) VM.</p>
+
+<h2>Make sure you have the correct MySQL libs installed:</h2>
+
+<pre><code>sudo apt-get install mysql-server libmysqlclient-dev
+</code></pre>
+
+<h2>Clone janky from the <a href="https://github.com/github/janky">Github repository</a></h2>
+
+<pre><code>git clone https://github.com/github/janky.git
+cd janky
+</code></pre>
+
+<h2>Bootstrap your environment</h2>
+
+<p>The following steps are taken nearly verbatim from the &ldquo;Hacking&rdquo; section on the Janky README:</p>
+
+<pre><code>script/bootstrap
+
+mysqladmin -uroot create janky_development
+mysqladmin -uroot create janky_test
+
+RACK_ENV=development bin/rake db:migrate
+RACK_ENV=test bin/rake db:migrate
+
+RACK_ENV=development bundle exec rake db:seed
+</code></pre>
+
+<h2>Configure Thin</h2>
+
+<p>Open <code>Gemfile</code> in your text editor and add:</p>
+
+<pre><code>gem "foreman"
+</code></pre>
+
+<p>Then install it:</p>
+
+<pre><code>bundle install
+</code></pre>
+
+<p>Then create a Procfile:</p>
+
+<pre><code>touch Procfile
+</code></pre>
+
+<p>Open the Procfile in your text editor and add the following line:</p>
+
+<pre><code>web: bundle exec thin start -p $PORT
+</code></pre>
+
+<p>Add the JANKY_* variables to your environment according to the janky README. I use zsh, so I added these as export statements in my ~/.zshenv</p>
+
+<h2>Start your server</h2>
+
+<pre><code>bundle exec foreman start
+</code></pre>
+
+<p>Note that the server starts on port 5000 by default, and you can override it like so:</p>
+
+<pre><code>PORT=8080 bundle exec foreman start
+</code></pre>
+
+<h2>That&rsquo;s it!</h2>
+
+<p>Let me know how that works for you!</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -671,52 +773,6 @@ end
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/2011/07/01/chat-app-frontend-prototype/">Chat App - Frontend Prototype</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-07-01T11:21:05-07:00" pubdate data-updated="true">Jul 1<span>st</span>, 2011</time>
-        
-         | <a href="/2011/07/01/chat-app-frontend-prototype/#disqus_thread">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><a href="http://www.flickr.com/photos/andrewhao/5885861130/"><img src="http://farm6.static.flickr.com/5261/5885861130_71e25f2beb.jpg" alt="Chat View - 1" /></a></p>
-
-<p><a href="http://www.flickr.com/photos/andrewhao/5885860254/"><img src="http://farm7.static.flickr.com/6053/5885860254_a2aa7f7895.jpg" alt="Interview View" /></a></p>
-
-<p>Some UI work I did for a stealth startup in early &lsquo;11. Responsible for look &amp; feel and frontend chat interactions. jQuery/UI communicating to a CakePHP/nodejs backend.</p>
-
-<p>We developed this prototype with <a href="http://www.wisdom.weizmann.ac.il/~dharel/SCANNED.PAPERS/Statecharts.pdf">statecharts</a>, a concept commonly found in event-driven programming and with which I first learned from <a href="http://frozencanuck.wordpress.com/2011/03/09/sproutcore-statecharts-vs-controllers/">Sproutcore</a>. I found it really helped map out all the complex user interactions we had to deal with on the page.</p>
-
-<p><a href="http://www.flickr.com/photos/andrewhao/sets/72157626954648391/with/5885860254/">See more screenshots from the set</a>.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/page/4/">&larr; Older</a>
@@ -734,6 +790,10 @@ end
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/2016/04/08/knex-dot-js-and-bookshelf-dot-js-cheat-sheet/">Knex.js and PostGIS cheat sheet</a>
+      </li>
+    
+      <li class="post">
         <a href="/2016/03/21/lossless-rate-limiting-with-rxjs/">Lossless rate limiting with RxJS</a>
       </li>
     
@@ -747,10 +807,6 @@ end
     
       <li class="post">
         <a href="/2015/06/29/notes-on-performance-tuning-a-puma-server/">Notes on performance tuning a Puma server</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2015/06/01/toolbox-learning-swift-and-viper/">Toolbox: learning Swift and VIPER</a>
       </li>
     
   </ul>

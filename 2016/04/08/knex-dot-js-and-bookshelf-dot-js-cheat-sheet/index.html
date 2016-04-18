@@ -1,0 +1,372 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Knex.js and PostGIS cheat sheet - The Sweet Spot</title>
+  <meta name="author" content="Andrew Hao">
+
+  
+  <meta name="description" content="As follows are some code snippets for using Knex.js for executing
+Postgres and PostGIS queries. Execute raw SQL in migration I often find this useful &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://www.g9labs.com/2016/04/08/knex-dot-js-and-bookshelf-dot-js-cheat-sheet">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="The Sweet Spot" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-2330913-9']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">The Sweet Spot</a></h1>
+  
+    <h2>Andrew Hao's thoughts about software engineering, design, and anything shiny.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:www.g9labs.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/notes">Notes</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Knex.js and PostGIS cheat sheet</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2016-04-08T12:33:00-07:00" pubdate data-updated="true">Apr 8<span>th</span>, 2016</time>
+        
+         | <a href="#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>As follows are some code snippets for using <a href="http://knexjs.org/">Knex.js</a> for executing
+Postgres and PostGIS queries.</p>
+
+<h3>Execute raw SQL in migration</h3>
+
+<p>I often find this useful for fancy SQL, like creating views.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">exports</span><span class="p">.</span><span class="nx">up</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">knex</span><span class="p">,</span> <span class="nx">Promise</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">return</span> <span class="nx">knex</span><span class="p">.</span><span class="nx">raw</span><span class="p">(</span><span class="err">`</span><span class="nx">YOUR</span> <span class="nx">RAW</span> <span class="nx">SQL</span><span class="err">`</span><span class="p">);</span>
+</span><span class='line'><span class="p">};</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Add a PostGIS Point type to a table in a migration:</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="k">return</span> <span class="nx">knex</span><span class="p">.</span><span class="nx">schema</span><span class="p">.</span><span class="nx">table</span><span class="p">(</span><span class="s1">&#39;events&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">table</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">table</span><span class="p">.</span><span class="nx">specificType</span><span class="p">(</span><span class="s1">&#39;point&#39;</span><span class="p">,</span> <span class="s1">&#39;geometry(point, 4326)&#39;</span><span class="p">);</span>
+</span><span class='line'><span class="p">})</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Add a foreign key to another table.</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="k">return</span> <span class="nx">knex</span><span class="p">.</span><span class="nx">schema</span><span class="p">.</span><span class="nx">table</span><span class="p">(</span><span class="s1">&#39;events&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">table</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">table</span><span class="p">.</span><span class="nx">integer</span><span class="p">(</span><span class="s1">&#39;device_id&#39;</span><span class="p">).</span><span class="nx">references</span><span class="p">(</span><span class="s1">&#39;id&#39;</span><span class="p">).</span><span class="nx">inTable</span><span class="p">(</span><span class="s1">&#39;devices&#39;</span><span class="p">);</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Add a multi-column unique index</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="k">return</span> <span class="nx">knex</span><span class="p">.</span><span class="nx">schema</span><span class="p">.</span><span class="nx">table</span><span class="p">(</span><span class="s1">&#39;events&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">table</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">table</span><span class="p">.</span><span class="nx">unique</span><span class="p">([</span><span class="s1">&#39;start_time&#39;</span><span class="p">,</span> <span class="s1">&#39;end_time&#39;</span><span class="p">,</span> <span class="s1">&#39;start_location&#39;</span><span class="p">,</span> <span class="s1">&#39;end_location&#39;</span><span class="p">,</span> <span class="s1">&#39;distance_miles&#39;</span><span class="p">]);</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Find a collection</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">knex</span><span class="p">.</span><span class="nx">select</span><span class="p">(</span><span class="s1">&#39;*&#39;</span><span class="p">)</span>
+</span><span class='line'><span class="p">.</span><span class="nx">from</span><span class="p">(</span><span class="s1">&#39;participants&#39;</span><span class="p">)</span>
+</span><span class='line'><span class="p">.</span><span class="nx">where</span><span class="p">({</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;Jason&#39;</span> <span class="p">})</span>
+</span><span class='line'><span class="p">.</span><span class="nx">andWhere</span><span class="p">(</span><span class="s1">&#39;age&#39;</span><span class="p">,</span> <span class="s1">&#39;&gt;=&#39;</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Custom operations in SELECT clause</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">knex</span><span class="p">(</span><span class="s1">&#39;trips&#39;</span><span class="p">)</span>
+</span><span class='line'><span class="p">.</span><span class="nx">select</span><span class="p">(</span><span class="nx">knex</span><span class="p">.</span><span class="nx">raw</span><span class="p">(</span><span class="s1">&#39;miles * passengers as passenger_miles&#39;</span><span class="p">))</span>
+</span><span class='line'><span class="p">.</span><span class="nx">select</span><span class="p">(</span><span class="nx">knex</span><span class="p">.</span><span class="nx">raw</span><span class="p">(</span><span class="s2">&quot;CONCAT(&#39;Hello, &#39;, name) as greeting_message&quot;</span><span class="p">))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Return PostGIS data from a spatial column:</h3>
+
+<p>We use <a href="https://github.com/jfgodoy/knex-postgis">knex-postgis</a> to gain access to PostGIS functions in Postgres. Here, we return a &lsquo;point&rsquo; column with <code>ST_AsGeoJSON</code>:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="kr">const</span> <span class="nx">knexPostgis</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;knex-postgis&#39;</span><span class="p">)(</span><span class="nx">knex</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">knex</span><span class="p">(</span><span class="s1">&#39;events&#39;</span><span class="p">)</span>
+</span><span class='line'><span class="p">.</span><span class="nx">select</span><span class="p">(</span><span class="s1">&#39;*&#39;</span><span class="p">,</span> <span class="nx">knexPostgis</span><span class="p">.</span><span class="nx">asGeoJSON</span><span class="p">(</span><span class="s1">&#39;point&#39;</span><span class="p">));</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>See <a href="https://github.com/jfgodoy/knex-postgis">knex-postgis</a> documentation for a list of other PostGIS functions that are supported.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Andrew Hao</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2016-04-08T12:33:00-07:00" pubdate data-updated="true">Apr 8<span>th</span>, 2016</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/category/javascript/'>Javascript</a>, <a class='category' href='/category/knex-dot-js/'>Knex.js</a>, <a class='category' href='/category/postgis/'>PostGIS</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://www.g9labs.com/2016/04/08/knex-dot-js-and-bookshelf-dot-js-cheat-sheet/" data-via="andrewhao" data-counturl="http://www.g9labs.com/2016/04/08/knex-dot-js-and-bookshelf-dot-js-cheat-sheet/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/2016/03/21/lossless-rate-limiting-with-rxjs/" title="Previous Post: Lossless rate limiting with RxJS">&laquo; Lossless rate limiting with RxJS</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2016/04/08/knex-dot-js-and-bookshelf-dot-js-cheat-sheet/">Knex.js and PostGIS cheat sheet</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2016/03/21/lossless-rate-limiting-with-rxjs/">Lossless rate limiting with RxJS</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2016/02/17/partitioning-rxjs-streams-adventures-in-nested-observables-with-groupby-and-flatmap/">Partitioning RxJS streams: adventures in nested Observables with groupBy() and flatMap()</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2015/09/27/strange-loop-2015-reflections/">Strange Loop 2015: Notes & Reflections</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2015/06/29/notes-on-performance-tuning-a-puma-server/">Notes on performance tuning a Puma server</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/andrewhao">@andrewhao</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'andrewhao',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2016 - Andrew Hao -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'g9labs';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://www.g9labs.com/2016/04/08/knex-dot-js-and-bookshelf-dot-js-cheat-sheet/';
+        var disqus_url = 'http://www.g9labs.com/2016/04/08/knex-dot-js-and-bookshelf-dot-js-cheat-sheet/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
