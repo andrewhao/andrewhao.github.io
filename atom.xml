@@ -4,7 +4,7 @@
   <title><![CDATA[The Sweet Spot]]></title>
   <link href="http://www.g9labs.com/atom.xml" rel="self"/>
   <link href="http://www.g9labs.com/"/>
-  <updated>2016-04-19T15:18:56-07:00</updated>
+  <updated>2016-04-19T15:23:39-07:00</updated>
   <id>http://www.g9labs.com/</id>
   <author>
     <name><![CDATA[Andrew Hao]]></name>
@@ -19,7 +19,7 @@
     <updated>2016-04-18T17:14:00-07:00</updated>
     <id>http://www.g9labs.com/2016/04/18/the-joy-of-naming-with-the-powers-of-domain-driven-design</id>
     <content type="html"><![CDATA[<p>I want to discuss a topic near and dear to my heart, and what I believe
-core to the crux of software design. It&rsquo;s not a new functional language,
+is at the crux of effective software design. It&rsquo;s not a new functional language,
 it&rsquo;s not a fancy new framework, a how-to guide to do microservices, nor a quantum leap in the field of machine learning.</p>
 
 <p>It&rsquo;s much simpler.</p>
@@ -353,7 +353,7 @@ it&rsquo;s not a fancy new framework, a how-to guide to do microservices, nor a 
 </span><span class='line'>  <span class="k">end</span>
 </span><span class='line'>
 </span><span class='line'>  <span class="k">def</span> <span class="nf">total_amount</span>
-</span><span class='line'>    <span class="vi">@booking_amount</span><span class="o">.</span><span class="n">price</span>
+</span><span class='line'>    <span class="vi">@booking_amount</span><span class="o">.</span><span class="n">amount</span>
 </span><span class='line'>  <span class="k">end</span>
 </span><span class='line'><span class="k">end</span>
 </span><span class='line'>
@@ -366,7 +366,7 @@ it&rsquo;s not a fancy new framework, a how-to guide to do microservices, nor a 
 </span><span class='line'>  <span class="k">end</span>
 </span><span class='line'>
 </span><span class='line'>  <span class="k">def</span> <span class="nf">amount</span>
-</span><span class='line'>    <span class="vi">@amount</span> <span class="o">-</span> <span class="n">coupons</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="o">&amp;</span><span class="ss">:amount</span><span class="p">)</span>
+</span><span class='line'>    <span class="vi">@amount</span> <span class="o">-</span> <span class="vi">@coupons</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="o">&amp;</span><span class="ss">:amount</span><span class="p">)</span>
 </span><span class='line'>  <span class="k">end</span>
 </span><span class='line'><span class="k">end</span>
 </span></code></pre></td></tr></table></div></figure>

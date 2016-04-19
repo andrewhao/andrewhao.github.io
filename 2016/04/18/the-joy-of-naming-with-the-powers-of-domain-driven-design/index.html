@@ -10,7 +10,7 @@
 
   
   <meta name="description" content="I want to discuss a topic near and dear to my heart, and what I believe
-core to the crux of software design. It&rsquo;s not a new functional language &hellip;">
+is at the crux of effective software design. It&rsquo;s not a new functional &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -108,7 +108,7 @@ core to the crux of software design. It&rsquo;s not a new functional language &h
 
 
 <div class="entry-content"><p>I want to discuss a topic near and dear to my heart, and what I believe
-core to the crux of software design. It&rsquo;s not a new functional language,
+is at the crux of effective software design. It&rsquo;s not a new functional language,
 it&rsquo;s not a fancy new framework, a how-to guide to do microservices, nor a quantum leap in the field of machine learning.</p>
 
 <p>It&rsquo;s much simpler.</p>
@@ -442,7 +442,7 @@ it&rsquo;s not a fancy new framework, a how-to guide to do microservices, nor a 
 </span><span class='line'>  <span class="k">end</span>
 </span><span class='line'>
 </span><span class='line'>  <span class="k">def</span> <span class="nf">total_amount</span>
-</span><span class='line'>    <span class="vi">@booking_amount</span><span class="o">.</span><span class="n">price</span>
+</span><span class='line'>    <span class="vi">@booking_amount</span><span class="o">.</span><span class="n">amount</span>
 </span><span class='line'>  <span class="k">end</span>
 </span><span class='line'><span class="k">end</span>
 </span><span class='line'>
@@ -455,7 +455,7 @@ it&rsquo;s not a fancy new framework, a how-to guide to do microservices, nor a 
 </span><span class='line'>  <span class="k">end</span>
 </span><span class='line'>
 </span><span class='line'>  <span class="k">def</span> <span class="nf">amount</span>
-</span><span class='line'>    <span class="vi">@amount</span> <span class="o">-</span> <span class="n">coupons</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="o">&amp;</span><span class="ss">:amount</span><span class="p">)</span>
+</span><span class='line'>    <span class="vi">@amount</span> <span class="o">-</span> <span class="vi">@coupons</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="o">&amp;</span><span class="ss">:amount</span><span class="p">)</span>
 </span><span class='line'>  <span class="k">end</span>
 </span><span class='line'><span class="k">end</span>
 </span></code></pre></td></tr></table></div></figure>
