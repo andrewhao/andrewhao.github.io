@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Architecture | The Sweet Spot]]></title>
+  <link href="http://www.g9labs.com/category/architecture/atom.xml" rel="self"/>
+  <link href="http://www.g9labs.com/"/>
+  <updated>2016-04-19T15:18:56-07:00</updated>
+  <id>http://www.g9labs.com/</id>
+  <author>
+    <name><![CDATA[Andrew Hao]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[The Joy of Naming (with the powers of Domain-Driven Design)]]></title>
+    <link href="http://www.g9labs.com/2016/04/18/the-joy-of-naming-with-the-powers-of-domain-driven-design/"/>
+    <updated>2016-04-18T17:14:00-07:00</updated>
+    <id>http://www.g9labs.com/2016/04/18/the-joy-of-naming-with-the-powers-of-domain-driven-design</id>
+    <content type="html"><![CDATA[<p>I want to discuss a topic near and dear to my heart, and what I believe
+core to the crux of software design. It&rsquo;s not a new functional language,
+it&rsquo;s not a fancy new framework, a how-to guide to do microservices, nor a quantum leap in the field of machine learning.</p>
+
+<p>It&rsquo;s much simpler.</p>
+
+<p>It&rsquo;s about names.</p>
+
+<p><img src="http://3.bp.blogspot.com/_rL73HKlqbH0/TKhVHMbs2oI/AAAAAAAABEc/DiPbblM0R44/s1600/sistine-chapel-michelangelo-paintings-6.jpg" alt="In the beginning..." /></p>
+
+<p><em>Names define us</em>. They define concepts. They imbue a concept with shared understanding. They&rsquo;re language concepts, but more than that, they&rsquo;re units of meaning.</p>
+
+<p>Software development is a fundamentally human endeavour. No amount of technical computing breakthroughs will change the fact that software development is still the arduous task of getting a team together full of humans from a kaleidescope of different cultural, linguistic backgrounds &ndash; then throwing them together to build an arbitrarily complex product in a rapidly-shifting competitive landscape.</p>
+
+<p>Not only that, the thing to build is chock-full of systems that interact with other systems of unbounded complexity. Additionally, once your software system is out in the wild, you need to make sure that it was the right thing to build. Is the product you built correctly tuned to your market? Is it generating sufficient revenue?</p>
+
+<p>The landscape is littered with software projects that began ambitiously, but got lost in a towering mess of fragile code. It&rsquo;s no wonder that developing reliable, successful software is more art than science.</p>
+
+<h3>Crossing our linguistic wires</h3>
+
+<p>Let&rsquo;s rewind back to a scene from a typical day in the life of your software development team. Think back to the last time you discussed a story with your product owner, how did it unfold?</p>
+
+<p>Let&rsquo;s imagine a scene at Delorean, the Uber for time travel, where you work:</p>
+
+<blockquote><p>PO: Our next big project is to update our driver app to show rider locations on the timeline map.</p>
+
+<p>You: And when do these riders show up on the timeline map?</p>
+
+<p>PO: When the driver turns on the app and signals that she&rsquo;s driving.</p>
+
+<p>You: OK, so that means when the app boots up and the DriverStatus service receives a POST we&rsquo;ll need to simultaneously fetch references from the HailingUser service based on time locality.</p>
+
+<p>PO: Um&hellip; I guess so?</p></blockquote>
+
+<p>Or how about your last iteration planning meeting, where you discussed the intricacies of a specific story?</p>
+
+<blockquote><p>PO: In this story, we&rsquo;re going to add a coupon box to the checkout flow.</p>
+
+<p>You: [Thinking out loud] Hm&hellip; would that mean we add a <code>/coupon</code> route to the checkout API?</p>
+
+<p>Teammate: Wait &ndash; I think we call them <code>Discounts</code> in the backend. And the checkout flow is technically part of the <code>RideCommerce</code> service.</p>
+
+<p>You: Right &ndash; I mean let&rsquo;s call the route <code>/coupon</code> but it&rsquo;ll create a <code>Discount</code> object. And in this story,    let&rsquo;s just remember that the checkout API really refers to the <code>RideCommerce</code> service.</p>
+
+<p>PO: I&rsquo;ll add a note to the story.</p></blockquote>
+
+<p>The implementing engineer, of course, doesn&rsquo;t read the note in the story (who has time to, anyways?). In the course of implementation, he gets tripped up in semantics and spends the better part of a half day re-implementing the <code>Checkout</code> flow as an entirely new service, before realizing his mistake in code review and backing out his changes.</p>
+
+<p>Months later, a new colleague is tasked to fix the link in the checkout flow, but files an incomplete fix because she was not aware of the fact that <code>Coupons</code> actually had mappings back to <code>Discounts</code>. The bug makes its way to production, where it subtly lies dormant until a most inopportune time&hellip;</p>
+
+<h3>A better, Domain-Driven way</h3>
+
+<p>In Eric Evans' book <a href="http://www.amazon.com/Domain-Driven-Design-Tackling-Complexity-Software/dp/0321125215"><strong>Domain-Driven Design</strong></a>, he describes the concept of a <a href="http://martinfowler.com/bliki/UbiquitousLanguage.html">Ubiquitous Language</a> &ndash; a shared, common vocabulary that the entire team shares when discussing software.</p>
+
+<p>When we say the &ldquo;entire team&rdquo;, we mean the combined team of designers, developers, the product owner and any other domain experts that might be at hand.</p>
+
+<p>Your product owner may be your domain expert (and typically is). However, you may have other domain experts such as:</p>
+
+<ul>
+<li>Any team that builds reporting or analytics off of your software.</li>
+<li>Upstream data providers</li>
+<li>Anybody further up the reporting chain whose purview includes the software you&rsquo;re building, or its effects. Think: the Director of Finance, the COO, the head of Customer Support.</li>
+<li>The users of your software</li>
+</ul>
+
+
+<p>Side note: in XP, each team has an &ldquo;onsite customer&rdquo; &ndash; this is your domain expert!</p>
+
+<h4>Developing a Ubiquitous Language with a Glossary</h4>
+
+<p>Try this: keep a living document of all the terminology your team uses &ndash; along with all its definitions. This <strong>Glossary</strong> is exactly what it sounds &ndash; a list of terms and their definitions.</p>
+
+<p>```</p>
+
+<h2>Delorean Team Glossary</h2>
+
+<ul>
+<li><strong>Coupon</strong>: an applied discount to a BookingAmount. A coupon may take the form of a Fixed or a Percentage amount.
+
+<ul>
+<li><strong>Fixed-type</strong>: A coupon that applies a fixed amount of money &ndash; e.g. a $30 USD discount.</li>
+<li><strong>Percentage-type</strong>: A coupon that applies a percentage savings off the total BookingAmount.</li>
+</ul>
+</li>
+<li><strong>Driver</strong>: An employed driver who drives within the system, picking up passengers and driving Trips for payment.</li>
+<li><strong>Trip</strong>: An itinerary of passenger pick-up and drop-off location and times.</li>
+<li><strong>Rider</strong>: The passenger that books the trip and is transported by the <em>Driver</em>.</li>
+<li><strong>Booking</strong>: A reservation for a Trip, as booked by the <em>Rider</em>.</li>
+<li><strong>BookingAmount</strong>: The monetary amount of the Trip, accounting for the trip cost, surge pricing, coupons and taxes.</li>
+<li><strong>Routing Engine:</strong> The software system that maps out the driving directions for a driver.</li>
+<li><strong>Payment</strong>: A record of how a user paid.</li>
+<li><strong>Charge</strong>: A financial transaction for a specific dollar amount, for a specific charge method to an institution.</li>
+<li><strong>Checkout</strong>: A workflow in which a <em>Payment</em> is made for a <em>Booking</em>.
+```</li>
+</ul>
+
+
+<p>From now on, use only the term definitions listed here in your stories. Be explicit about how you use your language!</p>
+
+<p>I&rsquo;ve been on many projects where the sloppy usage of a term from project inception led to the usage of that term in the code &ndash; codifying that messy, slippery term throughout the life of the project!</p>
+
+<p>Which leads us to our next point:</p>
+
+<h4>Refactoring your team to use the right terms</h4>
+
+<p>Your <strong>Glossary</strong> is a living document. It is meant to be living &ndash; either on a continually-updated Google Doc or a wiki page. It should be visible for all to see &ndash; you should print it out and post it on the walls!</p>
+
+<p>Meanwhile, in a planning meeting:</p>
+
+<blockquote><p>You: So when a user logs into the app and broadcasts that they&rsquo;re ready to drive&hellip;</p>
+
+<p>PO: You mean <em>Driver</em>. When a <em>Driver</em> logs in.</p>
+
+<p>You: Right. Good catch.</p></blockquote>
+
+<p>It seems a little silly (after all, you both know only Drivers use the broadcast feature of the app), but the laser focus on using the right words means that your team is always on the same page when talking about things.</p>
+
+<p>Later that afternoon, your teammate taps you on the shoulder:</p>
+
+<blockquote><p>Teammate: I&rsquo;m about to implement the Coupon story. I suggest we rename the <code>Discount</code> class to <code>Coupon</code>.</p>
+
+<p>You: Great idea. That way, we aren&rsquo;t tripped up by the naming mismatches in the future.</p>
+
+<p>Teammate: I do have a question about the coupon, though. Do you think it&rsquo;s <em>applied</em> to the <strong>BookingAmount</strong>, or is it <em>added</em>?</p>
+
+<p>PO: [Overhearing conversation] You had it right. It&rsquo;s <em>applied</em>.</p></blockquote>
+
+<p>You and your teammate then go and update the glossary, scribbling an addendum on the wall (or updating your wiki):</p>
+
+<p><code>
+- **Coupon**: ... Coupons may be *applied* to BookingAmounts to discount the total cost of the booking.
+</code></p>
+
+<h4>Refactoring your code to use the right terms</h4>
+
+<p>Your teammate and you then walk over to her desk; as a pair you proceed to refactor the existing account code. We&rsquo;ll use Ruby for the sake of this example.</p>
+
+<p>In the beginning, the code looks like this:</p>
+
+<p>```ruby
+class Checkout
+  def initialize(booking_amount, discount)</p>
+
+<pre><code>@booking_amount = booking_amount
+@discount = discount
+</code></pre>
+
+<p>  end</p>
+
+<p>  def total</p>
+
+<pre><code>@booking_amount.total - @discount.calculate_amount_for(booking_amount: booking_amount)
+</code></pre>
+
+<p>  end
+end</p>
+
+<p>class Discount
+  STRATEGY_FIXED = &lsquo;STRATEGY_FIXED&rsquo;
+  STRATEGY_PERCENTAGE = &lsquo;STRATEGY_PERCENTAGE&rsquo;</p>
+
+<p>  def initialize(amount, strategy)</p>
+
+<pre><code>@amount = amount
+@strategy = strategy
+</code></pre>
+
+<p>  end</p>
+
+<p>  def calculate_amount_for(booking_amount:)</p>
+
+<pre><code># Implementation...
+</code></pre>
+
+<p>  end
+end
+```</p>
+
+<p>You take a first pass and rename the <code>Discount</code> class to <code>Coupon</code>.</p>
+
+<p>```ruby
+class Coupon
+  STRATEGY_FIXED = &lsquo;STRATEGY_FIXED&rsquo;
+  STRATEGY_PERCENTAGE = &lsquo;STRATEGY_PERCENTAGE&rsquo;</p>
+
+<p>  def initialize(amount, strategy)</p>
+
+<pre><code>@amount = amount
+@strategy = strategy
+</code></pre>
+
+<p>  end</p>
+
+<p>  def calculate_amount_for(booking_amount:)</p>
+
+<pre><code># Implementation...
+</code></pre>
+
+<p>  end
+end
+```</p>
+
+<p>Now there&rsquo;s something funny here &ndash; your domain language suggests that a <strong>Coupon</strong> is <em>applied to</em> a <strong>BookingAmount</strong>. You pause, because the code reads the opposite &ndash; &ldquo;A Coupon calculates its amount for a BookingAmount&rdquo;.</p>
+
+<blockquote><p>You: How about we also refactor the <code>calculate_amount_for</code> method to reflect the language a little better?</p>
+
+<p>Teammate: Yeah. It sounds like the action occurs the other way &ndash; the BookingAmount is responsible for applying a Coupon to itself.</p></blockquote>
+
+<p>In your next refactoring pass, you move the <code>calculate_amount_for</code> method into the <code>BookingAmount</code>, calling it <code>applied_discount_total</code>:</p>
+
+<p>```ruby
+class BookingAmount
+  # implementation details&hellip;</p>
+
+<p>  def applied_coupon_amount(coupon:)</p>
+
+<pre><code># Implementation...
+</code></pre>
+
+<p>  end
+end
+```</p>
+
+<p>Finally, you change your <code>Checkout</code> implementation to match:</p>
+
+<p>```ruby
+class Checkout
+  def initialize(booking_amount, coupon)</p>
+
+<pre><code>@booking_amount = booking_amount
+@coupon = coupon
+</code></pre>
+
+<p>  end</p>
+
+<p>  def total_amount</p>
+
+<pre><code>@booking_amount.price - @booking_amount.applied_coupon_amount(coupon: @coupon)
+</code></pre>
+
+<p>  end
+end
+```</p>
+
+<p>When you read the implementation in plain English, it reads:</p>
+
+<blockquote><p>The checkout&rsquo;s total amount is calculated by subtracting the booking amount&rsquo;s applied coupon amount from the booking amount price.</p></blockquote>
+
+<p>Phew! Designing a strong <strong>Ubiquitous Language</strong> was hard work! In fact, you had spent a goodly amount of time debating and clarifying with your domain experts:</p>
+
+<ul>
+<li>Is a Coupon <em>applied</em> to a BookingAmount, or is it <em>discounted from</em> one?</li>
+<li>Should we call it a Coupon <em>amount</em>, or a Coupon <em>cost</em>?</li>
+<li>Is the pre-tax, pre-discount amount in the BookingAmount called a <em>price</em>, or a <em>cost</em>?</li>
+</ul>
+
+
+<p>Whatever you agreed on, that&rsquo;s what you changed your code to reflect.</p>
+
+<h4>Continual refinement</h4>
+
+<p>Hm. Something still feels off.</p>
+
+<p>You and your teammate feel your OOP spidey senses going haywire.</p>
+
+<blockquote><p>Teammate: Hm. I guess that worked, but that&rsquo;s still not exactly as clean as we wanted it. Isn&rsquo;t it kind of weird how the Checkout owns the calculation for the calculation of a discount?</p>
+
+<p>You: Yeah, I see where you&rsquo;re coming from. That&rsquo;s just not good OO design. Additionally, if we notice the language our domain experts were using, they didn&rsquo;t mention that the checkout total was some subtraction of something from another thing. The Checkout&rsquo;s total simply is the order amount, after application of a Coupon.</p></blockquote>
+
+<p>Your partner and you take one last step:</p>
+
+<p>```ruby
+class Checkout
+  def initialize(booking_amount, coupon)</p>
+
+<pre><code>@booking_amount = booking_amount
+@booking_amount.apply!(coupon)
+</code></pre>
+
+<p>  end</p>
+
+<p>  def total_amount</p>
+
+<pre><code>@booking_amount.price
+</code></pre>
+
+<p>  end
+end</p>
+
+<p>class BookingAmount
+  # Implementation&hellip;</p>
+
+<p>  def apply!(coupon)</p>
+
+<pre><code>@coupons += coupon
+</code></pre>
+
+<p>  end</p>
+
+<p>  def amount</p>
+
+<pre><code>@amount - coupons.sum(&amp;:amount)
+</code></pre>
+
+<p>  end
+end
+```</p>
+
+<p>You sit back and read it back, out loud:</p>
+
+<blockquote><p>The checkout&rsquo;s total amount is the BookingAmount after a Coupon has been applied.</p></blockquote>
+
+<p>You both smile. Much better.</p>
+
+<h3>In closing&hellip;</h3>
+
+<p>In this brief time we had together,</p>
+
+<ul>
+<li>We discussed why names are important &ndash; especially in a complex endeavour like software development.</li>
+<li>We covered why it&rsquo;s important to arrive at a shared understanding, together as a team, using the same words and vocabulary.</li>
+<li>We discovered how to build and integrate a <strong>Glossary</strong> into the daily rhythm of our team</li>
+<li>We refactored the code twice &ndash; illustrating how to get code in line with the domain language.</li>
+</ul>
+
+
+<h3>And there is much more!</h3>
+
+<p>In an upcoming post, we&rsquo;ll investigate how the <strong>Ubiquitous Language</strong> applies to a core concept of Domain-Driven Design: the <strong>Bounded Context</strong>. Why is that important? Because Bounded Contexts give us tools to organize our code &ndash; and to do further advanced things like <a href="https://speakerdeck.com/andrewhao/ddd-rail-your-monorail">break up monoliths into services</a>. More on that to come!</p>
+]]></content>
+  </entry>
+  
+</feed>

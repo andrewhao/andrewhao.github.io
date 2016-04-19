@@ -9,7 +9,7 @@
   <meta name="author" content="Andrew Hao">
 
   
-  <meta name="description" content="I&rsquo;m currently in Botswana, doing volunteer work at a nonprofit Christian agency called Love Botswana Outreach Mission. Among my &hellip;">
+  <meta name="description" content="A couple of months ago I switched over to TypeKit, a cloud-hosted font service (buzzword! &ldquo;cloud&rdquo; gets me all warm and fuzzy). They &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -78,6 +78,68 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2010/03/12/shiny-font-overhaul/">Shiny font overhaul!</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-03-12T03:54:15-08:00" pubdate data-updated="true">Mar 12<span>th</span>, 2010</time>
+        
+         | <a href="/2010/03/12/shiny-font-overhaul/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h3><a href="http://www.g9labs.com/2010/03/12/shiny-font-overhaul/screenshot1/"><img src="http://www.g9labs.com/wp-content/uploads/2010/03/screenshot1-500x126.png" alt="" /></a></h3>
+
+<p>A couple of months ago I switched over to TypeKit, a cloud-hosted font service (buzzword! &ldquo;cloud&rdquo; gets me all warm and fuzzy). They basically take your font stack and enhance it with @font-face goodness, pulling in lots of fonts from their library.</p>
+
+<h3>Why not roll a @font-face implementation yourself?</h3>
+
+<p>The availability of good, high-quality, <em>licensed</em> fonts out there is still pretty small. The hoopla over @font-face has been centered around the fact that the fonts are unobfuscated, and anybody with the gumption to do so could go out to your site and steal yer font. So I&rsquo;d say if you have a font you want to put up on the Web, you&rsquo;d better make sure the font publisher/licenseholder is kosher with that.</p>
+
+<p>(Ironically, Microsoft got it pretty right with their EOT font format, drafted way back in the days of IE 4 (!). Oh yeah, TypeKit takes care of EOT fonts for you as well.)</p>
+
+<p>(Also, Mozilla is pushing their <a href="http://hacks.mozilla.org/2009/10/woff/">WOFF format</a> which is currently supported in FF 3.6. Typekit does that too!).</p>
+
+<h3>So, how&rsquo;s TypeKit working out for you?</h3>
+
+<p>Well, TypeKit&rsquo;s not bad. If you&rsquo;re running a cutting-edge browser (Safari 4, FF 3+, Chromium 4), you&rsquo;re going to see the font shininess. If you&rsquo;re not, you still get the default stack.</p>
+
+<p>A problem way early on was the fact that Firefox for Windows was rendering certain fonts with very, very jagged features (<a href="http://www.elated.com/articles/typekit-first-impressions/">see comparisons</a>). Turns out this was a fault of both the font and the OS/browser&mdash; certain browsers and OSes don&rsquo;t render hints properly.</p>
+
+<p>The best solution I&rsquo;ve found? <a href="http://blog.typekit.com/2009/12/08/new-fonts-and-improved-hinting-from-our-partners/">Use a better font with better hinting</a>.</p>
+
+<p>I&rsquo;m using FF Nuvo Web and FF Enzo Web Pro:</p>
+
+<p><a href="http://www.g9labs.com/2010/03/12/shiny-font-overhaul/screenshot-g9labs-design-studio-typekit-namoroka/"><img src="http://www.g9labs.com/wp-content/uploads/2010/03/Screenshot-g9Labs-Design-Studio-Typekit-Namoroka-500x412.png" alt="" /></a></p>
+
+<p>All in all, I&rsquo;m pretty satisfied.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -649,46 +711,6 @@ So there&rsquo;s a nagging little voice that warns me that Google&rsquo;s seriou
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/2008/04/26/sensations-negotiating-noise/">Sensations - Negotiating Noise</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2008-04-26T01:46:14-07:00" pubdate data-updated="true">Apr 26<span>th</span>, 2008</time>
-        
-         | <a href="/2008/04/26/sensations-negotiating-noise/#disqus_thread">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><a href="http://www.flickr.com/photos/andrewhao/2443375144/"><img src="http://farm3.static.flickr.com/2124/2443375144_9e096efe29.jpg" alt="Sensations - Negotiating Noise" /></a></p>
-
-<p>I&rsquo;m showing this and a few more design pieces at <strong>Exposed</strong>, Cal Christian Fellowship&rsquo;s art and performance extravaganza tonight. You can visit it today, April 26&mdash;the gallery will be open all day in the Wurster lobby, and there are two performance shows: 6PM and 9PM in 112 Wurster.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/page/7/">&larr; Older</a>
@@ -706,6 +728,10 @@ So there&rsquo;s a nagging little voice that warns me that Google&rsquo;s seriou
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/2016/04/18/the-joy-of-naming-with-the-powers-of-domain-driven-design/">The Joy of Naming (with the powers of Domain-Driven Design)</a>
+      </li>
+    
+      <li class="post">
         <a href="/2016/04/08/knex-dot-js-and-bookshelf-dot-js-cheat-sheet/">Knex.js and PostGIS cheat sheet</a>
       </li>
     
@@ -719,10 +745,6 @@ So there&rsquo;s a nagging little voice that warns me that Google&rsquo;s seriou
     
       <li class="post">
         <a href="/2015/09/27/strange-loop-2015-reflections/">Strange Loop 2015: Notes & Reflections</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2015/06/29/notes-on-performance-tuning-a-puma-server/">Notes on performance tuning a Puma server</a>
       </li>
     
   </ul>

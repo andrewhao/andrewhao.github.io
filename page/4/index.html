@@ -9,7 +9,7 @@
   <meta name="author" content="Andrew Hao">
 
   
-  <meta name="description" content="Some UI work I did for a stealth startup in early &lsquo;11. Responsible for look &amp; feel and frontend chat interactions. jQuery/UI communicating &hellip;">
+  <meta name="description" content="My friends were complaining that wedding photobooths were too expensive to rent. Could we make one for them? Glen and I from the Porkbuns Initiative &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -78,6 +78,60 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2011/08/10/introducing-boink-a-photobooth-for-the-rest-of-us/">Introducing Boink, a photobooth for the rest of us.</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-08-10T02:25:10-07:00" pubdate data-updated="true">Aug 10<span>th</span>, 2011</time>
+        
+         | <a href="/2011/08/10/introducing-boink-a-photobooth-for-the-rest-of-us/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>My friends were complaining that wedding photobooths were too expensive to rent. Could we make one for them?</p>
+
+<p>Glen and I from the <a href="http://porkbuns.net">Porkbuns Initiative</a> stepped up in full armor, ready to help.</p>
+
+<p>What is it? It&rsquo;s a self-running photobooth that uses your Mac for brains and DSLR for eyes and a Webkit browser for its clothes and a photo printer for&hellip; a printer. You can connect an iPad as the frontend for a nice visual touch (pun intended).</p>
+
+<p>We built it on a backend Rails instance, pushing SVG+HTML5 in the frontend and using the gphoto4ruby gem as a camera library wrapper.</p>
+
+<p>[caption id=&ldquo;attachment_1105&rdquo; align=&ldquo;alignnone&rdquo; width=&ldquo;500&rdquo; caption=&ldquo;All dressed up and ready to go.&rdquo;]<a href="http://www.g9labs.com/2011/08/10/introducing-boink-a-photobooth-for-the-rest-of-us/284852_10100607611957573_1201208_60011361_805844_n/"><img src="http://www.g9labs.com/wp-content/uploads/2011/08/284852_10100607611957573_1201208_60011361_805844_n-500x333.jpg" alt="" /></a>[/caption]</p>
+
+<p>[caption id=&ldquo;&rdquo; align=&ldquo;alignnone&rdquo; width=&ldquo;500&rdquo; caption=&ldquo;An early UI prototype.&rdquo;]<a href="http://www.flickr.com/photos/andrewhao/6006564205/"><img src="http://farm7.static.flickr.com/6029/6006564205_60fda1b366.jpg" alt="Boink Preview" /></a>[/caption]</p>
+
+<p>[caption id=&ldquo;attachment_1106&rdquo; align=&ldquo;alignnone&rdquo; width=&ldquo;500&rdquo; caption=&ldquo;This comes out of the printer.&rdquo;]<a href="http://www.g9labs.com/2011/08/10/introducing-boink-a-photobooth-for-the-rest-of-us/gen_219/"><img src="http://www.g9labs.com/wp-content/uploads/2011/08/gen_219-500x348.jpg" alt="" /></a>[/caption]</p>
+
+<h3>Try it out</h3>
+
+<p>Check it out on <a href="http://www.github.com/andrewhao/boink">Github</a>.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -552,86 +606,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/2011/02/01/the-making-of-sos-intro/">The making of SOS: Intro</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-02-01T10:40:40-08:00" pubdate data-updated="true">Feb 1<span>st</span>, 2011</time>
-        
-         | <a href="/2011/02/01/the-making-of-sos-intro/#disqus_thread">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><a href="http://www.flickr.com/photos/andrewhao/5408231821/"><img src="http://farm6.static.flickr.com/5095/5408231821_b4d0fd6837.jpg" alt="Save Our Souls - Logo" /></a></p>
-
-<p>I&rsquo;m starting a project for my church&rsquo;s art show that integrates Twitter, print design and light. I&rsquo;m titling it &ldquo;Save Our Souls&rdquo;.</p>
-
-<p>The theme of the art show is &ldquo;Instead of Ashes&rdquo;, a reference from of <a href="http://www.esvonline.org/search/isaiah+61/">Isaiah 61</a> which highlights of God&rsquo;s promises of redemption for the world&rsquo;s suffering through Jesus.</p>
-
-<h2>What does it do?</h2>
-
-<p>Essentially, what I want it to do is parse the global Twitter firehose and display a live stream of tweets that highlight brokenness and pain: tweets about the world&rsquo;s injustices, breakups, deaths, disappointments, and even ennui. This is inspired by <a href="http://twistori.com">twistori</a>.</p>
-
-<p>At the same time these tweets are floating across the screen, I want to illuminate a part of the printed verse in physical space that corresponds to the tweet.</p>
-
-<p>Imagine:</p>
-
-<p>Tweet: <em>I just want everyone to understand something&hellip;&hellip;I&rsquo;m SEVERELY depressed right now&hellip;&hellip;my (ex)girlfriend is one of the greatest things to happen to me and she&rsquo;s gone.</em></p>
-
-<p>At the same time, the LED array behind &ldquo;he has sent me to bind up the brokenhearted&rdquo; from Isaiah 61:1 would light up and pulse.</p>
-
-<p>And so on, for each tweet that flies across the screen.</p>
-
-<h2>Architecture</h2>
-
-<p><a href="http://www.flickr.com/photos/andrewhao/5408232737/"><img src="http://farm6.static.flickr.com/5020/5408232737_0ba8545d4e.jpg" alt="Isaiah 61 Architecture" /></a></p>
-
-<p>node.js would process messages from the Twitter streaming API keyed off of certain keywords and filter them by (negative) sentiment, and pushed onto queues. Queues would be drained in a fair manner and pushed out to a browser frontend, while a socket connection to an Arduino script would be responsible for pulsing the LED array.</p>
-
-<p>Of course, there&rsquo;s a lot of questions left unanswered here: How do you make an LED array? How do you do (reliable) sentiment analysis? How big should the print graphic be? How far behind the print should the LED arrays be placed for the light to be sufficiently diffuse, yet bright enough to be visible? I&rsquo;m not sure yet.</p>
-
-<h2>First steps</h2>
-
-<p>So I just bought an Arduino and a ton of LEDs off of eBay. I&rsquo;m trying to relearn all the EE40 I tried so hard to forget way back in my undergrad days.</p>
-
-<p>[caption id=&ldquo;&rdquo; align=&ldquo;alignnone&rdquo; width=&ldquo;500&rdquo; caption=&ldquo;Arduinos are cool. I had to do my fair share of head-scratching to figure out resistor values.&rdquo;]<a href="http://www.flickr.com/photos/andrewhao/5408162241/"><img src="http://farm6.static.flickr.com/5096/5408162241_201f757ddd.jpg" alt="Arduino is hooked up" /></a>[/caption]</p>
-
-<p>[caption id=&ldquo;&rdquo; align=&ldquo;alignnone&rdquo; width=&ldquo;500&rdquo; caption=&ldquo;A conceptual design for the print graphic.&rdquo;]<a href="http://www.flickr.com/photos/andrewhao/5408870750/"><img src="http://farm6.static.flickr.com/5098/5408870750_9fa4951f0d.jpg" alt="Print Concepts" /></a>[/caption]</p>
-
-<p>[caption id=&ldquo;&rdquo; align=&ldquo;alignnone&rdquo; width=&ldquo;500&rdquo; caption=&ldquo;Basic node.js backend with a rudimentary frontend streams live tweets.&rdquo;]<a href="http://www.flickr.com/photos/andrewhao/5408765510/"><img src="http://farm6.static.flickr.com/5137/5408765510_3381c46945.jpg" alt="Testing backend." /></a>[/caption]</p>
-
-<p>See the (rudimentary) nodejs/client code at <a href="https://github.com/andrewhao/isaiah-61-project">github</a>.</p>
-
-<p>See the <a href="http://www.flickr.com/photos/andrewhao/sets/72157625956085386/with/5408765510/">rest of the photos</a>.</p>
-
-<p>More to come!</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/page/5/">&larr; Older</a>
@@ -649,6 +623,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/2016/04/18/the-joy-of-naming-with-the-powers-of-domain-driven-design/">The Joy of Naming (with the powers of Domain-Driven Design)</a>
+      </li>
+    
+      <li class="post">
         <a href="/2016/04/08/knex-dot-js-and-bookshelf-dot-js-cheat-sheet/">Knex.js and PostGIS cheat sheet</a>
       </li>
     
@@ -662,10 +640,6 @@
     
       <li class="post">
         <a href="/2015/09/27/strange-loop-2015-reflections/">Strange Loop 2015: Notes & Reflections</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2015/06/29/notes-on-performance-tuning-a-puma-server/">Notes on performance tuning a Puma server</a>
       </li>
     
   </ul>
