@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "The Joy of Naming (with the powers of Domain-Driven Design)"
+title: "Domain-Driven Design & The Joy of Naming"
 date: 2016-04-18 17:14
 comments: true
 categories:
@@ -283,4 +283,6 @@ In this brief time we had together,
 
 ### And there is much more!
 
-In an upcoming post, we'll investigate how the **Ubiquitous Language** applies to a core concept of Domain-Driven Design: the **Bounded Context**. Why is that important? Because Bounded Contexts give us tools to organize our code - and to do further advanced things like [break up monoliths into services](https://speakerdeck.com/andrewhao/ddd-rail-your-monorail). More on that to come!
+In an upcoming post, we'll investigate how the **Ubiquitous Language** applies to a core concept of Domain-Driven Design: the **Bounded Context**. Why is that important? Because Bounded Contexts give us tools to organize our code - and to do further advanced things like [break up monoliths into services](https://speakerdeck.com/andrewhao/ddd-rail-your-monorail). 
+
+<script async class="speakerdeck-embed" data-id="1e6dd8983891467381036a321cd274a9" data-ratio="1.77777777777778" src="//speakerdeck.com/assets/embed.js"></script>
