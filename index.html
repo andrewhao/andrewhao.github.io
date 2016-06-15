@@ -1,116 +1,61 @@
 
-<!DOCTYPE html>
-<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
-<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
-<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
-<head>
-  <meta charset="utf-8">
-  <title>The Sweet Spot</title>
-  <meta name="author" content="Andrew Hao">
+<!doctype html>
+<!-- START OF _layouts/default.html -->
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" >
+		<meta content="width=device-width,initial-scale=1" name="viewport">
+		<meta content="A hacker/designer's brain dump about things like Javascript, Ruby, and typography." name="description">
+		<meta content="The Sweet Spot" name="author">
 
-  
-  <meta name="description" content="I want to discuss a topic near and dear to my heart, and what I believe
-is at the crux of effective software design. It&rsquo;s not a new functional &hellip;">
-  
+		<title>The Sweet Spot</title>
 
-  <!-- http://t.co/dKP3o1e -->
-  <meta name="HandheldFriendly" content="True">
-  <meta name="MobileOptimized" content="320">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+		<!-- Styles -->
+		<link href="/stylesheets/main.css" rel="stylesheet">
 
-  
-  <link rel="canonical" href="http://www.g9labs.com">
-  <link href="/favicon.png" rel="icon">
-  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
-  <link href="/atom.xml" rel="alternate" title="The Sweet Spot" type="application/atom+xml">
-  <script src="/javascripts/modernizr-2.0.js"></script>
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
-  <script src="/javascripts/octopress.js" type="text/javascript"></script>
-  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
-<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
-<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+		<!-- Google webfonts -->
+		<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Tangerine">
+		<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Cousine">
 
-  
-  <script type="text/javascript">
-    var _gaq = _gaq || [];
-    _gaq.push(['_setAccount', 'UA-2330913-9']);
-    _gaq.push(['_trackPageview']);
+		<!-- jQuery and plugins -->
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+		<script src="/js/jquery.zclip.min.js"></script>
 
-    (function() {
-      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-    })();
-  </script>
+		<!-- Syntax highlighter -->
+		<link href="/stylesheets/prettify-hemisu.css" type="text/css" rel="stylesheet" />
+		<script type="text/javascript" src="/js/prettify.js"></script>
 
+		<!--<link href="http://feeds.feedburner.com/turkeltaub" rel="alternate" title="The Sweet Spot" type="application/rss+xml" />-->
 
-</head>
+	</head>
+	<body onload="prettyPrint()">
 
-<body   >
-  <header role="banner"><hgroup>
-  <h1><a href="/">The Sweet Spot</a></h1>
-  
-    <h2>Andrew Hao's thoughts about software engineering, design, and anything shiny.</h2>
-  
-</hgroup>
+		<div class="wrap">
 
-</header>
-  <nav role="navigation"><ul class="subscription" data-subscription="rss">
-  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
-  
-</ul>
-  
-<form action="http://google.com/search" method="get">
-  <fieldset role="search">
-    <input type="hidden" name="q" value="site:www.g9labs.com" />
-    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
-  </fieldset>
-</form>
-  
-<ul class="main-navigation">
-  <li><a href="/">Blog</a></li>
-  <li><a href="/notes">Notes</a></li>
-  <li><a href="/blog/archives">Archives</a></li>
-</ul>
+			<header>
+				<div class="title">The Sweet Spot</div>
 
-</nav>
-  <div id="main">
-    <div id="content">
-      <div class="blog-index">
-  
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/2016/04/18/the-joy-of-naming-with-the-powers-of-domain-driven-design/">The Joy of Naming</a></h1>
-    
-    
-      <p class="meta">
-        
+				<div class="navi">
+					<ul>
+						<li><a href="/">Blog</a></li>
+						<li><a href="/blog/archives">All Articles</a></li>
+					</ul>
+				</div> <!-- // .navi -->
+			</header>
 
+				<!-- START OF index.html -->
 
-
-
-
-
-
-
-  
-
-
-<time datetime="2016-04-18T17:14:00-07:00" pubdate data-updated="true">Apr 18<span>th</span>, 2016</time>
-        
-         | <a href="/2016/04/18/the-joy-of-naming-with-the-powers-of-domain-driven-design/#disqus_thread">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I want to discuss a topic near and dear to my heart, and what I believe
+	
+		
+		<!-- START OF _includes/article.html -->
+<article>
+	<header>
+		<h1><a href="/2016/04/18/the-joy-of-naming-with-the-powers-of-domain-driven-design/">Domain-Driven Design & The Joy of Naming</a></h1>
+		<time>18 April 2016</time>
+	</header>
+		<div class="content">
+			<p>I want to discuss a topic near and dear to my heart, and what I believe
 is at the crux of effective software design. It&rsquo;s not a new functional language,
 it&rsquo;s not a fancy new framework, a how-to guide to do microservices, nor a quantum leap in the field of machine learning.</p>
 
@@ -484,45 +429,47 @@ it&rsquo;s not a fancy new framework, a how-to guide to do microservices, nor a 
 
 <h3>And there is much more!</h3>
 
-<p>In an upcoming post, we&rsquo;ll investigate how the <strong>Ubiquitous Language</strong> applies to a core concept of Domain-Driven Design: the <strong>Bounded Context</strong>. Why is that important? Because Bounded Contexts give us tools to organize our code &ndash; and to do further advanced things like <a href="https://speakerdeck.com/andrewhao/ddd-rail-your-monorail">break up monoliths into services</a>. More on that to come!</p>
-</div>
-  
-  
+<p>In an upcoming post, we&rsquo;ll investigate how the <strong>Ubiquitous Language</strong> applies to a core concept of Domain-Driven Design: the <strong>Bounded Context</strong>. Why is that important? Because Bounded Contexts give us tools to organize our code &ndash; and to do further advanced things like <a href="https://speakerdeck.com/andrewhao/ddd-rail-your-monorail">break up monoliths into services</a>.</p>
+
+<script async class="speakerdeck-embed" data-id="1e6dd8983891467381036a321cd274a9" data-ratio="1.77777777777778" src="//speakerdeck.com/assets/embed.js"></script>
 
 
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/2016/04/08/knex-dot-js-and-bookshelf-dot-js-cheat-sheet/">Knex.js and PostGIS cheat sheet</a></h1>
-    
-    
-      <p class="meta">
-        
+			
+			
+		</div>
+	<footer>
+		
 
 
-
-
-
+		
 
 
 
   
+		
+			Tagged under
+		
+    <a class='category' href='/category/architecture/'>Architecture</a>, <a class='category' href='/category/ddd/'>DDD</a>, <a class='category' href='/category/domain-driven-design/'>Domain-Driven Design</a>
+	
 
 
-<time datetime="2016-04-08T12:33:00-07:00" pubdate data-updated="true">Apr 8<span>th</span>, 2016</time>
-        
-         | <a href="/2016/04/08/knex-dot-js-and-bookshelf-dot-js-cheat-sheet/#disqus_thread">Comments</a>
-        
-      </p>
-    
-  </header>
+	
+	
+	</footer>
+	
+</article>
+<!-- END OF _includes/article.html -->
 
-
-  <div class="entry-content"><p>As follows are some code snippets for using <a href="http://knexjs.org/">Knex.js</a> for executing
+	
+		
+		<!-- START OF _includes/article.html -->
+<article>
+	<header>
+		<h1><a href="/2016/04/08/knex-dot-js-and-bookshelf-dot-js-cheat-sheet/">Knex.js and PostGIS cheat sheet</a></h1>
+		<time>08 April 2016</time>
+	</header>
+		<div class="content">
+			<p>As follows are some code snippets for using <a href="http://knexjs.org/">Knex.js</a> for executing
 Postgres and PostGIS queries.</p>
 
 <h3>Execute raw SQL in migration</h3>
@@ -611,44 +558,43 @@ Postgres and PostGIS queries.</p>
 
 
 <p>See <a href="https://github.com/jfgodoy/knex-postgis">knex-postgis</a> documentation for a list of other PostGIS functions that are supported.</p>
-</div>
-  
-  
+
+			
+			
+		</div>
+	<footer>
+		
 
 
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/2016/03/21/lossless-rate-limiting-with-rxjs/">Lossless rate limiting with RxJS</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
+		
 
 
 
   
+		
+			Tagged under
+		
+    <a class='category' href='/category/javascript/'>Javascript</a>, <a class='category' href='/category/knex-dot-js/'>Knex.js</a>, <a class='category' href='/category/postgis/'>PostGIS</a>
+	
 
 
-<time datetime="2016-03-21T13:09:00-07:00" pubdate data-updated="true">Mar 21<span>st</span>, 2016</time>
-        
-         | <a href="/2016/03/21/lossless-rate-limiting-with-rxjs/#disqus_thread">Comments</a>
-        
-      </p>
-    
-  </header>
+	
+	
+	</footer>
+	
+</article>
+<!-- END OF _includes/article.html -->
 
-
-  <div class="entry-content"><p>Much of RxJS involves working with
+	
+		
+		<!-- START OF _includes/article.html -->
+<article>
+	<header>
+		<h1><a href="/2016/03/21/lossless-rate-limiting-with-rxjs/">Lossless rate limiting with RxJS</a></h1>
+		<time>21 March 2016</time>
+	</header>
+		<div class="content">
+			<p>Much of RxJS involves working with
 <a href="http://reactivex.io/documentation/operators/backpressure.html">backpressure</a> &ndash; how to reconcile
 streams that emit/process data at different rates, without overloading
 the system. Much of that model is built with lossy handling in mind &ndash; it
@@ -715,44 +661,43 @@ forces the incoming stream to execute serially over artificial time delayed stre
 <li><a href="http://stackoverflow.com/questions/30876361/rxjs-rate-limit-requests-per-second-and-concurrency?rq=1">http://stackoverflow.com/questions/30876361/rxjs-rate-limit-requests-per-second-and-concurrency?rq=1</a></li>
 </ul>
 
-</div>
-  
-  
+
+			
+			
+		</div>
+	<footer>
+		
 
 
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/2016/02/17/partitioning-rxjs-streams-adventures-in-nested-observables-with-groupby-and-flatmap/">Partitioning RxJS streams: adventures in nested Observables with groupBy() and flatMap()</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
+		
 
 
 
   
+		
+			Tagged under
+		
+    <a class='category' href='/category/frp/'>FRP</a>, <a class='category' href='/category/rate-limiting/'>Rate limiting</a>, <a class='category' href='/category/reactive-programming/'>Reactive programming</a>, <a class='category' href='/category/rxjs/'>RxJS</a>
+	
 
 
-<time datetime="2016-02-17T22:47:00-08:00" pubdate data-updated="true">Feb 17<span>th</span>, 2016</time>
-        
-         | <a href="/2016/02/17/partitioning-rxjs-streams-adventures-in-nested-observables-with-groupby-and-flatmap/#disqus_thread">Comments</a>
-        
-      </p>
-    
-  </header>
+	
+	
+	</footer>
+	
+</article>
+<!-- END OF _includes/article.html -->
 
-
-  <div class="entry-content"><p>One of the confusing aspects about working with streams is diving into
+	
+		
+		<!-- START OF _includes/article.html -->
+<article>
+	<header>
+		<h1><a href="/2016/02/17/partitioning-rxjs-streams-adventures-in-nested-observables-with-groupby-and-flatmap/">Partitioning RxJS streams: adventures in nested Observables with groupBy() and flatMap()</a></h1>
+		<time>17 February 2016</time>
+	</header>
+		<div class="content">
+			<p>One of the confusing aspects about working with streams is diving into
 Rx operators that take a stream and fan out into multiple streams.</p>
 
 <p>Is your head exploding yet?</p>
@@ -904,44 +849,43 @@ bit.</li>
 
 <p>Updated typo where the <code>index</code> variable on a GroupedObservable was
 changed to correctly be <code>key</code>.</p>
-</div>
-  
-  
+
+			
+			
+		</div>
+	<footer>
+		
 
 
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/2015/09/27/strange-loop-2015-reflections/">Strange Loop 2015: Notes & Reflections</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
+		
 
 
 
   
+		
+			Tagged under
+		
+    <a class='category' href='/category/observables/'>Observables</a>, <a class='category' href='/category/rxjs/'>RxJS</a>, <a class='category' href='/category/streams/'>Streams</a>
+	
 
 
-<time datetime="2015-09-27T15:40:00-07:00" pubdate data-updated="true">Sep 27<span>th</span>, 2015</time>
-        
-         | <a href="/2015/09/27/strange-loop-2015-reflections/#disqus_thread">Comments</a>
-        
-      </p>
-    
-  </header>
+	
+	
+	</footer>
+	
+</article>
+<!-- END OF _includes/article.html -->
 
-
-  <div class="entry-content"><p>Going to Strange Loop was a huge check off my conference bucket list
+	
+		
+		<!-- START OF _includes/article.html -->
+<article>
+	<header>
+		<h1><a href="/2015/09/27/strange-loop-2015-reflections/">Strange Loop 2015: Notes & Reflections</a></h1>
+		<time>27 September 2015</time>
+	</header>
+		<div class="content">
+			<p>Going to Strange Loop was a huge check off my conference bucket list
 (lanyard?). I&rsquo;d always heard about this slightly-weird, highly academic
 collision between academia and industry, skewing toward programming
 languages you haven&rsquo;t heard of (or, at the very least, you&rsquo;ve never used
@@ -1222,44 +1166,43 @@ Valley.</li>
 love and support one another/we have nothing to lose but our chains&rdquo;</li>
 </ul>
 
-</div>
-  
-  
+
+			
+			
+		</div>
+	<footer>
+		
 
 
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/2015/06/29/notes-on-performance-tuning-a-puma-server/">Notes on performance tuning a Puma server</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
+		
 
 
 
   
+		
+			Tagged under
+		
+    <a class='category' href='/category/conference/'>conference</a>, <a class='category' href='/category/distributed-systems/'>distributed systems</a>, <a class='category' href='/category/functional-programming/'>functional programming</a>, <a class='category' href='/category/software/'>software</a>, <a class='category' href='/category/strangeloop/'>strangeloop</a>
+	
 
 
-<time datetime="2015-06-29T11:47:00-07:00" pubdate data-updated="true">Jun 29<span>th</span>, 2015</time>
-        
-         | <a href="/2015/06/29/notes-on-performance-tuning-a-puma-server/#disqus_thread">Comments</a>
-        
-      </p>
-    
-  </header>
+	
+	
+	</footer>
+	
+</article>
+<!-- END OF _includes/article.html -->
 
-
-  <div class="entry-content"><p>A couple of months ago, I was tuning a Rails app for one of our clients.
+	
+		
+		<!-- START OF _includes/article.html -->
+<article>
+	<header>
+		<h1><a href="/2015/06/29/notes-on-performance-tuning-a-puma-server/">Notes on performance tuning a Puma server</a></h1>
+		<time>29 June 2015</time>
+	</header>
+		<div class="content">
+			<p>A couple of months ago, I was tuning a Rails app for one of our clients.
 This client wanted to know how performant their app would be under load.</p>
 
 <p>To do that, you can do several different things:</p>
@@ -1370,44 +1313,43 @@ tools like <a href="https://github.com/schneems/puma_auto_tune">puma_auto_tune</
 
 
 <p>Let me know in the comments if you have any questions!</p>
-</div>
-  
-  
+
+			
+			
+		</div>
+	<footer>
+		
 
 
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/2015/06/01/toolbox-learning-swift-and-viper/">Toolbox: learning Swift and VIPER</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
+		
 
 
 
   
+		
+			Tagged under
+		
+    <a class='category' href='/category/performance-tuning/'>performance tuning</a>, <a class='category' href='/category/puma/'>puma</a>, <a class='category' href='/category/rails/'>rails</a>
+	
 
 
-<time datetime="2015-06-01T17:04:00-07:00" pubdate data-updated="true">Jun 1<span>st</span>, 2015</time>
-        
-         | <a href="/2015/06/01/toolbox-learning-swift-and-viper/#disqus_thread">Comments</a>
-        
-      </p>
-    
-  </header>
+	
+	
+	</footer>
+	
+</article>
+<!-- END OF _includes/article.html -->
 
-
-  <div class="entry-content"><p>The following are some notes I&rsquo;m compiling as I&rsquo;m beginning a journey
+	
+		
+		<!-- START OF _includes/article.html -->
+<article>
+	<header>
+		<h1><a href="/2015/06/01/toolbox-learning-swift-and-viper/">Toolbox: learning Swift and VIPER</a></h1>
+		<time>01 June 2015</time>
+	</header>
+		<div class="content">
+			<p>The following are some notes I&rsquo;m compiling as I&rsquo;m beginning a journey
 down the rabbit hole, writing an app in Swift utilizing the <a href="http://www.objc.io/issue-13/viper.html">VIPER app development methodology</a></p>
 
 <ul>
@@ -1483,44 +1425,43 @@ clicking the checkbox &ldquo;Create Groups for any Added Folders&rdquo;</p>
 <li>You must contact CircleCI manually if you want to activate an iOS build (it&rsquo;s still in beta). What are some other good CI tools to use with iOS?</li>
 </ul>
 
-</div>
-  
-  
+
+			
+			
+		</div>
+	<footer>
+		
 
 
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/2015/04/30/building-gpx-stats-through-frp-principles-on-bacon-dot-js/">Building GPX stats through FRP principles with Bacon.js</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
+		
 
 
 
   
+		
+			Tagged under
+		
+    <a class='category' href='/category/ios/'>ios</a>, <a class='category' href='/category/swift/'>swift</a>, <a class='category' href='/category/viper/'>viper</a>
+	
 
 
-<time datetime="2015-04-30T12:54:00-07:00" pubdate data-updated="true">Apr 30<span>th</span>, 2015</time>
-        
-         | <a href="/2015/04/30/building-gpx-stats-through-frp-principles-on-bacon-dot-js/#disqus_thread">Comments</a>
-        
-      </p>
-    
-  </header>
+	
+	
+	</footer>
+	
+</article>
+<!-- END OF _includes/article.html -->
 
-
-  <div class="entry-content"><p>With my current fascination with <a href="http://github.com/andrewhao/stressfactor">tracking workouts and location-based-activities</a>, I have been interested in how I might be able to rewrite some of my stats logic with FRP principles.</p>
+	
+		
+		<!-- START OF _includes/article.html -->
+<article>
+	<header>
+		<h1><a href="/2015/04/30/building-gpx-stats-through-frp-principles-on-bacon-dot-js/">Building GPX stats through FRP principles with Bacon.js</a></h1>
+		<time>30 April 2015</time>
+	</header>
+		<div class="content">
+			<p>With my current fascination with <a href="http://github.com/andrewhao/stressfactor">tracking workouts and location-based-activities</a>, I have been interested in how I might be able to rewrite some of my stats logic with FRP principles.</p>
 
 <h3>What is FRP?</h3>
 
@@ -1613,44 +1554,43 @@ clicking the checkbox &ldquo;Create Groups for any Added Folders&rdquo;</p>
 <p>I investigated different reactive frameworks, mainly <a href="https://github.com/Reactive-Extensions/RxJS/">RxJS</a> and <a href="https://github.com/baconjs/bacon.js/">Bacon.js</a>. My takeaways were that RxJS does everything and the kitchen sink, but I got lost trying to reconcile Node streams with RxJS cold streams. Bacon.js just seemed to work for me, out of the box. I&rsquo;m still learning, so I hope to have a better understanding of the core issues here.</p>
 
 <p>You can check it out here: <a href="https://github.com/andrewhao/rxlocation">rxlocation</a>.</p>
-</div>
-  
-  
+
+			
+			
+		</div>
+	<footer>
+		
 
 
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/2015/03/19/docker-rails-and-docker-compose-in-your-development-workflow/">Docker, Rails, and Docker Compose in your development workflow</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
+		
 
 
 
   
+		
+			Tagged under
+		
+    <a class='category' href='/category/functional-reactive-programming/'>functional reactive programming</a>, <a class='category' href='/category/javascript/'>javascript</a>, <a class='category' href='/category/node/'>node</a>
+	
 
 
-<time datetime="2015-03-19T13:29:00-07:00" pubdate data-updated="true">Mar 19<span>th</span>, 2015</time>
-        
-         | <a href="/2015/03/19/docker-rails-and-docker-compose-in-your-development-workflow/#disqus_thread">Comments</a>
-        
-      </p>
-    
-  </header>
+	
+	
+	</footer>
+	
+</article>
+<!-- END OF _includes/article.html -->
 
-
-  <div class="entry-content"><p>(This post <a href="http://blog.carbonfive.com/2015/03/17/docker-rails-docker-compose-together-in-your-development-workflow/">originally appeared</a> on the Carbon Five blog.)</p>
+	
+		
+		<!-- START OF _includes/article.html -->
+<article>
+	<header>
+		<h1><a href="/2015/03/19/docker-rails-and-docker-compose-in-your-development-workflow/">Docker, Rails, and Docker Compose in your development workflow</a></h1>
+		<time>19 March 2015</time>
+	</header>
+		<div class="content">
+			<p>(This post <a href="http://blog.carbonfive.com/2015/03/17/docker-rails-docker-compose-together-in-your-development-workflow/">originally appeared</a> on the Carbon Five blog.)</p>
 
 <p>We&rsquo;ve been trialing the usage of Docker and <a href="https://docs.docker.com/compose/">Docker Compose</a> (previously known as <a href="http://www.fig.sh">fig</a>) on a Rails project here at Carbon Five. In the past, my personal experience with Docker had been that the promise of portable containerized apps was within reach, but the tooling and development workflow were still awkward &ndash; commands were complex, configuration and linking steps were complicated, and the overall learning curve was high.</p>
 
@@ -2113,44 +2053,43 @@ each container. You should see output that indicates that both our <code>web</co
 <h3>Coming up: integration with CI and deployment.</h3>
 
 <p>In upcoming blog posts, we will investigate how to use the power of Docker Compose to test and build your containers in a CI-powered workflow, push to Docker registries, and deploy to production. Stay tuned!</p>
-</div>
-  
-  
+
+			
+			
+		</div>
+	<footer>
+		
 
 
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/2014/11/29/explorations-in-logic-programming/">Explorations in logic programming</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
+		
 
 
 
   
+		
+			Tagged under
+		
+    <a class='category' href='/category/docker/'>Docker</a>, <a class='category' href='/category/rails/'>Rails</a>
+	
 
 
-<time datetime="2014-11-29T16:40:00-08:00" pubdate data-updated="true">Nov 29<span>th</span>, 2014</time>
-        
-         | <a href="/2014/11/29/explorations-in-logic-programming/#disqus_thread">Comments</a>
-        
-      </p>
-    
-  </header>
+	
+	
+	</footer>
+	
+</article>
+<!-- END OF _includes/article.html -->
 
-
-  <div class="entry-content"><p>Out of <a href="https://github.com/andrewhao/storybook">Storybook</a>, a side project I&rsquo;ve been doing for a friend, I had the opportunity to model the problem domain as a constraint satisfaction problem (CSP). It goes:</p>
+	
+		
+		<!-- START OF _includes/article.html -->
+<article>
+	<header>
+		<h1><a href="/2014/11/29/explorations-in-logic-programming/">Explorations in logic programming</a></h1>
+		<time>29 November 2014</time>
+	</header>
+		<div class="content">
+			<p>Out of <a href="https://github.com/andrewhao/storybook">Storybook</a>, a side project I&rsquo;ve been doing for a friend, I had the opportunity to model the problem domain as a constraint satisfaction problem (CSP). It goes:</p>
 
 <blockquote><p>A set of students are assigned a book a week. Write plan generator to create a set of student-book assignments for that week, given the following constraints:</p>
 
@@ -2282,128 +2221,76 @@ each container. You should see output that indicates that both our <code>web</co
 <li><a href="http://community.schemewiki.org/?amb">SchemeWiki: amb</a></li>
 </ul>
 
+
+			
+			
+		</div>
+	<footer>
+		
+
+
+		
+
+
+
+
+	
+	
+	</footer>
+	
+</article>
+<!-- END OF _includes/article.html -->
+
+	
+	
+<div class="pagination">
+	
+		<a class="older" href="/page/2/">Older</a>
+	
+	
+	<span class="total">1 of 10</span>
+	
+	
 </div>
-  
-  
+<!-- END OF index.html -->
 
 
-    </article>
-  
-  <div class="pagination">
-    
-      <a class="prev" href="/page/2/">&larr; Older</a>
-    
-    <a href="/blog/archives">Blog Archives</a>
-    
-  </div>
-</div>
-<aside class="sidebar">
-  
-    <section>
-  <h1>Recent Posts</h1>
-  <ul id="recent_posts">
-    
-      <li class="post">
-        <a href="/2016/04/18/the-joy-of-naming-with-the-powers-of-domain-driven-design/">The Joy of Naming</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2016/04/08/knex-dot-js-and-bookshelf-dot-js-cheat-sheet/">Knex.js and PostGIS cheat sheet</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2016/03/21/lossless-rate-limiting-with-rxjs/">Lossless rate limiting with RxJS</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2016/02/17/partitioning-rxjs-streams-adventures-in-nested-observables-with-groupby-and-flatmap/">Partitioning RxJS streams: adventures in nested Observables with groupBy() and flatMap()</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2015/09/27/strange-loop-2015-reflections/">Strange Loop 2015: Notes & Reflections</a>
-      </li>
-    
-  </ul>
-</section>
+			<footer>
+				Copyright &copy; 2016
 
-<section>
-  <h1>GitHub Repos</h1>
-  <ul id="gh_repos">
-    <li class="loading">Status updating&#8230;</li>
-  </ul>
-  
-  <a href="https://github.com/andrewhao">@andrewhao</a> on GitHub
-  
-  <script type="text/javascript">
-    $(document).ready(function(){
-        if (!window.jXHR){
-            var jxhr = document.createElement('script');
-            jxhr.type = 'text/javascript';
-            jxhr.src = '/javascripts/libs/jXHR.js';
-            var s = document.getElementsByTagName('script')[0];
-            s.parentNode.insertBefore(jxhr, s);
-        }
-
-        github.showRepos({
-            user: 'andrewhao',
-            count: 0,
-            skip_forks: true,
-            target: '#gh_repos'
-        });
-    });
-  </script>
-  <script src="/javascripts/github.js" type="text/javascript"> </script>
-</section>
+	Andrew Hao
 
 
+			</footer>
 
+		</div> <!-- // .wrap -->
+	</body>
+	<script>
+		$(document).ready(function() {
+			// Make images center
+			$('p:has(img)').css('text-align', 'center');
 
+			// Add the image's title attribute as a caption
+			$('p:has(img)').append(function () {
+				return '<div class="caption">' + ($('img', this).attr('title') || "") + '</div>';
+			});
 
-  
-</aside>
+			// Prettify code
+			$('code').addClass('prettyprint');
+			$('pre code').addClass('linenums');
 
-    </div>
-  </div>
-  <footer role="contentinfo"><p>
-  Copyright &copy; 2016 - Andrew Hao -
-  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
-</p>
-
-</footer>
-  
-
-<script type="text/javascript">
-      var disqus_shortname = 'g9labs';
-      
-        
-        var disqus_script = 'count.js';
-      
-    (function () {
-      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
-      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-    }());
-</script>
-
-
-
-
-
-
-
-  <script type="text/javascript">
-    (function(){
-      var twitterWidgets = document.createElement('script');
-      twitterWidgets.type = 'text/javascript';
-      twitterWidgets.async = true;
-      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
-      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
-    })();
-  </script>
-
-
-
-
-
-</body>
+			// Copy to clipboard with button
+			$('pre:has(code)').prepend(function(){
+				return '<div class="clip-btn">copy to clipboard</div>';
+			});
+			$('.clip-btn').zclip({
+				path:'/js/ZeroClipboard.swf',
+				copy: $(this).next('code').text(),
+				afterCopy: function(){
+					$(this).replaceWith('<div class="clip-btn">copied!');
+					}
+			});
+		});
+	</script>
 </html>
+<!-- END OF _layouts/default.html -->

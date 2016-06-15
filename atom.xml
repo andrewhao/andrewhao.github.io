@@ -1,24 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[The Sweet Spot]]></title>
-  <link href="http://www.g9labs.com/atom.xml" rel="self"/>
-  <link href="http://www.g9labs.com/"/>
-  <updated>2016-04-19T15:56:03-07:00</updated>
-  <id>http://www.g9labs.com/</id>
-  <author>
-    <name><![CDATA[Andrew Hao]]></name>
-    
-  </author>
-  <generator uri="http://octopress.org/">Octopress</generator>
+	<title><![CDATA[The Sweet Spot]]></title>
+	<link href="http://www.g9labs.com/atom.xml" rel="self"/>
+	<link href="http://www.g9labs.com/"/>
+	<updated>2016-06-15T10:29:09-07:00</updated>
+	<id>http://www.g9labs.com/</id>
+	<author>
+		<name><![CDATA[Andrew Hao]]></name>
+		
+	</author>
+	<generator uri="http://octopress.org/">Octopress</generator>
 
-  
-  <entry>
-    <title type="html"><![CDATA[The Joy of Naming]]></title>
-    <link href="http://www.g9labs.com/2016/04/18/the-joy-of-naming-with-the-powers-of-domain-driven-design/"/>
-    <updated>2016-04-18T17:14:00-07:00</updated>
-    <id>http://www.g9labs.com/2016/04/18/the-joy-of-naming-with-the-powers-of-domain-driven-design</id>
-    <content type="html"><![CDATA[<p>I want to discuss a topic near and dear to my heart, and what I believe
+	
+	<entry>
+		
+			<title type="html"><![CDATA[Domain-Driven Design & The Joy of Naming]]></title>
+		
+		<link href="http://www.g9labs.com/2016/04/18/the-joy-of-naming-with-the-powers-of-domain-driven-design/"/>
+		<updated>2016-04-18T17:14:00-07:00</updated>
+		<id>http://www.g9labs.com/2016/04/18/the-joy-of-naming-with-the-powers-of-domain-driven-design</id>
+		<content type="html">
+			<![CDATA[
+				
+					<p></p>
+				
+			]]>
+			<![CDATA[<p>I want to discuss a topic near and dear to my heart, and what I believe
 is at the crux of effective software design. It&rsquo;s not a new functional language,
 it&rsquo;s not a fancy new framework, a how-to guide to do microservices, nor a quantum leap in the field of machine learning.</p>
 
@@ -392,16 +400,28 @@ it&rsquo;s not a fancy new framework, a how-to guide to do microservices, nor a 
 
 <h3>And there is much more!</h3>
 
-<p>In an upcoming post, we&rsquo;ll investigate how the <strong>Ubiquitous Language</strong> applies to a core concept of Domain-Driven Design: the <strong>Bounded Context</strong>. Why is that important? Because Bounded Contexts give us tools to organize our code &ndash; and to do further advanced things like <a href="https://speakerdeck.com/andrewhao/ddd-rail-your-monorail">break up monoliths into services</a>. More on that to come!</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Knex.js and PostGIS cheat sheet]]></title>
-    <link href="http://www.g9labs.com/2016/04/08/knex-dot-js-and-bookshelf-dot-js-cheat-sheet/"/>
-    <updated>2016-04-08T12:33:00-07:00</updated>
-    <id>http://www.g9labs.com/2016/04/08/knex-dot-js-and-bookshelf-dot-js-cheat-sheet</id>
-    <content type="html"><![CDATA[<p>As follows are some code snippets for using <a href="http://knexjs.org/">Knex.js</a> for executing
+<p>In an upcoming post, we&rsquo;ll investigate how the <strong>Ubiquitous Language</strong> applies to a core concept of Domain-Driven Design: the <strong>Bounded Context</strong>. Why is that important? Because Bounded Contexts give us tools to organize our code &ndash; and to do further advanced things like <a href="https://speakerdeck.com/andrewhao/ddd-rail-your-monorail">break up monoliths into services</a>.</p>
+
+<script async class="speakerdeck-embed" data-id="1e6dd8983891467381036a321cd274a9" data-ratio="1.77777777777778" src="http://www.g9labs.com//speakerdeck.com/assets/embed.js"></script>
+
+]]>
+		</content>
+	</entry>
+	
+	<entry>
+		
+			<title type="html"><![CDATA[Knex.js and PostGIS cheat sheet]]></title>
+		
+		<link href="http://www.g9labs.com/2016/04/08/knex-dot-js-and-bookshelf-dot-js-cheat-sheet/"/>
+		<updated>2016-04-08T12:33:00-07:00</updated>
+		<id>http://www.g9labs.com/2016/04/08/knex-dot-js-and-bookshelf-dot-js-cheat-sheet</id>
+		<content type="html">
+			<![CDATA[
+				
+					<p></p>
+				
+			]]>
+			<![CDATA[<p>As follows are some code snippets for using <a href="http://knexjs.org/">Knex.js</a> for executing
 Postgres and PostGIS queries.</p>
 
 <h3>Execute raw SQL in migration</h3>
@@ -490,15 +510,24 @@ Postgres and PostGIS queries.</p>
 
 
 <p>See <a href="https://github.com/jfgodoy/knex-postgis">knex-postgis</a> documentation for a list of other PostGIS functions that are supported.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Lossless rate limiting with RxJS]]></title>
-    <link href="http://www.g9labs.com/2016/03/21/lossless-rate-limiting-with-rxjs/"/>
-    <updated>2016-03-21T13:09:00-07:00</updated>
-    <id>http://www.g9labs.com/2016/03/21/lossless-rate-limiting-with-rxjs</id>
-    <content type="html"><![CDATA[<p>Much of RxJS involves working with
+]]>
+		</content>
+	</entry>
+	
+	<entry>
+		
+			<title type="html"><![CDATA[Lossless rate limiting with RxJS]]></title>
+		
+		<link href="http://www.g9labs.com/2016/03/21/lossless-rate-limiting-with-rxjs/"/>
+		<updated>2016-03-21T13:09:00-07:00</updated>
+		<id>http://www.g9labs.com/2016/03/21/lossless-rate-limiting-with-rxjs</id>
+		<content type="html">
+			<![CDATA[
+				
+					<p></p>
+				
+			]]>
+			<![CDATA[<p>Much of RxJS involves working with
 <a href="http://reactivex.io/documentation/operators/backpressure.html">backpressure</a> &ndash; how to reconcile
 streams that emit/process data at different rates, without overloading
 the system. Much of that model is built with lossy handling in mind &ndash; it
@@ -565,15 +594,24 @@ forces the incoming stream to execute serially over artificial time delayed stre
 <li><a href="http://stackoverflow.com/questions/30876361/rxjs-rate-limit-requests-per-second-and-concurrency?rq=1">http://stackoverflow.com/questions/30876361/rxjs-rate-limit-requests-per-second-and-concurrency?rq=1</a></li>
 </ul>
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Partitioning RxJS streams: adventures in nested Observables with groupBy() and flatMap()]]></title>
-    <link href="http://www.g9labs.com/2016/02/17/partitioning-rxjs-streams-adventures-in-nested-observables-with-groupby-and-flatmap/"/>
-    <updated>2016-02-17T22:47:00-08:00</updated>
-    <id>http://www.g9labs.com/2016/02/17/partitioning-rxjs-streams-adventures-in-nested-observables-with-groupby-and-flatmap</id>
-    <content type="html"><![CDATA[<p>One of the confusing aspects about working with streams is diving into
+]]>
+		</content>
+	</entry>
+	
+	<entry>
+		
+			<title type="html"><![CDATA[Partitioning RxJS streams: adventures in nested Observables with groupBy() and flatMap()]]></title>
+		
+		<link href="http://www.g9labs.com/2016/02/17/partitioning-rxjs-streams-adventures-in-nested-observables-with-groupby-and-flatmap/"/>
+		<updated>2016-02-17T22:47:00-08:00</updated>
+		<id>http://www.g9labs.com/2016/02/17/partitioning-rxjs-streams-adventures-in-nested-observables-with-groupby-and-flatmap</id>
+		<content type="html">
+			<![CDATA[
+				
+					<p></p>
+				
+			]]>
+			<![CDATA[<p>One of the confusing aspects about working with streams is diving into
 Rx operators that take a stream and fan out into multiple streams.</p>
 
 <p>Is your head exploding yet?</p>
@@ -725,15 +763,24 @@ bit.</li>
 
 <p>Updated typo where the <code>index</code> variable on a GroupedObservable was
 changed to correctly be <code>key</code>.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Strange Loop 2015: Notes & Reflections]]></title>
-    <link href="http://www.g9labs.com/2015/09/27/strange-loop-2015-reflections/"/>
-    <updated>2015-09-27T15:40:00-07:00</updated>
-    <id>http://www.g9labs.com/2015/09/27/strange-loop-2015-reflections</id>
-    <content type="html"><![CDATA[<p>Going to Strange Loop was a huge check off my conference bucket list
+]]>
+		</content>
+	</entry>
+	
+	<entry>
+		
+			<title type="html"><![CDATA[Strange Loop 2015: Notes & Reflections]]></title>
+		
+		<link href="http://www.g9labs.com/2015/09/27/strange-loop-2015-reflections/"/>
+		<updated>2015-09-27T15:40:00-07:00</updated>
+		<id>http://www.g9labs.com/2015/09/27/strange-loop-2015-reflections</id>
+		<content type="html">
+			<![CDATA[
+				
+					<p></p>
+				
+			]]>
+			<![CDATA[<p>Going to Strange Loop was a huge check off my conference bucket list
 (lanyard?). I&rsquo;d always heard about this slightly-weird, highly academic
 collision between academia and industry, skewing toward programming
 languages you haven&rsquo;t heard of (or, at the very least, you&rsquo;ve never used
@@ -1014,15 +1061,24 @@ Valley.</li>
 love and support one another/we have nothing to lose but our chains&rdquo;</li>
 </ul>
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Notes on performance tuning a Puma server]]></title>
-    <link href="http://www.g9labs.com/2015/06/29/notes-on-performance-tuning-a-puma-server/"/>
-    <updated>2015-06-29T11:47:00-07:00</updated>
-    <id>http://www.g9labs.com/2015/06/29/notes-on-performance-tuning-a-puma-server</id>
-    <content type="html"><![CDATA[<p>A couple of months ago, I was tuning a Rails app for one of our clients.
+]]>
+		</content>
+	</entry>
+	
+	<entry>
+		
+			<title type="html"><![CDATA[Notes on performance tuning a Puma server]]></title>
+		
+		<link href="http://www.g9labs.com/2015/06/29/notes-on-performance-tuning-a-puma-server/"/>
+		<updated>2015-06-29T11:47:00-07:00</updated>
+		<id>http://www.g9labs.com/2015/06/29/notes-on-performance-tuning-a-puma-server</id>
+		<content type="html">
+			<![CDATA[
+				
+					<p></p>
+				
+			]]>
+			<![CDATA[<p>A couple of months ago, I was tuning a Rails app for one of our clients.
 This client wanted to know how performant their app would be under load.</p>
 
 <p>To do that, you can do several different things:</p>
@@ -1133,15 +1189,24 @@ tools like <a href="https://github.com/schneems/puma_auto_tune">puma_auto_tune</
 
 
 <p>Let me know in the comments if you have any questions!</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Toolbox: learning Swift and VIPER]]></title>
-    <link href="http://www.g9labs.com/2015/06/01/toolbox-learning-swift-and-viper/"/>
-    <updated>2015-06-01T17:04:00-07:00</updated>
-    <id>http://www.g9labs.com/2015/06/01/toolbox-learning-swift-and-viper</id>
-    <content type="html"><![CDATA[<p>The following are some notes I&rsquo;m compiling as I&rsquo;m beginning a journey
+]]>
+		</content>
+	</entry>
+	
+	<entry>
+		
+			<title type="html"><![CDATA[Toolbox: learning Swift and VIPER]]></title>
+		
+		<link href="http://www.g9labs.com/2015/06/01/toolbox-learning-swift-and-viper/"/>
+		<updated>2015-06-01T17:04:00-07:00</updated>
+		<id>http://www.g9labs.com/2015/06/01/toolbox-learning-swift-and-viper</id>
+		<content type="html">
+			<![CDATA[
+				
+					<p></p>
+				
+			]]>
+			<![CDATA[<p>The following are some notes I&rsquo;m compiling as I&rsquo;m beginning a journey
 down the rabbit hole, writing an app in Swift utilizing the <a href="http://www.objc.io/issue-13/viper.html">VIPER app development methodology</a></p>
 
 <ul>
@@ -1217,15 +1282,24 @@ clicking the checkbox &ldquo;Create Groups for any Added Folders&rdquo;</p>
 <li>You must contact CircleCI manually if you want to activate an iOS build (it&rsquo;s still in beta). What are some other good CI tools to use with iOS?</li>
 </ul>
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Building GPX stats through FRP principles with Bacon.js]]></title>
-    <link href="http://www.g9labs.com/2015/04/30/building-gpx-stats-through-frp-principles-on-bacon-dot-js/"/>
-    <updated>2015-04-30T12:54:00-07:00</updated>
-    <id>http://www.g9labs.com/2015/04/30/building-gpx-stats-through-frp-principles-on-bacon-dot-js</id>
-    <content type="html"><![CDATA[<p>With my current fascination with <a href="http://github.com/andrewhao/stressfactor">tracking workouts and location-based-activities</a>, I have been interested in how I might be able to rewrite some of my stats logic with FRP principles.</p>
+]]>
+		</content>
+	</entry>
+	
+	<entry>
+		
+			<title type="html"><![CDATA[Building GPX stats through FRP principles with Bacon.js]]></title>
+		
+		<link href="http://www.g9labs.com/2015/04/30/building-gpx-stats-through-frp-principles-on-bacon-dot-js/"/>
+		<updated>2015-04-30T12:54:00-07:00</updated>
+		<id>http://www.g9labs.com/2015/04/30/building-gpx-stats-through-frp-principles-on-bacon-dot-js</id>
+		<content type="html">
+			<![CDATA[
+				
+					<p></p>
+				
+			]]>
+			<![CDATA[<p>With my current fascination with <a href="http://github.com/andrewhao/stressfactor">tracking workouts and location-based-activities</a>, I have been interested in how I might be able to rewrite some of my stats logic with FRP principles.</p>
 
 <h3>What is FRP?</h3>
 
@@ -1318,15 +1392,24 @@ clicking the checkbox &ldquo;Create Groups for any Added Folders&rdquo;</p>
 <p>I investigated different reactive frameworks, mainly <a href="https://github.com/Reactive-Extensions/RxJS/">RxJS</a> and <a href="https://github.com/baconjs/bacon.js/">Bacon.js</a>. My takeaways were that RxJS does everything and the kitchen sink, but I got lost trying to reconcile Node streams with RxJS cold streams. Bacon.js just seemed to work for me, out of the box. I&rsquo;m still learning, so I hope to have a better understanding of the core issues here.</p>
 
 <p>You can check it out here: <a href="https://github.com/andrewhao/rxlocation">rxlocation</a>.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Docker, Rails, and Docker Compose in your development workflow]]></title>
-    <link href="http://www.g9labs.com/2015/03/19/docker-rails-and-docker-compose-in-your-development-workflow/"/>
-    <updated>2015-03-19T13:29:00-07:00</updated>
-    <id>http://www.g9labs.com/2015/03/19/docker-rails-and-docker-compose-in-your-development-workflow</id>
-    <content type="html"><![CDATA[<p>(This post <a href="http://blog.carbonfive.com/2015/03/17/docker-rails-docker-compose-together-in-your-development-workflow/">originally appeared</a> on the Carbon Five blog.)</p>
+]]>
+		</content>
+	</entry>
+	
+	<entry>
+		
+			<title type="html"><![CDATA[Docker, Rails, and Docker Compose in your development workflow]]></title>
+		
+		<link href="http://www.g9labs.com/2015/03/19/docker-rails-and-docker-compose-in-your-development-workflow/"/>
+		<updated>2015-03-19T13:29:00-07:00</updated>
+		<id>http://www.g9labs.com/2015/03/19/docker-rails-and-docker-compose-in-your-development-workflow</id>
+		<content type="html">
+			<![CDATA[
+				
+					<p></p>
+				
+			]]>
+			<![CDATA[<p>(This post <a href="http://blog.carbonfive.com/2015/03/17/docker-rails-docker-compose-together-in-your-development-workflow/">originally appeared</a> on the Carbon Five blog.)</p>
 
 <p>We&rsquo;ve been trialing the usage of Docker and <a href="https://docs.docker.com/compose/">Docker Compose</a> (previously known as <a href="http://www.fig.sh">fig</a>) on a Rails project here at Carbon Five. In the past, my personal experience with Docker had been that the promise of portable containerized apps was within reach, but the tooling and development workflow were still awkward &ndash; commands were complex, configuration and linking steps were complicated, and the overall learning curve was high.</p>
 
@@ -1789,15 +1872,24 @@ each container. You should see output that indicates that both our <code>web</co
 <h3>Coming up: integration with CI and deployment.</h3>
 
 <p>In upcoming blog posts, we will investigate how to use the power of Docker Compose to test and build your containers in a CI-powered workflow, push to Docker registries, and deploy to production. Stay tuned!</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Explorations in logic programming]]></title>
-    <link href="http://www.g9labs.com/2014/11/29/explorations-in-logic-programming/"/>
-    <updated>2014-11-29T16:40:00-08:00</updated>
-    <id>http://www.g9labs.com/2014/11/29/explorations-in-logic-programming</id>
-    <content type="html"><![CDATA[<p>Out of <a href="https://github.com/andrewhao/storybook">Storybook</a>, a side project I&rsquo;ve been doing for a friend, I had the opportunity to model the problem domain as a constraint satisfaction problem (CSP). It goes:</p>
+]]>
+		</content>
+	</entry>
+	
+	<entry>
+		
+			<title type="html"><![CDATA[Explorations in logic programming]]></title>
+		
+		<link href="http://www.g9labs.com/2014/11/29/explorations-in-logic-programming/"/>
+		<updated>2014-11-29T16:40:00-08:00</updated>
+		<id>http://www.g9labs.com/2014/11/29/explorations-in-logic-programming</id>
+		<content type="html">
+			<![CDATA[
+				
+					<p></p>
+				
+			]]>
+			<![CDATA[<p>Out of <a href="https://github.com/andrewhao/storybook">Storybook</a>, a side project I&rsquo;ve been doing for a friend, I had the opportunity to model the problem domain as a constraint satisfaction problem (CSP). It goes:</p>
 
 <blockquote><p>A set of students are assigned a book a week. Write plan generator to create a set of student-book assignments for that week, given the following constraints:</p>
 
@@ -1929,15 +2021,24 @@ each container. You should see output that indicates that both our <code>web</co
 <li><a href="http://community.schemewiki.org/?amb">SchemeWiki: amb</a></li>
 </ul>
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[My own robot training buddy.]]></title>
-    <link href="http://www.g9labs.com/2014/11/15/my-own-robot-training-buddy/"/>
-    <updated>2014-11-15T10:03:00-08:00</updated>
-    <id>http://www.g9labs.com/2014/11/15/my-own-robot-training-buddy</id>
-    <content type="html"><![CDATA[<p>As an ultra runner, I am really into the mountains. As a software engineer, I&rsquo;m really into data. So naturally, I&rsquo;m interested in the intersection of both.</p>
+]]>
+		</content>
+	</entry>
+	
+	<entry>
+		
+			<title type="html"><![CDATA[My own robot training buddy.]]></title>
+		
+		<link href="http://www.g9labs.com/2014/11/15/my-own-robot-training-buddy/"/>
+		<updated>2014-11-15T10:03:00-08:00</updated>
+		<id>http://www.g9labs.com/2014/11/15/my-own-robot-training-buddy</id>
+		<content type="html">
+			<![CDATA[
+				
+					<p></p>
+				
+			]]>
+			<![CDATA[<p>As an ultra runner, I am really into the mountains. As a software engineer, I&rsquo;m really into data. So naturally, I&rsquo;m interested in the intersection of both.</p>
 
 <p>I&rsquo;ve particularly been interested in how systems like <a href="http://www.strava.com">Strava</a> work, especially when they quantify what is known as a &ldquo;Suffer Score&rdquo;, a single number denoting the amount of training stress (a.k.a. suffering) you put yourself through in a workout.</p>
 
@@ -1987,15 +2088,24 @@ each container. You should see output that indicates that both our <code>web</co
 <li>Deploying all my apps on Heroku&rsquo;s free tier may actually be an interesting start to building a microservice architecture &mdash; with the space limitations on Heroku, I&rsquo;m forced to build new features on new services. Call it cheapskate architecture.</li>
 </ul>
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Recap: QCon SF 2014]]></title>
-    <link href="http://www.g9labs.com/2014/11/05/qcon-sf-2014/"/>
-    <updated>2014-11-05T19:01:00-08:00</updated>
-    <id>http://www.g9labs.com/2014/11/05/qcon-sf-2014</id>
-    <content type="html"><![CDATA[<p>Blurb sent me off to QCon SF 2014 for three days.</p>
+]]>
+		</content>
+	</entry>
+	
+	<entry>
+		
+			<title type="html"><![CDATA[Recap: QCon SF 2014]]></title>
+		
+		<link href="http://www.g9labs.com/2014/11/05/qcon-sf-2014/"/>
+		<updated>2014-11-05T19:01:00-08:00</updated>
+		<id>http://www.g9labs.com/2014/11/05/qcon-sf-2014</id>
+		<content type="html">
+			<![CDATA[
+				
+					<p></p>
+				
+			]]>
+			<![CDATA[<p>Blurb sent me off to QCon SF 2014 for three days.</p>
 
 <h2>Notes</h2>
 
@@ -2032,15 +2142,24 @@ each container. You should see output that indicates that both our <code>web</co
 <li>What are places in our hiring funnels that, unbeknownst to us, may be turning away or detracting women and minorities?</li>
 </ul>
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Conway's Law for humans]]></title>
-    <link href="http://www.g9labs.com/2014/11/01/conways-law-for-humans/"/>
-    <updated>2014-11-01T18:38:00-07:00</updated>
-    <id>http://www.g9labs.com/2014/11/01/conways-law-for-humans</id>
-    <content type="html"><![CDATA[<p>If you&rsquo;re familiar with <a href="http://en.wikipedia.org/wiki/Conway's_law">Conway&rsquo;s Law</a>, it states:</p>
+]]>
+		</content>
+	</entry>
+	
+	<entry>
+		
+			<title type="html"><![CDATA[Conway's Law for humans]]></title>
+		
+		<link href="http://www.g9labs.com/2014/11/01/conways-law-for-humans/"/>
+		<updated>2014-11-01T18:38:00-07:00</updated>
+		<id>http://www.g9labs.com/2014/11/01/conways-law-for-humans</id>
+		<content type="html">
+			<![CDATA[
+				
+					<p></p>
+				
+			]]>
+			<![CDATA[<p>If you&rsquo;re familiar with <a href="http://en.wikipedia.org/wiki/Conway's_law">Conway&rsquo;s Law</a>, it states:</p>
 
 <blockquote><p>Any organization that designs a system (defined broadly) will produce a design whose structure is a copy of the organization&rsquo;s communication structure.</p></blockquote>
 
@@ -2063,15 +2182,24 @@ each container. You should see output that indicates that both our <code>web</co
 <p>In this case, as we kept rolling out this framework, I realized our organization had no single owner for the design language of the site. Why? I had to wonder if it had to do with some deeper communication issues between the heads of the two departments.</p>
 
 <p>Code can be a good canary to organizational issues, and call out larger human issues at hand. In this case, Conway&rsquo;s Law helps us root out and bring into the light structural concerns. Leaders can pay attention to these concerns and check themselves to become more open communicators.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Mocks aren't stubs: mockist & classic testing]]></title>
-    <link href="http://www.g9labs.com/2014/06/21/mocks-arent-stubs/"/>
-    <updated>2014-06-21T17:55:00-07:00</updated>
-    <id>http://www.g9labs.com/2014/06/21/mocks-arent-stubs</id>
-    <content type="html"><![CDATA[<p>With the famed &ldquo;TDD is dead&rdquo; debate around the Rails community largely
+]]>
+		</content>
+	</entry>
+	
+	<entry>
+		
+			<title type="html"><![CDATA[Mocks aren't stubs: mockist & classic testing]]></title>
+		
+		<link href="http://www.g9labs.com/2014/06/21/mocks-arent-stubs/"/>
+		<updated>2014-06-21T17:55:00-07:00</updated>
+		<id>http://www.g9labs.com/2014/06/21/mocks-arent-stubs</id>
+		<content type="html">
+			<![CDATA[
+				
+					<p></p>
+				
+			]]>
+			<![CDATA[<p>With the famed &ldquo;TDD is dead&rdquo; debate around the Rails community largely
 coming to an end, I found myself referencing Martin Fowler&rsquo;s article,
 <a href="http://martinfowler.com/articles/mocksArentStubs.html">Mocks Aren&rsquo;t Stubs</a> a good deal, trying to make sense of it in terms of how I write tests and code.</p>
 
@@ -2217,15 +2345,24 @@ state instead of the <code>api_client</code>.</p>
 <li><a href="http://www.amazon.com/Growing-Object-Oriented-Software-Guided-Tests/dp/0321503627">Amazon: &ldquo;Growing Object Oriented Software, Guided by Tests&rdquo;</a></li>
 </ul>
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Running Mocha tests with ES6/AMD modules]]></title>
-    <link href="http://www.g9labs.com/2014/06/06/running-mocha-tests-with-es6-amd-modules/"/>
-    <updated>2014-06-06T15:11:00-07:00</updated>
-    <id>http://www.g9labs.com/2014/06/06/running-mocha-tests-with-es6-amd-modules</id>
-    <content type="html"><![CDATA[<p>In one of my personal projects (<a href="https://github.com/andrewhao/chordmeister">Chordmeister</a>), I&rsquo;ve been trying to
+]]>
+		</content>
+	</entry>
+	
+	<entry>
+		
+			<title type="html"><![CDATA[Running Mocha tests with ES6/AMD modules]]></title>
+		
+		<link href="http://www.g9labs.com/2014/06/06/running-mocha-tests-with-es6-amd-modules/"/>
+		<updated>2014-06-06T15:11:00-07:00</updated>
+		<id>http://www.g9labs.com/2014/06/06/running-mocha-tests-with-es6-amd-modules</id>
+		<content type="html">
+			<![CDATA[
+				
+					<p></p>
+				
+			]]>
+			<![CDATA[<p>In one of my personal projects (<a href="https://github.com/andrewhao/chordmeister">Chordmeister</a>), I&rsquo;ve been trying to
 upgrade the code to be written in <a href="http://wiki.ecmascript.org/doku.php?id=harmony:modules#export_declarations">ES6 modules</a> and transpile down to AMD modules with Square&rsquo;s <a href="https://github.com/square/es6-module-transpiler">very excellent es6-module-transpiler project</a>.</p>
 
 <p>Since I&rsquo;ve already <a href="https://github.com/andrewhao/hendrix">updated</a> an Ember app of mine to try ES6, I figured it was high time to do it on another project.</p>
@@ -2459,15 +2596,24 @@ finding myself having problems compiling from Coffeescript &ndash;> ES5 JS &ndas
 
 
 <p>Let me know if you have any questions!</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Implementing DDD: Domains, Subdomains and Bounded Contexts]]></title>
-    <link href="http://www.g9labs.com/2014/04/26/implementing-ddd-chapter-2/"/>
-    <updated>2014-04-26T08:43:00-07:00</updated>
-    <id>http://www.g9labs.com/2014/04/26/implementing-ddd-chapter-2</id>
-    <content type="html"><![CDATA[<h2>Chapter 2: Domains, Subdomains, and Bounded Contexts</h2>
+]]>
+		</content>
+	</entry>
+	
+	<entry>
+		
+			<title type="html"><![CDATA[Implementing DDD: Domains, Subdomains and Bounded Contexts]]></title>
+		
+		<link href="http://www.g9labs.com/2014/04/26/implementing-ddd-chapter-2/"/>
+		<updated>2014-04-26T08:43:00-07:00</updated>
+		<id>http://www.g9labs.com/2014/04/26/implementing-ddd-chapter-2</id>
+		<content type="html">
+			<![CDATA[
+				
+					<p></p>
+				
+			]]>
+			<![CDATA[<h2>Chapter 2: Domains, Subdomains, and Bounded Contexts</h2>
 
 <p>A <em>Domain</em> is what a business does and the surrounding context of how it does business. It is important to model out its supported <em>Subdomains</em> &mdash; that is, the smaller components of the business that collaborate in real, day-to-day operations of the business. The book describes these as <em>Core Domains</em>.</p>
 
@@ -2520,15 +2666,24 @@ finding myself having problems compiling from Coffeescript &ndash;> ES5 JS &ndas
 <p>Conversations with the business reveal an intention to develop an add-on product to the core product. This implies the development of two subdomains. However, further investigation reveals that the shared overlap of certain domain models (like users, roles, and access management) cannot simply be identically shared between two systems, since their <em>linguistic meanings</em> in the two systems differ slightly. Instead, the developers use the linguistic problem to develop a third bounded context.</p>
 
 <p>The developers separate their app into three bounded contexts built as three software systems.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Six months as a manager]]></title>
-    <link href="http://www.g9labs.com/2014/03/08/six-months-as-a-manager/"/>
-    <updated>2014-03-08T16:15:00-08:00</updated>
-    <id>http://www.g9labs.com/2014/03/08/six-months-as-a-manager</id>
-    <content type="html"><![CDATA[<p>It&rsquo;s been approximately six months since I&rsquo;ve entered engineering management. Here are some thoughts reflecting back on that season now.</p>
+]]>
+		</content>
+	</entry>
+	
+	<entry>
+		
+			<title type="html"><![CDATA[Six months as a manager]]></title>
+		
+		<link href="http://www.g9labs.com/2014/03/08/six-months-as-a-manager/"/>
+		<updated>2014-03-08T16:15:00-08:00</updated>
+		<id>http://www.g9labs.com/2014/03/08/six-months-as-a-manager</id>
+		<content type="html">
+			<![CDATA[
+				
+					<p></p>
+				
+			]]>
+			<![CDATA[<p>It&rsquo;s been approximately six months since I&rsquo;ve entered engineering management. Here are some thoughts reflecting back on that season now.</p>
 
 <h2>I didn&rsquo;t like it at first.</h2>
 
@@ -2586,15 +2741,24 @@ finding myself having problems compiling from Coffeescript &ndash;> ES5 JS &ndas
 <p>Lord knows I have a lot to learn here. One area I&rsquo;m learning to grow in is how to give honest and accurate feedback to team members, without fearing how they&rsquo;re going to receive it.</p>
 
 <p>Another area? Delegation. I&rsquo;m learning to delegate the little micro-responsibilities in my job that I just kind of expect that I&rsquo;m supposed to do. Case in point: every week we accept a translation import from a third-party translation service. I realized that I was burning a lot of time reviewing hundreds of lines of translation keys every week, and the repetition of it was sapping a lot of my energy. I had to learn to ask a team member for help and give them responsibility to own that function of the process.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Blogging through: Implementing Domain-Driven Design]]></title>
-    <link href="http://www.g9labs.com/2014/02/02/blogging-through-implementing-domain-driven-design/"/>
-    <updated>2014-02-02T11:31:00-08:00</updated>
-    <id>http://www.g9labs.com/2014/02/02/blogging-through-implementing-domain-driven-design</id>
-    <content type="html"><![CDATA[<p>In recent conversations with coworkers, the topic of Domain-Driven Design has
+]]>
+		</content>
+	</entry>
+	
+	<entry>
+		
+			<title type="html"><![CDATA[Blogging through: Implementing Domain-Driven Design]]></title>
+		
+		<link href="http://www.g9labs.com/2014/02/02/blogging-through-implementing-domain-driven-design/"/>
+		<updated>2014-02-02T11:31:00-08:00</updated>
+		<id>http://www.g9labs.com/2014/02/02/blogging-through-implementing-domain-driven-design</id>
+		<content type="html">
+			<![CDATA[
+				
+					<p></p>
+				
+			]]>
+			<![CDATA[<p>In recent conversations with coworkers, the topic of Domain-Driven Design has
 arisen on more than a few occasions in design and architecture meetings.
 &ldquo;Have you read it?&rdquo; a coworker asked, &ldquo;I think it&rsquo;d help us a lot.&rdquo;</p>
 
@@ -2756,15 +2920,24 @@ are able to provide in-flight feedback to the development of the
 system.</li>
 </ul>
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Moving to Ember App Kit]]></title>
-    <link href="http://www.g9labs.com/2014/01/26/moving-to-ember-app-kit/"/>
-    <updated>2014-01-26T23:32:00-08:00</updated>
-    <id>http://www.g9labs.com/2014/01/26/moving-to-ember-app-kit</id>
-    <content type="html"><![CDATA[<p>I&rsquo;ve noticed a bit of the buzz around <a href="https://github.com/stefanpenner/ember-app-kit">Ember App Kit</a>
+]]>
+		</content>
+	</entry>
+	
+	<entry>
+		
+			<title type="html"><![CDATA[Moving to Ember App Kit]]></title>
+		
+		<link href="http://www.g9labs.com/2014/01/26/moving-to-ember-app-kit/"/>
+		<updated>2014-01-26T23:32:00-08:00</updated>
+		<id>http://www.g9labs.com/2014/01/26/moving-to-ember-app-kit</id>
+		<content type="html">
+			<![CDATA[
+				
+					<p></p>
+				
+			]]>
+			<![CDATA[<p>I&rsquo;ve noticed a bit of the buzz around <a href="https://github.com/stefanpenner/ember-app-kit">Ember App Kit</a>
 recently and decided to move Hendrix, my music management app, over from
 a <a href="http://yeoman.io/">Yeoman</a>-generated Ember app to EAK with all its
 bells and whistles.</p>
@@ -2867,15 +3040,24 @@ the Resolver for: <code>appkit/routes/songs/index</code>. Renaming the file to:<
 
 
 <p>did the trick.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Ember Data, Rails, CORS, and you!]]></title>
-    <link href="http://www.g9labs.com/2013/12/27/ember-data-rails-cors-and-you/"/>
-    <updated>2013-12-27T16:22:00-08:00</updated>
-    <id>http://www.g9labs.com/2013/12/27/ember-data-rails-cors-and-you</id>
-    <content type="html"><![CDATA[<p>I&rsquo;m starting up a new personal project involving Ember-Data and Rails
+]]>
+		</content>
+	</entry>
+	
+	<entry>
+		
+			<title type="html"><![CDATA[Ember Data, Rails, CORS, and you!]]></title>
+		
+		<link href="http://www.g9labs.com/2013/12/27/ember-data-rails-cors-and-you/"/>
+		<updated>2013-12-27T16:22:00-08:00</updated>
+		<id>http://www.g9labs.com/2013/12/27/ember-data-rails-cors-and-you</id>
+		<content type="html">
+			<![CDATA[
+				
+					<p></p>
+				
+			]]>
+			<![CDATA[<p>I&rsquo;m starting up a new personal project involving Ember-Data and Rails
 (more to come). The gist of it is that it&rsquo;s a pure frontend app engine
 built in Yeoman and Grunt, and designed to talk to a remote API service
 built on Rails.</p>
@@ -3015,7 +3197,8 @@ post</a></p>
 
 
 <p>More to come how how this app works.</p>
-]]></content>
-  </entry>
-  
+]]>
+		</content>
+	</entry>
+	
 </feed>

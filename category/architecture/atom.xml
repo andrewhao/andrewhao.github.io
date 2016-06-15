@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Architecture | The Sweet Spot]]></title>
   <link href="http://www.g9labs.com/category/architecture/atom.xml" rel="self"/>
   <link href="http://www.g9labs.com/"/>
-  <updated>2016-04-19T15:56:03-07:00</updated>
+  <updated>2016-06-15T10:29:09-07:00</updated>
   <id>http://www.g9labs.com/</id>
   <author>
     <name><![CDATA[Andrew Hao]]></name>
@@ -14,7 +14,7 @@
 
   
   <entry>
-    <title type="html"><![CDATA[The Joy of Naming]]></title>
+    <title type="html"><![CDATA[Domain-Driven Design & The Joy of Naming]]></title>
     <link href="http://www.g9labs.com/2016/04/18/the-joy-of-naming-with-the-powers-of-domain-driven-design/"/>
     <updated>2016-04-18T17:14:00-07:00</updated>
     <id>http://www.g9labs.com/2016/04/18/the-joy-of-naming-with-the-powers-of-domain-driven-design</id>
@@ -346,7 +346,10 @@ end
 
 <h3>And there is much more!</h3>
 
-<p>In an upcoming post, we&rsquo;ll investigate how the <strong>Ubiquitous Language</strong> applies to a core concept of Domain-Driven Design: the <strong>Bounded Context</strong>. Why is that important? Because Bounded Contexts give us tools to organize our code &ndash; and to do further advanced things like <a href="https://speakerdeck.com/andrewhao/ddd-rail-your-monorail">break up monoliths into services</a>. More on that to come!</p>
+<p>In an upcoming post, we&rsquo;ll investigate how the <strong>Ubiquitous Language</strong> applies to a core concept of Domain-Driven Design: the <strong>Bounded Context</strong>. Why is that important? Because Bounded Contexts give us tools to organize our code &ndash; and to do further advanced things like <a href="https://speakerdeck.com/andrewhao/ddd-rail-your-monorail">break up monoliths into services</a>.</p>
+
+<script async class="speakerdeck-embed" data-id="1e6dd8983891467381036a321cd274a9" data-ratio="1.77777777777778" src="http://www.g9labs.com//speakerdeck.com/assets/embed.js"></script>
+
 ]]></content>
   </entry>
   
