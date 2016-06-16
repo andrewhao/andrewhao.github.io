@@ -23,13 +23,12 @@
 
 		<!-- Syntax highlighter -->
 		<link href="{{ root_url }}/stylesheets/prettify-hemisu.css" type="text/css" rel="stylesheet" />
-		<script type="text/javascript" src="{{ root_url }}/js/prettify.js"></script>
+    <script type="text/javascript" src="{{ root_url }}/js/prettify.js"></script>
 
-		<!--<link href="http://feeds.feedburner.com/turkeltaub" rel="alternate" title="{{ site.title }}" type="application/rss+xml" />-->
+    <link href="{{ site.subscribe_rss }}" rel="alternate" title="{{site.title}}" type="application/atom+xml">
+  </head>
 
-	</head>
 	<body onload="prettyPrint()">
-
 		<div class="wrap">
 
 			<header>
@@ -47,10 +46,12 @@
 
 			<footer>
 				{% include footer.html %}
+				{% include after_footer.html %}
 			</footer>
 
 		</div> <!-- // .wrap -->
-	</body>
+  </body>
+
 	<script>
 		$(document).ready(function() {
 			// Make images center
@@ -68,7 +69,8 @@
 			// Copy to clipboard with button
 			$('pre:has(code)').prepend(function(){
 				return '<div class="clip-btn">copy to clipboard</div>';
-			});
+      });
+
 			$('.clip-btn').zclip({
 				path:'{{ root_url }}/js/ZeroClipboard.swf',
 				copy: $(this).next('code').text(),
