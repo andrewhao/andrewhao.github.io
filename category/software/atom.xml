@@ -4,7 +4,7 @@
   <title><![CDATA[Category: software | The Sweet Spot]]></title>
   <link href="http://www.g9labs.com/category/software/atom.xml" rel="self"/>
   <link href="http://www.g9labs.com/"/>
-  <updated>2016-06-23T17:31:40-07:00</updated>
+  <updated>2016-06-24T11:07:28-07:00</updated>
   <id>http://www.g9labs.com/</id>
   <author>
     <name><![CDATA[Andrew Hao]]></name>
@@ -400,6 +400,101 @@ love and support one another/we have nothing to lose but our chains&rdquo;</li>
 <li>What are places in our hiring funnels that, unbeknownst to us, may be turning away or detracting women and minorities?</li>
 </ul>
 
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Speeding up Rspec/Cucumber feedback times without sacrificing coverage]]></title>
+    <link href="http://www.g9labs.com/2012/04/27/speeding-up-rspeccucumber-feedback-times-without-sacrificing-coverage/"/>
+    <updated>2012-04-27T10:27:17-07:00</updated>
+    <id>http://www.g9labs.com/2012/04/27/speeding-up-rspeccucumber-feedback-times-without-sacrificing-coverage</id>
+    <content type="html"><![CDATA[<iframe src="http://www.slideshare.net/slideshow/embed_code/4479466" width="512" height="421" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:1px solid #CCC;border-width:1px 1px 0;margin-bottom:5px" allowfullscreen>
+</iframe>
+
+
+<p><a href="http://www.slideshare.net/josephwilk/rocket-fuelled-cucumbers">Rocket Fuelled Cucumbers</a>
+View more <a href="http://www.slideshare.net/">presentations</a> from <a href="http://www.slideshare.net/josephwilk">Joseph Wilk</a></p>
+
+<p>One thing the Blurb devs have been discussing is how we can speed up our test feedback cycles without sacrificing coverage. There&rsquo;s some good tips (mainly Rails+Rspec/Cucumber) in the presentation such as:</p>
+
+<ul>
+<li>Don&rsquo;t run all the tests when developing (tag your tests by function)</li>
+<li>Parallelize, chunk tests over machines/cores using Testjour/<a href="https://github.com/sandro/specjour">Specjour</a>, <a href="https://github.com/ngauthier/hydra">Hydra</a></li>
+<li>Don&rsquo;t run all the tests at once. Tests that never fail should nightly.</li>
+<li>Instead of spinning up a browser for acceptance tests, can you use a js/DOM simulator (e.g. <a href="https://github.com/thatcher/env-js">envjs</a> via <a href="https://github.com/smparkes/capybara-envjs">capybara-envjs</a>, or <a href="https://github.com/jarib/celerity">celerity</a>)</li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Ohm gotchas]]></title>
+    <link href="http://www.g9labs.com/2012/01/20/ohm-gotchas/"/>
+    <updated>2012-01-20T10:19:50-08:00</updated>
+    <id>http://www.g9labs.com/2012/01/20/ohm-gotchas</id>
+    <content type="html"><![CDATA[<p>Here&rsquo;s a list of things that have been annoying, or at least a bit frustrating using <a href="http://ohm.keyvalue.org">Ohm</a>, the Redis ORM, in a Rails app. Beware to those who assume Ohm is ActiveRecord in new clothes. It is, but it&rsquo;s not:</p>
+
+<h2>CRUD</h2>
+
+<p>Don&rsquo;t make the mistake of treating your Ohm objects like AR:</p>
+
+<table>
+<thead>
+<tr>
+<th>ActiveRecord        </th>
+<th> Ohm</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>`destroy            </td>
+<td> <code>delete</code></td>
+</tr>
+<tr>
+<td><code>self.find(id)</code>     </td>
+<td> <code>self[id]</code></td>
+</tr>
+<tr>
+<td><code>update_attributes</code> </td>
+<td> <code>update</code></td>
+</tr>
+<tr>
+<td><code>create</code>            </td>
+<td> <code>create</code></td>
+</tr>
+</tbody>
+</table>
+
+
+<p>Also note that Ohm&rsquo;s <code>update_attributes</code> behaves differently from Rails` &mdash; it doesn&rsquo;t persist the updates to DB. That owned me for the good part of the day.</p>
+
+<h2>Callbacks</h2>
+
+<p>Thankfully, these are ActiveRecord-like with the addition of <a href="http://cyx.github.com/ohm-contrib/doc/"><code>ohm/contrib</code></a>.</p>
+
+<h2>Associations</h2>
+
+<table>
+<thead>
+<tr>
+<th>ActiveRecord            </th>
+<th> Ohm</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>has_a</code> or <code>belongs_to</code> </td>
+<td> <code>reference</code></td>
+</tr>
+<tr>
+<td><code>has_many</code>              </td>
+<td> <code>collection</code></td>
+</tr>
+</tbody>
+</table>
+
+
+<p>Read <a href="http://blog.citrusbyte.com/2010/04/12/mixing-ohm-with-activerecord-datamapper-and-sequel/">this article</a> if you&rsquo;re considering creating associations from AR objects to Ohm objects and the other way &lsquo;round.</p>
 ]]></content>
   </entry>
   

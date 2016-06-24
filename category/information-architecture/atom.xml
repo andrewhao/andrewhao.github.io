@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Information Architecture | The Sweet Spot]]></title>
+  <title><![CDATA[Category: information architecture | The Sweet Spot]]></title>
   <link href="http://www.g9labs.com/category/information-architecture/atom.xml" rel="self"/>
   <link href="http://www.g9labs.com/"/>
-  <updated>2016-06-23T17:31:40-07:00</updated>
+  <updated>2016-06-24T11:07:28-07:00</updated>
   <id>http://www.g9labs.com/</id>
   <author>
     <name><![CDATA[Andrew Hao]]></name>
@@ -45,10 +45,10 @@
 <p>There is no standard file format to encode resource maps. Currently, the OAI-ORE working group has suggested the following description formats (HT: <a href="http://www.natlib.govt.nz/downloads/IT19-Hunter-OAI-ORE-Oct30.ppt">Univ. of Queensland</a>):</p>
 
 <ul>
-<li><p><a href="http://www.w3.org/TR/REC-rdf-syntax/">RDF</a> (Resource Description Framework)</p></li>
-<li><p><a href="http://en.wikipedia.org/wiki/Atom_(standard">Atom</a>) syndication format</p></li>
-<li><p><a href="http://nurture.nature.com/yads">YADS</a></p></li>
-<li><p><a href="http://www.w3.org/2004/03/trix/">TriX</a> (RDF triples in XML)</p></li>
+<li><a href="http://www.w3.org/TR/REC-rdf-syntax/">RDF</a> (Resource Description Framework)</li>
+<li><a href="http://en.wikipedia.org/wiki/Atom_(standard">Atom</a>) syndication format</li>
+<li><a href="http://nurture.nature.com/yads">YADS</a></li>
+<li><a href="http://www.w3.org/2004/03/trix/">TriX</a> (RDF triples in XML)</li>
 </ul>
 
 

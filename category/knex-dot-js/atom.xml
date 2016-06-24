@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Knex.js | The Sweet Spot]]></title>
+  <title><![CDATA[Category: knex.js | The Sweet Spot]]></title>
   <link href="http://www.g9labs.com/category/knex-dot-js/atom.xml" rel="self"/>
   <link href="http://www.g9labs.com/"/>
-  <updated>2016-06-23T17:31:40-07:00</updated>
+  <updated>2016-06-24T11:07:28-07:00</updated>
   <id>http://www.g9labs.com/</id>
   <author>
     <name><![CDATA[Andrew Hao]]></name>
@@ -79,12 +79,10 @@ knex('trips')
 
 <p>We use <a href="https://github.com/jfgodoy/knex-postgis">knex-postgis</a> to gain access to PostGIS functions in Postgres. Here, we return a &lsquo;point&rsquo; column with <code>ST_AsGeoJSON</code>:</p>
 
-<p>```js
-const knexPostgis = require(&lsquo;knex-postgis&rsquo;)(knex);</p>
-
-<p>knex(&lsquo;events&rsquo;)
-.select(&lsquo;*&rsquo;, knexPostgis.asGeoJSON(&lsquo;point&rsquo;));
-```</p>
+<p><code>js
+const knexPostgis = require('knex-postgis')(knex);
+knex('events').select('*', knexPostgis.asGeoJSON('point'));
+</code></p>
 
 <p>See <a href="https://github.com/jfgodoy/knex-postgis">knex-postgis</a> documentation for a list of other PostGIS functions that are supported.</p>
 ]]></content>

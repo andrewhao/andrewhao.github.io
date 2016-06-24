@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Architecture | The Sweet Spot]]></title>
+  <title><![CDATA[Category: architecture | The Sweet Spot]]></title>
   <link href="http://www.g9labs.com/category/architecture/atom.xml" rel="self"/>
   <link href="http://www.g9labs.com/"/>
-  <updated>2016-06-23T17:31:40-07:00</updated>
+  <updated>2016-06-24T11:07:28-07:00</updated>
   <id>http://www.g9labs.com/</id>
   <author>
     <name><![CDATA[Andrew Hao]]></name>
@@ -345,7 +345,7 @@ end
 
 <p>In an upcoming post, we&rsquo;ll investigate how the <strong>Ubiquitous Language</strong> applies to a core concept of Domain-Driven Design: the <strong>Bounded Context</strong>. Why is that important? Because Bounded Contexts give us tools to organize our code &ndash; and to do further advanced things like <a href="https://speakerdeck.com/andrewhao/ddd-rail-your-monorail">break up monoliths into services</a>.</p>
 
-<script async class="speakerdeck-embed" data-id="1e6dd8983891467381036a321cd274a9" data-ratio="1.77777777777778" src="http://www.g9labs.com//speakerdeck.com/assets/embed.js"></script>
+<script async class="speakerdeck-embed" data-id="1e6dd8983891467381036a321cd274a9" data-ratio="1.77777777777778" src="//speakerdeck.com/assets/embed.js"></script>
 
 ]]></content>
   </entry>

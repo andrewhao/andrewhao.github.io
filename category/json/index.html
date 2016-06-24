@@ -6,7 +6,7 @@
 		<meta charset="utf-8">
 		<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" >
 		<meta content="width=device-width,initial-scale=1" name="viewport">
-		<meta content="A hacker/designer's brain dump about things like Javascript, Ruby, and typography." name="description">
+		<meta content="" name="description">
 		<meta content="The Sweet Spot" name="author">
 
 		<title>Category: json &mdash; The Sweet Spot</title>
@@ -47,11 +47,13 @@
 		<div class="wrap">
 
 			<header>
-				<div class="title">The Sweet Spot</div>
+        <a href=""><div class="title">The Sweet Spot</div></a>
+				<div class="subtitle">Andrew Hao's thoughts about software engineering, design, and anything shiny.</div>
 
 				<div class="navi">
 					<ul>
 						<li><a href="/">Blog</a></li>
+						<li><a href="/blog/archives">All Articles</a></li>
 						<li><a href="/blog/archives">All Articles</a></li>
 					</ul>
 				</div> <!-- // .navi -->
@@ -81,7 +83,10 @@
 
 <!-- BEGIN _includes/archive_post.html -->
 
-<a class="title-listing" href="/2013/12/27/ember-data-rails-cors-and-you/">Ember Data, Rails, CORS, and you!</a><br>
+<div class="post-listing">
+  <a class="title-listing" href="/2013/12/27/ember-data-rails-cors-and-you/">Ember Data, Rails, CORS, and you!</a>
+  <p class="post-listing__preview">{ post.content | strip_html | truncatewords: 15 }}...</p>
+</div>
 <!-- END _includes/archive_post.html -->
 
 

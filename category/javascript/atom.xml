@@ -4,7 +4,7 @@
   <title><![CDATA[Category: javascript | The Sweet Spot]]></title>
   <link href="http://www.g9labs.com/category/javascript/atom.xml" rel="self"/>
   <link href="http://www.g9labs.com/"/>
-  <updated>2016-06-23T17:31:40-07:00</updated>
+  <updated>2016-06-24T11:07:28-07:00</updated>
   <id>http://www.g9labs.com/</id>
   <author>
     <name><![CDATA[Andrew Hao]]></name>
@@ -12,6 +12,81 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Knex.js and PostGIS cheat sheet]]></title>
+    <link href="http://www.g9labs.com/2016/04/08/knex-dot-js-and-bookshelf-dot-js-cheat-sheet/"/>
+    <updated>2016-04-08T12:33:00-07:00</updated>
+    <id>http://www.g9labs.com/2016/04/08/knex-dot-js-and-bookshelf-dot-js-cheat-sheet</id>
+    <content type="html"><![CDATA[<p>As follows are some code snippets for using <a href="http://knexjs.org/">Knex.js</a> for executing
+Postgres and PostGIS queries.</p>
+
+<h3>Execute raw SQL in migration</h3>
+
+<p>I often find this useful for fancy SQL, like creating views.</p>
+
+<p><code>js
+exports.up = function(knex, Promise) {
+  return knex.raw(`YOUR RAW SQL`);
+};
+</code></p>
+
+<h3>Add a PostGIS Point type to a table in a migration:</h3>
+
+<p><code>js
+return knex.schema.table('events', function(table) {
+  table.specificType('point', 'geometry(point, 4326)');
+})
+</code></p>
+
+<h3>Add a foreign key to another table.</h3>
+
+<p>```js
+return knex.schema.table(&lsquo;events&rsquo;, function(table) {</p>
+
+<pre><code>table.integer('device_id').references('id').inTable('devices');
+</code></pre>
+
+<p>});
+```</p>
+
+<h3>Add a multi-column unique index</h3>
+
+<p><code>js
+return knex.schema.table('events', function(table) {
+  table.unique(['start_time', 'end_time', 'start_location', 'end_location', 'distance_miles']);
+});
+</code></p>
+
+<h3>Find a collection</h3>
+
+<p><code>js
+knex.select('*')
+.from('participants')
+.where({ name: 'Jason' })
+.andWhere('age', '&gt;=', 20)
+</code></p>
+
+<h3>Custom operations in SELECT clause</h3>
+
+<p><code>js
+knex('trips')
+.select(knex.raw('miles * passengers as passenger_miles'))
+.select(knex.raw("CONCAT('Hello, ', name) as greeting_message"))
+</code></p>
+
+<h3>Return PostGIS data from a spatial column:</h3>
+
+<p>We use <a href="https://github.com/jfgodoy/knex-postgis">knex-postgis</a> to gain access to PostGIS functions in Postgres. Here, we return a &lsquo;point&rsquo; column with <code>ST_AsGeoJSON</code>:</p>
+
+<p><code>js
+const knexPostgis = require('knex-postgis')(knex);
+knex('events').select('*', knexPostgis.asGeoJSON('point'));
+</code></p>
+
+<p>See <a href="https://github.com/jfgodoy/knex-postgis">knex-postgis</a> documentation for a list of other PostGIS functions that are supported.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Building GPX stats through FRP principles with Bacon.js]]></title>
@@ -89,6 +164,127 @@ locationStream.slidingWindow(2)</p>
 <p>I investigated different reactive frameworks, mainly <a href="https://github.com/Reactive-Extensions/RxJS/">RxJS</a> and <a href="https://github.com/baconjs/bacon.js/">Bacon.js</a>. My takeaways were that RxJS does everything and the kitchen sink, but I got lost trying to reconcile Node streams with RxJS cold streams. Bacon.js just seemed to work for me, out of the box. I&rsquo;m still learning, so I hope to have a better understanding of the core issues here.</p>
 
 <p>You can check it out here: <a href="https://github.com/andrewhao/rxlocation">rxlocation</a>.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[mmtss, a collaborative loop station]]></title>
+    <link href="http://www.g9labs.com/2011/10/02/mmtss-a-collaborative-loop-station/"/>
+    <updated>2011-10-02T03:53:45-07:00</updated>
+    <id>http://www.g9labs.com/2011/10/02/mmtss-a-collaborative-loop-station</id>
+    <content type="html"><![CDATA[<h2>mmtss is a loop station built for live performances.</h2>
+
+<p>Let&rsquo;s make music together! This project simplifies a traditional loop tracking station and is designed for interactive collaborative music performances.</p>
+
+<p>The idea: Everybody adds or modifies one &ldquo;part&rdquo; of a 32-bar loop. The user gets to play an instrument over the existing mix and record the 32-bar phrase when she or he is ready. Once the person is finished, the project selects another instrument at random for the next viewer to record.</p>
+
+<p>It&rsquo;s an Ableton Live controller serving a Webkit view, backed by node.js on the backend and socket.io + RaphaelJS on the front. Communication is done through a LiveOSC Live plugin via sockets.</p>
+
+<p>Displayed at the Regeneration &ldquo;We Collaborate&rdquo; art show in Oakland, CA. 9/24/2011.</p>
+
+<h3>Screenshots</h3>
+
+<p><img src="https://a248.e.akamai.net/assets.github.com/img/64abaefb0d10744dda42f362b6cd991522a88da4/687474703a2f2f6661726d372e7374617469632e666c69636b722e636f6d2f363136392f363138383336363537375f376261343864333864315f7a2e6a7067" alt="Practice mode" /></p>
+
+<p>mmtss in practice/playback mode. Here the user is able to practice/mess around with the current instrument to prepare to record the next track.</p>
+
+<p><img src="https://a248.e.akamai.net/assets.github.com/img/3f0c633b9b8d9d35970efe73f84c0f67bf68c6a8/687474703a2f2f6661726d372e7374617469632e666c69636b722e636f6d2f363132312f363138383838363131345f396436643531393937325f7a2e6a7067" alt="Cued mode" /></p>
+
+<p>Pressing &ldquo;record&rdquo; puts the user in a wait state. They are prompted to begin recording when all the black boxes count down and disappear.</p>
+
+<p><img src="https://a248.e.akamai.net/assets.github.com/img/650dc62a52d8ca6441eff57e697307325390caaa/687474703a2f2f6661726d372e7374617469632e666c69636b722e636f6d2f363137372f363138383336373135315f636135623738323733355f7a2e6a7067" alt="Record mode" /></p>
+
+<p>mmtss in record mode.</p>
+
+<p>More screenshots: <a href="http://www.flickr.com/photos/andrewhao/sets/72157627640840853/">http://www.flickr.com/photos/andrewhao/sets/72157627640840853/</a></p>
+
+<h3>Source code</h3>
+
+<p>Github: <a href="http://www.github.com/andrewhao/mmtss.">http://www.github.com/andrewhao/mmtss.</a></p>
+
+<p>MIT/GPL-sourced for your coding pleasure.</p>
+
+<h3>Installation</h3>
+
+<ul>
+<li><p>Make sure you have npm installed: <a href="http://www.npmjs.org/">http://www.npmjs.org</a></p></li>
+<li><p>Copy <code>lib/LiveOSC</code> into <code>/Applications/Live x.y.z OS X/Live.app/Contents/App-Resources/MIDI\ Remote\ Scripts/</code> folder</p></li>
+<li><p>Set it as your MIDI remote in the Ableton Live Preferences pane, in the &ldquo;MIDI Remote&rdquo; tab.</p></li>
+</ul>
+
+
+<h3>Running it</h3>
+
+<ul>
+<li><p>Open <code>Mmtss_0.als</code> as a sample Live project.</p></li>
+<li><p>Install all project dependencies with <code>npm install</code> from the project root.</p></li>
+<li><p>Start the Node server with <code>node app.js</code> from the root directory.</p></li>
+<li><p>Open a Web browser and visit <code>localhost:3000</code></p></li>
+</ul>
+
+
+<h3>Modifying the sample project</h3>
+
+<p>You can modify this project to suit your own needs. Note that there are two sets of tracks; instrument (MIDI input) tracks and loop tracks that actually store clips.</p>
+
+<p>For <code>n</code> tracks, you can add or remove your own instruments. Just make sure that instrument at track <code>x</code> corresponds to track <code>x</code> + <code>n</code>.</p>
+
+<h3>Credits</h3>
+
+<ul>
+<li><p>Design and architectural inspiration taken from <a href="http://github.com/vnoise/vtouch">vtouch</a>, a HTML5/Node/Canvas Ableton controller.</p></li>
+<li><p>Original LiveOSC source is found at: <a href="http://monome.q3f.org/browser/trunk/LiveOSC">http://monome.q3f.org/browser/trunk/LiveOSC</a>. We use a different fork of the project at:<a href="http://github.com/vnoise/vtouch">http://github.com/vnoise/vtouch</a>.</p></li>
+<li><p>Super sweet CSS3 rocker widgets courtesy of <a href="http://www.simurai.com/">Simurai</a>: <a href="http://lab.simurai.com/css/umbrui/">UmbrUI</a></p></li>
+</ul>
+
+
+<h3>License</h3>
+
+<p><a href="http://www.opensource.org/licenses/mit-license.php">MIT</a> and <a href="http://www.gnu.org/copyleft/gpl.html">GPLv3</a> licensed. Go for it.</p>
+
+<p>You will, however, need to get a license for <a href="http://www.ableton.com/live">Ableton Live</a> yourself.</p>
+
+<h3>The handsome collaborators</h3>
+
+<ul>
+<li><p>Andrew Hao: <a href="http://www.g9labs.com/">http://www.g9labs.com</a></p></li>
+<li><p>David Luoh: <a href="http://www.inkproj.com/">http://www.inkproj.com</a></p></li>
+</ul>
+
+
+<h3></h3>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Chat App - Frontend Prototype]]></title>
+    <link href="http://www.g9labs.com/2011/07/01/chat-app-frontend-prototype/"/>
+    <updated>2011-07-01T11:21:05-07:00</updated>
+    <id>http://www.g9labs.com/2011/07/01/chat-app-frontend-prototype</id>
+    <content type="html"><![CDATA[<p><a href="http://www.flickr.com/photos/andrewhao/5885861130/"><img src="http://farm6.static.flickr.com/5261/5885861130_71e25f2beb.jpg" alt="Chat View - 1" /></a></p>
+
+<p><a href="http://www.flickr.com/photos/andrewhao/5885860254/"><img src="http://farm7.static.flickr.com/6053/5885860254_a2aa7f7895.jpg" alt="Interview View" /></a></p>
+
+<p>Some UI work I did for a stealth startup in early &lsquo;11. Responsible for look &amp; feel and frontend chat interactions. jQuery/UI communicating to a CakePHP/nodejs backend.</p>
+
+<p>We developed this prototype with <a href="http://www.wisdom.weizmann.ac.il/~dharel/SCANNED.PAPERS/Statecharts.pdf">statecharts</a>, a concept commonly found in event-driven programming and with which I first learned from <a href="http://frozencanuck.wordpress.com/2011/03/09/sproutcore-statecharts-vs-controllers/">Sproutcore</a>. I found it really helped map out all the complex user interactions we had to deal with on the page.</p>
+
+<p><a href="http://www.flickr.com/photos/andrewhao/sets/72157626954648391/with/5885860254/">See more screenshots from the set</a>.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Aristo, the shiniest jQuery UI theme of them all.]]></title>
+    <link href="http://www.g9labs.com/2010/12/01/aristo-the-shiniest-jquery-ui-theme-of-them-all/"/>
+    <updated>2010-12-01T09:54:40-08:00</updated>
+    <id>http://www.g9labs.com/2010/12/01/aristo-the-shiniest-jquery-ui-theme-of-them-all</id>
+    <content type="html"><![CDATA[<p>Let&rsquo;s face it: <a href="http://jqueryui.com/themeroller/">jQuery UI skins</a> suck. They&rsquo;re flat, they&rsquo;re boring, they don&rsquo;t pop.</p>
+
+<p>Enter <a href="http://taitems.tumblr.com/post/482577430/introducing-aristo-a-jquery-ui-theme">Aristo</a>, a jQuery UI port of the <a href="http://cappuccino.org/">Cappuccino Javascript framework</a> theme.</p>
+
+<p><a href="http://www.g9labs.com/2010/12/01/aristo-the-shiniest-jquery-ui-theme-of-them-all/screen-shot-2010-12-01-at-4-47-58-pm/"><img src="http://www.g9labs.com/wp-content/uploads/2010/12/Screen-shot-2010-12-01-at-4.47.58-PM.png" alt="" /></a></p>
+
+<p>Much better. Clone the <a href="https://github.com/taitems/Aristo-jQuery-UI-Theme">repo from GitHub</a> here, or check out a <a href="http://www.warfuric.com/taitems/demo.html">demo</a>.</p>
 ]]></content>
   </entry>
   
