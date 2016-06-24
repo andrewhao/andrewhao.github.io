@@ -1,4 +1,7 @@
 .highlight, html .gist .gist-file .gist-syntax .gist-highlight {
+  table {
+    width: 100%;
+  }
   table td.code { width: 100%; }
   border: 1px solid $pre-border !important;
 }
@@ -216,12 +219,16 @@ pre, .highlight, .gist-highlight {
 .highlight code { 
   @extend .pre-code; background: #000;
 }
+
 figure.code {
   background: none;
   padding: 0;
   border: 0;
-  margin-bottom: 1.5em;
+  // margin-bottom: 1.5em;
+  margin: 0;
+
   pre { margin-bottom: 0; }
+
   figcaption {
     position: relative;
     @extend .code-title;

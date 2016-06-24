@@ -56,42 +56,22 @@ OAI-ORE is a specification that defines relationships between resources through 
 There is no standard file format to encode resource maps. Currently, the OAI-ORE working group has suggested the following description formats (HT: [Univ. of Queensland](http://www.natlib.govt.nz/downloads/IT19-Hunter-OAI-ORE-Oct30.ppt)):
 
 
-
-	
   * [RDF](http://www.w3.org/TR/REC-rdf-syntax/) (Resource Description Framework)
-
-	
   * [Atom](http://en.wikipedia.org/wiki/Atom_(standard)) syndication format
-
-	
   * [YADS](http://nurture.nature.com/yads)
-
-	
   * [TriX](http://www.w3.org/2004/03/trix/) (RDF triples in XML)
-
 
 The [recommended method of describing a resource map is in RDF/XML](http://www.openarchives.org/ore/0.9/rdfxml). I'm not very familiar with the RDF syntax, however, and the TriX format, which affords us RDF triples that can easiliy express relationships between objects and resources, seems to make more sense to me.. However, there is a [complete Atom implementation of the protocol](http://www.openarchives.org/ore/0.1/atom), used when syndication is preferred.
 
 I'd definitely refer the reader to the [Univ. of Queensland's OAI-ORE PDF overview](http://www.natlib.govt.nz/downloads/IT19-Hunter-OAI-ORE-Oct30.ppt) for a broader overview of the protocol and its potential implementations.
 
-
 ### The nitty-gritty
-
-
-
 
 > **Collections**: Multiple resources can be grouped together, but only via an "aggregate object" or a "collection", which maintains pointers to each object in a collection.
 
-
-
-
 > **Links**: Links describe relationships between objects in a resource map, such as "has-part" ("War & Peace "-has-part-"page 2") or "derived-from" ("Radiohead - 15 Step Remix"-derived-from-"Radiohead - 15 Step"). Actual relationships depend on selected vocabularies and namespaces (meaning you can change the link relationships to be whatever you need them to be). There is a [list of default namespaces on the spec](http://www.openarchives.org/ore/0.9/primer.html#Namespaces).
 
-
-
-
 ### In conclusion
-
 
 I took a high-level and somewhat abstract tack in describing the protocol, and would direct you to the [OAI-ORE Primer](http://www.openarchives.org/ore/0.9/primer.html) for more implementation specifics. Apologies to those of you who were completely lost in this discussion.
 

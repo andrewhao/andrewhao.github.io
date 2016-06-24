@@ -86,6 +86,17 @@ header {
 		text-transform: $blog-title-text-transform;
 		}
 
+
+  a {
+    color: $black;
+    text-decoration: none;
+
+    &:hover,
+    &:active{
+      color: $main-color;
+    }
+  } /* // a */
+
 	.navi {
 		font-family: $navi-font;
 		font-size: $navi-font-size;
@@ -100,15 +111,6 @@ header {
 				margin: 0;
 				padding: 0 ($navi-link-spacing/2 * 1em);
 
-				a {
-					color: $black;
-					text-decoration: none;
-
-					&:hover,
-					&:active{
-						color: $main-color;
-						}
-					} /* // a */
 				} /* // li */
 			} /* // ul */
 		} /* // .navi */
@@ -186,6 +188,10 @@ article {
 		}
 
 	p {
+    word-break: break-word;
+    word-wrap: break-word;
+    hyphens: auto;
+
 		.caption {
 			font-family: $caption-font-family;
 			font-size: $caption-font-size;
@@ -207,6 +213,19 @@ article {
 	}
 
 /* Code blocks */
+
+figure.code {
+  width: 100%;
+  margin: 0;
+
+  table {
+    width: 100%;
+  }
+  td.gutter {
+    display: none;
+  }
+}
+
 pre {
 	position: relative;
 	border: 1px solid $light-gray;
@@ -293,7 +312,15 @@ p > code {
 	font-size: $month-font-size;
 	}
 
-.title-listing {
+.post-listing {
+  margin-bottom: 1rem;
 	margin-left: $month-indent;
-	}
+}
+
+.post-listing__preview {
+  font-size: 1rem;
+}
+
+.title-listing {
+}
 

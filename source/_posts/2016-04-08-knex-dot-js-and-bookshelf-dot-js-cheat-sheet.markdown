@@ -69,9 +69,7 @@ We use [knex-postgis](https://github.com/jfgodoy/knex-postgis) to gain access to
 
 ```js
 const knexPostgis = require('knex-postgis')(knex);
-
-knex('events')
-.select('*', knexPostgis.asGeoJSON('point'));
+knex('events').select('*', knexPostgis.asGeoJSON('point'));
 ```
 
 See [knex-postgis](https://github.com/jfgodoy/knex-postgis) documentation for a list of other PostGIS functions that are supported.
