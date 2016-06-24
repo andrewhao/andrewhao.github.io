@@ -64,253 +64,47 @@
 		<!-- START OF _includes/article.html -->
 <article>
 	<header>
-		<h1><a href="/2011/02/01/the-making-of-sos-intro/">The making of SOS: Intro</a></h1>
-		<time>01 February 2011</time>
+		<h1><a href="/2014/11/05/qcon-sf-2014/">Recap: QCon SF 2014</a></h1>
+		<time>05 November 2014</time>
 	</header>
 		<div class="content">
-			<p><a href="http://www.flickr.com/photos/andrewhao/5408231821/"><img src="http://farm6.static.flickr.com/5095/5408231821_b4d0fd6837.jpg" alt="Save Our Souls - Logo" /></a></p>
+			<p>Blurb sent me off to QCon SF 2014 for three days.</p>
 
-<p>I&rsquo;m starting a project for my church&rsquo;s art show that integrates Twitter, print design and light. I&rsquo;m titling it &ldquo;Save Our Souls&rdquo;.</p>
+<h2>Notes</h2>
 
-<p>The theme of the art show is &ldquo;Instead of Ashes&rdquo;, a reference from of <a href="http://www.esvonline.org/search/isaiah+61/">Isaiah 61</a> which highlights of God&rsquo;s promises of redemption for the world&rsquo;s suffering through Jesus.</p>
-
-<h2>What does it do?</h2>
-
-<p>Essentially, what I want it to do is parse the global Twitter firehose and display a live stream of tweets that highlight brokenness and pain: tweets about the world&rsquo;s injustices, breakups, deaths, disappointments, and even ennui. This is inspired by <a href="http://twistori.com">twistori</a>.</p>
-
-<p>At the same time these tweets are floating across the screen, I want to illuminate a part of the printed verse in physical space that corresponds to the tweet.</p>
-
-<p>Imagine:</p>
-
-<p>Tweet: <em>I just want everyone to understand something&hellip;&hellip;I&rsquo;m SEVERELY depressed right now&hellip;&hellip;my (ex)girlfriend is one of the greatest things to happen to me and she&rsquo;s gone.</em></p>
-
-<p>At the same time, the LED array behind &ldquo;he has sent me to bind up the brokenhearted&rdquo; from Isaiah 61:1 would light up and pulse.</p>
-
-<p>And so on, for each tweet that flies across the screen.</p>
-
-<h2>Architecture</h2>
-
-<p><a href="http://www.flickr.com/photos/andrewhao/5408232737/"><img src="http://farm6.static.flickr.com/5020/5408232737_0ba8545d4e.jpg" alt="Isaiah 61 Architecture" /></a></p>
-
-<p>node.js would process messages from the Twitter streaming API keyed off of certain keywords and filter them by (negative) sentiment, and pushed onto queues. Queues would be drained in a fair manner and pushed out to a browser frontend, while a socket connection to an Arduino script would be responsible for pulsing the LED array.</p>
-
-<p>Of course, there&rsquo;s a lot of questions left unanswered here: How do you make an LED array? How do you do (reliable) sentiment analysis? How big should the print graphic be? How far behind the print should the LED arrays be placed for the light to be sufficiently diffuse, yet bright enough to be visible? I&rsquo;m not sure yet.</p>
-
-<h2>First steps</h2>
-
-<p>So I just bought an Arduino and a ton of LEDs off of eBay. I&rsquo;m trying to relearn all the EE40 I tried so hard to forget way back in my undergrad days.</p>
-
-<p>[caption id=&ldquo;&rdquo; align=&ldquo;alignnone&rdquo; width=&ldquo;500&rdquo; caption=&ldquo;Arduinos are cool. I had to do my fair share of head-scratching to figure out resistor values.&rdquo;]<a href="http://www.flickr.com/photos/andrewhao/5408162241/"><img src="http://farm6.static.flickr.com/5096/5408162241_201f757ddd.jpg" alt="Arduino is hooked up" /></a>[/caption]</p>
-
-<p>[caption id=&ldquo;&rdquo; align=&ldquo;alignnone&rdquo; width=&ldquo;500&rdquo; caption=&ldquo;A conceptual design for the print graphic.&rdquo;]<a href="http://www.flickr.com/photos/andrewhao/5408870750/"><img src="http://farm6.static.flickr.com/5098/5408870750_9fa4951f0d.jpg" alt="Print Concepts" /></a>[/caption]</p>
-
-<p>[caption id=&ldquo;&rdquo; align=&ldquo;alignnone&rdquo; width=&ldquo;500&rdquo; caption=&ldquo;Basic node.js backend with a rudimentary frontend streams live tweets.&rdquo;]<a href="http://www.flickr.com/photos/andrewhao/5408765510/"><img src="http://farm6.static.flickr.com/5137/5408765510_3381c46945.jpg" alt="Testing backend." /></a>[/caption]</p>
-
-<p>See the (rudimentary) nodejs/client code at <a href="https://github.com/andrewhao/isaiah-61-project">github</a>.</p>
-
-<p>See the <a href="http://www.flickr.com/photos/andrewhao/sets/72157625956085386/with/5408765510/">rest of the photos</a>.</p>
-
-<p>More to come!</p>
-
-			
-			
-		</div>
-	<footer>
-		
-
-
-		
-			andrewhao 
-		
-
-
-
-  
-		
-			on
-		
-    <a class='category' href='/category/andrew-2-dot-0/'>Andrew 2.0</a>, <a class='category' href='/category/art/'>Art</a>, <a class='category' href='/category/geek/'>Geek</a>, <a class='category' href='/category/god/'>God</a>, <a class='category' href='/category/software/'>Software</a>, <a class='category' href='/category/web/'>Web</a>
-	
-
-
-	
-	
-	</footer>
-	
-</article>
-<!-- END OF _includes/article.html -->
-
-	
-		
-		<!-- START OF _includes/article.html -->
-<article>
-	<header>
-		<h1><a href="/2011/01/28/using-37signals-shorthand-for-ux-flows/">Using 37signals shorthand for UX flows</a></h1>
-		<time>28 January 2011</time>
-	</header>
-		<div class="content">
-			<p><a href="http://37signals.com/svn/posts/1926-a-shorthand-for-designing-ui-flows">http://37signals.com/svn/posts/1926-a-shorthand-for-designing-ui-flows</a></p>
-
-<p>I&rsquo;ve found this technique useful for illustrating workflows quickly, particularly when brainstorming in teams.</p>
-
-			
-			
-		</div>
-	<footer>
-		
-
-
-		
-			andrewhao 
-		
-
-
-
-  
-		
-			on
-		
-    <a class='category' href='/category/andrew-2-dot-0/'>Andrew 2.0</a>
-	
-
-
-	
-	
-	</footer>
-	
-</article>
-<!-- END OF _includes/article.html -->
-
-	
-		
-		<!-- START OF _includes/article.html -->
-<article>
-	<header>
-		<h1><a href="/2011/01/28/appstoreconnect-ux/">AppStoreConnect UX</a></h1>
-		<time>28 January 2011</time>
-	</header>
-		<div class="content">
-			<p><a href="http://www.flickr.com/photos/andrewhao/5411517135/"><img src="http://farm6.static.flickr.com/5138/5411517135_e63f84705d.jpg" alt="2. Dashboard: Reviews Tab" /></a></p>
-
-<p>A series of UX workflow designs I did for <a href="http://www.appstoreconnect.com">AppStoreConnect</a>, an overseas Android multi-market submission application. Completed November 2010.</p>
-
-			
-			
-		</div>
-	<footer>
-		
-
-
-		
-			andrewhao 
-		
-
-
-
-  
-		
-			on
-		
-    <a class='category' href='/category/design/'>Design</a>, <a class='category' href='/category/ux/'>UX</a>
-	
-
-
-	
-	
-	</footer>
-	
-</article>
-<!-- END OF _includes/article.html -->
-
-	
-		
-		<!-- START OF _includes/article.html -->
-<article>
-	<header>
-		<h1><a href="/2010/12/01/aristo-the-shiniest-jquery-ui-theme-of-them-all/">Aristo, the shiniest jQuery UI theme of them all.</a></h1>
-		<time>01 December 2010</time>
-	</header>
-		<div class="content">
-			<p>Let&rsquo;s face it: <a href="http://jqueryui.com/themeroller/">jQuery UI skins</a> suck. They&rsquo;re flat, they&rsquo;re boring, they don&rsquo;t pop.</p>
-
-<p>Enter <a href="http://taitems.tumblr.com/post/482577430/introducing-aristo-a-jquery-ui-theme">Aristo</a>, a jQuery UI port of the <a href="http://cappuccino.org/">Cappuccino Javascript framework</a> theme.</p>
-
-<p><a href="http://www.g9labs.com/2010/12/01/aristo-the-shiniest-jquery-ui-theme-of-them-all/screen-shot-2010-12-01-at-4-47-58-pm/"><img src="http://www.g9labs.com/wp-content/uploads/2010/12/Screen-shot-2010-12-01-at-4.47.58-PM.png" alt="" /></a></p>
-
-<p>Much better. Clone the <a href="https://github.com/taitems/Aristo-jQuery-UI-Theme">repo from GitHub</a> here, or check out a <a href="http://www.warfuric.com/taitems/demo.html">demo</a>.</p>
-
-			
-			
-		</div>
-	<footer>
-		
-
-
-		
-			andrewhao 
-		
-
-
-
-  
-		
-			on
-		
-    <a class='category' href='/category/javascript/'>Javascript</a>
-	
-
-
-	
-	
-	</footer>
-	
-</article>
-<!-- END OF _includes/article.html -->
-
-	
-		
-		<!-- START OF _includes/article.html -->
-<article>
-	<header>
-		<h1><a href="/2010/08/03/on-selling-my-soul-and-switching-to-mac/">On selling my soul and switching to Mac</a></h1>
-		<time>03 August 2010</time>
-	</header>
-		<div class="content">
-			<p>A month ago I bought an &lsquo;07 MacBook on Craigslist. No, it&rsquo;s not one of those sexy aluminum hot rods, but it sure is pretty.</p>
-
-<p>I was full of mixed emotions. I had finally joined the Tribe! I had sold my soul. I can now develop iPhone apps! I am property of SJ. Yes, I had interned at Apple in the summer of &lsquo;08, but I haven&rsquo;t really paid much attention to OS X until I&rsquo;ve owned one of these suckers for myself.</p>
-
-<p>It&rsquo;s not easy making the switch. Here are some of my gripes with OSX and some stopgap replacements I&rsquo;ve found:</p>
+<p>I took a series of notes each day in attendance:</p>
 
 <ul>
-<li><p>No keyboard shortcut to maximize windows. (Solved with <a href="http://www.blazingtools.com/downloads.html#RightZoom">RightZoom</a>)</p></li>
-<li><p>MacPorts really sucks (that is, having to compile everything from source is really slow). (Still outstanding)</p></li>
-<li><p>Switching windows between spaces is really clunky. (Sorta solved with <a href="http://thecocoabots.com/hyperspaces/">Hyperspaces</a>)</p></li>
-<li><p>No keyboard shortcut to &ldquo;move active window to space&rdquo;. (Still outstanding)</p></li>
-<li><p>No way to force windows to a grid. (Solved with <a href="http://www.mizage.com/divvy/">Divvy</a>)</p></li>
-<li><p>No right Ctrl key makes things really painful in Emacs. (Remapped right &ldquo;Enter&rdquo; with <a href="http://doublecommand.sourceforge.net/">DoubleCommand</a>)</p></li>
-<li><p>Aero Snap is cool. (Check out <a href="http://www.irradiatedsoftware.com/cinch/">Cinch</a>)</p></li>
-<li><p>The MacBook keyboard keys feel cheap compared to a Thinkpad. (Still outstanding)</p></li>
-<li><p>Really annoyed with Command-Tab switching. I just want to switch to a different window! (Still outstanding).</p></li>
-<li><p>Expose feels limited compared to Compiz&#8217; Scale plugin. Cannot Expose all windows in all spaces. (Still outstanding)</p></li>
-<li><p>Closing window doesn&rsquo;t kill the process. I suspect this is just a design philosophy I have to deal with. (Still outstanding)</p></li>
-<li><p>Not sure why, but my wrists generally tend to hurt more after using the MB rather than my work Thinkpad.</p></li>
+<li><a href="/notes/2014-11-03-qconsf-day-one.html">Day One: Architectures, Functional</a></li>
+<li><a href="/notes/2014-11-04-qconsf-day-two.html">Day Two: Rx Systems, API Platforms</a></li>
+<li><a href="/notes/2014-11-05-qconsf-day-three.html">Day Three: Microservices, Culture</a></li>
 </ul>
 
 
-<p>Okay, I&rsquo;m not going to do all complaining. Some things I really enjoy:</p>
+<h2>Summary</h2>
 
 <ul>
-<li><p>Drag-and-drop installation is totally elegant.</p></li>
-<li><p>Time Machine just works, and the zoomable interface is totally slick.</p></li>
-<li><p>Helvetica Neue, I love you.</p></li>
-<li><p>Something about the font rendering is just amazing.</p></li>
-<li><p>I get to look cool (and slightly cliche&hellip;) at coffee shops</p></li>
-<li><p>Desktop graphics &amp; animations render smoothly with CoreAnimation. This stuff just looks slick.</p></li>
+<li>Big trends in continuous delivery and deployment &mdash; deploy more often, smaller feedback loops</li>
+<li>A lot of emphasis on event driven architectures + microservices. Lots of emphasis on DDD as a design tool.</li>
+<li>Reactive systems with functional implementations were widely discussed as a scaling tool (backpressure-sensitive) and as a coordination tool between multiple async services.</li>
+<li>Big data/realtime streaming talks were interesting &mdash; my personal experience with them is limited, but it seems there is a debate over the merits of existing Lambda architecture practice.</li>
+<li>A lot of talk about microservice orchestration tools &mdash; acknowledging the pain of configuration and management of many services.</li>
+<li>Scala got a lotttt of attention. Probably because of its presence in bigger companies like Netflix, Twitter, LinkedIn. Wonder what smaller startups are using.</li>
+<li>Web Components were a big upcoming trend in frontend technologies. Strong modularization of views + behaviors in HTML documents.</li>
 </ul>
 
 
-<p>I guess it&rsquo;s not as bad as I&rsquo;ve made it out to be. Well here I am. Swore I&rsquo;d never do it, but you got me with all that shiny, Mr. Jobs. You got me.</p>
+<h2>Questions</h2>
+
+<ul>
+<li>If I could do a startup over again, would I begin an app in Rails? Where is the sweet spot for that sort of application architecture?</li>
+<li>How can I design systems such that they can be extractible into focused components/services as early as possible?</li>
+<li>How can we plan for failures (<a href="http://en.wikipedia.org/wiki/Fault_injection">fault injection</a>)?</li>
+<li>How does one implement change in software engineering organizations? Bottom-up (organic initiatives bubbling up through management) vs top-down (management/software leaders direct org to implement).</li>
+<li>How are we doing with encouraging women and minorities who traditionally are underrepresented in our industry?</li>
+<li>What are places in our hiring funnels that, unbeknownst to us, may be turning away or detracting women and minorities?</li>
+</ul>
+
 
 			
 			
@@ -320,16 +114,14 @@
 
 
 		
-			andrewhao 
-		
 
 
 
   
 		
-			on
+			Tagged under
 		
-    <a class='category' href='/category/andrew-2-dot-0/'>Andrew 2.0</a>, <a class='category' href='/category/apple/'>Apple</a>, <a class='category' href='/category/geek/'>Geek</a>
+    <a class='category' href='/category/conference/'>conference</a>, <a class='category' href='/category/qconsf/'>qconsf</a>, <a class='category' href='/category/software/'>software</a>
 	
 
 
@@ -345,31 +137,33 @@
 		<!-- START OF _includes/article.html -->
 <article>
 	<header>
-		<h1><a href="/2010/06/02/post-review-git-svn-and-review-board/">post-review, git-svn and Review Board</a></h1>
-		<time>02 June 2010</time>
+		<h1><a href="/2014/11/01/conways-law-for-humans/">Conway&#8217;s Law for humans</a></h1>
+		<time>01 November 2014</time>
 	</header>
 		<div class="content">
-			<p>Here&rsquo;s how to set up the excellent VMware-developed open-source <a href="http://www.reviewboard.org/">Review Board</a> and its <code>[post-review](http://www.reviewboard.org/docs/releasenotes/dev/rbtools/0.2/)</code> command line review creation utility to work with git and git-svn on your computer.</p>
+			<p>If you&rsquo;re familiar with <a href="http://en.wikipedia.org/wiki/Conway's_law">Conway&rsquo;s Law</a>, it states:</p>
 
-<p>My assumption is that you&rsquo;re working with a local Git repository that is remotely linked to an SVN repository via the <a href="http://utsl.gen.nz/talks/git-svn/intro.html">git-svn</a> bridge. Let&rsquo;s assume that your master branch is synced with the SVN repository, and you&rsquo;re working on <code>bug_12345_branch</code>.</p>
+<blockquote><p>Any organization that designs a system (defined broadly) will produce a design whose structure is a copy of the organization&rsquo;s communication structure.</p></blockquote>
 
-<ol>
-<li><p> Make sure you have RBTools installed (<code>sudo easy_install rbtools</code> for me on Ubuntu Linux), and Review Board set up elsewhere.</p></li>
-<li><p> Add a link to your Review Board URL in .git/config:</p></li>
-</ol>
+<p>Or in layman&rsquo;s terms, your software systems reflect the structure of the teams that create them.</p>
 
+<p>Think about it &mdash; do your teams prefer to do everything themselves? Or do they ask for help from other teams? In general, as a team, we prefer to have as little dependencies as possible. The work that the engineer has to do to send an email, or wait for work from another team (like an API change or design change) is usually time-consuming and burdensome. Therefore, it is not (usually) in the team&rsquo;s best interests to cross silos and ask for help from others. Your teams, if they look like this, tend to work in codebases that are generally monolithic and wholly owned by the team.</p>
 
-<blockquote><pre><code>[reviewboard]
- url = &lt;a href="#"&gt;https://(url_for_review_board)/&lt;/a&gt;
-</code></pre></blockquote>
+<p>It&rsquo;s not wrong, or it&rsquo;s not bad, it&rsquo;s just a sociological observation. This is why companies like Spotify, Netflix or Amazon have embraced Conway&rsquo;s Law and changed their organizations to match the  microservice-driven architecture they want. Small teams work on small codebases and are empowered to make the changes they need.</p>
 
-<ol>
-<li><p> Make sure all your changes in <code>bug_12345_branch</code> have been locally committed.</p></li>
-<li><p> <code>post-review -o</code>, and&hellip;</p></li>
-<li><p> Voila! You should have a new review up on your Review Board instance.</p></li>
-<li><p> (After you get reviews, you can modify <code>bug_12345_branch</code>, pull the changes into master, and then <code>git svn dcommit</code>, blah, blah, blah.)</p></li>
-</ol>
+<h3>A corollary and some observations about your company culture.</h3>
 
+<p>Here&rsquo;s a corollary, which I&rsquo;ve heard in various shapes and forms. Paraphrased:</p>
+
+<blockquote><p>An organization&rsquo;s structure tends to pattern after its leaders&#8217; communication patterns.</p></blockquote>
+
+<p>I&rsquo;ve been pushing an effort to unify our company&rsquo;s frontend styles and UX into a unified framework in an attempt to standardize the look and feel of the site.</p>
+
+<p>However, in working with our designers, I realized that they weren&rsquo;t talking to each other. Designers in one department had opposing design aesthetics from designers in another. This was causing problems in the code, because the frontend framework itself was becoming fragmented. You could see it in the code. Version A of the styleguide went into Department A&rsquo;s products. Version B of the styleguide went to Department B&rsquo;s products.</p>
+
+<p>In this case, as we kept rolling out this framework, I realized our organization had no single owner for the design language of the site. Why? I had to wonder if it had to do with some deeper communication issues between the heads of the two departments.</p>
+
+<p>Code can be a good canary to organizational issues, and call out larger human issues at hand. In this case, Conway&rsquo;s Law helps us root out and bring into the light structural concerns. Leaders can pay attention to these concerns and check themselves to become more open communicators.</p>
 
 			
 			
@@ -379,16 +173,14 @@
 
 
 		
-			andrewhao 
-		
 
 
 
   
 		
-			on
+			Tagged under
 		
-    <a class='category' href='/category/andrew-2-dot-0/'>Andrew 2.0</a>, <a class='category' href='/category/geek/'>Geek</a>, <a class='category' href='/category/linux/'>Linux</a>, <a class='category' href='/category/programming/'>programming</a>
+    <a class='category' href='/category/conways-law/'>conway&#8217;s law</a>, <a class='category' href='/category/engineering/'>engineering</a>, <a class='category' href='/category/management/'>management</a>, <a class='category' href='/category/management-theory/'>management theory</a>
 	
 
 
@@ -404,49 +196,156 @@
 		<!-- START OF _includes/article.html -->
 <article>
 	<header>
-		<h1><a href="/2010/04/26/yui-widget-lazy-instantiation/">YUI 3 Widget lazy instantiation</a></h1>
-		<time>26 April 2010</time>
+		<h1><a href="/2014/06/21/mocks-arent-stubs/">Mocks aren&#8217;t stubs: mockist & classic testing</a></h1>
+		<time>21 June 2014</time>
 	</header>
 		<div class="content">
-			<p>At work, we make good use of <a href="http://developer.yahoo.com/yui/">YUI 3</a>. It&rsquo;s a really well-thought-out framework, from sandboxing and deep namespaces to CSS3 selector support and lazy-loading modules through the Yahoo! CDN. One of YUI 3&rsquo;s biggest features is the Widget framework, which specifies an object on the page that the user can tweak to his or her whims.</p>
+			<p>With the famed &ldquo;TDD is dead&rdquo; debate around the Rails community largely
+coming to an end, I found myself referencing Martin Fowler&rsquo;s article,
+<a href="http://martinfowler.com/articles/mocksArentStubs.html">Mocks Aren&rsquo;t Stubs</a> a good deal, trying to make sense of it in terms of how I write tests and code.</p>
 
-<p>Now typically, a YUI widget must be instantiated, then rendered onto the page. The render method is responsible for:</p>
+<p>In this post I&rsquo;m going to talk about mocking and stubbing and their
+roots, paraphrase Fowler in an attempt to explain their differences, and
+walk through a couple of code examples. In each case, I&rsquo;m going to
+attempt to build this example out in Ruby and RSpec 3.</p>
 
-<ol>
-<li><p> Writing the widget&rsquo;s DOM elements out to the page</p></li>
-<li><p> Binding handlers onto the DOM object.</p></li>
-<li><p> Updating the widget state to match the JS object state.</p></li>
-</ol>
+<p>Let&rsquo;s assume this implementation in our code for a <code>BookUpdater</code> object in Ruby. Its job is to call through its collaborating <code>ApiClient</code>, which wraps some aspect of an API that we want to call.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># Update a book&#39;s metadata in our systems.</span>
+</span><span class='line'><span class="k">class</span> <span class="nc">BookUpdater</span>
+</span><span class='line'>  <span class="kp">attr_accessor</span> <span class="ss">:book</span><span class="p">,</span> <span class="ss">:api_client</span><span class="p">,</span> <span class="ss">:response</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">book</span><span class="p">,</span> <span class="n">api_client</span><span class="p">)</span>
+</span><span class='line'>    <span class="vi">@book</span> <span class="o">=</span> <span class="n">book</span>
+</span><span class='line'>    <span class="vi">@api_client</span> <span class="o">=</span> <span class="n">api_client</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">updated?</span>
+</span><span class='line'>    <span class="o">!!</span><span class="n">response</span><span class="o">.</span><span class="n">success?</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">update!</span>
+</span><span class='line'>    <span class="n">response</span> <span class="o">=</span> <span class="n">api_client</span><span class="o">.</span><span class="n">call_update_api</span><span class="p">(</span><span class="n">book</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
-<p>(This information didn&rsquo;t come easily. I had to dig around in some YUI slides and found this in <a href="http://developer.yahoo.com/yui/theater/video.php?v=desai-yuiconf2009-widgets">Satyen Desai&rsquo;s &ldquo;A Widget Walkthrough&rdquo; presentation</a> at YUIConf 2009.)</p>
+<h2>What they are</h2>
 
-<p><a href="http://www.g9labs.com/2010/04/27/yui-widget-lazy-instantiation/screenshot5/"><img src="http://www.g9labs.com/wp-content/uploads/2010/04/screenshot5-499x374.png" alt="" /></a></p>
+<h3>Mocks</h3>
 
-<p>Now we have a page that generates hundreds if not thousands of these tooltips. Instantiating each tooltip, rendering them into the DOM and generating event handlers for each was wasteful and slowed IE browsers down to a crawl. So this brought us to the decision to lazily instantiate each Tooltip instance. My first thought was that I should be able to overwrite the render() method to write to the DOM only after a mouseover onto the Tooltip trigger.</p>
+<p>Mocks are fake objects that verify that they have received messages. In
+RSpec, we traditionally use the <code>mock</code> object utility to create these objects.</p>
 
-<p>Here&rsquo;s the folly: note that in the previous slide, the event handlers don&rsquo;t go live until after the widget HTML is rendered into the DOM. Rats. Is there any way I can get around this?</p>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">api_client</span> <span class="o">=</span> <span class="n">mock</span><span class="p">(</span><span class="s1">&#39;api client&#39;</span><span class="p">)</span>
+</span><span class='line'><span class="n">book</span> <span class="o">=</span> <span class="no">Book</span><span class="o">.</span><span class="n">new</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">expect</span><span class="p">(</span><span class="n">api_client</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">receive</span><span class="p">(</span><span class="ss">:call_update_api</span><span class="p">)</span><span class="o">.</span><span class="n">with</span><span class="p">(</span><span class="n">book</span><span class="p">)</span><span class="o">.</span><span class="n">and_return</span><span class="p">(</span><span class="kp">true</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">subject</span> <span class="o">=</span> <span class="no">BookUpdater</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">api_client</span><span class="p">,</span> <span class="n">book</span><span class="p">)</span>
+</span><span class='line'><span class="n">subject</span><span class="o">.</span><span class="n">list!</span>
+</span></code></pre></td></tr></table></div></figure>
 
-<p>Here&rsquo;s some peculiar code for the Tooltip wrapper:</p>
 
-<pre><code>function ttWrapper(triggerNode) {
-  this.tt = null;
-  /* First mouseover will instantiate the real TooltipWidget. */
-  var mOver = Y.on('mouseover', function (e) {
-    this.tt = new TooltipWidget(/*config*/).render();
-    /* Detach this listener so it won't intercept any more mouseovers */
-    mOver.detach();
-    /* A second mouseover must be simulated on the real TooltipWidget */
-    Y.Event.simulate(triggerNode, 'mouseover'); 
-  }, triggerNode);
+<p>What&rsquo;s happening here? RSpec creates a mock <code>api_client</code> object that will verify that, after the test case executes, it has received the <code>:call_update_api</code> message with the correct arguments.</p>
+
+<p>The main point of this style of testing is <em>behavior verification</em> &mdash; that is, that your object is behaving correctly in relation with its collaborators.</p>
+
+<h3>Double</h3>
+
+<p>Let&rsquo;s take a look at a <code>double</code> &mdash; also known as a <code>stub</code>. A <code>double</code> is a fake object that is set up to respond to a certain message with a pre-canned response, each time. Let&rsquo;s take a look at how I would set up a test using doubles:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">api_client</span> <span class="o">=</span> <span class="n">double</span><span class="p">(</span><span class="s1">&#39;api client&#39;</span><span class="p">)</span>
+</span><span class='line'><span class="n">response</span> <span class="o">=</span> <span class="n">double</span><span class="p">(</span><span class="s1">&#39;response&#39;</span><span class="p">,</span> <span class="ss">:success?</span> <span class="o">=&gt;</span> <span class="kp">true</span><span class="p">)</span>
+</span><span class='line'><span class="n">book</span> <span class="o">=</span> <span class="no">Book</span><span class="o">.</span><span class="n">new</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">allow</span><span class="p">(</span><span class="n">api_client</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">receive</span><span class="p">(</span><span class="ss">:call_update_api</span><span class="p">)</span><span class="o">.</span><span class="n">with</span><span class="p">(</span><span class="n">book</span><span class="p">)</span><span class="o">.</span><span class="n">and_return</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+</span><span class='line'><span class="n">expect</span><span class="p">(</span><span class="n">subject</span><span class="o">.</span><span class="n">update!</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">change</span><span class="p">(</span><span class="n">subject</span><span class="p">,</span> <span class="ss">:updated?</span><span class="p">)</span><span class="o">.</span><span class="n">from</span><span class="p">(</span><span class="kp">false</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="kp">true</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
+<p>Okay, so what&rsquo;s the big deal here? My test case still passes. Note that
+I had to change my code to focus its expectation on the <code>subject</code>&rsquo;s
+state instead of the <code>api_client</code>.</p>
+
+<p>The focus of using doubles is for <em>state verification</em> &mdash; that is, that so long as everybody around me is behaving according to their contracts, the test merely has to verify that internal object state changes correctly.</p>
+
+<h3>A third way &mdash; real objects</h3>
+
+<p>I won&rsquo;t cover this very much in depth, but with sufficiently simple objects, one could actually instantiate real objects instead of doubles, and test an object against all its collaborators. This is, in my experience, the most common experience of working in Rails + ActiveRecord applications.</p>
+
+<h2>Classic vs Mockist testing: different strokes for different folks</h2>
+
+<p>As we saw above, the key difference between the mock and the stub (the <code>double</code>). The focus of the test in the mock case is on the messages being sent to the collaborators. The focus of the test when using the double is on the the <code>subject</code> under test (SUT).</p>
+
+<p>Mocks and stubs/doubles are tools that we can use under the larger umbrellas of two TDD philosophical styles: <em>classic</em> vs <em>mockist</em> styles.</p>
+
+<h3>Classic TDD</h3>
+
+<ul>
+<li>Classic TDDists like using <code>double</code>s or real objects to test collaborators.</li>
+<li>From personal experience, testing classicly is oftentimes the path of least resistance. There isn&rsquo;t expectation setup and verification that mockist testing requires of you.</li>
+<li>Classic TDD sometimes results in creating objects that reveal state &mdash; note how the <code>BookUpdater</code> needed to expose an <code>updated?</code> method.</li>
+<li>Setting up the state of the world prior to your test may be complex, requiring setting up all the objects in your universe. This can be a huge pain (has anybody ever had this problem with overcomplicated Rails models with spidery associations? Raise your hands&hellip;). Classicists may argue that the root cause here is not paying attention to your model architecture, and having too many associations is an antipattern. Alternatively, classicists oftentimes generate test factories (e.g. Rails&#8217; FactoryGirl gem) to manage test setup.</li>
+<li>Tests tend to be treatable more like black boxes, testable under isolation (due to verifications on object state) and are more resistant to refactoring.</li>
+</ul>
 
 
-}
-</code></pre>
+<h3>Mockist TDD</h3>
 
-<p>The code installs a mouseover listener on the trigger node, then swaps itself out for the real mouseover listener that gets attached to the triggerNode when TooltipWidget gets instantiated. Event.simulate() is a strange, yet smart way to solve this problem.</p>
+<ul>
+<li>Mockist TDD utilizes <code>mock</code>s to verify behavior between objects and collaborators.</li>
+<li>It can be argued to develop &ldquo;purer&rdquo; objects, that are mainly concerned with objects passing messages to each other. Fowler refers to these objects as preferring role-interfaces.</li>
+<li>These tests are easier to set up, as they don&rsquo;t require setting up the state of the world prior to test invocation.</li>
+<li>Tests tend to be more coupled to implementation, and may be more difficult to refactor due to very specific requirements for message passing between collaborators.</li>
+<li>Fowler brings up a point where being a mockist means that your objects prefer to <a href="https://pragprog.com/articles/tell-dont-ask">Tell Don&rsquo;t Ask</a>. A nice side effect of TDA is you generally can avoid Demeter violations.</li>
+</ul>
+
+
+<h2>In conclusion</h2>
+
+<p>In coming from a classic TDD background, I&rsquo;ve oftentimes viewed mockist testing with some suspicion, particularly around how much work is involved to bring them about. Over the years, I&rsquo;ve warmed up to the usage of mockist testing, but have not been diligent enough at doing pure driving TDD with mocks. In reviewing Fowler&rsquo;s comments, I&rsquo;m intruiged at the possibilities of mockist TDD in affecting system design, particularly in their natural inclinations toward <a href="http://martinfowler.com/bliki/RoleInterface.html">role interfaces</a>. I look forward to trying pure mockist TDD in a future project.</p>
+
+<h4>Further reading:</h4>
+
+<ul>
+<li><a href="http://dannorth.net/introducing-bdd/">Dan North: &ldquo;Introducing BDD&rdquo;</a></li>
+<li><a href="http://jamesgolick.com/2010/3/10/on-mocks-and-mockist-testing.html">James Golick: &ldquo;On Mocks and Mockist Testing&rdquo;</a></li>
+<li><a href="http://jmock.org/oopsla2004.pdf">OOPSLA 2004: &ldquo;Mock Roles, Not Objects&rdquo;</a></li>
+<li><a href="http://www.amazon.com/Growing-Object-Oriented-Software-Guided-Tests/dp/0321503627">Amazon: &ldquo;Growing Object Oriented Software, Guided by Tests&rdquo;</a></li>
+</ul>
+
 
 			
 			
@@ -456,158 +355,14 @@
 
 
 		
-			andrewhao 
-		
 
 
 
   
 		
-			on
+			Tagged under
 		
-    <a class='category' href='/category/andrew-2-dot-0/'>Andrew 2.0</a>, <a class='category' href='/category/javascript/'>Javascript</a>
-	
-
-
-	
-	
-	</footer>
-	
-</article>
-<!-- END OF _includes/article.html -->
-
-	
-		
-		<!-- START OF _includes/article.html -->
-<article>
-	<header>
-		<h1><a href="/2010/04/16/its-official-web-site-becomes-website/">It&#8217;s official: &#8220;Web site&#8221; becomes &#8220;website&#8221;</a></h1>
-		<time>16 April 2010</time>
-	</header>
-		<div class="content">
-			<p><a href="http://www.g9labs.com/2010/04/16/its-official-web-site-becomes-website/screenshot1-2/"><img src="http://www.g9labs.com/wp-content/uploads/2010/04/screenshot1-500x350.png" alt="" /></a></p>
-
-<p><a href="http://www.g9labs.com/2010/04/16/its-official-web-site-becomes-website/screenshot1-2/"></a>File this under &ldquo;Nobody is going to care&rdquo;, but I&rsquo;ve always been instructed to write &ldquo;Web site&rdquo; in my technical communications class. I found it grating. Hooray for change!</p>
-
-			
-			
-		</div>
-	<footer>
-		
-
-
-		
-			andrewhao 
-		
-
-
-
-  
-		
-			on
-		
-    <a class='category' href='/category/andrew-2-dot-0/'>Andrew 2.0</a>, <a class='category' href='/category/words/'>Words</a>
-	
-
-
-	
-	
-	</footer>
-	
-</article>
-<!-- END OF _includes/article.html -->
-
-	
-		
-		<!-- START OF _includes/article.html -->
-<article>
-	<header>
-		<h1><a href="/2010/04/04/i-lovehate-marmite/">I Love/Hate Marmite</a></h1>
-		<time>04 April 2010</time>
-	</header>
-		<div class="content">
-			<p>I had my first taste of Marmite last year while in Botswana. My South African roommate loved it, and encouraged me to try it and spread it on my toast. One bite and I gagged. It was like somebody mixed soy sauce and peanut butter and cranked it to 11.</p>
-
-<p>The Marmite company apparently recognizes this dichotomy as well and so runs the advertising campaign accordingly:</p>
-
-<p><a href="http://www.g9labs.com/2010/04/04/i-lovehate-marmite/capture/"><img src="http://www.g9labs.com/wp-content/uploads/2010/04/Capture-500x367.png" alt="" /></a></p>
-
-<p><a href="http://www.g9labs.com/2010/04/04/i-lovehate-marmite/capture-love/"><img src="http://www.g9labs.com/wp-content/uploads/2010/04/Capture-Love-500x367.png" alt="" /></a></p>
-
-<p>Every section of the site is written from a love and a hate perspective. <a href="http://www.marmite.co.uk/">Check it out</a>.</p>
-
-			
-			
-		</div>
-	<footer>
-		
-
-
-		
-			andrewhao 
-		
-
-
-
-  
-		
-			on
-		
-    <a class='category' href='/category/advertising/'>Advertising</a>
-	
-
-
-	
-	
-	</footer>
-	
-</article>
-<!-- END OF _includes/article.html -->
-
-	
-		
-		<!-- START OF _includes/article.html -->
-<article>
-	<header>
-		<h1><a href="/2010/03/14/upgrading-wejoinin-to-unicorn/">Upgrading Wejoinin to unicorn</a></h1>
-		<time>14 March 2010</time>
-	</header>
-		<div class="content">
-			<p>(Reposted from the <a href="http://blog.wejoinin.com/2010/03/14/server-transition-nuts-and-bolts/">Wejoinin Blog</a>)</p>
-
-<p>When you run a Web app like Wejoinin on minimal VPS resources (read: we&rsquo;re too poor to get a beefy server), it forces you to go lean. We started to realize a year ago that our out-of-the-box Rails and nginx/Mongrel setup was starting to show its age; resource utilization would climb every so often and we&rsquo;d have to kill and restart a Mongrel thread.</p>
-
-<p>Well, with last night&rsquo;s Wejoinin push, we&rsquo;ve upgraded our server environment a few ways:</p>
-
-<ol>
-<li><p> We&rsquo;ve switched to <a href="http://prgmr.com/xen/">prgmr.com with a killer deal</a> on a 512MiB VPS. This is a step up from the 256 slice we used to hold at <a href="www.slicehost.com">Slicehost</a> at almost half the price.</p></li>
-<li><p> We&rsquo;ve switched from vanilla Ruby to <a href="http://www.rubyenterpriseedition.com/">Ruby Enterprise Edition </a>&mdash; advertised to take &ldquo;33% less memory [when used with Passenger]&rdquo;. It&rsquo;s got a tweaked garbage collector, memory allocator and the ability to go in a tweak memory usage settings for yourself.</p></li>
-<li><p> We&rsquo;ve set up <a href="http://unicorn.bogomips.org/">Unicorn</a>, the new HTTP server on the block. It&rsquo;s special in that each worker is in its own process, meaning that the load balancing is done natively by the OS. Also, this means that should a worker process start to get bloated, we can take it down gracefully without touching the others. Really. <a href="http://tomayko.com/writings/unicorn-is-unix">We can trust the OS</a>. Plus, <a href="http://github.com/blog/517-unicorn">Git&rsquo;s doing it</a>.</p></li>
-</ol>
-
-
-<p>With all these tweaks, we should be seeing Wejoinin rarin&#8217; to go. Let us know what you think!</p>
-
-<p>-Andrew</p>
-
-			
-			
-		</div>
-	<footer>
-		
-
-
-		
-			andrewhao 
-		
-
-
-
-  
-		
-			on
-		
-    <a class='category' href='/category/andrew-2-dot-0/'>Andrew 2.0</a>
+    <a class='category' href='/category/tdd/'>TDD</a>, <a class='category' href='/category/mocks/'>mocks</a>, <a class='category' href='/category/stubs/'>stubs</a>
 	
 
 
@@ -625,7 +380,7 @@
 		<a class="older" href="/page/6/">Older</a>
 	
 	
-	<span class="total">5 of 10</span>
+	<span class="total">5 of 33</span>
 	
 	
 		<a class="newer" href="/page/4/">Newer</a>

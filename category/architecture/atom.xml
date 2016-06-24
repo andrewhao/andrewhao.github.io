@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Architecture | The Sweet Spot]]></title>
   <link href="http://www.g9labs.com/category/architecture/atom.xml" rel="self"/>
   <link href="http://www.g9labs.com/"/>
-  <updated>2016-06-16T13:58:37-07:00</updated>
+  <updated>2016-06-23T17:31:40-07:00</updated>
   <id>http://www.g9labs.com/</id>
   <author>
     <name><![CDATA[Andrew Hao]]></name>
@@ -90,9 +90,7 @@ it&rsquo;s not a fancy new framework, a how-to guide to do microservices, nor a 
 
 <p>Try this: keep a living document of all the terminology your team uses &ndash; along with all its definitions. This <strong>Glossary</strong> is exactly what it sounds &ndash; a list of terms and their definitions.</p>
 
-<p>```</p>
-
-<h2>Delorean Team Glossary</h2>
+<blockquote><h2>Delorean Team Glossary</h2>
 
 <ul>
 <li><strong>Coupon</strong>: an applied discount to a BookingAmount. A coupon may take the form of a Fixed or a Percentage amount.
@@ -110,14 +108,13 @@ it&rsquo;s not a fancy new framework, a how-to guide to do microservices, nor a 
 <li><strong>Routing Engine:</strong> The software system that maps out the driving directions for a driver.</li>
 <li><strong>Payment</strong>: A record of how a user paid.</li>
 <li><strong>Charge</strong>: A financial transaction for a specific dollar amount, for a specific charge method to an institution.</li>
-<li><strong>Checkout</strong>: A workflow in which a <em>Payment</em> is made for a <em>Booking</em>.
-```</li>
+<li><strong>Checkout</strong>: A workflow in which a <em>Payment</em> is made for a <em>Booking</em>.</li>
 </ul>
-
+</blockquote>
 
 <p>From now on, use only the term definitions listed here in your stories. Be explicit about how you use your language!</p>
 
-<p>I&rsquo;ve been on many projects where the sloppy usage of a term from project inception led to the usage of that term in the code &ndash; codifying that messy, slippery term throughout the life of the project!</p>
+<p>I&rsquo;ve been on many projects where the sloppy usage of a term from project inception led to the usage of that term in the code &ndash; codifying that messy, slippery term throughout the life of the project.</p>
 
 <p>Which leads us to our next point:</p>
 

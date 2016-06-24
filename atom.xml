@@ -4,7 +4,7 @@
 	<title><![CDATA[The Sweet Spot]]></title>
 	<link href="http://www.g9labs.com/atom.xml" rel="self"/>
 	<link href="http://www.g9labs.com/"/>
-	<updated>2016-06-16T13:58:37-07:00</updated>
+	<updated>2016-06-23T17:31:40-07:00</updated>
 	<id>http://www.g9labs.com/</id>
 	<author>
 		<name><![CDATA[Andrew Hao]]></name>
@@ -12,6 +12,366 @@
 	</author>
 	<generator uri="http://octopress.org/">Octopress</generator>
 
+	
+	<entry>
+		
+			<title type="html"><![CDATA[Evented Rails: Decoupling domains in Rails with Wisper pub/sub events]]></title>
+		
+		<link href="http://www.g9labs.com/2016/06/23/rails-pub-slash-sub-with-wisper-and-sidekiq/"/>
+		<updated>2016-06-23T11:44:00-07:00</updated>
+		<id>http://www.g9labs.com/2016/06/23/rails-pub-slash-sub-with-wisper-and-sidekiq</id>
+		<content type="html">
+			<![CDATA[
+				
+					<p></p>
+				
+			]]>
+			<![CDATA[<p>One common pattern in Domain-Driven Design is the use of
+publish/subscribe messaging to communicate between domains. When
+<a href="http://martinfowler.com/eaaDev/DomainEvent.html">Domain Events</a> are created from within a domain, other domains are
+able to subscribe to these events and take action within their own
+domains, respectively.</p>
+
+<p>This is not a common pattern in Rails, particularly because of Ruby&rsquo;s
+lack of language support for functional programming paradigms that exist
+in other languages. However, with a nifty framework and the help of
+Sidekiq, we can get just a little bit closer.</p>
+
+<h3>What is a Domain Event?</h3>
+
+<p>A domain event is a recorded property in the system that tracks an
+action that the system performs, and the factors/properties that lead to
+its creation.</p>
+
+<p>In the following examples, we are going to use the <a href="https://github.com/krisleech/wisper">Wisper</a> gem to
+implement domain events in our sample <a href="http://github.com/andrewhao/delorean">Delorean</a> app.</p>
+
+<p>Imagine that we are writing an endpoint that our users will hit,
+indicating that they want to hail a time-traveling cab. Now the logic to
+hail a cab is rather complicated and lives in an entirely different area
+of the codebase, perhaps even in another application. How should we call
+the other code and ensure that our code is cleanly decoupled?</p>
+
+<p>With our Domain-Driven powers, we&rsquo;ve been smart enough to segregate our code into different
+subdomains and bounded contexts,
+denoted by these two Ruby modules <code>Ridesharing</code> and <code>DriverRouting</code>.</p>
+
+<h2>Example 1: In-process pub-sub event modeling, with a service object.</h2>
+
+<p>A simple way to use Wisper is to use it to implement your service
+objects with Wisper, calling the service from the controller.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">module</span> <span class="nn">Ridesharing</span>
+</span><span class='line'>  <span class="k">class</span> <span class="nc">RidesController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">post</span>
+</span><span class='line'>      <span class="c1"># Hail a time-traveling Delorean:</span>
+</span><span class='line'>      <span class="n">command</span> <span class="o">=</span> <span class="no">HailDelorean</span><span class="o">.</span><span class="n">new</span>
+</span><span class='line'>      <span class="n">command</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="s1">&#39;hailed&#39;</span><span class="p">)</span> <span class="p">{</span> <span class="o">|</span><span class="n">driver</span><span class="o">|</span>
+</span><span class='line'>        <span class="n">render</span> <span class="ss">text</span><span class="p">:</span> <span class="s2">&quot;Hailed you a cab: </span><span class="si">#{</span><span class="n">driver</span><span class="si">}</span><span class="s2"> is arriving!&quot;</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>      <span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="s1">&#39;could_not_hail&#39;</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="n">render</span> <span class="ss">text</span><span class="p">:</span> <span class="s2">&quot;Sorry, no dice.&quot;</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>      <span class="n">command</span><span class="o">.</span><span class="n">hail!</span><span class="p">(</span><span class="n">current_user</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Note that the <code>HailDelorean</code> class has powers of event subscriptions
+now. Our calling code does not have to concern itself with the
+implementation details of the <code>HailDelorean</code> service &ndash; it merely needs
+to register handlers for the two possible outcomes, <code>hailed</code> and
+<code>could_not_hail</code>. Here&rsquo;s how the service class is implemented:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">module</span> <span class="nn">Ridesharing</span>
+</span><span class='line'>  <span class="k">class</span> <span class="nc">HailDelorean</span>
+</span><span class='line'>    <span class="kp">include</span> <span class="ss">Wisper</span><span class="p">:</span><span class="ss">:Publisher</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">hail!</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
+</span><span class='line'>      <span class="c1"># broadcast() is a Wisper method to fire an event</span>
+</span><span class='line'>      <span class="n">driver</span> <span class="o">=</span> <span class="n">find_driver</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
+</span><span class='line'>      <span class="k">if</span> <span class="n">driver</span>
+</span><span class='line'>        <span class="n">broadcast</span><span class="p">(</span><span class="s1">&#39;hailed&#39;</span><span class="p">,</span> <span class="n">driver</span><span class="p">)</span>
+</span><span class='line'>      <span class="k">else</span>
+</span><span class='line'>        <span class="n">broadcast</span><span class="p">(</span><span class="s1">&#39;could_not_hail&#39;</span><span class="p">)</span>
+</span><span class='line'>      <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">find_driver</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
+</span><span class='line'>      <span class="c1"># Here lies slow, complex domain logic</span>
+</span><span class='line'>      <span class="ss">DriverRouting</span><span class="p">:</span><span class="ss">:FindDriver</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Handling side effects in subscriber classes</h3>
+
+<p>Other side-effects can subscribe to the <code>HailDelorean</code> events. Let&rsquo;s say we want to fire an event
+to Segment analytics tracking. I can create a plain Ruby object that simply needs to implement a method with the same name as the event.</p>
+
+<p>Let&rsquo;s implement <code>hailed</code> and <code>could_not_hail</code> methods on this subscriber class:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">TrackSegmentAnalytics</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">hailed</span><span class="p">(</span><span class="n">driver</span><span class="p">)</span>
+</span><span class='line'>    <span class="c1"># fire analytics event to Segment</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">could_not_hail</span>
+</span><span class='line'>    <span class="c1"># fire analytics event to Segment</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And we hook it up by subscribing it to the command handler:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">module</span> <span class="nn">Ridesharing</span>
+</span><span class='line'>  <span class="k">class</span> <span class="nc">RidesController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">post</span>
+</span><span class='line'>      <span class="c1"># snip</span>
+</span><span class='line'>      <span class="n">command</span> <span class="o">=</span> <span class="no">HailDelorean</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">current_user</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="c1"># register the subscriber to the triggering action</span>
+</span><span class='line'>      <span class="n">command</span><span class="o">.</span><span class="n">subscribe</span><span class="p">(</span><span class="no">TrackSegmentAnalytics</span><span class="p">)</span>
+</span><span class='line'>      <span class="c1"># snip</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>OK, that was a little awkward, doing all that wiring up in the controller. What if we did the wiring globally,
+within an app initializer?</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># config/initializers/domain_event_subscriptions.rb</span>
+</span><span class='line'><span class="no">Wisper</span><span class="o">.</span><span class="n">subscribe</span><span class="p">(</span><span class="no">TrackSegmentAnalytics</span><span class="p">,</span> <span class="ss">scope</span><span class="p">:</span> <span class="s2">&quot;HailDelorean&quot;</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># alternate form:</span>
+</span><span class='line'><span class="no">HailDelorean</span><span class="o">.</span><span class="n">subscribe</span><span class="p">(</span><span class="no">TrackSegmentAnalytics</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This registers a global subscriber for all future instances of <code>HailDelorean</code>.</p>
+
+<h2>Example 2: Asynchronous events with subscription handlers and Sidekiq</h2>
+
+<p>Here&rsquo;s the real power of Wisper &ndash; we can decouple our application domain responsibilities by modeling
+effects as subscription objects and do them out-of-band of the primary web request thread.</p>
+
+<p>Note that with the <a href="https://github.com/krisleech/wisper-sidekiq"><code>wisper-sidekiq</code></a> gem, all subscriptions
+given with an <code>async: true</code> option flag will automatically execute in an external thread as a Sidekiq job.
+Let&rsquo;s take advantage of that now.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">module</span> <span class="nn">Ridesharing</span>
+</span><span class='line'>  <span class="k">class</span> <span class="nc">RidesController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">post</span>
+</span><span class='line'>      <span class="c1"># Hail a time-traveling Delorean:</span>
+</span><span class='line'>      <span class="no">HailDelorean</span><span class="o">.</span><span class="n">hail</span><span class="p">(</span><span class="n">current_user</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+</span><span class='line'>      <span class="n">render</span> <span class="ss">text</span><span class="p">:</span> <span class="s1">&#39;Hailing a cab, please wait for a response...&#39;</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">class</span> <span class="nc">HailDelorean</span>
+</span><span class='line'>    <span class="kp">include</span> <span class="ss">Wisper</span><span class="p">:</span><span class="ss">:Broadcaster</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">hail</span><span class="p">(</span><span class="n">passenger_id</span><span class="p">)</span>
+</span><span class='line'>      <span class="n">broadcast</span><span class="p">(</span><span class="ss">:hail</span><span class="p">,</span> <span class="n">passenger_id</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">module</span> <span class="nn">DriverRouting</span>
+</span><span class='line'>  <span class="c1"># Note that this class is both a subscriber and a publisher</span>
+</span><span class='line'>  <span class="k">class</span> <span class="nc">FindDriver</span>
+</span><span class='line'>    <span class="kp">include</span> <span class="ss">Wisper</span><span class="p">:</span><span class="ss">:Publisher</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">hail</span><span class="p">(</span><span class="n">passenger_id</span><span class="p">)</span>
+</span><span class='line'>      <span class="c1"># Do slow, complex hairy routefinding/optimization/messaging behind the scenes:</span>
+</span><span class='line'>      <span class="n">driver</span> <span class="o">=</span> <span class="n">find_driver_for</span><span class="p">(</span><span class="n">passenger_id</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="k">if</span> <span class="n">driver</span>
+</span><span class='line'>        <span class="n">broadcast</span><span class="p">(</span><span class="s1">&#39;driver_found&#39;</span><span class="p">,</span> <span class="n">passenger_id</span><span class="p">,</span> <span class="n">driver</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+</span><span class='line'>      <span class="k">else</span>
+</span><span class='line'>        <span class="n">broadcast</span><span class="p">(</span><span class="s1">&#39;driver_not_found&#39;</span><span class="p">,</span> <span class="n">passenger_id</span><span class="p">)</span>
+</span><span class='line'>      <span class="k">end</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Finally, we add handlers (subscribers) to these domain objects:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">module</span> <span class="nn">Ridesharing</span>
+</span><span class='line'>  <span class="k">class</span> <span class="nc">NotifyPassengerWithDriverStatus</span>
+</span><span class='line'>    <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">driver_found</span>
+</span><span class='line'>      <span class="c1"># send them a text message :)</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">driver_not_found</span>
+</span><span class='line'>      <span class="c1"># send them a text message :(</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now let&rsquo;s link it together with subscriptions:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># config/initializers/domain_event_subscriptions.rb</span>
+</span><span class='line'><span class="ss">Ridesharing</span><span class="p">:</span><span class="ss">:HailDelorean</span><span class="o">.</span><span class="n">subscribe</span><span class="p">(</span><span class="ss">DriverRouting</span><span class="p">:</span><span class="ss">:FindDriver</span><span class="p">,</span> <span class="ss">async</span><span class="p">:</span> <span class="kp">true</span><span class="p">)</span>
+</span><span class='line'><span class="ss">DriverRouting</span><span class="p">:</span><span class="ss">:FindDriver</span><span class="o">.</span><span class="n">subscribe</span><span class="p">(</span><span class="ss">Ridesharing</span><span class="p">:</span><span class="ss">:NotifyPassengerWithDriverStatus</span><span class="p">,</span> <span class="ss">async</span><span class="p">:</span> <span class="kp">true</span><span class="p">)</span>
+</span><span class='line'><span class="no">Wisper</span><span class="o">.</span><span class="n">subscribe</span><span class="p">(</span><span class="no">AnalyticsListener</span><span class="p">,</span> <span class="ss">scope</span><span class="p">:</span> <span class="s2">&quot;Ridesharing::NotifyPassengerWithDriverStatus&quot;</span><span class="p">,</span> <span class="s2">&quot;DriverRouting::FindDriver&quot;</span><span class="o">]</span><span class="p">,</span> <span class="ss">async</span><span class="p">:</span> <span class="kp">true</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now our messages between our domains are pulled out of the main request thread, and operate in an asynchronous
+fashion with Sidekiq as the runner.</p>
+
+<p>Code in our domains are kept clean &ndash; note that there are no direct references to the other subdomains within each
+subdomain. Our app more cleanly segregates the responsibilities between each app, heavy workloads are naturally
+balanced as they move to worker threads.</p>
+
+<h2>Caveats: Beware of overbuilding</h2>
+
+<p>If you are on a small app, you probably should go with approach #1. The weight of indirection
+can be a cognitive load on development, unless you truly need to build async code in #2. The overhead and
+conceptual complexities of the approach can only be justified with large codebases, or in apps
+where a domain-centric view (and segregation) of code is present.</p>
+
+<h2>Caveats: Event subscriptions can be a tangled mess</h2>
+
+<p>Note that the act of wiring can quickly fan out into a spidery mess of handlers &ndash; you could even further
+decouple your handlers by modeling a global event bus as a publisher, and having each domain tap into the bus&#8217; events
+and figure out how to handle each event on its own.</p>
+
+<h2>Caveats: transactional consistency!</h2>
+
+<p>If you implement this asynchronously, you&rsquo;ll have to think about how to
+deal with transactional consistency. Can you design your data models
+(and database schema) to support independent updates without any
+dependencies? How will you handle
+the case when one domain action fails and the other completes?</p>
+
+<p>You may have to roll your own two-phase commit here, the specifics of
+which I won&rsquo;t delve into. However, for most of our applications, we may
+want to skip the asynchronous and keep our events synchronous.</p>
+]]>
+		</content>
+	</entry>
 	
 	<entry>
 		
@@ -98,41 +458,31 @@ it&rsquo;s not a fancy new framework, a how-to guide to do microservices, nor a 
 
 <p>Try this: keep a living document of all the terminology your team uses &ndash; along with all its definitions. This <strong>Glossary</strong> is exactly what it sounds &ndash; a list of terms and their definitions.</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>Delorean Team Glossary
-</span><span class='line'>----------------------
-</span><span class='line'>
-</span><span class='line'>- **Coupon**: an applied discount to a BookingAmount. A coupon may take the form of a Fixed or a Percentage amount.
-</span><span class='line'>   - **Fixed-type**: A coupon that applies a fixed amount of money - e.g. a $30 USD discount.
-</span><span class='line'>   - **Percentage-type**: A coupon that applies a percentage savings off the total BookingAmount.
-</span><span class='line'>- **Driver**: An employed driver who drives within the system, picking up passengers and driving Trips for payment.
-</span><span class='line'>- **Trip**: An itinerary of passenger pick-up and drop-off location and times.
-</span><span class='line'>- **Rider**: The passenger that books the trip and is transported by the *Driver*.
-</span><span class='line'>- **Booking**: A reservation for a Trip, as booked by the *Rider*.
-</span><span class='line'>- **BookingAmount**: The monetary amount of the Trip, accounting for the trip cost, surge pricing, coupons and taxes.
-</span><span class='line'>- **Routing Engine:** The software system that maps out the driving directions for a driver.
-</span><span class='line'>- **Payment**: A record of how a user paid.
-</span><span class='line'>- **Charge**: A financial transaction for a specific dollar amount, for a specific charge method to an institution.
-</span><span class='line'>- **Checkout**: A workflow in which a *Payment* is made for a *Booking*.</span></code></pre></td></tr></table></div></figure>
+<blockquote><h2>Delorean Team Glossary</h2>
 
+<ul>
+<li><strong>Coupon</strong>: an applied discount to a BookingAmount. A coupon may take the form of a Fixed or a Percentage amount.
+
+<ul>
+<li><strong>Fixed-type</strong>: A coupon that applies a fixed amount of money &ndash; e.g. a $30 USD discount.</li>
+<li><strong>Percentage-type</strong>: A coupon that applies a percentage savings off the total BookingAmount.</li>
+</ul>
+</li>
+<li><strong>Driver</strong>: An employed driver who drives within the system, picking up passengers and driving Trips for payment.</li>
+<li><strong>Trip</strong>: An itinerary of passenger pick-up and drop-off location and times.</li>
+<li><strong>Rider</strong>: The passenger that books the trip and is transported by the <em>Driver</em>.</li>
+<li><strong>Booking</strong>: A reservation for a Trip, as booked by the <em>Rider</em>.</li>
+<li><strong>BookingAmount</strong>: The monetary amount of the Trip, accounting for the trip cost, surge pricing, coupons and taxes.</li>
+<li><strong>Routing Engine:</strong> The software system that maps out the driving directions for a driver.</li>
+<li><strong>Payment</strong>: A record of how a user paid.</li>
+<li><strong>Charge</strong>: A financial transaction for a specific dollar amount, for a specific charge method to an institution.</li>
+<li><strong>Checkout</strong>: A workflow in which a <em>Payment</em> is made for a <em>Booking</em>.</li>
+</ul>
+</blockquote>
 
 <p>From now on, use only the term definitions listed here in your stories. Be explicit about how you use your language!</p>
 
-<p>I&rsquo;ve been on many projects where the sloppy usage of a term from project inception led to the usage of that term in the code &ndash; codifying that messy, slippery term throughout the life of the project!</p>
+<p>I&rsquo;ve been on many projects where the sloppy usage of a term from project inception led to the usage of that term in the code &ndash; codifying that messy, slippery term throughout the life of the project.</p>
 
 <p>Which leads us to our next point:</p>
 
@@ -3040,163 +3390,6 @@ the Resolver for: <code>appkit/routes/songs/index</code>. Renaming the file to:<
 
 
 <p>did the trick.</p>
-]]>
-		</content>
-	</entry>
-	
-	<entry>
-		
-			<title type="html"><![CDATA[Ember Data, Rails, CORS, and you!]]></title>
-		
-		<link href="http://www.g9labs.com/2013/12/27/ember-data-rails-cors-and-you/"/>
-		<updated>2013-12-27T16:22:00-08:00</updated>
-		<id>http://www.g9labs.com/2013/12/27/ember-data-rails-cors-and-you</id>
-		<content type="html">
-			<![CDATA[
-				
-					<p></p>
-				
-			]]>
-			<![CDATA[<p>I&rsquo;m starting up a new personal project involving Ember-Data and Rails
-(more to come). The gist of it is that it&rsquo;s a pure frontend app engine
-built in Yeoman and Grunt, and designed to talk to a remote API service
-built on Rails.</p>
-
-<p>So since it&rsquo;s a remote API, I&rsquo;ve got to enable CORS, right?</p>
-
-<h2>Install CORS via rack-cors</h2>
-
-<figure class='code'><figcaption><span>Gemfile.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">gem</span> <span class="s2">&quot;rack-cors&quot;</span><span class="p">,</span> <span class="ss">:require</span> <span class="o">=&gt;</span> <span class="s2">&quot;rack/cors&quot;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<figure class='code'><figcaption><span>config/application.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">config</span><span class="o">.</span><span class="n">middleware</span><span class="o">.</span><span class="n">use</span> <span class="ss">Rack</span><span class="p">:</span><span class="ss">:Cors</span> <span class="k">do</span>
-</span><span class='line'>  <span class="n">allow</span> <span class="k">do</span>
-</span><span class='line'>    <span class="n">origins</span> <span class="s2">&quot;*&quot;</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="n">resource</span> <span class="s2">&quot;*&quot;</span><span class="p">,</span>
-</span><span class='line'>      <span class="ss">:headers</span> <span class="o">=&gt;</span> <span class="ss">:any</span><span class="p">,</span>
-</span><span class='line'>      <span class="ss">:methods</span> <span class="o">=&gt;</span> <span class="o">[</span><span class="ss">:get</span><span class="p">,</span> <span class="ss">:post</span><span class="p">,</span> <span class="ss">:put</span><span class="p">,</span> <span class="ss">:delete</span><span class="p">,</span> <span class="ss">:options</span><span class="p">,</span> <span class="ss">:patch</span><span class="o">]</span>
-</span><span class='line'>    <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="n">allow</span> <span class="k">do</span>
-</span><span class='line'>    <span class="n">origins</span> <span class="s2">&quot;*&quot;</span>
-</span><span class='line'>    <span class="n">resource</span> <span class="s2">&quot;/public/*&quot;</span><span class="p">,</span>
-</span><span class='line'>      <span class="ss">:headers</span> <span class="o">=&gt;</span> <span class="ss">:any</span><span class="p">,</span>
-</span><span class='line'>      <span class="ss">:methods</span> <span class="o">=&gt;</span> <span class="ss">:get</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>A very naive implementation with zero security whatsoever. Anyways.
-Onward!</p>
-
-<h2>Get Ember-Data DS.RESTAdapter talkin&#8217; CORS</h2>
-
-<p>I saw conflicting documentation on Ember-Data and CORS &mdash; it seemed like
-it should support CORS out of the box. Apparently this is not so.</p>
-
-<p>In my ember app&rsquo;s <code>store.js</code> (or anywhere your app loads before the
-application adapter is defined, do this:</p>
-
-<figure class='code'><figcaption><span>store.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">$</span><span class="p">.</span><span class="nx">ajaxSetup</span><span class="p">({</span>
-</span><span class='line'>  <span class="nx">crossDomain</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
-</span><span class='line'>  <span class="nx">xhrFields</span><span class="o">:</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nx">withCredentials</span><span class="o">:</span> <span class="kc">true</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'><span class="p">});</span>
-</span><span class='line'>
-</span><span class='line'><span class="nx">Hendrix</span><span class="p">.</span><span class="nx">Store</span> <span class="o">=</span> <span class="nx">DS</span><span class="p">.</span><span class="nx">Store</span><span class="p">.</span><span class="nx">extend</span><span class="p">();</span>
-</span><span class='line'><span class="nx">Hendrix</span><span class="p">.</span><span class="nx">ApplicationAdapter</span> <span class="o">=</span> <span class="nx">DS</span><span class="p">.</span><span class="nx">RESTAdapter</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
-</span><span class='line'>  <span class="nx">host</span><span class="o">:</span> <span class="s2">&quot;http://localhost:3000&quot;</span><span class="p">,</span>
-</span><span class='line'><span class="p">})</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><a href="http://api.jquery.com/jQuery.ajaxSetup/"><code>$.ajaxSetup</code></a>, though its
-usage is not recommended, is designed to set global options on the
-jQuery <code>ajax</code> object. It provides some information on the options you can modify.</p>
-
-<p>Why doesn&rsquo;t Ember support this out of the box? I think it&rsquo;s because they
-cannot support IE, where one must use an XDR object to support CORS.</p>
-
-<p>I&rsquo;ve posted an <a href="http://discuss.emberjs.com/t/ember-data-and-cors/3690">Ember follow-up question in the
-forums</a> for discussion.</p>
-
-<h2>Get Rails talking JSON out of its mimetype confusion.</h2>
-
-<p>Did you know that if you rely on the <code>Accepts:</code> header in HTTP that
-Rails does not obey its ordering<code>*</code>? I was trying to figure out why my
-Rails controllers were trying to render HTML instead of JSON when the
-headers were:</p>
-
-<p><code>'Accept: application/json, text/javascript, */*; q=0.01'</code></p>
-
-<p>A <a href="https://github.com/rails/rails/issues/9940">very long winded
-discussion</a> on the Rails
-project reveals that, well, nobody has it figured out yet. Most modern
-browsers do obey <code>Accepts:</code> specificity, but for the sake of older
-browser compatibility, the best practice for browsers is still to return
-HTML when <code>*/*</code> is specified.</p>
-
-<p>What does this mean for Rails developers who want to use <code>Accepts:</code>
-mimetype lists? Well, we either wait for the Rails projects to support
-mimetype specificity (and for older browsers to die out), or we are
-encouraged to include the format explicitly in the URI.</p>
-
-<p>I chose to have Ember append the <code>.json</code> suffix to the URL, thanks to
-this <a href="http://stackoverflow.com/questions/13648807/ds-model-url-not-working-in-ember-js">SO
-post</a></p>
-
-<figure class='code'><figcaption><span>store.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">Hendrix</span><span class="p">.</span><span class="nx">ApplicationAdapter</span> <span class="o">=</span> <span class="nx">DS</span><span class="p">.</span><span class="nx">RESTAdapter</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
-</span><span class='line'>  <span class="nx">host</span><span class="o">:</span> <span class="s2">&quot;http://localhost:3000&quot;</span><span class="p">,</span>
-</span><span class='line'>  <span class="c1">// Force ember-data to append the `json` suffix</span>
-</span><span class='line'>  <span class="nx">buildURL</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">record</span><span class="p">,</span> <span class="nx">suffix</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">_super</span><span class="p">(</span><span class="nx">record</span><span class="p">,</span> <span class="nx">suffix</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;.json&quot;</span><span class="p">;</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'><span class="p">})</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>More to come how how this app works.</p>
 ]]>
 		</content>
 	</entry>

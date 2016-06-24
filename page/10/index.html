@@ -64,41 +64,18 @@
 		<!-- START OF _includes/article.html -->
 <article>
 	<header>
-		<h1><a href="/2007/02/25/taiwan-roundup/">Taiwan Roundup</a></h1>
-		<time>25 February 2007</time>
+		<h1><a href="/2012/03/23/rspec-order-agnostic-array-matching/">RSpec order-agnostic array matching</a></h1>
+		<time>23 March 2012</time>
 	</header>
 		<div class="content">
-			<p>So I&rsquo;m writing the first part of my International Media paper on the structures of the media systems in Taiwan. Just wanted to share with you what I&rsquo;ve been coming across in my research so far:</p>
+			<p>What&rsquo;s that? <a href="http://stackoverflow.com/questions/2978922/rspec-array-should-another-array-but-without-concern-for-order">You want to write an expectation for an array but your method returns the Array in a nondeterministic ordering</a>?</p>
 
-<p>Here&rsquo;s a <a href="http://taiwanfeed.com/">aggregate blog</a> of many of the main English blogs on/in Taiwan.</p>
+<p>Simple. Write:</p>
 
-<p>Interestingly enough, many of the high-visibility English political <a href="http://michaelturton.blogspot.com/">blog</a>s have heavy DPP rhetoric where many of my 1.5-gen Taiwanese friends at school and back home lean blue. It&rsquo;ll be interesting to discover where native Taiwanese political pundits/bloggers lean.</p>
+<pre><code>my_method.should =~ &lt;my_expectation&gt;
+</code></pre>
 
-<p>A <a href="http://taiwanperspective.blogspot.com/index.html">photo blogger</a> posts photos from the perspective of a foreigner in Taiwan.</p>
-
-<p>Portnoy Zheng, a Taiwanese graduate student <a href="http://workingman.wordpress.com/">keeps a blog</a> (this is his lesser-updated English blog) on Taiwanese media with a particular Web emphasis.</p>
-
-<p>I am also following another interesting conversation regarding Taiwanese bloggers&mdash;the complaint that the English and Taiwanese blog communities are largely independent of one another. <a href="http://michaelturton.blogspot.com/">Michael Turton</a> describes the need to unify the two realms:</p>
-
-<blockquote><p>For me the major challenge is going to be bringing the Chinese-language and English language blogospheres together, because they have much to say to one another, and because Taiwanese bloggers need to get more recognition.</p></blockquote>
-
-<p>Scott Sommers largely agrees <a href="http://scottsommers.blogs.com/taiwanweblog/2007/02/michael_turton_.html">in his post</a>, but more interesting is the meta section of his entry where there is a lively debate on who needs to take the first step: English- or Chinese-speaking bloggers. One commenter proposes considering the hegemonic properties of Western values:</p>
-
-<blockquote><p>In my opinion, if English readers can answer these two questions, then maybe they might understand.<br/>
-1. Why is it one can not export American-styled democracy anywhere, no matter how good the intention?<br/>
-2. Why is it certain missionaries, churches, or faiths are more accepted then others; even when their messages are the same?</p></blockquote>
-
-<p>Portnoy Zheng (previously mentioned), believes the problem is <a href="http://workingman.wordpress.com/2006/04/23/about-regional-blogger-aggregator/#comments">less about hegemony than it is about language</a>:</p>
-
-<blockquote><p>It is nothing about English hegemony; it is about how to communicate
-effectively,how to break the language divide, and how to enhance our
-understanding of our neighbors.</p></blockquote>
-
-<p>Interestingly enough, there is a movement towards an <a href="http://rconversation.blogs.com/rconversation/2007/02/join_the_open_s.html">Open Source Translation Project</a> which is calling for volunteers to translate Chinese blogs (not limited to TW) to English and vice versa. The implications here could be enormous, not just for Taiwanese blogs but for the Chinese web audience as well.</p>
-
-<p>Finally, Tony Chung is a composer, songwriter and <a href="http://tonelisten.com/">pop singer</a> in <a href="http://www.wretch.cc/blog/tonelisten">Taiwan</a>. He also happens to be from San Jose. He also happens to run a <a href="http://www.geekwhat.com">tech blog</a> and a <a href="http://www.talkmatic.com">Web 2.0 podcast show</a>, recently covered by tech blogger, <a href="http://scobleizer.com/2007/02/15/neat-meeting-of-the-day-tony-chung/">Robert Scoble</a>. Not to mention he also was ASB president my sophomore year in high school. Go check him out and support him. Best to you, Tony (er, Tone?).</p>
-
-<p>AND I need to get back to work (yunno, actually writing).</p>
+<p>See the <a href="https://github.com/dchelimsky/rspec/blob/master/lib/spec/matchers/match_array.rb">source</a>.</p>
 
 			
 			
@@ -117,7 +94,7 @@ understanding of our neighbors.</p></blockquote>
 		
 			on
 		
-    <a class='category' href='/category/andrew-2-dot-0/'>Andrew 2.0</a>
+    <a class='category' href='/category/andrew-2-dot-0/'>Andrew 2.0</a>, <a class='category' href='/category/rails/'>Rails</a>, <a class='category' href='/category/ruby/'>Ruby</a>
 	
 
 
@@ -133,11 +110,73 @@ understanding of our neighbors.</p></blockquote>
 		<!-- START OF _includes/article.html -->
 <article>
 	<header>
-		<h1><a href="/2007/02/21/extreme-editing/">eXtreme Editing</a></h1>
-		<time>21 February 2007</time>
+		<h1><a href="/2012/01/20/ohm-gotchas/">Ohm gotchas</a></h1>
+		<time>20 January 2012</time>
 	</header>
 		<div class="content">
-			<p>I realized today (with a grin) that I wasn&rsquo;t editing my essay as much as I was <a href="http://c2.com/xp/RefactorMercilessly.html">refactoring</a> it.</p>
+			<p>Here&rsquo;s a list of things that have been annoying, or at least a bit frustrating using <a href="http://ohm.keyvalue.org">Ohm</a>, the Redis ORM, in a Rails app. Beware to those who assume Ohm is ActiveRecord in new clothes. It is, but it&rsquo;s not:</p>
+
+<h2>CRUD</h2>
+
+<p>Don&rsquo;t make the mistake of treating your Ohm objects like AR:</p>
+
+<table>
+<thead>
+<tr>
+<th>ActiveRecord        </th>
+<th> Ohm</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>`destroy            </td>
+<td> <code>delete</code></td>
+</tr>
+<tr>
+<td><code>self.find(id)</code>     </td>
+<td> <code>self[id]</code></td>
+</tr>
+<tr>
+<td><code>update_attributes</code> </td>
+<td> <code>update</code></td>
+</tr>
+<tr>
+<td><code>create</code>            </td>
+<td> <code>create</code></td>
+</tr>
+</tbody>
+</table>
+
+
+<p>Also note that Ohm&rsquo;s <code>update_attributes</code> behaves differently from Rails` &mdash; it doesn&rsquo;t persist the updates to DB. That owned me for the good part of the day.</p>
+
+<h2>Callbacks</h2>
+
+<p>Thankfully, these are ActiveRecord-like with the addition of <a href="http://cyx.github.com/ohm-contrib/doc/"><code>ohm/contrib</code></a>.</p>
+
+<h2>Associations</h2>
+
+<table>
+<thead>
+<tr>
+<th>ActiveRecord            </th>
+<th> Ohm</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>has_a</code> or <code>belongs_to</code> </td>
+<td> <code>reference</code></td>
+</tr>
+<tr>
+<td><code>has_many</code>              </td>
+<td> <code>collection</code></td>
+</tr>
+</tbody>
+</table>
+
+
+<p>Read <a href="http://blog.citrusbyte.com/2010/04/12/mixing-ohm-with-activerecord-datamapper-and-sequel/">this article</a> if you&rsquo;re considering creating associations from AR objects to Ohm objects and the other way &lsquo;round.</p>
 
 			
 			
@@ -156,7 +195,7 @@ understanding of our neighbors.</p></blockquote>
 		
 			on
 		
-    <a class='category' href='/category/andrew-2-dot-0/'>Andrew 2.0</a>
+    <a class='category' href='/category/andrew-2-dot-0/'>Andrew 2.0</a>, <a class='category' href='/category/software/'>Software</a>, <a class='category' href='/category/programming/'>programming</a>
 	
 
 
@@ -172,11 +211,15 @@ understanding of our neighbors.</p></blockquote>
 		<!-- START OF _includes/article.html -->
 <article>
 	<header>
-		<h1><a href="/2007/02/19/sensations-i/">Sensations I</a></h1>
-		<time>19 February 2007</time>
+		<h1><a href="/2011/11/21/now-at-blurb/">Now at Blurb</a></h1>
+		<time>21 November 2011</time>
 	</header>
 		<div class="content">
-			<p><img src="http://www.g9labs.com/img/blogart/never-ending.jpg" alt="never-ending" /></p>
+			<p>I should have mentioned this long ago, but I started work at Blurb in early August. It&rsquo;s been a quick ramp-up and I&rsquo;m loving it there, surrounded by smart engineers and great designers. I do Rails/JS work there, and I&rsquo;m building a lot of chops around Agile/TDD methodologies.</p>
+
+<p>Anyways, they had me do a Camera Thursdays blog post, which I <a href="http://blog.blurb.com/index.php/2011/11/17/blurberati-with-cameras-nikon-d80-with-f1-8-50mm-prime/">wrote about my Nikon/1.8 camera combo</a>:</p>
+
+<p><a href="http://blog.blurb.com/index.php/2011/11/17/blurberati-with-cameras-nikon-d80-with-f1-8-50mm-prime/"><img src="http://blog.blurb.com/wp-content/uploads/2011/11/andrew.jpg" alt="" /></a></p>
 
 			
 			
@@ -195,173 +238,7 @@ understanding of our neighbors.</p></blockquote>
 		
 			on
 		
-    <a class='category' href='/category/andrew-2-dot-0/'>Andrew 2.0</a>
-	
-
-
-	
-	
-	</footer>
-	
-</article>
-<!-- END OF _includes/article.html -->
-
-	
-		
-		<!-- START OF _includes/article.html -->
-<article>
-	<header>
-		<h1><a href="/2006/09/02/geek-brief/">GTD-izing my Thunderbird client, and other productivity things</a></h1>
-		<time>02 September 2006</time>
-	</header>
-		<div class="content">
-			<p>Do any fellow geeks out there follow any <a href="http://en.wikipedia.org/wiki/Getting_things_done">GettingThingsDone</a> (GTD) practices?</p>
-
-<p>(I&rsquo;m trying to get my life organizedï¿½a futile attempt before the sledgehammer of school and responsibilities drops. Organized as in&hellip; prioritizing, managing time, et cetera.) A couple things I&rsquo;ve done:</p>
-
-<ul>
-<li><p><a href="http://entropicprincipal.blogspot.com/2005/09/using-thunderbird-to-get-things-done.html">GTD-ized my Thunderbird client</a> (heck, I never knew labels could be so useful) and it seems to really help keep my mind on track when I field emails (I receive twenty to forty non-spam messages a day). The basic principle is to tag (label) your mail the instant it shows up in your inbox with its priority status. Then you run back through your mail and attack each piece according to its priority.</p></li>
-<li><p>I&rsquo;m syncing my Palm V to Yahoo Calendar. Using the Yahoo Widgets Day Planner widget as an interface, I&rsquo;m basically able to access my calendar information anywhere, whether I have the Palm or not. I&rsquo;m still debating whether this is useful because the sync is less-than-accurate and well, nothing beats pencil and paper (a la the <a href="http://www.43folders.com/2004/09/03/introducing-the-hipster-pda/">Hipster PDA</a>. Has anybody used it? What were your experiences?)</p></li>
-</ul>
-
-
-<p>Sorry, that was a quick break from our regularly scheduled programming. Geek, out.</p>
-
-			
-			
-		</div>
-	<footer>
-		
-
-
-		
-			andrewhao 
-		
-
-
-
-  
-		
-			on
-		
-    <a class='category' href='/category/andrew-2-dot-0/'>Andrew 2.0</a>, <a class='category' href='/category/geek/'>Geek</a>, <a class='category' href='/category/productivity/'>Productivity</a>
-	
-
-
-	
-	
-	</footer>
-	
-</article>
-<!-- END OF _includes/article.html -->
-
-	
-		
-		<!-- START OF _includes/article.html -->
-<article>
-	<header>
-		<h1><a href="/2006/08/28/photoshoot-berkeley-seven-am/">Photoshoot: Berkeley, Seven AM</a></h1>
-		<time>28 August 2006</time>
-	</header>
-		<div class="content">
-			<p><a href="http://www.flickr.com/photos/g9labs/227317906/"><img src="http://static.flickr.com/57/227317906_d1f60a7d5c_m.jpg" alt="Buddies" /></a>
-<a href="http://www.flickr.com/photos/g9labs/227318666/"><img src="http://static.flickr.com/69/227318666_4265b716b6_m.jpg" alt="Green Picket Fence" /></a>
-<a href="http://www.flickr.com/photos/g9labs/227319509/"><img src="http://static.flickr.com/62/227319509_aad73784dc_m.jpg" alt="Passing Garbage Truck" /></a>
-<a href="http://www.flickr.com/photos/g9labs/227318225/"><img src="http://static.flickr.com/70/227318225_1269240ea0_m.jpg" alt="Graffiti Newsboxes" /></a>
-<a href="http://www.flickr.com/photos/g9labs/227319969/"><img src="http://static.flickr.com/77/227319969_a0ceb34352_m.jpg" alt="Runner Sidewalk" /></a>
-<a href="http://www.flickr.com/photos/g9labs/227320201/"><img src="http://static.flickr.com/98/227320201_4f48a2daef_m.jpg" alt="Sleeping Man" /></a>
-<a href="http://www.flickr.com/photos/g9labs/226247082/"><img src="http://static.flickr.com/98/226247082_48902bd213_m.jpg" alt="Lightpole (Fog)" /></a>
-<a href="http://www.flickr.com/photos/g9labs/226247081/"><img src="http://static.flickr.com/81/226247081_8621983141_m.jpg" alt="Tree (Fog)" /></a></p>
-
-<p>View the <a href="http://www.flickr.com/photos/g9labs/sets/72157594255111783/">rest of the set ï¿½</a></p>
-
-			
-			
-		</div>
-	<footer>
-		
-
-
-		
-			andrewhao 
-		
-
-
-
-  
-		
-			on
-		
-    <a class='category' href='/category/andrew-2-dot-0/'>Andrew 2.0</a>
-	
-
-
-	
-	
-	</footer>
-	
-</article>
-<!-- END OF _includes/article.html -->
-
-	
-		
-		<!-- START OF _includes/article.html -->
-<article>
-	<header>
-		<h1><a href="/2006/07/31/the-faqqly-tour/">The FAQQLY Tour</a></h1>
-		<time>31 July 2006</time>
-	</header>
-		<div class="content">
-			<p>Many of you have wondered what it&rsquo;s like daily indulging in the opulence that are the FAQQLY offices. Allow me to take you on a tour.</p>
-
-<p>These are known as cubicles. There are many of them, and they all look the same. Don&rsquo;t let their similarities to prison cells fool you. They are actually holding pens for geeks.</p>
-
-<p><a href="http://www.flickr.com/photos/andrewhao/201500325/"><img src="http://static.flickr.com/69/201500325_d3db63cb33.jpg" alt="This is office casual." /></a></p>
-
-<p>Hsiufan and Vicki, earlier in the summer. Note the shoes just chillin&#8217; in the corner.</p>
-
-<p>I, being the senior techie, get my own cubicle. Note the paper clutter on the desk; it is a sure sign of productivity (and they sure help catch any runaway condiments leaking from my Subway sandwiches).</p>
-
-<p><a href="http://www.flickr.com/photos/andrewhao/201502725/"><img src="http://static.flickr.com/64/201502725_2d23680326.jpg" alt="My workspace" /></a></p>
-
-<p>(Three computers, four screens and a whole lotta carpal-swivel-neck-syndrome.)</p>
-
-<p>Some whiteboard scrabble:</p>
-
-<p><a href="http://www.flickr.com/photos/andrewhao/201500907/"><img src="http://static.flickr.com/58/201500907_fae7bbb939.jpg" alt="Whiteboard Talk 1" /></a>
-<a href="http://www.flickr.com/photos/andrewhao/201500780/"><img src="http://static.flickr.com/57/201500780_e9e2d3bddc.jpg" alt="Whiteboard Talk 2" /></a>
-<a href="http://www.flickr.com/photos/andrewhao/201500644/"><img src="http://static.flickr.com/67/201500644_f1b03a1bee.jpg" alt="Whiteboard Talk 3" /></a>
-Don&rsquo;t let the appearance of &lsquo;fun&rsquo; fool you. Dave works us like dogs. We have to, cuz he works pretty hard himself.</p>
-
-<p><a href="http://www.flickr.com/photos/andrewhao/201501052/"><img src="http://static.flickr.com/66/201501052_a53a9b86ed.jpg" alt="Dave can't leave his cubicle. Ever." /></a>
-It&rsquo;s pretty hard to get this guy out of his cubicle. &ldquo;Hey, wanna get lunch?&rdquo; we ask him, and he says, &ldquo;Sure, in five minutes.&rdquo; Then about thirty minutes later we finally get to pull him away off his important phone conferences and whatever he does as a Founder Person.</p>
-
-<p>But seriously, it&rsquo;s been a ton of fun working here, getting tons of good experience, panicking like real people with real responsibilities do, learning how to run a business in a constantly changing market (the solution? work smarter, not harder. and don&rsquo;t sleep). And we do keep kidding Dave about how he drives us like slaves, but I love the guy. <a href="http://xanga.com/davewliu">His heart</a> is in the right place, for sure.</p>
-
-<p><a href="http://www.flickr.com/photos/andrewhao/201502424/"><img src="http://static.flickr.com/70/201502424_18468b3c4a.jpg" alt="The Tech Team says hi." /></a></p>
-
-<p>The tech team says &ldquo;Hi&rdquo;.</p>
-
-<p>(For more pictures, visit my <a href="http://www.flickr.com/photos/andrewhao/sets/72157594216774733/">FAQQLY Farm</a> photoset)</p>
-
-			
-			
-		</div>
-	<footer>
-		
-
-
-		
-			andrewhao 
-		
-
-
-
-  
-		
-			on
-		
-    <a class='category' href='/category/andrew-2-dot-0/'>Andrew 2.0</a>
+    <a class='category' href='/category/life/'>Life</a>, <a class='category' href='/category/work/'>Work</a>
 	
 
 
@@ -376,8 +253,10 @@ It&rsquo;s pretty hard to get this guy out of his cubicle. &ldquo;Hey, wanna get
 	
 <div class="pagination">
 	
+		<a class="older" href="/page/11/">Older</a>
 	
-	<span class="total">10 of 10</span>
+	
+	<span class="total">10 of 33</span>
 	
 	
 		<a class="newer" href="/page/9/">Newer</a>

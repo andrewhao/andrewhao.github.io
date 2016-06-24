@@ -406,7 +406,11 @@
         <loc>
             http://www.g9labs.com/2016/04/18/the-joy-of-naming-with-the-powers-of-domain-driven-design/
         </loc>
-        <lastmod>2016-06-16T13:58:31-07:00</lastmod>
+        <lastmod>2016-06-23T15:23:14-07:00</lastmod>
+    </url>
+    <url>
+        <loc>http://www.g9labs.com/2016/06/23/rails-pub-slash-sub-with-wisper-and-sidekiq/</loc>
+        <lastmod>2016-06-23T17:30:28-07:00</lastmod>
     </url>
     <url>
         <loc>http://www.g9labs.com/about/</loc>
@@ -418,11 +422,11 @@
     </url>
     <url>
         <loc>http://www.g9labs.com/blog/archives/</loc>
-        <lastmod>2016-06-16T13:58:31-07:00</lastmod>
+        <lastmod>2016-06-23T17:30:28-07:00</lastmod>
     </url>
     <url>
         <loc>http://www.g9labs.com/</loc>
-        <lastmod>2016-06-16T13:58:31-07:00</lastmod>
+        <lastmod>2016-06-23T17:30:28-07:00</lastmod>
     </url>
     <url>
         <loc>http://www.g9labs.com/notes/2009-09-16-uxweek-day-1.html</loc>

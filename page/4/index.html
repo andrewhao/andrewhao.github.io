@@ -64,353 +64,473 @@
 		<!-- START OF _includes/article.html -->
 <article>
 	<header>
-		<h1><a href="/2011/08/10/introducing-boink-a-photobooth-for-the-rest-of-us/">Introducing Boink, a photobooth for the rest of us.</a></h1>
-		<time>10 August 2011</time>
+		<h1><a href="/2015/03/19/docker-rails-and-docker-compose-in-your-development-workflow/">Docker, Rails, and Docker Compose in your development workflow</a></h1>
+		<time>19 March 2015</time>
 	</header>
 		<div class="content">
-			<p>My friends were complaining that wedding photobooths were too expensive to rent. Could we make one for them?</p>
+			<p>(This post <a href="http://blog.carbonfive.com/2015/03/17/docker-rails-docker-compose-together-in-your-development-workflow/">originally appeared</a> on the Carbon Five blog.)</p>
 
-<p>Glen and I from the <a href="http://porkbuns.net">Porkbuns Initiative</a> stepped up in full armor, ready to help.</p>
+<p>We&rsquo;ve been trialing the usage of Docker and <a href="https://docs.docker.com/compose/">Docker Compose</a> (previously known as <a href="http://www.fig.sh">fig</a>) on a Rails project here at Carbon Five. In the past, my personal experience with Docker had been that the promise of portable containerized apps was within reach, but the tooling and development workflow were still awkward &ndash; commands were complex, configuration and linking steps were complicated, and the overall learning curve was high.</p>
 
-<p>What is it? It&rsquo;s a self-running photobooth that uses your Mac for brains and DSLR for eyes and a Webkit browser for its clothes and a photo printer for&hellip; a printer. You can connect an iPad as the frontend for a nice visual touch (pun intended).</p>
+<p>My team decided to take a peek at the current landscape of Docker tools (primarily boot2docker and Docker Compose) and see how easily we could spin up a new app and integrate it into our development workflow on Mac OS X.</p>
 
-<p>We built it on a backend Rails instance, pushing SVG+HTML5 in the frontend and using the gphoto4ruby gem as a camera library wrapper.</p>
+<p>In the end, I&rsquo;ve found my experience with Docker tools to be surprisingly pleasant; the tooling easily integrates with existing Rails development workflows with only a minor amount of performance overhead. Docker Compose offers a seamless way to build containers and orchestrate their dependencies, and helps lower the learning curve to build Dockerized applications. Read on to find out how we built ours.</p>
 
-<p>[caption id=&ldquo;attachment_1105&rdquo; align=&ldquo;alignnone&rdquo; width=&ldquo;500&rdquo; caption=&ldquo;All dressed up and ready to go.&rdquo;]<a href="http://www.g9labs.com/2011/08/10/introducing-boink-a-photobooth-for-the-rest-of-us/284852_10100607611957573_1201208_60011361_805844_n/"><img src="http://www.g9labs.com/wp-content/uploads/2011/08/284852_10100607611957573_1201208_60011361_805844_n-500x333.jpg" alt="" /></a>[/caption]</p>
+<h2>Introduction to docker-compose (née Fig).</h2>
 
-<p>[caption id=&ldquo;&rdquo; align=&ldquo;alignnone&rdquo; width=&ldquo;500&rdquo; caption=&ldquo;An early UI prototype.&rdquo;]<a href="http://www.flickr.com/photos/andrewhao/6006564205/"><img src="http://farm7.static.flickr.com/6029/6006564205_60fda1b366.jpg" alt="Boink Preview" /></a>[/caption]</p>
+<p>Docker Compose acts as a wrapper around Docker &ndash; it links your containers together and provides syntactic sugar around some complex container linking commands.</p>
 
-<p>[caption id=&ldquo;attachment_1106&rdquo; align=&ldquo;alignnone&rdquo; width=&ldquo;500&rdquo; caption=&ldquo;This comes out of the printer.&rdquo;]<a href="http://www.g9labs.com/2011/08/10/introducing-boink-a-photobooth-for-the-rest-of-us/gen_219/"><img src="http://www.g9labs.com/wp-content/uploads/2011/08/gen_219-500x348.jpg" alt="" /></a>[/caption]</p>
+<p>We liked Docker Compose for its ability to coordinate and spin up your entire application and dependencies with one command. In the past, frameworks like Vagrant were easy ways to generate a standard image for your development team to use and get started on. Docker Compose offers similar benefits of decoupling the app from the host environment, but also provides the container vehicle for the app to run in all environments &ndash; that is, the container you develop in will often be the same container that you deploy to production with.</p>
 
-<h3>Try it out</h3>
-
-<p>Check it out on <a href="http://www.github.com/andrewhao/boink">Github</a>.</p>
-
-			
-			
-		</div>
-	<footer>
-		
-
-
-		
-			andrewhao 
-		
-
-
-
-  
-		
-			on
-		
-    <a class='category' href='/category/design/'>Design</a>, <a class='category' href='/category/geek/'>Geek</a>, <a class='category' href='/category/interfaces/'>Interfaces</a>, <a class='category' href='/category/programming/'>programming</a>
-	
-
-
-	
-	
-	</footer>
-	
-</article>
-<!-- END OF _includes/article.html -->
-
-	
-		
-		<!-- START OF _includes/article.html -->
-<article>
-	<header>
-		<h1><a href="/2011/07/01/chat-app-frontend-prototype/">Chat App - Frontend Prototype</a></h1>
-		<time>01 July 2011</time>
-	</header>
-		<div class="content">
-			<p><a href="http://www.flickr.com/photos/andrewhao/5885861130/"><img src="http://farm6.static.flickr.com/5261/5885861130_71e25f2beb.jpg" alt="Chat View - 1" /></a></p>
-
-<p><a href="http://www.flickr.com/photos/andrewhao/5885860254/"><img src="http://farm7.static.flickr.com/6053/5885860254_a2aa7f7895.jpg" alt="Interview View" /></a></p>
-
-<p>Some UI work I did for a stealth startup in early &lsquo;11. Responsible for look &amp; feel and frontend chat interactions. jQuery/UI communicating to a CakePHP/nodejs backend.</p>
-
-<p>We developed this prototype with <a href="http://www.wisdom.weizmann.ac.il/~dharel/SCANNED.PAPERS/Statecharts.pdf">statecharts</a>, a concept commonly found in event-driven programming and with which I first learned from <a href="http://frozencanuck.wordpress.com/2011/03/09/sproutcore-statecharts-vs-controllers/">Sproutcore</a>. I found it really helped map out all the complex user interactions we had to deal with on the page.</p>
-
-<p><a href="http://www.flickr.com/photos/andrewhao/sets/72157626954648391/with/5885860254/">See more screenshots from the set</a>.</p>
-
-			
-			
-		</div>
-	<footer>
-		
-
-
-		
-			andrewhao 
-		
-
-
-
-  
-		
-			on
-		
-    <a class='category' href='/category/design/'>Design</a>, <a class='category' href='/category/interfaces/'>Interfaces</a>, <a class='category' href='/category/javascript/'>Javascript</a>, <a class='category' href='/category/software/'>Software</a>
-	
-
-
-	
-	
-	</footer>
-	
-</article>
-<!-- END OF _includes/article.html -->
-
-	
-		
-		<!-- START OF _includes/article.html -->
-<article>
-	<header>
-		<h1><a href="/2011/06/15/brute-labs-ux-project-studentsconnect/">BRUTE LABS UX project: StudentsConnect</a></h1>
-		<time>15 June 2011</time>
-	</header>
-		<div class="content">
-			<p>I&rsquo;m on a team with <a href="http://www.brutelabs.org">BRUTE LABS</a>, a volunteer-led design agency working on StudentsConnect, a prototype project making chatroulette-style interactions connecting students from the global North and South. Here&rsquo;s a UX flow we worked on:</p>
-
-<p><strong><a href="http://www.slideshare.net/andrewhao/brute-labs-wireframes">BRUTE LABS &ndash; StudentsConnect UX</a></strong></p>
-
-<p>View more <a href="http://www.slideshare.net/">presentations</a> from <a href="http://www.slideshare.net/andrewhao">Andrew Hao</a></p>
-
-			
-			
-		</div>
-	<footer>
-		
-
-
-		
-			andrewhao 
-		
-
-
-
-  
-		
-			on
-		
-    <a class='category' href='/category/design/'>Design</a>, <a class='category' href='/category/interfaces/'>Interfaces</a>, <a class='category' href='/category/ux/'>UX</a>
-	
-
-
-	
-	
-	</footer>
-	
-</article>
-<!-- END OF _includes/article.html -->
-
-	
-		
-		<!-- START OF _includes/article.html -->
-<article>
-	<header>
-		<h1><a href="/2011/06/04/code-for-oakland-barcamp/">Code For Oakland Barcamp</a></h1>
-		<time>04 June 2011</time>
-	</header>
-		<div class="content">
-			<p>[caption id=&ldquo;&rdquo; align=&ldquo;alignnone&rdquo; width=&ldquo;500&rdquo; caption=&ldquo;Is that Jon Chan I see? Yes it is. Photo credit Oakland Local.&rdquo;]<a href="http://www.flickr.com/photos/oaklandlocal/5804304389/"><img src="http://farm4.static.flickr.com/3527/5804304389_e539db36a2.jpg" alt="" /></a>[/caption]</p>
-
-<p>A few notes from this <a href="http://codeforoakland.org/">one-day barcamp/hackfest</a>. The goal was to create mobile apps for Oakland, with a special emphasis on serving underserved populations.</p>
+<p>Docker (with the orchestration tooling provided by Compose) provides us the ability to:</p>
 
 <ul>
-<li><p>Text messaging is still king. While smartphones and their apps are at the leading edge and grabbing all the attention these days, most underserved populations don&rsquo;t have access to these services. Lots of apps today are using <a href="http://www.twilio.com/">Twilio</a> or <a href="http://www.tropo.com">Tropo</a> APIs as their SMS/voice gateways.</p></li>
-<li><p>Open data is awesome. I learned about <a href="http://www.scraperwiki.com">ScraperWiki</a>, which basically puts site scraping code into the cloud so people can maintain your scraper script long after you&rsquo;ve tossed it. Some staff from maplight.org are here.</p></li>
-<li><p>Open data is also difficult to maintain. One presenter mentioned how Oakland keeps a database of social services&mdash;that&rsquo;s great, but what if the organization shuts down and/or changes its hours? Who&rsquo;s responsible for updating the information? IIRC, the estimate was that 30% of the listings kept by the City are no longer valid. There need to be active efforts to combat dataset decay.</p></li>
-<li><p>By the way, here&rsquo;s a <a href="http://codeforoakland.org/data-sets/">list of Oakland GIS datasets</a>. Some of it really sucks (filled with garbage spam data). Some of it is useful.</p></li>
+<li>Upgrade versions of Ruby or Node (or whatever runtime your app requires) in production with far less infrastructure coordination than normally required.</li>
+<li>Reduce the number of moving parts in the deployment process. Instead of writing complex Puppet and Capistrano deployment scripts, our deployments will now center around moving images around and starting containers.</li>
+<li>Simplify developer onboarding by standardizing your team on the same machine images.</li>
 </ul>
 
 
-<h4>Today&rsquo;s Projects:</h4>
+<p>In this example, we will run two Docker containers &ndash; a Rails container and a MySQL container &ndash; and rely on Compose to build, link, and run them.</p>
+
+<h2>Installing boot2docker, Docker, and Docker Compose.</h2>
+
+<p>Docker runs in a VirtualBox VM through an image called <code>boot2docker</code>. The reason we have to use <code>boot2docker</code> and VirtualBox is because the Mac OSX filesystem is not compatible with the type of filesystem required to support Docker. Hence, we must run our Docker containers within yet another virtual machine.</p>
+
+<ol>
+<li>Download and install <a href="https://www.virtualbox.org/wiki/Downloads">VirtualBox</a>.</li>
+<li>Now install boot2docker and Docker Compose.</li>
+</ol>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>brew install boot2docker docker-compose
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ol>
+<li>Initialize and start up boot2docker</li>
+</ol>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>boot2docker init
+</span><span class='line'><span class="nv">$ </span>boot2docker start
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ol>
+<li>Configure your Docker host to point to your boot2docker image.</li>
+</ol>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span><span class="k">$(</span>boot2docker shellinit<span class="k">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>  You&rsquo;ll need to run this for every terminal session that invokes the <code>docker</code> or <code>docker-compose</code> command &ndash; better export this line into your <code>.zshrc</code> or <code>.bashrc</code>.</p>
+
+<h2>Creating a Dockerfile</h2>
+
+<p>Let&rsquo;s start by creating a Dockerfile for this app. This specifies the base dependencies for our Rails application. We will need:</p>
 
 <ul>
-<li><p><a href="http://comtxt.nodester.com/">comtxt</a>: text gateway for community organizers. <a href="http://github.com/ryanjarvinen/comtxt">github.com/ryanjarvinen/comtxt</a></p></li>
-<li><p>freexchange.org. mobile interface to donated goods.</p></li>
-<li><p>oakland:pm. get oakland high-schoolers connected to afterschool programs. <a href="http://github.com/jedp/oakland.pm">github.com/jedp/oakland.pm</a></p></li>
-<li><p>txt2wrk: text-based job matching. this one is unique because it is a complete SMS/voice based interface. connects to craigslist. call it and it reads back craigslist job postings. targeted for parolees.</p></li>
-<li><p>Oakland Food Finder: helping people find healthy, locally-grown food.</p></li>
-<li><p>BettaSTOP: help people find buses, access bus schedules. in oakland, many underserved communities depend on making and finding the right bus. it also allows users to give feedback on buses, remark on their timeliness, and talk about bus route features. Live &amp; in production: <a href="http://www.bettastop.net.">http://www.bettastop.net.</a></p></li>
+<li>Ruby 2.2 &ndash; for our Rails instance</li>
+<li>NodeJS and NPM &ndash; for installation of Karma, jshint, and other JS dependencies.</li>
+<li>MySQL client &ndash; for ActiveRecord tasks</li>
+<li>PhantomJS &ndash; for executing JS-based tests</li>
+<li>vim &ndash; for inspecting and editing files within our container</li>
 </ul>
 
 
-<h4>What I did</h4>
+<p>Create a <code>Dockerfile</code> from within your Rails app directory.</p>
 
-<p>I&rsquo;m helping out the Oakland:PM team, which is in the process of building out a service to get high schoolers connected to city-funded afterschool programs. The idea is that they can pull up their mobile phones and see what&rsquo;s available to them while they&rsquo;re kicking it with friends and bored out of their minds.</p>
-
-<p>While the others hacked on wireframes and some code, I worked on a few user stories and resolved to interview a few of my contacts who work for the YMCA in East Oakland. We won a $500 grant from the City to see this thing through in July. Here&rsquo;s hoping that we&rsquo;ll make it.</p>
-
-<p>So far the app is a <a href="http://nodejs.org">nodejs</a> app with pages served with the <a href="http://expressjs.com/">Express</a> framework. We threw around ideas of using <a href="http://www.sencha.com/products/touch/">Sencha Touch</a>, but I think that decision is out of my hands. We&rsquo;ll see how we proceed.</p>
-
-<p>Source code can be found at: <a href="http://github.com/jedp/oakland.pm">http://www.github.com/jedp/oakland.pm</a></p>
-
-			
-			
-		</div>
-	<footer>
-		
-
-
-		
-			andrewhao 
-		
-
-
-
-  
-		
-			on
-		
-    <a class='category' href='/category/andrew-2-dot-0/'>Andrew 2.0</a>
-	
-
-
-	
-	
-	</footer>
-	
-</article>
-<!-- END OF _includes/article.html -->
-
-	
-		
-		<!-- START OF _includes/article.html -->
-<article>
-	<header>
-		<h1><a href="/2011/03/22/un-declaration-of-human-rights-visualization/">UN Declaration of Human Rights (Visualization)</a></h1>
-		<time>22 March 2011</time>
-	</header>
-		<div class="content">
-			<p><a href="http://www.flickr.com/photos/andrewhao/5548186559/"><img src="http://farm6.static.flickr.com/5186/5548186559_70e047238c.jpg" alt="UN Declaration of Human Rights (Visualization)" /></a></p>
-
-<p>This design was created from a Processing sketch that breaks up the preamble to the <a href="http://www.un.org/en/documents/udhr/index.shtml">UN Declaration of Human Rights</a> and connects adjacent words together with lines. More frequent word associations can be noted by darker, thicker lines.</p>
-
-<p>The source code (albeit messy) can be found at <a href="http://www.github.com/andrewhao/freedom-sunday">www.github.com/andrewhao/freedom-sunday</a>. I&rsquo;m running the sketch in full Java mode, so be sure to compile with your Java IDE of choice (rather than the Processing IDE).</p>
-
-<p>Inspiration taken from the designs of Harry Kao (<a href="http://www.hairycow.name">http://www.hairycow.name</a>) and Jer Thorp (<a href="http://blog.blprnt.com">http://blog.blprnt.com</a>).</p>
-
-<p>My fellow interns and I are headed off to Cebu for 10 days to observe organizations involved in anti-trafficking efforts. More info: <a href="http://interns.regenerationweb.com">interns.regenerationweb.com</a></p>
-
-			
-			
-		</div>
-	<footer>
-		
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>FROM ruby:2.2.0
+</span><span class='line'>RUN apt-get update -qq <span class="o">&amp;&amp;</span> apt-get install -y build-essential nodejs npm nodejs-legacy mysql-client vim
+</span><span class='line'>RUN npm install -g phantomjs
+</span><span class='line'>
+</span><span class='line'>RUN mkdir /myapp
+</span><span class='line'>
+</span><span class='line'>WORKDIR /tmp
+</span><span class='line'>COPY Gemfile Gemfile
+</span><span class='line'>COPY Gemfile.lock Gemfile.lock
+</span><span class='line'>RUN bundle install
+</span><span class='line'>
+</span><span class='line'>ADD . /myapp
+</span><span class='line'>WORKDIR /myapp
+</span><span class='line'>RUN <span class="nv">RAILS_ENV</span><span class="o">=</span>production bundle <span class="nb">exec </span>rake assets:precompile --trace
+</span><span class='line'>CMD <span class="o">[</span><span class="s2">&quot;rails&quot;</span>,<span class="s2">&quot;server&quot;</span>,<span class="s2">&quot;-b&quot;</span>,<span class="s2">&quot;0.0.0.0&quot;</span><span class="o">]</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
-		
-			andrewhao 
-		
+<p>Let&rsquo;s start by breaking this up line-by-line:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>FROM ruby:2.2.0
+</span></code></pre></td></tr></table></div></figure>
 
 
+<p>The <a href="https://docs.docker.com/reference/builder/#from"><code>FROM</code></a> directive specifies the <a href="https://registry.hub.docker.com/u/library/ruby/"><code>library/ruby</code> base image from Docker Hub</a>, and uses the <code>2.2.0</code> tag, which corresponds to the Ruby 2.2.0 runtime.</p>
 
-  
-		
-			on
-		
-    <a class='category' href='/category/art/'>Art</a>, <a class='category' href='/category/design/'>Design</a>
-	
+<p>From here on, we are going to be executing commands that will build on this reference image.</p>
 
-
-	
-	
-	</footer>
-	
-</article>
-<!-- END OF _includes/article.html -->
-
-	
-		
-		<!-- START OF _includes/article.html -->
-<article>
-	<header>
-		<h1><a href="/2011/03/14/slavery-today-infographic/">Slavery Today (Infographic)</a></h1>
-		<time>14 March 2011</time>
-	</header>
-		<div class="content">
-			<p><a href="http://www.flickr.com/photos/andrewhao/5523317386/"><img src="http://farm6.static.flickr.com/5134/5523317386_1b2c6967c4.jpg" alt="Slavery Today Infographic (Freedom Sunday)" /></a><a href="http://www.flickr.com/photos/andrewhao/5522731659/"><img src="http://farm6.static.flickr.com/5092/5522731659_4bfa77761f.jpg" alt="Slavery Today Infographic (Freedom Sunday)" /></a></p>
-
-<p>An infographic for <a href="http://www.freedomsunday.org/">Freedom Sunday</a> at <a href="http://www.regenerationweb.com">Regeneration</a>. <a href="http://www.andrewhao.com/wp-content/uploads/2011/03/Slavery-Today-Flyer.pdf">Download as PDF</a>.</p>
-
-			
-			
-		</div>
-	<footer>
-		
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>RUN apt-get update -qq <span class="o">&amp;&amp;</span> apt-get install -y build-essential nodejs npm nodejs-legacy mysql-client vim
+</span><span class='line'>RUN npm install -g phantomjs
+</span></code></pre></td></tr></table></div></figure>
 
 
-		
-			andrewhao 
-		
+<p>Each <a href="https://docs.docker.com/reference/builder/#run"><code>RUN</code></a> command builds up the image, installing specific application dependencies and setting up the environment. Here we install our app dependencies both from <code>apt</code> and <code>npm</code>.</p>
+
+<h3>An aside on how a Docker image is built</h3>
+
+<p>One of the core concepts in Docker is the concept of &ldquo;layers&rdquo;. Docker runs on operating systems that support layering filesystems such as <code>aufs</code> or <code>btrfs</code>. Changes to the filesystem can be thought of as atomic operations that can be rolled forward or backwards.</p>
+
+<p>This means that Docker can effectively store its images as snapshots of each other, much like Git commits. This also has implications as to how we can build up and cache copies of the container as we go along.</p>
+
+<p>The Dockerfile can be thought of as a series of rolling incremental changes to a base image &ndash; each command builds on top of the line before. This allows Docker to quickly rebuild changes to the reference image by understanding which lines have changed &ndash; and not rebuild the image from scratch each time.</p>
+
+<p>Keep these concepts in mind as we talk about speeding up your Docker build in the following section.</p>
+
+<h3>Fast Docker builds by caching your Gemfiles</h3>
+
+<p>The following steps install the required Ruby gems for Bundler, within your app container:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>WORKDIR /tmp
+</span><span class='line'>COPY Gemfile Gemfile
+</span><span class='line'>COPY Gemfile.lock Gemfile.lock
+</span><span class='line'>RUN bundle install
+</span></code></pre></td></tr></table></div></figure>
 
 
+<p>Note how we sneak the gems into <code>/tmp</code>, then run the <code>bundle install</code> which downloads and installs gems into Bundler&rsquo;s <code>vendor/bundle</code> directory. This is a cache hack &ndash; whereas in the past we would have kept the <code>Gemfile</code>s in with the rest of the application directory in <code>/myapp</code>.</p>
 
-  
-		
-			on
-		
-    <a class='category' href='/category/art/'>Art</a>, <a class='category' href='/category/design/'>Design</a>, <a class='category' href='/category/god/'>God</a>
-	
+<p>Keeping Gemfiles inline with the app would have meant that the entire <code>bundle install</code> command would have been re-run on each <code>docker-compose build</code> &mdash; without any caching &mdash; due to the constant change in the code in the <code>/myapp</code> directory.</p>
+
+<p>By separating out the Gemfiles into their own directory, we logically separate the Gemfiles, which are far less likely to change, from the app code, which are far more likely to change. This reduces the number of times we have to wait for a clean <code>bundle install</code> to complete.</p>
+
+<p>HT: <a href="http://ilikestuffblog.com/2014/01/06/how-to-skip-bundle-install-when-deploying-a-rails-app-to-docker/">Brian Morearty: &ldquo;How to skip bundle install when deploying a Rails app to Docker&rdquo;</a></p>
+
+<h3>Adding the app</h3>
+
+<p>Finally, we finish our Dockerfile by adding our current app code to the working directory.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>ADD . /myapp
+</span><span class='line'>WORKDIR /myapp
+</span><span class='line'>RUN <span class="nv">RAILS_ENV</span><span class="o">=</span>production bundle <span class="nb">exec </span>rake assets:precompile --trace
+</span><span class='line'>CMD <span class="o">[</span><span class="s2">&quot;rails&quot;</span>,<span class="s2">&quot;server&quot;</span>,<span class="s2">&quot;-b&quot;</span>,<span class="s2">&quot;0.0.0.0&quot;</span><span class="o">]</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
-	
-	
-	</footer>
-	
-</article>
-<!-- END OF _includes/article.html -->
+<p>This links the contents of the app directory on the host to the  <code>/myapp</code> directory within the container.</p>
 
-	
-		
-		<!-- START OF _includes/article.html -->
-<article>
-	<header>
-		<h1><a href="/2011/02/23/save-our-souls-a-twitter-art-installation/">Save our souls - a Twitter art installation</a></h1>
-		<time>23 February 2011</time>
-	</header>
-		<div class="content">
-			<p>Here&rsquo;s how the installation looked on the day of the art show.</p>
+<p>Note that we precompile all our assets before the container boots up &ndash; this ensures that the container is preloaded and ready to run and jives with Docker tenets that a container should be the same container that runs in development, test, and production environments.</p>
 
-<p>[caption id=&ldquo;&rdquo; align=&ldquo;alignnone&rdquo; width=&ldquo;333&rdquo; caption=&ldquo;We mounted the installation on the inside of the Regeneration cafe. The Arduino lies behind the Macbook behind the monitor.&rdquo;]<a href="http://www.flickr.com/photos/andrewhao/5467033003/"><img src="http://farm6.static.flickr.com/5180/5467033003_c1c14c5dc0.jpg" alt="Installation" /></a>[/caption]</p>
+<h2>Setting up Docker Compose</h2>
 
-<p>[caption id=&ldquo;&rdquo; align=&ldquo;alignnone&rdquo; width=&ldquo;333&rdquo; caption=&ldquo;The LEDs are mounted on breadboards suspended on fishing wire, binder clips, rubber bands, chopsticks, and a prayer.&rdquo;]<a href="http://www.flickr.com/photos/andrewhao/5471602272/"><img src="http://farm6.static.flickr.com/5296/5471602272_85203b475e.jpg" alt="Mounted LED array" /></a>[/caption]</p>
+<p>Now that we&rsquo;ve defined a <code>Dockerfile</code> for booting our Rails app, we turn to the Compose piece that orchestrates the linking phase between the Rails app and its dependencies &ndash; in this case, the DB.</p>
 
-<p>[caption id=&ldquo;&rdquo; align=&ldquo;alignnone&rdquo; width=&ldquo;333&rdquo; caption=&ldquo;Finished it just in time.&rdquo;]<a href="http://www.flickr.com/photos/andrewhao/5471598060/"><img src="http://farm6.static.flickr.com/5057/5471598060_f1bb64a83f.jpg" alt="In action" /></a>[/caption]</p>
+<p>A <code>docker-compose.yml</code> file automatically configures our application ecosystem. Here, it defines our Rails container and its db container:</p>
 
-<p><a href="http://vimeo.com/20267056">Save our souls &ndash; Twitter art installation</a> from <a href="http://vimeo.com/user807863">Andrew Hao</a> on <a href="http://vimeo.com">Vimeo</a>.</p>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='yaml'><span class='line'><span class="l-Scalar-Plain">web</span><span class="p-Indicator">:</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">build</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">.</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">volumes</span><span class="p-Indicator">:</span>
+</span><span class='line'>    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">.:/myapp</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">ports</span><span class="p-Indicator">:</span>
+</span><span class='line'>    <span class="p-Indicator">-</span> <span class="s">&quot;3000:3000&quot;</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">links</span><span class="p-Indicator">:</span>
+</span><span class='line'>    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">db</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">env_file</span><span class="p-Indicator">:</span>
+</span><span class='line'>    <span class="p-Indicator">-</span> <span class="s">&#39;.env.web&#39;</span>
+</span><span class='line'><span class="l-Scalar-Plain">db</span><span class="p-Indicator">:</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">image</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">library/mysql:5.6.22</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">ports</span><span class="p-Indicator">:</span>
+</span><span class='line'>    <span class="p-Indicator">-</span> <span class="s">&quot;13306:3306&quot;</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">env_file</span><span class="p-Indicator">:</span>
+</span><span class='line'>    <span class="p-Indicator">-</span> <span class="s">&#39;.env.db&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
 
-<blockquote><p>What are people saying about the ashes in the world today? This installation visualizes a live Twitter stream on heartache, injustice, loss, and our city and matches them up with the redemptive promises of Isaiah.</p></blockquote>
 
-<p>Life is difficult, and redemption is something we all long for. What changes do you hope for in your life or in the world? Send a response from your Twitter account to @sos_61 and watch the installation react. If you&rsquo;d like to be kept anonymous, send your response in a DM to @sos_61.</p>
+<p>A simple:</p>
 
-<p>&ldquo;I hope for <strong><strong>&rdquo;
-&ldquo;I wish that </strong></strong>&rdquo;
-&ldquo;I want to see ____&rdquo;</p>
+<pre><code>$ docker-compose up
+</code></pre>
 
-<h3>A few notes</h3>
+<p>will spin up both the <code>web</code> and <code>db</code> instances.</p>
+
+<p>One of the most powerful tools of using Docker Compose is the ability to abstract away the configuration of your server, no matter whether it is running as a development container on your computer, a test container on CI, or on your production Docker host.</p>
+
+<p>The directive:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='yaml'><span class='line'><span class="l-Scalar-Plain">links</span><span class="p-Indicator">:</span>
+</span><span class='line'>  <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">db</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>will add an entry for <code>db</code> into the Rails&#8217; container&rsquo;s <code>/etc/hosts</code>, linking the hostname to the correct container. This allows us to write our database.yml like so:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='yaml'><span class='line'><span class="c1"># config/database.yml</span>
+</span><span class='line'><span class="l-Scalar-Plain">development</span><span class="p-Indicator">:</span> <span class="nl">&amp;default</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">host</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">db</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Another important thing to note is the <code>volumes</code> configuration:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='yaml'><span class='line'><span class="c1"># docker-compose.yml</span>
+</span><span class='line'><span class="l-Scalar-Plain">volumes</span><span class="p-Indicator">:</span>
+</span><span class='line'>  <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">.:/myapp</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This mounts the current directory <code>.</code> on the host Mac to the <code>/myapp</code> directory in the container. This allows us to make live code changes on the host filesystem and see code changes reflected in the container.</p>
+
+<p>Also note that we make use of Compose&rsquo;s <code>env_file</code> directive, which allows us to specify environment variables to inject into the container at runtime:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='yaml'><span class='line'><span class="l-Scalar-Plain">env_file</span><span class="p-Indicator">:</span>
+</span><span class='line'>  <span class="p-Indicator">-</span> <span class="s">&#39;.env.web&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p> A peek into <code>.env.web</code> shows:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='yaml'><span class='line'><span class="l-Scalar-Plain">PORT=3000</span>
+</span><span class='line'><span class="l-Scalar-Plain">PUMA_WORKERS=1</span>
+</span><span class='line'><span class="l-Scalar-Plain">MIN_THREADS=4</span>
+</span><span class='line'><span class="l-Scalar-Plain">MAX_THREADS=16</span>
+</span><span class='line'><span class="l-Scalar-Plain">SECRET_KEY_BASE=&lt;Rails secret key&gt;</span>
+</span><span class='line'><span class="l-Scalar-Plain">AWS_REGION=us-west-2</span>
+</span><span class='line'><span class="l-Scalar-Plain"># ...</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Note that the <code>env_file</code> is powerful in that it allows us to swap out environment configurations when you deploy and run your containers. Perhaps your container needs separate configurations on dev than when on CI, or when deployed to staging or on production.</p>
+
+<h2>Creating containers and booting them up.</h2>
+
+<p>Now it&rsquo;s time to assemble the container. From within the Rails app, run:</p>
+
+<pre><code>$ docker-compose build
+</code></pre>
+
+<p>This downloads and builds the containers that your web app and your db will live in, linking them up. You will need to re-run the <code>docker-compose build</code> command every time you change the <code>Dockerfile</code> or <code>Gemfile</code>.</p>
+
+<h2>Running your app in containers</h2>
+
+<p>You can bring up your Rails server and associated containers by running:</p>
+
+<pre><code>$ docker-compose up
+</code></pre>
+
+<p>This is a combination of build, link, and start-services command for
+each container. You should see output that indicates that both our <code>web</code> and <code>db</code> containers, as configured in the <code>docker-compose.yml</code> file, are booting up.</p>
+
+<h2>Development workflow</h2>
+
+<p>I was pleasantly surprised to discover that developing with Docker added very little overhead to the development process. In fact, most commands that you would run for Rails simply needed to be prepended with a <code>docker-compose run web</code>.</p>
+
+<table>
+<thead>
+<tr>
+<th>When you want to run:           </th>
+<th> With Docker Compose, you would run:</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>bundle install</code>                </td>
+<td> <code>docker-compose run web bundle install</code></td>
+</tr>
+<tr>
+<td><code>rails s</code>                       </td>
+<td> <code>docker-compose run web rails s</code></td>
+</tr>
+<tr>
+<td><code>rspec spec/path/to/spec.rb</code>    </td>
+<td> <code>docker-compose run web rspec spec/path/to/spec.rb</code></td>
+</tr>
+<tr>
+<td><code>RAILS_ENV=test rake db:create</code> </td>
+<td> <code>docker-compose run -e RAILS_ENV=test web rake db:create</code></td>
+</tr>
+<tr>
+<td><code>tail -f log/development.log</code>   </td>
+<td> <code>docker-compose run web tail -f log/development.log</code></td>
+</tr>
+</tbody>
+</table>
+
+
+<h2>Protips</h2>
+
+<p>Here are some nice development tricks I found useful when working with Docker:</p>
 
 <ul>
-<li><p>Web interface is a fullscreen Google Chrome window. <a href="http://socket.io/">socket.io</a> is the Websocket interface to the <a href="http://nodejs.org">node.js</a> backend. The slide transition is animated via a CSS3 animation, and the red overlay is a simple SVG shape plotted with the help of <a href="http://raphaeljs.com">RaphaëlJS</a>.</p></li>
-<li><p>The Twitter backend is a collection of four self-updating Twitter searches, one for heartache (&ldquo;i feel lonely, sad, depressed&rdquo;), injustice (&ldquo;violence, war, oppression, justice&rdquo;), death (&ldquo;rest in peace, passed away&rdquo;), and Oakland (&ldquo;oakland&rdquo;). A blacklist filters out undesirable tweet keywords (&ldquo;justin bieber&rdquo;).</p></li>
-<li><p>Additionally, the backend connects to Twitter via the <a href="http://dev.twitter.com/pages/streaming_api">Streaming API</a> and displays a special animation for users who reply via tweet to the <a href="http://www.twitter.com/sos_61">@sos_61</a> account.</p></li>
-<li><p>The installation picks a tweet to display and pulses the LED array corresponding to the right tweet.</p></li>
-<li><p>Communication to the Arduino happens via a python script over the Firmata protocol, using the <a href="https://github.com/lupeke/python-firmata">python-firmata</a> library. The nodejs server signals the script over a socket connection which will run the pulse animation on the correct pin.</p></li>
-<li><p>I printed the graphic on an oversize printer with the good folks at <a href="http://alamedacopy.com">Alameda Copy</a>. Friendly service, fast turnaround, very reasonable prices. Ask for Joe.</p></li>
+<li>Add a <code>dockerhost</code> entry to your <code>/etc/hosts</code> file so you can visit <code>dockerhost</code> from your browser.</li>
 </ul>
 
 
-<h3>Links</h3>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>boot2docker ip
+</span><span class='line'>192.168.59.104
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>  Then add the IP to your <code>/etc/hosts</code></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>192.168.59.104  dockerhost
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>  Now you can pull up your app from <code>dockerhost:3000</code>:</p>
+
+<p>  <img src="http://i.imgur.com/5eqNJqN.png" alt="Screenshot of your URL bar" /></p>
 
 <ul>
-<li><p><a href="http://www.github.com/andrewhao/isaiah-61-project">Source code on github.</a></p></li>
-<li><p><a href="http://www.flickr.com/photos/andrewhao/sets/72157626107989740/">Flickr photos from the art show.</a></p></li>
-<li><p><a href="http://www.flickr.com/photos/andrewhao/sets/72157625956085386/">Photos of the creation process.</a></p></li>
-<li><p>Other posts on the process: <a href="http://www.g9labs.com/2011/02/01/the-making-of-sos-intro/">[1]</a>, <a href="http://www.g9labs.com/2011/02/11/update/">[2]</a>, <a href="http://www.g9labs.com/2011/02/12/currently-frustrated/">[3]</a>, <a href="http://www.g9labs.com/2011/02/15/arduino-and-python-firmata/">[4]</a></p></li>
+<li><p>Debugging containers with <code>docker exec</code></p>
+
+<p>Sometimes you need to get inside a container to see what&rsquo;s <em>really</em> happening. Perhaps you need to test whether a port is truly open, or verify that a process is truly running. This can be accomplished by grabbing the container ID with a <code>docker ps</code>, then passing that ID into the <code>docker exec</code> command:</p></li>
 </ul>
 
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>docker ps
+</span><span class='line'>CONTAINER ID        IMAGE
+</span><span class='line'>301fa6331388        myrailsapp_web:latest
+</span><span class='line'><span class="nv">$ </span>docker <span class="nb">exec</span> -it 301fa6331388 /bin/bash
+</span><span class='line'>root@301fa6331388:/myapp#
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>Showing environment variables in a container with <code>docker-compose run web env</code></li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>docker-compose run web env
+</span><span class='line'><span class="nv">AWS_SECRET_KEY</span><span class="o">=</span>
+</span><span class='line'><span class="nv">MAX_THREADS</span><span class="o">=</span>16
+</span><span class='line'><span class="nv">MIN_THREADS</span><span class="o">=</span>4
+</span><span class='line'><span class="nv">AWS_REGION</span><span class="o">=</span>us-west-2
+</span><span class='line'><span class="nv">BUNDLE_APP_CONFIG</span><span class="o">=</span>/usr/local/bundle
+</span><span class='line'><span class="nv">HOME</span><span class="o">=</span>/root
+</span><span class='line'><span class="c">#...</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li><p>Running an interactive debugger (like <a href="http://pryrepl.org/">pry</a>) in your Docker container</p>
+
+<p>It takes a little extra work to get Docker to allow interactive terminal debugging with tools like <code>byebug</code> or <code>pry</code>. Should you desire to start your web server with debugging capabilities, you will need to use the <code>--service-ports</code> flag with the <code>run</code> command.</p></li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>docker-compose run --service-ports web
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>  This works due to two internal implementations of <code>docker-compose run</code>:</p>
+
+<ul>
+<li><code>docker-compose run</code> creates a TTY session for your app to connect to, allowing interactive debugging. The default <code>docker-compose up</code> command does not create a TTY session.</li>
+<li><p>The <code>run</code> command does not map ports to the Docker host by default. The <code>--service-ports</code> directive maps the container&rsquo;s ports to the host&rsquo;s ports, allowing you to visit the container from your web browser.</p></li>
+<li><p>Use <code>slim</code> images when possible on production</p></li>
+</ul>
+
+
+<p>  Oftentimes, your base image will come supplied with a <code>-slim</code> variant on Docker Hub. This usually means that the image maintainer has supplied a trimmed-down version of the container for you to use with source code and build-time files stripped and removed. You can oftentimes shave a couple hundred megabytes off your resulting image &mdash; we did when we switched our <code>ruby</code> image from <code>2.2.1</code> to <code>2.2.1-slim</code>. This results in faster deployment times due to less network I/O from the registry to the deployment target.</p>
+
+<h2>Gotchas</h2>
+
+<ul>
+<li><p>Remember that your app runs in containers &ndash; so every time you do a <code>docker-compose run</code>, remember that Compose is spinning up entirely new containers for your code <strong>but only if the containers are not up already, in which case they are linked to that (running) container</strong>.</p>
+
+<p>This means that it&rsquo;s possible that you&rsquo;ve spun up multiple instances of your app without thinking about it &ndash; for example, you may have a <code>web</code> and <code>db</code> container already up from a <code>docker-compose up</code> command, and then in a separate terminal window you run a <code>docker-compose run web rails c</code>. That spins up <em>another</em> <code>web</code> container to execute the command, but then links that container with the pre-launched <code>db</code> container.</p></li>
+<li><p>There is a small but noticeable performance penalty running through both the VirtualBox VM and docker. I&rsquo;ve generally noticed waiting a few extra seconds when starting a Rails environment. My overall experience has been that the penalty has not been large enough to be painful.</p></li>
+</ul>
+
+
+<h2>Try it out</h2>
+
+<p>Give this a shot and let me know how Docker has been working for you. What have your experiences been? What are ways in which you&rsquo;ve been able to get your Docker workflow smoother? Share in the comments below.</p>
+
+<h3>Coming up: integration with CI and deployment.</h3>
+
+<p>In upcoming blog posts, we will investigate how to use the power of Docker Compose to test and build your containers in a CI-powered workflow, push to Docker registries, and deploy to production. Stay tuned!</p>
 
 			
 			
@@ -420,16 +540,14 @@
 
 
 		
-			andrewhao 
-		
 
 
 
   
 		
-			on
+			Tagged under
 		
-    <a class='category' href='/category/andrew-2-dot-0/'>Andrew 2.0</a>, <a class='category' href='/category/art/'>Art</a>, <a class='category' href='/category/geek/'>Geek</a>, <a class='category' href='/category/god/'>God</a>, <a class='category' href='/category/sos/'>SOS</a>
+    <a class='category' href='/category/docker/'>Docker</a>, <a class='category' href='/category/rails/'>Rails</a>
 	
 
 
@@ -445,17 +563,142 @@
 		<!-- START OF _includes/article.html -->
 <article>
 	<header>
-		<h1><a href="/2011/02/14/arduino-and-python-firmata/">Arduino and python-firmata</a></h1>
-		<time>14 February 2011</time>
+		<h1><a href="/2014/11/29/explorations-in-logic-programming/">Explorations in logic programming</a></h1>
+		<time>29 November 2014</time>
 	</header>
 		<div class="content">
-			<p>I just spent five hours trying to figure out why  none of the <a href="http://arduino.cc/playground/Interfacing/Python">Firmata libraries for Python</a> were working over my serial connection. I was wondering why the previous program remained on the board and none of the signals sent were hot.</p>
+			<p>Out of <a href="https://github.com/andrewhao/storybook">Storybook</a>, a side project I&rsquo;ve been doing for a friend, I had the opportunity to model the problem domain as a constraint satisfaction problem (CSP). It goes:</p>
 
-<p>Hint: you need to load Firmata first onto the board before it can understand the protocol. Oh. Duh.</p>
+<blockquote><p>A set of students are assigned a book a week. Write plan generator to create a set of student-book assignments for that week, given the following constraints:</p>
 
-<p>[caption id=&ldquo;attachment_1032&rdquo; align=&ldquo;alignnone&rdquo; width=&ldquo;500&rdquo; caption=&ldquo;Don&rsquo;t forget to load up &#8220;OldStandardFirmata&rdquo;&ldquo;]<a href="http://www.g9labs.com/2011/02/15/arduino-and-python-firmata/screen-shot-2011-02-15-at-4-24-47-am/"><img src="http://www.g9labs.com/wp-content/uploads/2011/02/Screen-shot-2011-02-15-at-4.24.47-AM-500x312.png" alt="" /></a>[/caption]</p>
+<ul>
+<li>All students must receive a book.</li>
+<li>Each book may only be assigned to one student at a time.</li>
+<li>A student may not be assigned a book s/he has received before.</li>
+</ul>
+</blockquote>
 
-<p>Only &ldquo;OldStandardFirmata&rdquo; (Firmata 2.0) seems to work with my version of <a href="https://github.com/lupeke/python-firmata">python-firmata</a>. The newer Firmata PDEs can talk Firmata 2.1 and 2.2, but I&rsquo;m too tired to figure them out.</p>
+<p>Being that this was a Rails app, I put <a href="https://github.com/andrewhao/storybook">Amb</a>, a Ruby-based CSP solver, to use. Amb is derived off <a href="">Jim Weirich&rsquo;s original source code</a>, implementing a simple backtracking algorithm. (More <a href="http://community.schemewiki.org/?amb">interesting reading on the original idea</a> behind the <code>amb</code> operator, proposed in a <a href="http://www-formal.stanford.edu/jmc/basis1.pdf">paper</a> by LISP founder John McCarthy in 1963.)</p>
+
+<p>Not having written any CSP logic since my university days, I tried to come up with a naive solution. It goes something like this:</p>
+
+<figure class='code'><figcaption><span>assignment_problem_1.rb</span><a href='https://github.com/andrewhao/storybook/blob/8bb03101d46472e36ee400b79c30d941d3a4bd39/lib/assignment_problem.rb'>link</a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">AssignmentProblem</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">solve</span>
+</span><span class='line'>    <span class="c1"># Generates the cross product of sids and bids.</span>
+</span><span class='line'>    <span class="n">spaces</span> <span class="o">=</span> <span class="n">student_ids</span><span class="o">.</span><span class="n">product</span><span class="p">(</span><span class="n">bag_ids</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1"># Now generate combinations of those uniques</span>
+</span><span class='line'>    <span class="n">full_solution_space</span> <span class="o">=</span> <span class="n">spaces</span><span class="o">.</span><span class="n">permutation</span><span class="p">(</span><span class="n">student_ids</span><span class="o">.</span><span class="n">count</span><span class="p">)</span><span class="o">.</span><span class="n">to_a</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1"># Assign those to the CSP</span>
+</span><span class='line'>    <span class="n">plan</span> <span class="o">=</span> <span class="n">solver</span><span class="o">.</span><span class="n">choose</span><span class="p">(</span><span class="o">*</span><span class="n">full_solution_space</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">solver</span><span class="o">.</span><span class="n">assert</span> <span class="n">all_students_have_bags</span><span class="p">(</span><span class="n">plan</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">solver</span><span class="o">.</span><span class="n">assert</span> <span class="n">assigned_bags_are_unique</span><span class="p">(</span><span class="n">plan</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">solver</span><span class="o">.</span><span class="n">assert</span> <span class="n">assigned_bags_without_student_repeats</span><span class="p">(</span><span class="n">plan</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">plan</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Well this would work for 2 students and 2 bags, 3 and 3, 4 and 4, but would blow up and overflow the stack when we got to 5 students and 5 bags. Why? I was forcing Ruby to generate the full solution space before starting the CSP search problem:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">student_ids</span> <span class="o">=</span> <span class="o">[</span><span class="ss">:s1</span><span class="p">,</span> <span class="ss">:s2</span><span class="o">]</span>
+</span><span class='line'><span class="n">bag_ids</span> <span class="o">=</span> <span class="o">[</span><span class="ss">:b1</span><span class="p">,</span> <span class="ss">:b2</span><span class="o">]</span>
+</span><span class='line'><span class="c1"># Modeled as: the complete solution space of assignments</span>
+</span><span class='line'><span class="n">spaces</span> <span class="o">=</span> <span class="n">student_ids</span><span class="o">.</span><span class="n">product</span><span class="p">(</span><span class="n">bag_ids</span><span class="p">)</span>
+</span><span class='line'><span class="c1"># =&gt; [[:s1, :b1], [:s1, :b2], [:s2, :b1], [:s2, :b2]]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Then I was taking that cross product and brute-force generating all possible permutations internal to that:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">spaces</span><span class="o">.</span><span class="n">permutation</span><span class="p">(</span><span class="n">student_ids</span><span class="o">.</span><span class="n">count</span><span class="p">)</span><span class="o">.</span><span class="n">to_a</span>
+</span><span class='line'><span class="c1"># =&gt; [[[:s1, :b1], [:s1, :b2]], [[:s1, :b1], [:s2, :b1]],</span>
+</span><span class='line'><span class="c1">#     [[:s1, :b1], [:s2, :b2]], [[:s1, :b2], [:s1, :b1]],</span>
+</span><span class='line'><span class="c1">#     [[:s1, :b2], [:s2, :b1]], [[:s1, :b2], [:s2, :b2]],</span>
+</span><span class='line'><span class="c1">#     [[:s2, :b1], [:s1, :b1]], [[:s2, :b1], [:s1, :b2]],</span>
+</span><span class='line'><span class="c1">#     [[:s2, :b1], [:s2, :b2]], [[:s2, :b2], [:s1, :b1]],</span>
+</span><span class='line'><span class="c1">#     [[:s2, :b2], [:s1, :b2]], [[:s2, :b2], [:s2, :b1]]]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The most obvious thing that stood out to me like a sore thumb was how I wasn&rsquo;t simply trusting the constraint-based nature of the problem and expressing the problem in terms of the constraints, instead of attempting to imperatively generate the solution. Usage of <code>Enumerable#permutation</code> resulted in an <em>O(n!)</em> algorithm, which is unacceptable. Back to the drawing board:</p>
+
+<figure class='code'><figcaption><span>assignment_problem_2.rb</span><a href='https://github.com/andrewhao/storybook/blob/e2dd94add2b5949d87968ab650a31b4bdfb9e8a2/lib/csp/assignment_problem.rb'>link</a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">AssignmentProblem</span>
+</span><span class='line'>  <span class="c1"># Generates tuples of student =&gt; bag assignments</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">solve</span>
+</span><span class='line'>    <span class="n">student_ids</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">sid</span><span class="o">|</span>
+</span><span class='line'>      <span class="n">bid</span> <span class="o">=</span> <span class="n">solver</span><span class="o">.</span><span class="n">choose</span><span class="p">(</span><span class="o">*</span><span class="n">bag_ids</span><span class="p">)</span>
+</span><span class='line'>      <span class="n">partial_plan</span><span class="o">[</span><span class="n">sid</span><span class="o">]</span> <span class="o">=</span>  <span class="n">bid</span>
+</span><span class='line'>      <span class="n">solver</span><span class="o">.</span><span class="n">assert</span> <span class="n">assigned_bags_are_unique</span><span class="p">(</span><span class="n">partial_plan</span><span class="p">)</span>
+</span><span class='line'>      <span class="n">solver</span><span class="o">.</span><span class="n">assert</span> <span class="n">assigned_bags_without_student_repeats</span><span class="p">(</span><span class="n">partial_plan</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">partial_plan</span><span class="o">.</span><span class="n">to_a</span>
+</span><span class='line'>  <span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Note the main difference here is how I&rsquo;ve re-tooled the solver to assign variables one at a time (in L5) and check constraints after each assignment. This simplifies the domain of the problem as a graph search and helps us more easily reason about this program.</p>
+
+<h3>Further explorations</h3>
+
+<p>Follow my <a href="https://www.github.com/andrewhao/csp-solvers/">csp-solvers</a> project, where I attempt to rewrite this in Prolog and Clojure in an attempt to see how language affects how we reason about problems like these. It&rsquo;s gonna be fun.</p>
+
+<h3>Further reading</h3>
+
+<ul>
+<li><a href="http://www.amazon.com/Artificial-Intelligence-Modern-Approach-3rd/dp/0136042597/ref=sr_1_1?ie=UTF8&amp;qid=1417214576&amp;sr=8-1&amp;keywords=9780136042594">Artificial Intelligence: A Modern Approach (3rd Edition)</a></li>
+<li><a href="http://aima.cs.berkeley.edu/2nd-ed/newchap05.pdf">http://aima.cs.berkeley.edu/2nd-ed/newchap05.pdf</a></li>
+<li><a href="https://www.ruby-forum.com/topic/57768">Ruby Forum &mdash; Using Amb</a></li>
+<li><a href="http://community.schemewiki.org/?amb">SchemeWiki: amb</a></li>
+</ul>
+
 
 			
 			
@@ -465,17 +708,8 @@
 
 
 		
-			andrewhao 
-		
 
 
-
-  
-		
-			on
-		
-    <a class='category' href='/category/geek/'>Geek</a>, <a class='category' href='/category/sos/'>SOS</a>, <a class='category' href='/category/programming/'>programming</a>
-	
 
 
 	
@@ -490,29 +724,60 @@
 		<!-- START OF _includes/article.html -->
 <article>
 	<header>
-		<h1><a href="/2011/02/12/currently-frustrated/">Currently: frustrated</a></h1>
-		<time>12 February 2011</time>
+		<h1><a href="/2014/11/15/my-own-robot-training-buddy/">My own robot training buddy.</a></h1>
+		<time>15 November 2014</time>
 	</header>
 		<div class="content">
-			<p>So I got the poster printed, and the LEDs currently show through the board pretty well. This is good:</p>
+			<p>As an ultra runner, I am really into the mountains. As a software engineer, I&rsquo;m really into data. So naturally, I&rsquo;m interested in the intersection of both.</p>
 
-<p><a href="http://www.flickr.com/photos/andrewhao/5437339409/"><img src="http://farm5.static.flickr.com/4134/5437339409_14b14199d0.jpg" alt="Printed poster, testing the light" /></a></p>
+<p>I&rsquo;ve particularly been interested in how systems like <a href="http://www.strava.com">Strava</a> work, especially when they quantify what is known as a &ldquo;Suffer Score&rdquo;, a single number denoting the amount of training stress (a.k.a. suffering) you put yourself through in a workout.</p>
 
-<p>But last night I spent a good chunk of my evening and early morning hitting a lot of walls:</p>
+<p>How does a track workout compare to a long day on the trails? Which is tougher: a 5m tempo road run in and around my neighborhood, or a tough 2m climb into a local regional park?</p>
+
+<h2>Data in&hellip;</h2>
+
+<p>I first attacked the problem of getting data off of my phone. I record my GPX tracks in <a href="http://runmeter.com/">Runmeter</a>, a fantastic iPhone application with all sorts of metrics and data export capabilities. What I wanted was a seamless way to get the data off my phone without fuss after a hard workout.</p>
+
+<p>The application has a nifty feature in which it can automatically send an email to an email address after a workout is completed.</p>
+
+<p>I wrote an <a href="https://github.com/andrewhao/velocitas">email ingester, Velocitas</a>, with the help of <a href="http://cloudmailin.com/">Cloudmailin</a>, which fires off a POST request to the Node application. Velocitas does the following:</p>
 
 <ul>
-<li><p>I might have to throw out the idea of using the Twitter Streaming API. For the kind of searches I need to do, I just can&rsquo;t get enough granularity to use live information. Plus, I can only open one connection to the API at a time, which is not good if I need to run four listeners at a time.</p></li>
-<li><p>I couldn&rsquo;t get the <a href="http://classifier.rubyforge.org/">Classifier</a> Ruby gem to work; which looked like the easiest implementation of an LSI/naive Bayes classifier out there. The next closest thing was <a href="http://code.google.com/p/nltk/">nltk</a>, and there was no way in heck I had the time to figure that out. Plus, I realized that creating a training set was a LOT more work than I thought I had. So&hellip; scratch the machine intelligence out of this. I&rsquo;m just going to manually search for specific search terms.</p></li>
-<li><p>New solution: Periodically use the Search API to grab results. This allows more exact search results and gives me the ability to tweak the search terms while the demo loop is running.</p></li>
-<li><p>Event-driven programming is throwing me for a loop (ha, get it?). After perusing the <a href="http://nodejs.org/docs/v0.4.0/api/">node.js docs</a> for the better part of an evening, I think I need to re-architect the code. I need to create a simple event-driven queue, which is confusing because it seems like something simple, yet support isn&rsquo;t built in. node provides so little out of the box.</p></li>
-<li><p>It could be more difficult to set up a socket connection to Arduino than I thought. I may have to set up a socket connection in python with <a href="https://github.com/lupeke/python-firmata">python-firmata</a> to interface with the Arduino. Other Arduino/serial proxies report not working well with Snow Leopard.</p></li>
-<li><p>I haven&rsquo;t yet thought about the Web interface.</p></li>
-<li><p>I haven&rsquo;t thought about how I&rsquo;m going to hang the piece. I have some scrap wood and fishing wire, but I haven&rsquo;t thought about whether it&rsquo;s possible to hang all those LED arrays w/o some weird gravity issues.</p></li>
-<li><p>Woodwork help? I need to figure out how to use a rotary saw.</p></li>
+<li><code>curl</code>s and downloads the GPX link embedded in the email.</li>
+<li>Saves the GPX file to a linked Dropbox account.</li>
+<li>Republishes the GPX file to a linked Strava account.</li>
 </ul>
 
 
-<p>So uh, yeah, I&rsquo;m getting nowhere but at least I know what I still need to do.</p>
+<h2>Deriving the Training Stress Score</h2>
+
+<p>Next up: I wanted to do a quick and dirty implementation of the (run-based) Training Stress Score. <a href="https://github.com/andrewhao/stressfactor">Stressfactor</a>, a Ruby gem, is what came out of it.</p>
+
+<p>It implements the rTSS as detailed in <a href="http://home.trainingpeaks.com/blog/article/running-training-stress-score-rtss-explained">this article</a>.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="p">(</span><span class="n">duration_seconds</span> <span class="o">*</span> <span class="n">normalized_graded_pace</span> <span class="o">*</span> <span class="n">intensity_factor</span><span class="p">)</span> <span class="o">/</span>
+</span><span class='line'><span class="p">(</span><span class="n">functional_threshold_pace</span> <span class="o">*</span> <span class="mi">3600</span><span class="p">)</span> <span class="o">*</span> <span class="mi">100</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Stressfactor is a higher-order tookit for deriving meaning from GPX tracks, so it, at the moment, attempts to calculate the stress score and grade adjusted pace.</p>
+
+<p>The data still needs validation, so I&rsquo;m eager to run it on my data set of GPX tracks from the past years.</p>
+
+<h2>Generating reports</h2>
+
+<p>I&rsquo;m working on this part right now &mdash; I need to nicely display a report from my workout history in Dropbox and display per-GPX. I&rsquo;ve started the project &mdash; <a href="https://github.com/andrewhao/stressreport">Stressreport</a>.</p>
+
+<h2>Some things I&rsquo;ve learned and am learning</h2>
+
+<ul>
+<li>The human body is complex, and cannot be <a href="http://fellrnr.com/wiki/Modeling_Human_Performance">easily modeled</a> without sufficient data. That said, what I&rsquo;m doing now may be sufficient for basic training data.</li>
+<li>The nature of parsing and generating higher-order stats from raw data may lend itself well to experimentation with functional languages. I&rsquo;m interested in trying to reimplement Stressfactor in Scala, or a functional equivalent.</li>
+<li>Deploying all my apps on Heroku&rsquo;s free tier may actually be an interesting start to building a microservice architecture &mdash; with the space limitations on Heroku, I&rsquo;m forced to build new features on new services. Call it cheapskate architecture.</li>
+</ul>
+
 
 			
 			
@@ -522,70 +787,14 @@
 
 
 		
-			andrewhao 
-		
 
 
 
   
 		
-			on
+			Tagged under
 		
-    <a class='category' href='/category/art/'>Art</a>, <a class='category' href='/category/sos/'>SOS</a>
-	
-
-
-	
-	
-	</footer>
-	
-</article>
-<!-- END OF _includes/article.html -->
-
-	
-		
-		<!-- START OF _includes/article.html -->
-<article>
-	<header>
-		<h1><a href="/2011/02/10/update/">Update</a></h1>
-		<time>10 February 2011</time>
-	</header>
-		<div class="content">
-			<p>A quick update on the art project:</p>
-
-<ul>
-<li><p>I switched from my normal LEDs to &ldquo;straw hat&rdquo; wide-angle LEDs. The viewing angle is much better, meaning also that I can get a more diffuse glow @ closer distances so the light comes through better through the paper.</p></li>
-<li><p>I found out my deadline is Sunday so I&rsquo;m a little stressed.</p></li>
-<li><p>No progress on Arduino/Processing or the Twitter feed. Still have to figure out whether I should use a Bayesian classifier for better fuzzy matching on tweets or if I should just rig the feed with a simple text filter on &ldquo;I feel ___&rdquo;. I have a feeling the former is nice in theory but isn&rsquo;t good enough and the latter is probably best given this short time span.</p></li>
-<li><p>No idea how I&rsquo;m going to solder the LEDs to the breadboards. Heck, I think my breadboards aren&rsquo;t even wide enough, meaning I either need to find a larger breadboard or cut one up and paste the two pieces together lengthwise.</p></li>
-<li><p>I still need to find wood to mount/suspend the project.</p></li>
-<li><p>I called around and got some good quotes from print shops. I&rsquo;m probably going to go with <a href="http://www.yelp.com/biz/alameda-copy-alameda">Alameda Copy</a>. Friendly staff, good Yelp review, best price I saw around. I&rsquo;ll be printing the poster off their oversize printer on a roll of 70lb paper. Quote: $6-8 per sq. foot, color.</p></li>
-<li><p>I&rsquo;ve made some good progress on the design, though. I think I&rsquo;m lengthening the poster but decreasing the width. I&rsquo;ll post more screens if I get a chance.</p></li>
-</ul>
-
-
-<p>[caption id=&ldquo;&rdquo; align=&ldquo;alignnone&rdquo; width=&ldquo;500&rdquo; caption=&ldquo;Left: conventional LEDs. Right: straw hat LEDs&rdquo;]<a href="http://www.flickr.com/photos/andrewhao/5437057228/"><img src="http://farm6.static.flickr.com/5019/5437057228_8568b5095d.jpg" alt="Compare straw hat LEDs with conventional LEDs" /></a>[/caption]</p>
-
-<p>[caption id=&ldquo;&rdquo; align=&ldquo;alignnone&rdquo; width=&ldquo;500&rdquo; caption=&ldquo;Final design&rdquo;]<a href="http://www.flickr.com/photos/andrewhao/5437055328/"><img src="http://farm5.static.flickr.com/4141/5437055328_81b362d325.jpg" alt="(Final) Remix" /></a>[/caption]</p>
-
-			
-			
-		</div>
-	<footer>
-		
-
-
-		
-			andrewhao 
-		
-
-
-
-  
-		
-			on
-		
-    <a class='category' href='/category/art/'>Art</a>, <a class='category' href='/category/design/'>Design</a>, <a class='category' href='/category/sos/'>SOS</a>
+    <a class='category' href='/category/open-source/'>open source</a>, <a class='category' href='/category/running/'>running</a>, <a class='category' href='/category/software/'>software</a>
 	
 
 
@@ -603,7 +812,7 @@
 		<a class="older" href="/page/5/">Older</a>
 	
 	
-	<span class="total">4 of 10</span>
+	<span class="total">4 of 33</span>
 	
 	
 		<a class="newer" href="/page/3/">Newer</a>

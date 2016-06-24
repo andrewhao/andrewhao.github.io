@@ -64,58 +64,75 @@
 		<!-- START OF _includes/article.html -->
 <article>
 	<header>
-		<h1><a href="/2014/11/15/my-own-robot-training-buddy/">My own robot training buddy.</a></h1>
-		<time>15 November 2014</time>
+		<h1><a href="/2016/03/21/lossless-rate-limiting-with-rxjs/">Lossless rate limiting with RxJS</a></h1>
+		<time>21 March 2016</time>
 	</header>
 		<div class="content">
-			<p>As an ultra runner, I am really into the mountains. As a software engineer, I&rsquo;m really into data. So naturally, I&rsquo;m interested in the intersection of both.</p>
+			<p>Much of RxJS involves working with
+<a href="http://reactivex.io/documentation/operators/backpressure.html">backpressure</a> &ndash; how to reconcile
+streams that emit/process data at different rates, without overloading
+the system. Much of that model is built with lossy handling in mind &ndash; it
+makes sense that when your system is under duress, that you design your
+streams to degrade gracefully (e.g. drop certain events, or rate limit
+them by chunking into windows, etc).</p>
 
-<p>I&rsquo;ve particularly been interested in how systems like <a href="http://www.strava.com">Strava</a> work, especially when they quantify what is known as a &ldquo;Suffer Score&rdquo;, a single number denoting the amount of training stress (a.k.a. suffering) you put yourself through in a workout.</p>
-
-<p>How does a track workout compare to a long day on the trails? Which is tougher: a 5m tempo road run in and around my neighborhood, or a tough 2m climb into a local regional park?</p>
-
-<h2>Data in&hellip;</h2>
-
-<p>I first attacked the problem of getting data off of my phone. I record my GPX tracks in <a href="http://runmeter.com/">Runmeter</a>, a fantastic iPhone application with all sorts of metrics and data export capabilities. What I wanted was a seamless way to get the data off my phone without fuss after a hard workout.</p>
-
-<p>The application has a nifty feature in which it can automatically send an email to an email address after a workout is completed.</p>
-
-<p>I wrote an <a href="https://github.com/andrewhao/velocitas">email ingester, Velocitas</a>, with the help of <a href="http://cloudmailin.com/">Cloudmailin</a>, which fires off a POST request to the Node application. Velocitas does the following:</p>
+<p>However, there are times when it is appropriate to have a lossless
+approach to backpressure &ndash; e.g., to store every chunk of data that comes
+through a stream in memory, and not drop things. These use cases may
+come about when:</p>
 
 <ul>
-<li><code>curl</code>s and downloads the GPX link embedded in the email.</li>
-<li>Saves the GPX file to a linked Dropbox account.</li>
-<li>Republishes the GPX file to a linked Strava account.</li>
+<li>You have a short-lived, or bounded set of data you know will come over
+the pipe. You understand the bounds of the data that will ever come over
+the pipe.</li>
+<li>You have a processing script you want to run, which is not part of a
+large system.</li>
+<li>You have a honkin&#8217; large system that can handle the load.</li>
 </ul>
 
 
-<h2>Deriving the Training Stress Score</h2>
-
-<p>Next up: I wanted to do a quick and dirty implementation of the (run-based) Training Stress Score. <a href="https://github.com/andrewhao/stressfactor">Stressfactor</a>, a Ruby gem, is what came out of it.</p>
-
-<p>It implements the rTSS as detailed in <a href="http://home.trainingpeaks.com/blog/article/running-training-stress-score-rtss-explained">this article</a>.</p>
+<p>In my case, I had a script that called the Google Geocoding API for a
+set of GPS coordinates. Now for a set of several hundred coordinates, I
+would end up calling the API several hundred times all at once with this
+naive implementation:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="p">(</span><span class="n">duration_seconds</span> <span class="o">*</span> <span class="n">normalized_graded_pace</span> <span class="o">*</span> <span class="n">intensity_factor</span><span class="p">)</span> <span class="o">/</span>
-</span><span class='line'><span class="p">(</span><span class="n">functional_threshold_pace</span> <span class="o">*</span> <span class="mi">3600</span><span class="p">)</span> <span class="o">*</span> <span class="mi">100</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// address$: [ &quot;1234 Widget Way, Promiseland, WV&quot; ] -- [...] -- [...]</span>
+</span><span class='line'><span class="kr">const</span> <span class="nx">geocoded$</span> <span class="o">=</span> <span class="nx">addresses$</span>
+</span><span class='line'><span class="p">.</span><span class="nx">flatMap</span><span class="p">(</span><span class="nx">address</span> <span class="o">=&gt;</span> <span class="nx">Rx</span><span class="p">.</span><span class="nx">Observable</span><span class="p">.</span><span class="nx">fromPromise</span><span class="p">(</span><span class="nx">callGoogleGeocodingService</span><span class="p">(</span><span class="nx">address</span><span class="p">)))</span>
+</span><span class='line'><span class="c1">// geocoded$: [ { latitude: 89.99, longitude: 90.00, ... } ] -- [...] -- [...]</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>Stressfactor is a higher-order tookit for deriving meaning from GPX tracks, so it, at the moment, attempts to calculate the stress score and grade adjusted pace.</p>
+<p>I searched all over for a lossless throttling mechanism, but all I could
+find was references to RxJS&rsquo;s lossy <a href="">throttle</a> behavior.</p>
 
-<p>The data still needs validation, so I&rsquo;m eager to run it on my data set of GPX tracks from the past years.</p>
+<p>Other frameworks, like <a href="https://github.com/baconjs/bacon.js/#observable-bufferingthrottle">Bacon.js&rsquo;s bufferingThrottle()</a> and <a href="http://highlandjs.org/#ratelimit">Highland.js ratelimit()</a> seemed attractive. Where was RxJS&rsquo;s equivalent?</p>
 
-<h2>Generating reports</h2>
+<p>Thanks to a <a href="http://stackoverflow.com/questions/34955842/rate-limiting-http-calls-made-by-rxjs">helpful StackOverflow post</a>,
+I found the answer: the use of
+<a href="https://github.com/Reactive-Extensions/RxJS/blob/master/doc/api/core/operators/concatmap.md">concatMap()</a>
+and
+<a href="https://github.com/Reactive-Extensions/RxJS/blob/master/doc/api/core/operators/delay.md">delay()</a>
+forces the incoming stream to execute serially over artificial time delayed streams.</p>
 
-<p>I&rsquo;m working on this part right now &mdash; I need to nicely display a report from my workout history in Dropbox and display per-GPX. I&rsquo;ve started the project &mdash; <a href="https://github.com/andrewhao/stressreport">Stressreport</a>.</p>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kr">const</span> <span class="nx">geocoded$</span> <span class="o">=</span> <span class="nx">addresses$</span>
+</span><span class='line'><span class="p">.</span><span class="nx">concatMap</span><span class="p">(</span><span class="nx">address</span> <span class="o">=&gt;</span> <span class="nx">Rx</span><span class="p">.</span><span class="nx">Observable</span><span class="p">.</span><span class="nx">just</span><span class="p">(</span><span class="nx">address</span><span class="p">).</span><span class="nx">delay</span><span class="p">(</span><span class="nx">TIME_INTERVAL</span><span class="p">))</span>
+</span><span class='line'><span class="p">.</span><span class="nx">flatMap</span><span class="p">(</span><span class="nx">address</span> <span class="o">=&gt;</span> <span class="nx">Rx</span><span class="p">.</span><span class="nx">Observable</span><span class="p">.</span><span class="nx">fromPromise</span><span class="p">(</span><span class="nx">callGoogleGeocodingService</span><span class="p">(</span><span class="nx">address</span><span class="p">)))</span>
+</span></code></pre></td></tr></table></div></figure>
 
-<h2>Some things I&rsquo;ve learned and am learning</h2>
+
+<p>Thanks to:</p>
 
 <ul>
-<li>The human body is complex, and cannot be <a href="http://fellrnr.com/wiki/Modeling_Human_Performance">easily modeled</a> without sufficient data. That said, what I&rsquo;m doing now may be sufficient for basic training data.</li>
-<li>The nature of parsing and generating higher-order stats from raw data may lend itself well to experimentation with functional languages. I&rsquo;m interested in trying to reimplement Stressfactor in Scala, or a functional equivalent.</li>
-<li>Deploying all my apps on Heroku&rsquo;s free tier may actually be an interesting start to building a microservice architecture &mdash; with the space limitations on Heroku, I&rsquo;m forced to build new features on new services. Call it cheapskate architecture.</li>
+<li><a href="http://stackoverflow.com/questions/34955842/rate-limiting-http-calls-made-by-rxjs">http://stackoverflow.com/questions/34955842/rate-limiting-http-calls-made-by-rxjs</a></li>
+<li><a href="http://stackoverflow.com/questions/30876361/rxjs-rate-limit-requests-per-second-and-concurrency?rq=1">http://stackoverflow.com/questions/30876361/rxjs-rate-limit-requests-per-second-and-concurrency?rq=1</a></li>
 </ul>
 
 
@@ -134,7 +151,7 @@
 		
 			Tagged under
 		
-    <a class='category' href='/category/open-source/'>open source</a>, <a class='category' href='/category/running/'>running</a>, <a class='category' href='/category/software/'>software</a>
+    <a class='category' href='/category/frp/'>FRP</a>, <a class='category' href='/category/rate-limiting/'>Rate limiting</a>, <a class='category' href='/category/reactive-programming/'>Reactive programming</a>, <a class='category' href='/category/rxjs/'>RxJS</a>
 	
 
 
@@ -150,152 +167,63 @@
 		<!-- START OF _includes/article.html -->
 <article>
 	<header>
-		<h1><a href="/2014/11/05/qcon-sf-2014/">Recap: QCon SF 2014</a></h1>
-		<time>05 November 2014</time>
+		<h1><a href="/2016/02/17/partitioning-rxjs-streams-adventures-in-nested-observables-with-groupby-and-flatmap/">Partitioning RxJS streams: adventures in nested Observables with groupBy() and flatMap()</a></h1>
+		<time>17 February 2016</time>
 	</header>
 		<div class="content">
-			<p>Blurb sent me off to QCon SF 2014 for three days.</p>
+			<p>One of the confusing aspects about working with streams is diving into
+Rx operators that take a stream and fan out into multiple streams.</p>
 
-<h2>Notes</h2>
+<p>Is your head exploding yet?</p>
 
-<p>I took a series of notes each day in attendance:</p>
+<h2>The problem:</h2>
 
-<ul>
-<li><a href="/notes/2014-11-03-qconsf-day-one.html">Day One: Architectures, Functional</a></li>
-<li><a href="/notes/2014-11-04-qconsf-day-two.html">Day Two: Rx Systems, API Platforms</a></li>
-<li><a href="/notes/2014-11-05-qconsf-day-three.html">Day Three: Microservices, Culture</a></li>
-</ul>
+<p>Let&rsquo;s dive into a problem I ran into while working on a personal
+project:</p>
 
+<p>The task at hand is to take a list of GPS moving point data and
+partition the group data into multiple clusters of points, count up each
+group, then return the aggregate stats. As a cyclist is moving, I want
+to know how often they are moving at that specific velocity (speed).</p>
 
-<h2>Summary</h2>
+<p>Our weapon of choice is the <a href="http://reactivex.io/documentation/operators/groupby.html">RxJS groupBy() function</a>,
+which groups like stream values based on a key value you define.</p>
 
-<ul>
-<li>Big trends in continuous delivery and deployment &mdash; deploy more often, smaller feedback loops</li>
-<li>A lot of emphasis on event driven architectures + microservices. Lots of emphasis on DDD as a design tool.</li>
-<li>Reactive systems with functional implementations were widely discussed as a scaling tool (backpressure-sensitive) and as a coordination tool between multiple async services.</li>
-<li>Big data/realtime streaming talks were interesting &mdash; my personal experience with them is limited, but it seems there is a debate over the merits of existing Lambda architecture practice.</li>
-<li>A lot of talk about microservice orchestration tools &mdash; acknowledging the pain of configuration and management of many services.</li>
-<li>Scala got a lotttt of attention. Probably because of its presence in bigger companies like Netflix, Twitter, LinkedIn. Wonder what smaller startups are using.</li>
-<li>Web Components were a big upcoming trend in frontend technologies. Strong modularization of views + behaviors in HTML documents.</li>
-</ul>
+<p><a href="http://reactivex.io/documentation/operators/groupby.html"><img src="http://reactivex.io/documentation/operators/images/groupBy.c.png" alt="Image of groupBy() at work, with marbles." /></a></p>
 
+<p>OK. Easy enough. So my implementation looked something like this:</p>
 
-<h2>Questions</h2>
-
-<ul>
-<li>If I could do a startup over again, would I begin an app in Rails? Where is the sweet spot for that sort of application architecture?</li>
-<li>How can I design systems such that they can be extractible into focused components/services as early as possible?</li>
-<li>How can we plan for failures (<a href="http://en.wikipedia.org/wiki/Fault_injection">fault injection</a>)?</li>
-<li>How does one implement change in software engineering organizations? Bottom-up (organic initiatives bubbling up through management) vs top-down (management/software leaders direct org to implement).</li>
-<li>How are we doing with encouraging women and minorities who traditionally are underrepresented in our industry?</li>
-<li>What are places in our hiring funnels that, unbeknownst to us, may be turning away or detracting women and minorities?</li>
-</ul>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">gpsPointStream</span>
+</span><span class='line'><span class="p">.</span><span class="nx">groupBy</span><span class="p">((</span><span class="nx">point</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">point</span><span class="p">.</span><span class="nx">velocity</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
-			
-			
-		</div>
-	<footer>
-		
+<p>The supplied <code>(point) =&gt; point.velocity</code> function determines the <code>key</code>
+value for the supplied event, which then 1) creates a new Observable
+sequence for that specific <code>key</code> value, if it doesn&rsquo;t exist, or 2)
+assigns your event to an existing Observable sequence.</p>
+
+<p>Let&rsquo;s illustrate:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">src</span><span class="o">:</span>     <span class="o">--</span> <span class="p">{</span> <span class="nx">velocity</span><span class="o">:</span> <span class="mi">0</span> <span class="p">}</span> <span class="o">----------</span> <span class="p">{</span> <span class="nx">velocity</span><span class="o">:</span> <span class="mf">0.1</span> <span class="p">}</span> <span class="o">-----------------------------------</span> <span class="p">{</span> <span class="nx">velocity</span><span class="o">:</span> <span class="mi">0</span> <span class="p">}</span> <span class="o">--&gt;</span>
+</span><span class='line'><span class="nx">groupBy</span><span class="o">:</span> <span class="o">--</span> <span class="p">[{</span> <span class="nx">Observable</span> <span class="nx">key</span><span class="o">:</span> <span class="mi">0</span> <span class="p">}]</span> <span class="o">--</span> <span class="p">[</span> <span class="p">{</span> <span class="nx">Observable</span> <span class="nx">key</span><span class="o">:</span> <span class="mi">0</span> <span class="p">},</span> <span class="p">{</span> <span class="nx">Observable</span> <span class="nx">key</span><span class="o">:</span> <span class="mf">0.1</span> <span class="p">}</span> <span class="p">]</span> <span class="o">--</span> <span class="p">[</span> <span class="p">{</span> <span class="nx">Observable</span> <span class="nx">key</span><span class="o">:</span> <span class="mi">0</span> <span class="nx">count</span><span class="o">:</span> <span class="mi">2</span> <span class="p">},</span> <span class="p">{</span> <span class="nx">Observable</span> <span class="nx">key</span><span class="o">:</span> <span class="mf">0.1</span> <span class="p">}</span> <span class="p">]</span> <span class="o">--&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
-		
+<h2>Never fear, <code>flatMap()</code> to the rescue.</h2>
 
+<p>So the story turns to our hero
+<a href="http://reactivex.io/documentation/operators/flatmap.html"><code>flatMap()</code></a>, which as it turns out is
+specifically tuned to deal with issues of dealing with multiple streams.</p>
 
+<p><a href="http://reactivex.io/documentation/operators/flatmap.html"><img src="http://reactivex.io/documentation/operators/images/flatMap.c.png" alt="Marble diagram for flatMap" /></a></p>
 
-  
-		
-			Tagged under
-		
-    <a class='category' href='/category/conference/'>conference</a>, <a class='category' href='/category/qconsf/'>qconsf</a>, <a class='category' href='/category/software/'>software</a>
-	
-
-
-	
-	
-	</footer>
-	
-</article>
-<!-- END OF _includes/article.html -->
-
-	
-		
-		<!-- START OF _includes/article.html -->
-<article>
-	<header>
-		<h1><a href="/2014/11/01/conways-law-for-humans/">Conway&#8217;s Law for humans</a></h1>
-		<time>01 November 2014</time>
-	</header>
-		<div class="content">
-			<p>If you&rsquo;re familiar with <a href="http://en.wikipedia.org/wiki/Conway's_law">Conway&rsquo;s Law</a>, it states:</p>
-
-<blockquote><p>Any organization that designs a system (defined broadly) will produce a design whose structure is a copy of the organization&rsquo;s communication structure.</p></blockquote>
-
-<p>Or in layman&rsquo;s terms, your software systems reflect the structure of the teams that create them.</p>
-
-<p>Think about it &mdash; do your teams prefer to do everything themselves? Or do they ask for help from other teams? In general, as a team, we prefer to have as little dependencies as possible. The work that the engineer has to do to send an email, or wait for work from another team (like an API change or design change) is usually time-consuming and burdensome. Therefore, it is not (usually) in the team&rsquo;s best interests to cross silos and ask for help from others. Your teams, if they look like this, tend to work in codebases that are generally monolithic and wholly owned by the team.</p>
-
-<p>It&rsquo;s not wrong, or it&rsquo;s not bad, it&rsquo;s just a sociological observation. This is why companies like Spotify, Netflix or Amazon have embraced Conway&rsquo;s Law and changed their organizations to match the  microservice-driven architecture they want. Small teams work on small codebases and are empowered to make the changes they need.</p>
-
-<h3>A corollary and some observations about your company culture.</h3>
-
-<p>Here&rsquo;s a corollary, which I&rsquo;ve heard in various shapes and forms. Paraphrased:</p>
-
-<blockquote><p>An organization&rsquo;s structure tends to pattern after its leaders&#8217; communication patterns.</p></blockquote>
-
-<p>I&rsquo;ve been pushing an effort to unify our company&rsquo;s frontend styles and UX into a unified framework in an attempt to standardize the look and feel of the site.</p>
-
-<p>However, in working with our designers, I realized that they weren&rsquo;t talking to each other. Designers in one department had opposing design aesthetics from designers in another. This was causing problems in the code, because the frontend framework itself was becoming fragmented. You could see it in the code. Version A of the styleguide went into Department A&rsquo;s products. Version B of the styleguide went to Department B&rsquo;s products.</p>
-
-<p>In this case, as we kept rolling out this framework, I realized our organization had no single owner for the design language of the site. Why? I had to wonder if it had to do with some deeper communication issues between the heads of the two departments.</p>
-
-<p>Code can be a good canary to organizational issues, and call out larger human issues at hand. In this case, Conway&rsquo;s Law helps us root out and bring into the light structural concerns. Leaders can pay attention to these concerns and check themselves to become more open communicators.</p>
-
-			
-			
-		</div>
-	<footer>
-		
-
-
-		
-
-
-
-  
-		
-			Tagged under
-		
-    <a class='category' href='/category/conways-law/'>conway&#8217;s law</a>, <a class='category' href='/category/engineering/'>engineering</a>, <a class='category' href='/category/management/'>management</a>, <a class='category' href='/category/management-theory/'>management theory</a>
-	
-
-
-	
-	
-	</footer>
-	
-</article>
-<!-- END OF _includes/article.html -->
-
-	
-		
-		<!-- START OF _includes/article.html -->
-<article>
-	<header>
-		<h1><a href="/2014/06/21/mocks-arent-stubs/">Mocks aren&#8217;t stubs: mockist & classic testing</a></h1>
-		<time>21 June 2014</time>
-	</header>
-		<div class="content">
-			<p>With the famed &ldquo;TDD is dead&rdquo; debate around the Rails community largely
-coming to an end, I found myself referencing Martin Fowler&rsquo;s article,
-<a href="http://martinfowler.com/articles/mocksArentStubs.html">Mocks Aren&rsquo;t Stubs</a> a good deal, trying to make sense of it in terms of how I write tests and code.</p>
-
-<p>In this post I&rsquo;m going to talk about mocking and stubbing and their
-roots, paraphrase Fowler in an attempt to explain their differences, and
-walk through a couple of code examples. In each case, I&rsquo;m going to
-attempt to build this example out in Ruby and RSpec 3.</p>
-
-<p>Let&rsquo;s assume this implementation in our code for a <code>BookUpdater</code> object in Ruby. Its job is to call through its collaborating <code>ApiClient</code>, which wraps some aspect of an API that we want to call.</p>
+<p><code>flatMap</code> will take a supplied function as its argument, which is the
+operation to apply to each argument within the supplied stream.</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -303,405 +231,98 @@ attempt to build this example out in Ruby and RSpec 3.</p>
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># Update a book&#39;s metadata in our systems.</span>
-</span><span class='line'><span class="k">class</span> <span class="nc">BookUpdater</span>
-</span><span class='line'>  <span class="kp">attr_accessor</span> <span class="ss">:book</span><span class="p">,</span> <span class="ss">:api_client</span><span class="p">,</span> <span class="ss">:response</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">book</span><span class="p">,</span> <span class="n">api_client</span><span class="p">)</span>
-</span><span class='line'>    <span class="vi">@book</span> <span class="o">=</span> <span class="n">book</span>
-</span><span class='line'>    <span class="vi">@api_client</span> <span class="o">=</span> <span class="n">api_client</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">updated?</span>
-</span><span class='line'>    <span class="o">!!</span><span class="n">response</span><span class="o">.</span><span class="n">success?</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">update!</span>
-</span><span class='line'>    <span class="n">response</span> <span class="o">=</span> <span class="n">api_client</span><span class="o">.</span><span class="n">call_update_api</span><span class="p">(</span><span class="n">book</span><span class="p">)</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>What they are</h2>
-
-<h3>Mocks</h3>
-
-<p>Mocks are fake objects that verify that they have received messages. In
-RSpec, we traditionally use the <code>mock</code> object utility to create these objects.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">api_client</span> <span class="o">=</span> <span class="n">mock</span><span class="p">(</span><span class="s1">&#39;api client&#39;</span><span class="p">)</span>
-</span><span class='line'><span class="n">book</span> <span class="o">=</span> <span class="no">Book</span><span class="o">.</span><span class="n">new</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">expect</span><span class="p">(</span><span class="n">api_client</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">receive</span><span class="p">(</span><span class="ss">:call_update_api</span><span class="p">)</span><span class="o">.</span><span class="n">with</span><span class="p">(</span><span class="n">book</span><span class="p">)</span><span class="o">.</span><span class="n">and_return</span><span class="p">(</span><span class="kp">true</span><span class="p">)</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">subject</span> <span class="o">=</span> <span class="no">BookUpdater</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">api_client</span><span class="p">,</span> <span class="n">book</span><span class="p">)</span>
-</span><span class='line'><span class="n">subject</span><span class="o">.</span><span class="n">list!</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>What&rsquo;s happening here? RSpec creates a mock <code>api_client</code> object that will verify that, after the test case executes, it has received the <code>:call_update_api</code> message with the correct arguments.</p>
-
-<p>The main point of this style of testing is <em>behavior verification</em> &mdash; that is, that your object is behaving correctly in relation with its collaborators.</p>
-
-<h3>Double</h3>
-
-<p>Let&rsquo;s take a look at a <code>double</code> &mdash; also known as a <code>stub</code>. A <code>double</code> is a fake object that is set up to respond to a certain message with a pre-canned response, each time. Let&rsquo;s take a look at how I would set up a test using doubles:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">api_client</span> <span class="o">=</span> <span class="n">double</span><span class="p">(</span><span class="s1">&#39;api client&#39;</span><span class="p">)</span>
-</span><span class='line'><span class="n">response</span> <span class="o">=</span> <span class="n">double</span><span class="p">(</span><span class="s1">&#39;response&#39;</span><span class="p">,</span> <span class="ss">:success?</span> <span class="o">=&gt;</span> <span class="kp">true</span><span class="p">)</span>
-</span><span class='line'><span class="n">book</span> <span class="o">=</span> <span class="no">Book</span><span class="o">.</span><span class="n">new</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">allow</span><span class="p">(</span><span class="n">api_client</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">receive</span><span class="p">(</span><span class="ss">:call_update_api</span><span class="p">)</span><span class="o">.</span><span class="n">with</span><span class="p">(</span><span class="n">book</span><span class="p">)</span><span class="o">.</span><span class="n">and_return</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
-</span><span class='line'><span class="n">expect</span><span class="p">(</span><span class="n">subject</span><span class="o">.</span><span class="n">update!</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">change</span><span class="p">(</span><span class="n">subject</span><span class="p">,</span> <span class="ss">:updated?</span><span class="p">)</span><span class="o">.</span><span class="n">from</span><span class="p">(</span><span class="kp">false</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="kp">true</span><span class="p">)</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Okay, so what&rsquo;s the big deal here? My test case still passes. Note that
-I had to change my code to focus its expectation on the <code>subject</code>&rsquo;s
-state instead of the <code>api_client</code>.</p>
-
-<p>The focus of using doubles is for <em>state verification</em> &mdash; that is, that so long as everybody around me is behaving according to their contracts, the test merely has to verify that internal object state changes correctly.</p>
-
-<h3>A third way &mdash; real objects</h3>
-
-<p>I won&rsquo;t cover this very much in depth, but with sufficiently simple objects, one could actually instantiate real objects instead of doubles, and test an object against all its collaborators. This is, in my experience, the most common experience of working in Rails + ActiveRecord applications.</p>
-
-<h2>Classic vs Mockist testing: different strokes for different folks</h2>
-
-<p>As we saw above, the key difference between the mock and the stub (the <code>double</code>). The focus of the test in the mock case is on the messages being sent to the collaborators. The focus of the test when using the double is on the the <code>subject</code> under test (SUT).</p>
-
-<p>Mocks and stubs/doubles are tools that we can use under the larger umbrellas of two TDD philosophical styles: <em>classic</em> vs <em>mockist</em> styles.</p>
-
-<h3>Classic TDD</h3>
-
-<ul>
-<li>Classic TDDists like using <code>double</code>s or real objects to test collaborators.</li>
-<li>From personal experience, testing classicly is oftentimes the path of least resistance. There isn&rsquo;t expectation setup and verification that mockist testing requires of you.</li>
-<li>Classic TDD sometimes results in creating objects that reveal state &mdash; note how the <code>BookUpdater</code> needed to expose an <code>updated?</code> method.</li>
-<li>Setting up the state of the world prior to your test may be complex, requiring setting up all the objects in your universe. This can be a huge pain (has anybody ever had this problem with overcomplicated Rails models with spidery associations? Raise your hands&hellip;). Classicists may argue that the root cause here is not paying attention to your model architecture, and having too many associations is an antipattern. Alternatively, classicists oftentimes generate test factories (e.g. Rails&#8217; FactoryGirl gem) to manage test setup.</li>
-<li>Tests tend to be treatable more like black boxes, testable under isolation (due to verifications on object state) and are more resistant to refactoring.</li>
-</ul>
-
-
-<h3>Mockist TDD</h3>
-
-<ul>
-<li>Mockist TDD utilizes <code>mock</code>s to verify behavior between objects and collaborators.</li>
-<li>It can be argued to develop &ldquo;purer&rdquo; objects, that are mainly concerned with objects passing messages to each other. Fowler refers to these objects as preferring role-interfaces.</li>
-<li>These tests are easier to set up, as they don&rsquo;t require setting up the state of the world prior to test invocation.</li>
-<li>Tests tend to be more coupled to implementation, and may be more difficult to refactor due to very specific requirements for message passing between collaborators.</li>
-<li>Fowler brings up a point where being a mockist means that your objects prefer to <a href="https://pragprog.com/articles/tell-dont-ask">Tell Don&rsquo;t Ask</a>. A nice side effect of TDA is you generally can avoid Demeter violations.</li>
-</ul>
-
-
-<h2>In conclusion</h2>
-
-<p>In coming from a classic TDD background, I&rsquo;ve oftentimes viewed mockist testing with some suspicion, particularly around how much work is involved to bring them about. Over the years, I&rsquo;ve warmed up to the usage of mockist testing, but have not been diligent enough at doing pure driving TDD with mocks. In reviewing Fowler&rsquo;s comments, I&rsquo;m intruiged at the possibilities of mockist TDD in affecting system design, particularly in their natural inclinations toward <a href="http://martinfowler.com/bliki/RoleInterface.html">role interfaces</a>. I look forward to trying pure mockist TDD in a future project.</p>
-
-<h4>Further reading:</h4>
-
-<ul>
-<li><a href="http://dannorth.net/introducing-bdd/">Dan North: &ldquo;Introducing BDD&rdquo;</a></li>
-<li><a href="http://jamesgolick.com/2010/3/10/on-mocks-and-mockist-testing.html">James Golick: &ldquo;On Mocks and Mockist Testing&rdquo;</a></li>
-<li><a href="http://jmock.org/oopsla2004.pdf">OOPSLA 2004: &ldquo;Mock Roles, Not Objects&rdquo;</a></li>
-<li><a href="http://www.amazon.com/Growing-Object-Oriented-Software-Guided-Tests/dp/0321503627">Amazon: &ldquo;Growing Object Oriented Software, Guided by Tests&rdquo;</a></li>
-</ul>
-
-
-			
-			
-		</div>
-	<footer>
-		
-
-
-		
-
-
-
-  
-		
-			Tagged under
-		
-    <a class='category' href='/category/tdd/'>TDD</a>, <a class='category' href='/category/mocks/'>mocks</a>, <a class='category' href='/category/stubs/'>stubs</a>
-	
-
-
-	
-	
-	</footer>
-	
-</article>
-<!-- END OF _includes/article.html -->
-
-	
-		
-		<!-- START OF _includes/article.html -->
-<article>
-	<header>
-		<h1><a href="/2014/06/06/running-mocha-tests-with-es6-amd-modules/">Running Mocha tests with ES6/AMD modules</a></h1>
-		<time>06 June 2014</time>
-	</header>
-		<div class="content">
-			<p>In one of my personal projects (<a href="https://github.com/andrewhao/chordmeister">Chordmeister</a>), I&rsquo;ve been trying to
-upgrade the code to be written in <a href="http://wiki.ecmascript.org/doku.php?id=harmony:modules#export_declarations">ES6 modules</a> and transpile down to AMD modules with Square&rsquo;s <a href="https://github.com/square/es6-module-transpiler">very excellent es6-module-transpiler project</a>.</p>
-
-<p>Since I&rsquo;ve already <a href="https://github.com/andrewhao/hendrix">updated</a> an Ember app of mine to try ES6, I figured it was high time to do it on another project.</p>
-
-<h2>Sorry Coffeescript, but I&rsquo;m moving on.</h2>
-
-<p>First problem: Coffeescript seems indecisive with respect to ES6
-support. In order to support <code>import</code> or <code>export</code> keywords, I had to
-wrap the statements in backticks, making the code look like this:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='coffeescript'><span class='line'><span class="o">`</span><span class="nx">import</span> <span class="nx">ClassifiedLine</span> <span class="nx">from</span> <span class="s">&quot;chordmeister/classified_line&quot;</span><span class="o">`</span>
-</span><span class='line'><span class="k">class</span> <span class="nx">Parser</span>
-</span><span class='line'>  <span class="c1"># Implementation</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">`</span><span class="nx">export</span> <span class="nx">default</span> <span class="nx">Parser</span><span class="o">`</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Except this wasn&rsquo;t being picked up by es6-module-transpiler, since
-Coffeescript wraps the entire declaration in a closure: I was
-finding myself having problems compiling from Coffeescript &ndash;> ES5 JS &ndash;> ES6 JS.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">define</span><span class="p">(</span><span class="s2">&quot;chordmeister/parser&quot;</span><span class="p">,</span>
-</span><span class='line'>  <span class="p">[],</span>
-</span><span class='line'>  <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>    <span class="s2">&quot;use strict&quot;</span><span class="p">;</span>
-</span><span class='line'>    <span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>      <span class="c1">// Oops, I wasn&#39;t transpiled!</span>
-</span><span class='line'>      <span class="kr">import</span> <span class="nx">ClassifiedLine</span> <span class="nx">from</span> <span class="s1">&#39;chordmeister/classified_line&#39;</span><span class="p">;</span>
-</span><span class='line'>      <span class="kd">var</span> <span class="nx">Parser</span><span class="p">;</span>
-</span><span class='line'>      <span class="nx">Parser</span> <span class="o">=</span> <span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>        <span class="c1">// Implementation</span>
-</span><span class='line'>      <span class="p">}</span>
-</span><span class='line'>      <span class="p">)();</span>
-</span><span class='line'>      <span class="c1">// Oops, I wasn&#39;t transpiled!</span>
-</span><span class='line'>      <span class="kr">export</span> <span class="k">default</span> <span class="nx">Parser</span><span class="p">;</span>
-</span><span class='line'>      <span class="p">})()</span>
-</span><span class='line'>  <span class="p">});</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>So the first call: ditch Coffeescript. Write this in pure ES6.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kr">import</span> <span class="nx">ClassifiedLine</span> <span class="nx">from</span> <span class="s1">&#39;chordmeister/classified_line&#39;</span><span class="p">;</span>
-</span><span class='line'><span class="kd">var</span> <span class="nx">Parser</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'><span class="nx">Parser</span> <span class="o">=</span> <span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>  <span class="c1">// implementation</span>
-</span><span class='line'><span class="p">})();</span>
-</span><span class='line'>
-</span><span class='line'><span class="kr">export</span> <span class="k">default</span> <span class="nx">Parser</span><span class="p">;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Which transpiled nicely to:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">define</span><span class="p">(</span><span class="s2">&quot;chordmeister/parser&quot;</span><span class="p">,</span>
-</span><span class='line'>  <span class="p">[</span><span class="s2">&quot;chordmeister/classified_line&quot;</span><span class="p">,</span><span class="s2">&quot;exports&quot;</span><span class="p">],</span>
-</span><span class='line'>  <span class="kd">function</span><span class="p">(</span><span class="nx">__dependency1__</span><span class="p">,</span> <span class="nx">__exports__</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="s2">&quot;use strict&quot;</span><span class="p">;</span>
-</span><span class='line'>    <span class="kd">var</span> <span class="nx">ClassifiedLine</span> <span class="o">=</span> <span class="nx">__dependency1__</span><span class="p">[</span><span class="s2">&quot;default&quot;</span><span class="p">];</span>
-</span><span class='line'>    <span class="kd">var</span> <span class="nx">Parser</span><span class="p">;</span>
-</span><span class='line'>    <span class="nx">Parser</span> <span class="o">=</span> <span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>      <span class="c1">// Implementation</span>
-</span><span class='line'>    <span class="p">})();</span>
-</span><span class='line'>    <span class="nx">__exports__</span><span class="p">[</span><span class="s2">&quot;default&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nx">Parser</span><span class="p">;</span>
-</span><span class='line'>    <span class="p">});</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>Next up: adding AMD support in Mocha</h2>
-
-<p>Okay, so we need to set up a few things to get Mocha playing well with RequireJS, the AMD loader.</p>
-
-<p>Our plan of attach will be to leverage the generated AMD modules and load our tests up with them. We have the benefit of being able to specifically inject dependencies into our test suite.</p>
-
-<p>The tricky parts will be:</p>
-
-<h3>Set up the Mocha index.html runner</h3>
-
-<p>Install <code>mocha</code>, <code>require.js</code>, and <code>chai</code> via <code>bower</code>, then plug them into the harness:</p>
-
-<figure class='code'><figcaption><span>test/index.html</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="cp">&lt;!doctype html&gt;</span>
-</span><span class='line'><span class="nt">&lt;html&gt;</span>
-</span><span class='line'><span class="nt">&lt;head&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;meta</span> <span class="na">charset=</span><span class="s">&quot;utf-8&quot;</span><span class="nt">&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;meta</span> <span class="na">http-equiv=</span><span class="s">&quot;X-UA-Compatible&quot;</span> <span class="na">content=</span><span class="s">&quot;IE=edge,chrome=1&quot;</span><span class="nt">&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;title&gt;</span>Mocha Spec Runner<span class="nt">&lt;/title&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">href=</span><span class="s">&quot;../bower_components/mocha/mocha.css&quot;</span><span class="nt">&gt;</span>
-</span><span class='line'><span class="nt">&lt;/head&gt;</span>
-</span><span class='line'><span class="nt">&lt;body&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;mocha&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;../bower_components/mocha/mocha.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;../bower_components/chai/chai.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;script </span><span class="na">data-main=</span><span class="s">&quot;test_helper&quot;</span> <span class="na">src=</span><span class="s">&quot;../bower_components/requirejs/require.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="nt">&lt;/body&gt;</span>
-</span><span class='line'><span class="nt">&lt;/html&gt;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Note the references to <code>data-main="test_helper"</code>, which is require.js&rsquo;s way of determining its entry point after it loads.</p>
-
-<h3>Set up a test runner.</h3>
-
-<figure class='code'><figcaption><span>test/test_runner.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// Configure and set up the tests.</span>
-</span><span class='line'><span class="nx">require</span><span class="p">.</span><span class="nx">config</span><span class="p">({</span>
-</span><span class='line'>  <span class="nx">baseUrl</span><span class="o">:</span> <span class="s2">&quot;../build/&quot;</span>
-</span><span class='line'><span class="p">})</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// Load up the files to run against</span>
-</span><span class='line'><span class="kd">var</span> <span class="nx">specs</span> <span class="o">=</span> <span class="p">[</span>
-</span><span class='line'>  <span class="s1">&#39;chordmeister/chord_spec.js&#39;</span><span class="p">,</span>
-</span><span class='line'>  <span class="s1">&#39;chordmeister/song_spec.js&#39;</span><span class="p">,</span>
-</span><span class='line'>  <span class="s1">&#39;chordmeister/parser_spec.js&#39;</span><span class="p">,</span>
-</span><span class='line'>  <span class="s1">&#39;chordmeister/classified_line_spec.js&#39;</span><span class="p">,</span>
-</span><span class='line'><span class="p">];</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// Start up the specs.</span>
-</span><span class='line'><span class="nx">require</span><span class="p">(</span><span class="nx">specs</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">require</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>  <span class="nx">mocha</span><span class="p">.</span><span class="nx">setup</span><span class="p">(</span><span class="s1">&#39;bdd&#39;</span><span class="p">);</span>
-</span><span class='line'>  <span class="nx">expect</span> <span class="o">=</span> <span class="nx">chai</span><span class="p">.</span><span class="nx">expect</span><span class="p">;</span>
-</span><span class='line'>  <span class="c1">// Why? Some async loading condition? Is there a callback I should be hooking into?</span>
-</span><span class='line'>  <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nx">mocha</span><span class="p">.</span><span class="nx">run</span><span class="p">();</span>
-</span><span class='line'>  <span class="p">},</span> <span class="mi">100</span><span class="p">);</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">gpsPointStream</span>
+</span><span class='line'><span class="p">.</span><span class="nx">groupBy</span><span class="p">((</span><span class="nx">point</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">point</span><span class="p">.</span><span class="nx">velocity</span><span class="p">)</span>
+</span><span class='line'><span class="p">.</span><span class="nx">flatMap</span><span class="p">((</span><span class="nx">group</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">return</span> <span class="nx">group</span><span class="p">.</span><span class="nx">scan</span><span class="p">((</span><span class="nx">h</span><span class="p">,</span> <span class="nx">v</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">h</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+</span><span class='line'>              <span class="p">.</span><span class="nx">zip</span><span class="p">(</span><span class="nx">Observable</span><span class="p">.</span><span class="nx">just</span><span class="p">(</span><span class="nx">group</span><span class="p">.</span><span class="nx">key</span><span class="p">))</span>
 </span><span class='line'><span class="p">});</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>You&rsquo;ll notice that I was having synchonicity issues between spec suite load and <code>mocha.run()</code>. Throwing everything back a few hundred ms seemed to have done the fix.</p>
 
-<h2>AMD gotchas</h2>
-
-<p>Pay attention to the <code>default</code> parameter that the module exports with. This is important to remember since native ES6 will allow you to directly import it with its native syntax:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kr">import</span> <span class="nx">Parser</span> <span class="nx">from</span> <span class="s2">&quot;chordmeister/parser&quot;</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">src</span><span class="o">:</span>     <span class="o">--</span> <span class="p">{</span> <span class="nx">velocity</span><span class="o">:</span> <span class="mi">0</span> <span class="p">}</span> <span class="o">----------</span> <span class="p">{</span> <span class="nx">velocity</span><span class="o">:</span> <span class="mf">0.1</span> <span class="p">}</span> <span class="o">-----------------------------------</span> <span class="p">{</span> <span class="nx">velocity</span><span class="o">:</span> <span class="mi">0</span> <span class="p">}</span> <span class="o">----&gt;</span>
+</span><span class='line'><span class="nx">groupBy</span><span class="o">:</span> <span class="o">--</span> <span class="p">[{</span> <span class="nx">Observable</span> <span class="nx">key</span><span class="o">:</span> <span class="mi">0</span> <span class="p">}]</span> <span class="o">--</span> <span class="p">[</span> <span class="p">{</span> <span class="nx">Observable</span> <span class="nx">key</span><span class="o">:</span> <span class="mi">0</span> <span class="p">},</span> <span class="p">{</span> <span class="nx">Observable</span> <span class="nx">key</span><span class="o">:</span> <span class="mf">0.1</span> <span class="p">}</span> <span class="p">]</span> <span class="o">--</span> <span class="p">[</span> <span class="p">{</span> <span class="nx">Observable</span> <span class="nx">key</span><span class="o">:</span> <span class="mi">0</span> <span class="nx">count</span><span class="o">:</span> <span class="mi">2</span> <span class="p">},</span> <span class="p">{</span> <span class="nx">Observable</span> <span class="nx">key</span><span class="o">:</span> <span class="mf">0.1</span> <span class="p">}</span> <span class="p">]</span> <span class="o">--&gt;</span>
+</span><span class='line'><span class="nx">flatMap</span><span class="o">:</span> <span class="o">--</span> <span class="p">[</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span> <span class="p">]</span> <span class="o">-----------------</span> <span class="p">[</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">0.1</span> <span class="p">]</span> <span class="o">------------------------------------------</span> <span class="p">[</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span> <span class="p">]</span> <span class="o">--&gt;</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>But if you&rsquo;re using RequireJS/AMD modules, you&rsquo;ll need to explicitly call out the <code>default</code> namespace from the required module, so like so:</p>
+<p>What just happened here?</p>
+
+<p>I specified a merging function for the <code>flatMap()</code> stream, which
+performed the <code>scan()</code> counting aggregation on my group before merging the
+stream back into the main stream. I threw in a <code>zip</code>, which annotated my
+aggregate count value with a record of the group key (velocity) that
+this value was computed for.</p>
+
+<h2>Compare it to imperative</h2>
+
+<p>The equivalent of <code>groupBy</code>/<code>flatMap</code> in imperative programming is, quite
+literally, just <code>_.groupBy()</code> and <code>_.flatMap()</code>. With a few key
+differences. Here it is in <a href="https://lodash.com/docs#groupBy">lodash</a>:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;chordmeister/parser&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">parser</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>  <span class="nx">Parser</span> <span class="o">=</span> <span class="nx">parser</span><span class="p">.</span><span class="k">default</span><span class="p">;</span>
-</span><span class='line'>  <span class="k">new</span> <span class="nx">Parser</span><span class="p">()</span> <span class="c1">// and do stuff.</span>
-</span><span class='line'><span class="p">});</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="kd">var</span> <span class="nx">grouped</span> <span class="o">=</span> <span class="nx">_</span><span class="p">([</span> <span class="p">{</span> <span class="nx">velocity</span><span class="o">:</span> <span class="mi">0</span> <span class="p">},</span> <span class="p">{</span> <span class="nx">velocity</span><span class="o">:</span> <span class="mf">0.1</span> <span class="p">},</span> <span class="p">{</span> <span class="nx">velocity</span><span class="o">:</span> <span class="mi">0</span> <span class="p">}</span> <span class="p">])</span>
+</span><span class='line'><span class="p">.</span><span class="nx">groupBy</span><span class="p">((</span><span class="nx">point</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">point</span><span class="p">.</span><span class="nx">velocity</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">grouped</span><span class="p">.</span><span class="nx">value</span><span class="p">()</span>
+</span><span class='line'><span class="c1">// { 0: [ { velocity: 0 }, { velocity: 0 } ], 0.1: [ { velocity: 0.1 } ] }</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">var</span> <span class="nx">flatmapped</span> <span class="o">=</span> <span class="nx">grouped</span><span class="p">.</span><span class="nx">flatMap</span><span class="p">((</span><span class="nx">v</span><span class="p">,</span> <span class="nx">k</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">return</span> <span class="p">[</span> <span class="p">[</span><span class="nx">v</span><span class="p">.</span><span class="nx">length</span><span class="p">,</span> <span class="nx">k</span><span class="p">]</span> <span class="p">]</span>
+</span><span class='line'>  <span class="p">})</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">flatmapped</span><span class="p">.</span><span class="nx">value</span><span class="p">()</span>
+</span><span class='line'><span class="c1">// [[2, &quot;0&quot;], [1, &quot;0.1&quot;]]</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>Let me know if you have any questions!</p>
+<p>So in the end, the end result was the same with one crucial difference &ndash;
+our Observable, reactive version was able to take intermediate accounts
+into time and perform an intermediate calculation as data was flowing
+in. This allowed us to generate an intermediate count for the &ldquo;0&rdquo; velocity
+group.</p>
+
+<h2>Takeaways</h2>
+
+<ul>
+<li>When you want to fan out a stream into groups or partitions based on a
+specific stream value, turn to
+<a href="https://github.com/Reactive-Extensions/RxJS/blob/master/doc/api/core/operators/groupby.md"><code>groupBy</code></a>.</li>
+<li>When you have a need to combine a stream-of-streams, you want to look at
+<a href="https://github.com/Reactive-Extensions/RxJS/blob/master/doc/api/core/operators/selectmany.md"><code>flatMap</code></a>. You may also consider looking at <a href="https://github.com/Reactive-Extensions/RxJS/blob/master/doc/api/core/operators/concatmap.md"><code>concatMap</code></a>, a close cousin of <code>flatMap</code>.</li>
+<li>Reactive programming gives you more expressive abilities to reason
+about time and event ordering. You just have to tilt your head a little
+bit.</li>
+</ul>
+
+
+<h2>Further reading:</h2>
+
+<ul>
+<li><a href="http://blogs.microsoft.co.il/iblogger/2015/08/11/animations-of-rx-operators-groupby/">http://blogs.microsoft.co.il/iblogger/2015/08/11/animations-of-rx-operators-groupby/</a></li>
+</ul>
+
+
+<p><strong>Update: 2016/03/22</strong></p>
+
+<p>Updated typo where the <code>index</code> variable on a GroupedObservable was
+changed to correctly be <code>key</code>.</p>
 
 			
 			
@@ -718,7 +339,7 @@ finding myself having problems compiling from Coffeescript &ndash;> ES5 JS &ndas
 		
 			Tagged under
 		
-    <a class='category' href='/category/amd/'>AMD</a>, <a class='category' href='/category/tdd/'>TDD</a>, <a class='category' href='/category/mocha/'>mocha</a>, <a class='category' href='/category/node/'>node</a>, <a class='category' href='/category/requirejs/'>requirejs</a>, <a class='category' href='/category/testing/'>testing</a>
+    <a class='category' href='/category/observables/'>Observables</a>, <a class='category' href='/category/rxjs/'>RxJS</a>, <a class='category' href='/category/streams/'>Streams</a>
 	
 
 
@@ -734,353 +355,289 @@ finding myself having problems compiling from Coffeescript &ndash;> ES5 JS &ndas
 		<!-- START OF _includes/article.html -->
 <article>
 	<header>
-		<h1><a href="/2014/04/26/implementing-ddd-chapter-2/">Implementing DDD: Domains, Subdomains and Bounded Contexts</a></h1>
-		<time>26 April 2014</time>
+		<h1><a href="/2015/09/27/strange-loop-2015-reflections/">Strange Loop 2015: Notes & Reflections</a></h1>
+		<time>27 September 2015</time>
 	</header>
 		<div class="content">
-			<h2>Chapter 2: Domains, Subdomains, and Bounded Contexts</h2>
+			<p>Going to Strange Loop was a huge check off my conference bucket list
+(lanyard?). I&rsquo;d always heard about this slightly-weird, highly academic
+collision between academia and industry, skewing toward programming
+languages you haven&rsquo;t heard of (or, at the very least, you&rsquo;ve never used
+in production). I anticipated sitting at the feet of gray-haired wizards
+and bright-eyed hipsters with Ph.Ds.</p>
 
-<p>A <em>Domain</em> is what a business does and the surrounding context of how it does business. It is important to model out its supported <em>Subdomains</em> &mdash; that is, the smaller components of the business that collaborate in real, day-to-day operations of the business. The book describes these as <em>Core Domains</em>.</p>
+<p>The conference did not disappoint. And it was not quite what I
+expected-I less sat at the feet of geniuses than I did talk with them,
+peer-to-peer, about topics of interest. All around me people were saying
+&ldquo;Don&rsquo;t be afraid to ask questions. Don&rsquo;t feel stupid &ndash; nobody knows
+everything.&rdquo; Speakers were tweeting about how much they were learning.
+It was comforting, because lots of topics I had come to see were those
+in which I had no. freakin. clue. about.</p>
 
-<p>Finally, a <em>Bounded Context</em> is the physical manifestation of the solution space as software &mdash; models living in a real application. Its key feature in the context of DDD is as a linguistic barrier between different domains.</p>
+<p>The following is culled from my notes from different sessions I
+attended. I will focus on brevity. I will keep it clear. Here we go:</p>
 
-<p>In an ideal world, each <em>Subdomain</em> maps directly to one <em>Bounded Context</em>. In the real world, this is less common since we tend to build things into monolithic systems. Still &mdash; many monolithic applications have several components that could in themselves be bounded contexts.</p>
+<h3>Opening Keynote: &ldquo;I see what you mean&rdquo; &ndash; Peter Alvaro</h3>
 
-<h6>Side note: In Rails, one could think of Engines as a <em>Bounded Context</em>. But that might be a blog post for another time.</h6>
+<iframe width="560" height="315"
+src="https://www.youtube.com/embed/R2Aa4PivG0g" frameborder="0"
+allowfullscreen></iframe>
 
-<p>It is important to get these ideas and concepts down correctly because we need correct modeling of our systems to determine what they do.</p>
-
-<h3>Bounded Contexts and terms</h3>
-
-<p>It&rsquo;s not usually realistic to get the entire organization agreeing on a universal linguistic definition for every term. Instead, DDD assumes that different terms have different meanings in different contexts.</p>
-
-<p>The author then dives into the an example of a book, where a <em>book</em> means several different things to different people in different contexts. A book is touched upon by authors, graphic designers, editors, marketing folks. In each of these contexts, the features of a book mean different things at different times. It is impossible to develop an all-knowing Book model without disagreement between stakeholders. DDD, instead, acknowledges these differences and allows stakeholders to use linguistic terms from within their unique Bounded Contexts.</p>
-
-<p>Bounded Contexts may include things like:</p>
 
 <ul>
-<li>Object models</li>
-<li>A database schema / persistence layer</li>
-<li>A SOAP or REST API</li>
-<li>A user interface</li>
+<li>Instructions, behaviors &amp; outcomes.</li>
+<li>It &ldquo;feels good&rdquo; to write in C (a hardcore 1000 liner)</li>
+<li>But a declarative program (e.g. SQL) works well, but is harder to come
+up with.</li>
+<li>The declarative world &ndash; as described in the work done in Datalog</li>
+<li>How can we take concepts from Datalog and apply to real-world
+resources like network actors (distributed systems)?</li>
+<li>It becomes easier to model these systems declaratively when we
+explicitly capture time.</li>
+<li>Enter Dedalus: extension to Datalog where time is a modeling
+construct.</li>
+<li>(Show off usage of <code>@next</code> and <code>@async</code> annotations</li>
+<li>Computation is redezvous &ndash; the only thing that you know is what YOU
+know at that point in time.</li>
+<li>Takeaway: Abstractions leak. Model them better (e.g. with time)</li>
+<li>Inventing languages is dope.</li>
 </ul>
 
 
-<h3>Bounded context antipatterns</h3>
+<h3>Have your Causality and your Wall Clocks Too (Jon Moore)</h3>
 
-<p>You may be tempted to divide up a bounded context by architectural concerns, or because you want to assign smaller tasks to developers (resource allocation). Beware that this kind of work tends to fragment the language.</p>
+<iframe width="560" height="315"
+src="https://www.youtube.com/embed/YqNGbvFHoKM" frameborder="0"
+allowfullscreen></iframe>
 
-<p>DDD operates on <em>linquistic drivers</em>. The unity, cohesion and domain-adherence of the bounded context should be the first priority in the design.</p>
-
-<p>Assigning two teams to the same bounded context results in fragmentation of the bounded context.</p>
-
-<p>Ideally: we strive to assign one team to work on one Bounded Context with one Ubiquitous Language at a time.</p>
-
-<h6>In Rails, what are the bounded contexts? It could be the top-level Rails application, or an engine, or a gem, that define the context boundaries._</h6>
-
-<h3>A story&hellip;</h3>
-
-<p>The chapter then goes on to describe their fictional team designing through three iterations off their DDD strategy:</p>
-
-<p>A system in which all domains live within the same bounded context. They see the folly of this and refactor with some tactical patterns, like creating services.</p>
-
-<p>This is, however, missing the point. They realized they needed to listen to business and their domain experts to find out exactly where the right places were to segregate the contexts. The team discovers that the business has a desire to go in a new direction which allows them to segregate the domain in such a way that would enable future directions for the business.</p>
-
-<h6>How often are we as developers in conversation with our product owners and asking where the business <em>wants</em> to go in the future?</h6>
-
-<p>Conversations with the business reveal an intention to develop an add-on product to the core product. This implies the development of two subdomains. However, further investigation reveals that the shared overlap of certain domain models (like users, roles, and access management) cannot simply be identically shared between two systems, since their <em>linguistic meanings</em> in the two systems differ slightly. Instead, the developers use the linguistic problem to develop a third bounded context.</p>
-
-<p>The developers separate their app into three bounded contexts built as three software systems.</p>
-
-			
-			
-		</div>
-	<footer>
-		
-
-
-		
-
-
-
-  
-		
-			Tagged under
-		
-    <a class='category' href='/category/book-review/'>Book Review</a>, <a class='category' href='/category/ddd/'>DDD</a>, <a class='category' href='/category/domain-driven-design/'>Domain-Driven Design</a>
-	
-
-
-	
-	
-	</footer>
-	
-</article>
-<!-- END OF _includes/article.html -->
-
-	
-		
-		<!-- START OF _includes/article.html -->
-<article>
-	<header>
-		<h1><a href="/2014/03/08/six-months-as-a-manager/">Six months as a manager</a></h1>
-		<time>08 March 2014</time>
-	</header>
-		<div class="content">
-			<p>It&rsquo;s been approximately six months since I&rsquo;ve entered engineering management. Here are some thoughts reflecting back on that season now.</p>
-
-<h2>I didn&rsquo;t like it at first.</h2>
-
-<p>Let&rsquo;s face it: I didn&rsquo;t like the feeling of being a &ldquo;manager&rdquo; now. It comes with too much baggage of pointy-haired bosses or ineffective waste layers. Why do we need managers anyways?</p>
-
-<p>More to the point: I love coding. I love working on rewarding projects. I hated the thought of being tied up in meetings while day by day getting more and more disconnected from code.</p>
-
-<p>So I struggled a lot in those first few months (still do), trying to maintain the balance of working with product management to get a strategic vision communicated, or with other engineering teams to get a tactical vision in place, versus trying to be deeply involved with the code base and doing code reviews.</p>
-
-<h3>You can&rsquo;t code anymore.</h3>
-
-<p>In the end? I had to come to grips with the reality that my team needed me in a different role &mdash; a strategic role, helping them see the big picture, sniffing out dependencies and destroying blockers before they got to them.</p>
-
-<p>But I still needed to be spot-on with the code &mdash; I still needed to be in the know with new product features as they are being developed. So it&rsquo;s my priority to be in design discussions, but I can&rsquo;t be the implementer anymore.</p>
-
-<p>So I&rsquo;ve started a change in mindset &mdash; how can offload all the random codebase knowledge I&rsquo;ve acquired over the years to the team? How can I effectively share my expertise so I&rsquo;m out of a (coding) job? I&rsquo;m starting to be more convinced that the answer to that is pair programming.</p>
-
-<h3>Pairing your way out of a job</h3>
-
-<p>Nowadays if there&rsquo;s a story or task in which I am the only one (or one of few) with domain knowledge about the feature, I&rsquo;ll ask a team member to pair with me on the feature. That way we get a really effective teaching tool about the domain model, and the extra plus in that if I get pulled into a meeting, development can continue.</p>
-
-<h3>But you still have to code.</h3>
-
-<p>So I code on the weekends (not everybody can do this!)</p>
-
-<p>We&rsquo;re a Rails team taking on a new Ember project. I need to get my chops up around Ember so I&rsquo;ve decided to pull in a <a href="https://github.com/andrewhao/hendrix">side project</a> to hack on the weekends. My side work on <a href="http://www.wejoinin.com">Wejoinin</a> lets me do all the Rails things I don&rsquo;t get to do anymore at work.</p>
-
-<p>And it works for me because I love to code, and to be honest, I don&rsquo;t ever want to get weak in that area.</p>
-
-<p>To be honest, I&rsquo;d love more feedback from other engineering managers in that area. How do you keep your chops sharp?</p>
-
-<h3>People are your priority.</h3>
-
-<p>I&rsquo;ve read often that <a href="http://firstround.com/article/My-Management-Lessons-from-Three-Failed-Startups-Google-Apple-Dropbox-Twitter-and-Square">empathy is everything</a> when it comes to management, and it still rings true. No matter how this product launch goes, in the end your team will remember how you treated them, how their thoughts and feelings were taken into account.</p>
-
-<p>One thing I&rsquo;m trying to check myself is my tendency to jump in on other people&rsquo;s sentences and cut them off. It sounds silly, but sometimes I realize I like to talk a lot more than listen. As a manager, sometimes you need to dwell on the feedback of a team member for some time before you write it off. There&rsquo;s usually a core message in there that&rsquo;s completely valid &mdash; a frustration, a desire for change. Empathy means communicating the message: &ldquo;I heard you, and I respect your thoughts.&rdquo;</p>
-
-<h3>It&rsquo;s your attitude</h3>
-
-<p>And finally, here&rsquo;s what I think: your attitude toward your company and the team make <em>ALL</em> the difference.</p>
 
 <ul>
-<li>Is your orientation truly to support your team? How will it be clear in the long run that your supported someone in their career?</li>
-<li>Where are places in your workday where you can connect and sympathize with people &mdash; share a joke, listen to someone&rsquo;s frustration, or just simply go out to lunch?</li>
-<li>How are you giving people something to work toward to: a vision of changing the world (for Blurb, it&rsquo;s about transforming the publishing industry).</li>
-<li>How are you addressing negativity? Grumbling is important to address head on in its own space, but how are you empowering people to take charge of issues of culture or organizational friction?</li>
-<li>How are you checking your own negativity &mdash; sometimes we forget that we&rsquo;re the solutions to our own problems, and I&rsquo;ve found oftentimes that the very issues that you assume are impossible to change are crackable by having the right relationships with the right people.</li>
-</ul>
-
-
-<p>The little things matter.</p>
-
-<h3>Growth areas</h3>
-
-<p>Lord knows I have a lot to learn here. One area I&rsquo;m learning to grow in is how to give honest and accurate feedback to team members, without fearing how they&rsquo;re going to receive it.</p>
-
-<p>Another area? Delegation. I&rsquo;m learning to delegate the little micro-responsibilities in my job that I just kind of expect that I&rsquo;m supposed to do. Case in point: every week we accept a translation import from a third-party translation service. I realized that I was burning a lot of time reviewing hundreds of lines of translation keys every week, and the repetition of it was sapping a lot of my energy. I had to learn to ask a team member for help and give them responsibility to own that function of the process.</p>
-
-			
-			
-		</div>
-	<footer>
-		
-
-
-		
-
-
-
-  
-		
-			Tagged under
-		
-    <a class='category' href='/category/code/'>Code</a>, <a class='category' href='/category/management/'>Management</a>, <a class='category' href='/category/thoughts/'>Thoughts</a>
-	
-
-
-	
-	
-	</footer>
-	
-</article>
-<!-- END OF _includes/article.html -->
-
-	
-		
-		<!-- START OF _includes/article.html -->
-<article>
-	<header>
-		<h1><a href="/2014/02/02/blogging-through-implementing-domain-driven-design/">Blogging through: Implementing Domain-Driven Design</a></h1>
-		<time>02 February 2014</time>
-	</header>
-		<div class="content">
-			<p>In recent conversations with coworkers, the topic of Domain-Driven Design has
-arisen on more than a few occasions in design and architecture meetings.
-&ldquo;Have you read it?&rdquo; a coworker asked, &ldquo;I think it&rsquo;d help us a lot.&rdquo;</p>
-
-<p>I&rsquo;ve gotten my hands on a copy of <a href="http://www.amazon.com/Implementing-Domain-Driven-Design-Vaughn-Vernon/dp/0321834577">Implementing Domain-Driven Design</a>
-by <a href="https://vaughnvernon.co/">Vaughn Vernon</a>, which is a more pragmatic
-approach to DDD than the original <a href="http://www.amazon.com/Domain-Driven-Design-Tackling-Complexity-Software/dp/0321125215/ref=pd_bxgy_b_text_y">Domain-Driven Design</a> book by Eric Evans.</p>
-
-<p>My desire is to share my outlines of the book chapter-by-chapter,
-hopefully once a week.</p>
-
-<h2>Chapter 1: Getting Started with DDD</h2>
-
-<h3>Can I DDD?</h3>
-
-<ul>
-<li>DDD helps us design software models where &ldquo;our design is exactly how
-the software works&rdquo; (1).</li>
-<li>DDD isn&rsquo;t a technology, it&rsquo;s a set of principles that involve
-discussion, listening, and business value so you can <em>centralize
-knowledge</em>.</li>
-<li>The main principle here is that we must &ldquo;understand the business in
-which our software works&rdquo; (3). This means we learn from domain experts
-in our field.</li>
-<li>What is a domain model? an object model where objects have
-data/persistence concerns with an accurate business meaning.</li>
-</ul>
-
-
-<h3>Why You Should Do DDD</h3>
-
-<ul>
-<li>Domain experts and devs on same playing field, cooperation required as
-one team. (Agile teams, anyone?)</li>
-<li>The business can learn more about itself through the questions asked
-about itself.</li>
-<li>Knowledge is centralized.</li>
-<li>Zero translations between domain experts and software devs and
-software.</li>
-<li>&ldquo;The design is the code, and code is the design.&rdquo; (7)</li>
-<li>It is not without up-front cost</li>
-</ul>
-
-
-<h4>The problem</h4>
-
-<ul>
-<li>The schism between business domain experts and software developers
-puts your project (and your business) at a risk.</li>
-<li>The more time passes, the greater the divide grows.</li>
-</ul>
-
-
-<h4>Solution</h4>
-
-<ul>
-<li>DDD brings domain experts and software developers together to develop
-software that reflects the business domain mental model.</li>
-<li>Oftentimes this requires that they jointly develop a &ldquo;Ubiquitous
-Language&rdquo; &ndash; a shared vocabulary and set of concepts that are jointly
-spoken by everybody.</li>
-<li>DDD produces software that is better designed &amp; architected &ndash;> better testable &ndash;>
-clearer code.</li>
-<li>Take heed: DDD should only be used to simplify your domain. If the net
-cost of implementing DDD is only going to add complexity, then you
-should stay away.</li>
-</ul>
-
-
-<h4>Domain model health</h4>
-
-<ul>
-<li>As time passes, our domain models can become
-<a href="http://www.martinfowler.com/bliki/AnemicDomainModel.html">anemic</a>,
-and lose their expressive capabilities and clean boundaries. This can
-lead to spaghetti code and a violation of object responsibilities.</li>
-<li>Why do anemic domain models hurt us? They claim to be well-formed
-models but they hide a badly designed system that is still unfocused
-in what it does. (Andrew: I&rsquo;ve seen a lot of Service objects that
-claim to be services but really are long scripts to get things done.
-There might be a cost of designing the Service interface, but inside
-things are just as messy as before we got there.)</li>
-<li>Seems like Vernon is blaming the influence of IDEs for Visual Basic as
-they influenced Java libraries &mdash; too many explicit getters and
-setters.</li>
-<li>Vernon throws up some code samples comparing two different code
-samples &mdash; one with an anemic model that looks like a long string of
-commands and another with descriptive method names. He makes the case
-that simply reading the code is documentation of the domain itself.</li>
-</ul>
-
-
-<h4>How to do DDD</h4>
-
-<ul>
-<li>Have a <a href="http://martinfowler.com/bliki/UbiquitousLanguage.html"><em>Ubiquitous Language</em></a>
-where the team of domain experts share the language together, from
-domain experts to programmers.</li>
-<li><p>Steps to coming up with a language:</p>
+<li>Take concept of Lamport clocks and extend them with hybrid clocks.</li>
+<li>And extend them one further with: Distributed Monotonic Clocks</li>
+<li>These DMCs use population protocol (flocking) to each actor in the
+system communicate with another, updating their source of truth to
+eventually agree on a media time w/in the group</li>
+<li>DMC components:
 
 <ol>
-<li>Draw out the domain and label it.</li>
-<li>Make a glossary of terms and definitions.</li>
-<li>Have the team review the language document.</li>
+<li>Have a reset button by adding epoch bit</li>
+<li>Use flocking (via population protocol) to avoid resets</li>
+<li>Accomodates for some clockless nodes</li>
+<li>Explicitly reflects causality</li>
 </ol>
 </li>
-<li><p>Note that a Ubiquitous Language is specific to the context it is
-implemented in. In other words, there is one Ubiquitous Language per
-Bounded Context.</p></li>
 </ul>
 
 
-<h3>Business value of DDD</h3>
+<h3>Building Isomorphic Web Apps with React &ndash; Elyse Gordon</h3>
 
-<ol>
-<li>The organization gains a useful model of its domain</li>
-<li>The precise definition of the business is developed</li>
-<li>Domain experts contribute to software design.</li>
-<li>A better user experience is gained.</li>
-<li>Clean boundaries for models keep them pure.</li>
-<li>Enterprise architecture is better designed.</li>
-<li>Continuous modeling is used &mdash; the working software we produce is the
-model we worked so hard to create.</li>
-<li>New tools and patterns are used.</li>
-</ol>
+<iframe width="560" height="315"
+src="https://www.youtube.com/embed/QPXNb6bl7hc" frameborder="0"
+allowfullscreen></iframe>
 
-
-<h4>Challenges</h4>
 
 <ul>
-<li>The time and effort required to think about the busines domain,
-research concepts, and converse with domain experts.</li>
-<li>It may be hard to get a domain expert involved due to their
-availability.</li>
-<li>There is a lot of thought required to clarify pure models and do
-domain modeling.</li>
+<li>Vevo needed better SEO for SPAs. Old soln was to snapshot page and upload to S3.</li>
+<li>Beneficial for SEO crawlers</li>
+<li>React in frontend. Node in backend.</li>
+<li>Vevo-developed <a href="">pellet</a> project as Flux-like framework to organize
+files.</li>
+<li>Webpack aliases/shims</li>
+<li>Server hands off to browser, bootstraps React in client.</li>
+<li>Alternatives: Relay, Ember</li>
 </ul>
 
 
-<h4>Tactical modeling</h4>
+<h3>Designing for the Worst Case: Peter Bailis (@pbailis)</h3>
+
+<iframe width="560" height="315"
+src="https://www.youtube.com/embed/ZGIAypUUwoQ" frameborder="0"
+allowfullscreen></iframe>
+
 
 <ul>
-<li>The <em>Core Domain</em> is the part of your application that has key and
-important business value &mdash; and may require high thought and attention
-to design.</li>
-<li>Sometimes DDD may not be the right fit for you &mdash; if you have a lot of
-experienced developers who are very comfortable with domain modeling,
-you may be better off trusting their opinion.</li>
+<li>Designing for worst case often penalizes average case</li>
+<li>But what if designing for the worst case actually helps avg case?</li>
+<li>Examples from dstbd systems:
+
+<ul>
+<li>Worst case of disconnected data centers, packet loss/link loss. Fix
+by introducing coordination-free protocols. Boom, you&rsquo;ve now made your
+network more scalable, performant, resistent to downtime.</li>
+<li>Worst case: hard to coordinate a distributed transaction between
+services. What do you do? You implement something like buffered writes
+out of process.
+
+<ul>
+<li>CRDT, RAMP, HAT, bloom</li>
+<li>Suddenly, you have fault tolerance</li>
+</ul>
+</li>
+<li>Tail latency problem in microservices: the more microservices you
+query, the higher the probability of hitting a slow server response.
+
+<ul>
+<li>Your service&rsquo;s corner case is your user&rsquo;s average case</li>
+</ul>
+</li>
+<li>HCI: accessibility guidelines in W3C lift standards for all. Make
+webpages easier to navigate. Side effect of better page performance,
+higher conversion.</li>
+<li>Netflix designing CC subtitles also benefits other users.</li>
+<li>Curb cuts in the real world to help ADA/mobility-assisted folks also
+benefit normal folks too</li>
+</ul>
+</li>
+<li>Best has pitfalls too: your notion of best may be hard to hit, or
+risky. You may want to optimize for &ldquo;stable&rdquo; solution. (Robust
+optimization)</li>
+<li>When to design for worst case?
+
+<ul>
+<li>common corner cases</li>
+<li>environmental conditions vary</li>
+<li>&ldquo;normal&rdquo; isn&rsquo;t normal</li>
+</ul>
+</li>
+<li>worst forces a conversation
+
+<ul>
+<li>how do we plan for failures?</li>
+<li>what is our scale-out strategy?</li>
+<li>how do we audit failures? data breaches?</li>
+</ul>
+</li>
 </ul>
 
 
-<h4>DDD is not heavy.</h4>
+<h3>Ideology by Gary Bernardt</h3>
 
 <ul>
-<li>It fits into any Agile or XP framework. It leans into TDD, eg: you use
-TDD to develop a new domain model that describes how it interacts with
-other existing models. You go through the red-green-refactor cycle.</li>
-<li>DDD promotes lightweight development. As domain experts read the code, they
-are able to provide in-flight feedback to the development of the
-system.</li>
+<li>Rumsfeld: known knowns, known unknowns, and unknown unknowns.</li>
+<li>Ideology is the thing you know you do not know you know</li>
+<li>Conflict between typed vs dynamic programmers:
+
+<ul>
+<li>Typed: &ldquo;I don&rsquo;t need tests, I have types&rdquo;</li>
+<li>Dynamic: &ldquo;I write tests, so I don&rsquo;t need types&rdquo;</li>
+</ul>
+</li>
+<li>In reality, they are solving different places in the problem domain,
+but they have different beliefs about the world that are hidden in the
+shadows:
+
+<ul>
+<li>Typed: &ldquo;Correctness comes solely from types&rdquo;</li>
+<li>Dynamic: &ldquo;Correctness comes solely from example&rdquo;</li>
+</ul>
+</li>
+<li>&ldquo;I need nulls&rdquo; &ndash;> You believe nulls are the only way to represent absence</li>
+<li>&ldquo;Immutable data structures are slow&rdquo; &ndash;> You believe all immutable types are slow</li>
+<li>&ldquo;GC is impractical&rdquo; &ndash;> you believe GC algorithms won&rsquo;t get faster.</li>
+<li>Read CSE 341 Type systems, Dan Grossman</li>
+</ul>
+
+
+<h3>Building Scalable, Stateful Services: Caitlin McCaffrey</h3>
+
+<iframe width="560" height="315"
+src="https://www.youtube.com/embed/H0i_bXKwujQ" frameborder="0"
+allowfullscreen></iframe>
+
+
+<h4>Sticky connection: always talk to the same machine</h4>
+
+<p>Building sticky connections:
+&ndash; persistent connections (load balancing cannot rebalance server)
+&ndash; implement backpressure (d/c connection)</p>
+
+<h4>dynamic cluster membership</h4>
+
+<ul>
+<li>gossip protocols &ndash;> availability</li>
+<li>consensus systems &ndash;> consistency
+(everybody needs to have the same worldview.</li>
+</ul>
+
+
+<h4>work distribution:</h4>
+
+<h5>random:</h5>
+
+<ul>
+<li>write anywhere, read from all</li>
+</ul>
+
+
+<h5>consistent hashing: on session ID</h5>
+
+<p>hash space &ndash;> node
+dynamoDB, Manhattan</p>
+
+<p>con: can have hotspots, could have uneven distribution of resources cannot move work.</p>
+
+<h4>distributed hash table</h4>
+
+<p>statefully store hash</p>
+
+<h4>Real world</h4>
+
+<p>Scuba (Facebook)
+&ndash; distributed in-memory DB</p>
+
+<p>Ringpop (Uber)
+&ndash; Node.js swim gossip protocol, consistent hashing</p>
+
+<p>Orleans (MS Research)
+&ndash; actor model
+&ndash; gossip
+&ndash; consistent hash
+&ndash; distributed hashtable</p>
+
+<h3>Idalin &ldquo;Abby&rdquo; Bobé: From Protesting to Programming: Becoming a Tech Activist</h3>
+
+<iframe width="560" height="315"
+src="https://www.youtube.com/embed/gy82S8tjJX8" frameborder="0"
+allowfullscreen></iframe>
+
+
+<ul>
+<li>Tech to resist exploitation</li>
+<li>Technologists as activists</li>
+<li>Idalin Bobé &ndash;> Changed name to &ldquo;Abby&rdquo; to get a job.</li>
+<li>Pastor Jenkins &ndash; magnifying glass vs paper</li>
+<li>Philadelphia Partnership Program:
+
+<ul>
+<li>1st to college</li>
+<li>work &lt;> school</li>
+</ul>
+</li>
+<li>Difficult to balance.</li>
+<li>Mills MBA, CS</li>
+<li>Joined Black Girls Code
+
+<ul>
+<li>Apply technology in the right way</li>
+</ul>
+</li>
+<li>Ferguson happened
+
+<ul>
+<li>Thoughtworkers joined on the ground</li>
+<li>Hands Up United: www.handsupunited.org</li>
+</ul>
+</li>
+<li>&ldquo;Do not be led by digital metrics&rdquo; &ndash; even though the activists had
+digital tooling, the tools were being used against activists. Phone
+calls, chats monitored. Movement tracked.</li>
+<li>New group starting up in St. Louis called &ldquo;Ray Clark, Sr.&rdquo; &ndash; named
+after a black man who played a strong role in the founding of Silicon
+Valley.</li>
+<li>21st century technologists need 21st century skillsets.</li>
+<li>Dream Defenders</li>
+<li>&ldquo;it is our duty to fight for our freedom/it is our duty to win/we must
+love and support one another/we have nothing to lose but our chains&rdquo;</li>
 </ul>
 
 
@@ -1099,322 +656,7 @@ system.</li>
 		
 			Tagged under
 		
-    <a class='category' href='/category/blog-a-book/'>Blog A Book</a>, <a class='category' href='/category/book-review/'>Book Review</a>, <a class='category' href='/category/ddd/'>DDD</a>, <a class='category' href='/category/domain-driven-design/'>Domain-Driven Design</a>
-	
-
-
-	
-	
-	</footer>
-	
-</article>
-<!-- END OF _includes/article.html -->
-
-	
-		
-		<!-- START OF _includes/article.html -->
-<article>
-	<header>
-		<h1><a href="/2014/01/26/moving-to-ember-app-kit/">Moving to Ember App Kit</a></h1>
-		<time>26 January 2014</time>
-	</header>
-		<div class="content">
-			<p>I&rsquo;ve noticed a bit of the buzz around <a href="https://github.com/stefanpenner/ember-app-kit">Ember App Kit</a>
-recently and decided to move Hendrix, my music management app, over from
-a <a href="http://yeoman.io/">Yeoman</a>-generated Ember app to EAK with all its
-bells and whistles.</p>
-
-<h3>What&rsquo;s the difference?</h3>
-
-<p>Well on the surface, the two frameworks aren&rsquo;t very different. The
-standard Yeoman build tool sets you up with Grunt and Bower, which is
-what EAK provides you out of the box. The cool stuff happens when you
-dive under the hood: ES6 module transpilation and an AMD-compatible
-Ember Resolver, built-in Karma integration and a built-in API stub
-framework for development and test environments.</p>
-
-<h3>The joys of modules</h3>
-
-<p>What I didn&rsquo;t realize was that compiling to ES6 modules required that my
-filenames be renamed exactly how the modules were going to be placed,
-with the extra caveat that resource actions needed to live in their own
-directories. Recall that in the old way of doing things with globals and
-namespaces, you could get away with throwing a route file like this in
-your app directory:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>routes/
-</span><span class='line'>  songs_index_controller.js</span></code></pre></td></tr></table></div></figure>
-
-
-<p>And inside:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">MyApp</span><span class="p">.</span><span class="nx">SongsIndexRoute</span> <span class="o">=</span> <span class="nx">Ember</span><span class="p">.</span><span class="nx">Route</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
-</span><span class='line'>  <span class="c1">//...</span>
-</span><span class='line'><span class="p">});</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>In EAK&rsquo;s world, you need to nest the file under the <code>songs/</code> directory,
-and strip the type from the filename, like so:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">routes</span><span class="o">/</span>
-</span><span class='line'>  <span class="nx">songs</span><span class="o">/</span>
-</span><span class='line'>    <span class="nx">index</span><span class="p">.</span><span class="nx">js</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Inside the file, you assign the function to a variable and let it be
-exported in the default namespace.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">SongsIndexRoute</span> <span class="o">=</span> <span class="nx">Ember</span><span class="p">.</span><span class="nx">Route</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
-</span><span class='line'>  <span class="c1">//...</span>
-</span><span class='line'><span class="p">});</span>
-</span><span class='line'><span class="kr">export</span> <span class="k">default</span> <span class="nx">SongsIndexRoute</span><span class="p">;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>File name matters</h3>
-
-<p>The <a href="https://github.com/stefanpenner/ember-jj-abrams-resolver/">new Ember resolver</a>
-loads modules in a smart way &mdash; according to how the framework
-structures resources, controllers and their corresponding actions. So
-visiting <code>#/songs</code> from my app caused the app to look up and load
-<code>appkit/routes/songs/index</code>. What I didn&rsquo;t realize was <em>this module must
-live at a very specific place in the file directory structure</em>.
-I realized that I left the module type in the file name the first time
-around, like this:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">routes</span><span class="o">/</span>
-</span><span class='line'>  <span class="nx">songs</span><span class="o">/</span>
-</span><span class='line'>    <span class="nx">index_route</span><span class="p">.</span><span class="nx">js</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>There are no types in the module names &mdash; or the filenames, for that
-matter. I had not realized this (I&rsquo;m also an AMD newbie) &mdash; so I had
-left my files un-renamed as <code>songs_index_route</code>, which meant that
-the module loader had stored the SongsIndexRoute module under
-<code>appkit/routes/songs/index_route</code>, but was doing a route lookup through
-the Resolver for: <code>appkit/routes/songs/index</code>. Renaming the file to:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">routes</span><span class="o">/</span>
-</span><span class='line'>  <span class="nx">songs</span><span class="o">/</span>
-</span><span class='line'>    <span class="nx">index</span><span class="p">.</span><span class="nx">js</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>did the trick.</p>
-
-			
-			
-		</div>
-	<footer>
-		
-
-
-		
-
-
-
-  
-		
-			Tagged under
-		
-    <a class='category' href='/category/development/'>development</a>, <a class='category' href='/category/ember/'>ember</a>, <a class='category' href='/category/ember-app-kit/'>ember app kit</a>, <a class='category' href='/category/programming/'>programming</a>
-	
-
-
-	
-	
-	</footer>
-	
-</article>
-<!-- END OF _includes/article.html -->
-
-	
-		
-		<!-- START OF _includes/article.html -->
-<article>
-	<header>
-		<h1><a href="/2013/12/27/ember-data-rails-cors-and-you/">Ember Data, Rails, CORS, and you!</a></h1>
-		<time>27 December 2013</time>
-	</header>
-		<div class="content">
-			<p>I&rsquo;m starting up a new personal project involving Ember-Data and Rails
-(more to come). The gist of it is that it&rsquo;s a pure frontend app engine
-built in Yeoman and Grunt, and designed to talk to a remote API service
-built on Rails.</p>
-
-<p>So since it&rsquo;s a remote API, I&rsquo;ve got to enable CORS, right?</p>
-
-<h2>Install CORS via rack-cors</h2>
-
-<figure class='code'><figcaption><span>Gemfile.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">gem</span> <span class="s2">&quot;rack-cors&quot;</span><span class="p">,</span> <span class="ss">:require</span> <span class="o">=&gt;</span> <span class="s2">&quot;rack/cors&quot;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<figure class='code'><figcaption><span>config/application.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">config</span><span class="o">.</span><span class="n">middleware</span><span class="o">.</span><span class="n">use</span> <span class="ss">Rack</span><span class="p">:</span><span class="ss">:Cors</span> <span class="k">do</span>
-</span><span class='line'>  <span class="n">allow</span> <span class="k">do</span>
-</span><span class='line'>    <span class="n">origins</span> <span class="s2">&quot;*&quot;</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="n">resource</span> <span class="s2">&quot;*&quot;</span><span class="p">,</span>
-</span><span class='line'>      <span class="ss">:headers</span> <span class="o">=&gt;</span> <span class="ss">:any</span><span class="p">,</span>
-</span><span class='line'>      <span class="ss">:methods</span> <span class="o">=&gt;</span> <span class="o">[</span><span class="ss">:get</span><span class="p">,</span> <span class="ss">:post</span><span class="p">,</span> <span class="ss">:put</span><span class="p">,</span> <span class="ss">:delete</span><span class="p">,</span> <span class="ss">:options</span><span class="p">,</span> <span class="ss">:patch</span><span class="o">]</span>
-</span><span class='line'>    <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="n">allow</span> <span class="k">do</span>
-</span><span class='line'>    <span class="n">origins</span> <span class="s2">&quot;*&quot;</span>
-</span><span class='line'>    <span class="n">resource</span> <span class="s2">&quot;/public/*&quot;</span><span class="p">,</span>
-</span><span class='line'>      <span class="ss">:headers</span> <span class="o">=&gt;</span> <span class="ss">:any</span><span class="p">,</span>
-</span><span class='line'>      <span class="ss">:methods</span> <span class="o">=&gt;</span> <span class="ss">:get</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>A very naive implementation with zero security whatsoever. Anyways.
-Onward!</p>
-
-<h2>Get Ember-Data DS.RESTAdapter talkin&#8217; CORS</h2>
-
-<p>I saw conflicting documentation on Ember-Data and CORS &mdash; it seemed like
-it should support CORS out of the box. Apparently this is not so.</p>
-
-<p>In my ember app&rsquo;s <code>store.js</code> (or anywhere your app loads before the
-application adapter is defined, do this:</p>
-
-<figure class='code'><figcaption><span>store.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">$</span><span class="p">.</span><span class="nx">ajaxSetup</span><span class="p">({</span>
-</span><span class='line'>  <span class="nx">crossDomain</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
-</span><span class='line'>  <span class="nx">xhrFields</span><span class="o">:</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nx">withCredentials</span><span class="o">:</span> <span class="kc">true</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'><span class="p">});</span>
-</span><span class='line'>
-</span><span class='line'><span class="nx">Hendrix</span><span class="p">.</span><span class="nx">Store</span> <span class="o">=</span> <span class="nx">DS</span><span class="p">.</span><span class="nx">Store</span><span class="p">.</span><span class="nx">extend</span><span class="p">();</span>
-</span><span class='line'><span class="nx">Hendrix</span><span class="p">.</span><span class="nx">ApplicationAdapter</span> <span class="o">=</span> <span class="nx">DS</span><span class="p">.</span><span class="nx">RESTAdapter</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
-</span><span class='line'>  <span class="nx">host</span><span class="o">:</span> <span class="s2">&quot;http://localhost:3000&quot;</span><span class="p">,</span>
-</span><span class='line'><span class="p">})</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><a href="http://api.jquery.com/jQuery.ajaxSetup/"><code>$.ajaxSetup</code></a>, though its
-usage is not recommended, is designed to set global options on the
-jQuery <code>ajax</code> object. It provides some information on the options you can modify.</p>
-
-<p>Why doesn&rsquo;t Ember support this out of the box? I think it&rsquo;s because they
-cannot support IE, where one must use an XDR object to support CORS.</p>
-
-<p>I&rsquo;ve posted an <a href="http://discuss.emberjs.com/t/ember-data-and-cors/3690">Ember follow-up question in the
-forums</a> for discussion.</p>
-
-<h2>Get Rails talking JSON out of its mimetype confusion.</h2>
-
-<p>Did you know that if you rely on the <code>Accepts:</code> header in HTTP that
-Rails does not obey its ordering<code>*</code>? I was trying to figure out why my
-Rails controllers were trying to render HTML instead of JSON when the
-headers were:</p>
-
-<p><code>'Accept: application/json, text/javascript, */*; q=0.01'</code></p>
-
-<p>A <a href="https://github.com/rails/rails/issues/9940">very long winded
-discussion</a> on the Rails
-project reveals that, well, nobody has it figured out yet. Most modern
-browsers do obey <code>Accepts:</code> specificity, but for the sake of older
-browser compatibility, the best practice for browsers is still to return
-HTML when <code>*/*</code> is specified.</p>
-
-<p>What does this mean for Rails developers who want to use <code>Accepts:</code>
-mimetype lists? Well, we either wait for the Rails projects to support
-mimetype specificity (and for older browsers to die out), or we are
-encouraged to include the format explicitly in the URI.</p>
-
-<p>I chose to have Ember append the <code>.json</code> suffix to the URL, thanks to
-this <a href="http://stackoverflow.com/questions/13648807/ds-model-url-not-working-in-ember-js">SO
-post</a></p>
-
-<figure class='code'><figcaption><span>store.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">Hendrix</span><span class="p">.</span><span class="nx">ApplicationAdapter</span> <span class="o">=</span> <span class="nx">DS</span><span class="p">.</span><span class="nx">RESTAdapter</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
-</span><span class='line'>  <span class="nx">host</span><span class="o">:</span> <span class="s2">&quot;http://localhost:3000&quot;</span><span class="p">,</span>
-</span><span class='line'>  <span class="c1">// Force ember-data to append the `json` suffix</span>
-</span><span class='line'>  <span class="nx">buildURL</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">record</span><span class="p">,</span> <span class="nx">suffix</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">_super</span><span class="p">(</span><span class="nx">record</span><span class="p">,</span> <span class="nx">suffix</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;.json&quot;</span><span class="p">;</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'><span class="p">})</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>More to come how how this app works.</p>
-
-			
-			
-		</div>
-	<footer>
-		
-
-
-		
-
-
-
-  
-		
-			Tagged under
-		
-    <a class='category' href='/category/ajax/'>ajax</a>, <a class='category' href='/category/api/'>api</a>, <a class='category' href='/category/cors/'>cors</a>, <a class='category' href='/category/crossdomain/'>crossdomain</a>, <a class='category' href='/category/ember/'>ember</a>, <a class='category' href='/category/ember-data/'>ember data</a>, <a class='category' href='/category/json/'>json</a>, <a class='category' href='/category/rails/'>rails</a>
+    <a class='category' href='/category/conference/'>conference</a>, <a class='category' href='/category/distributed-systems/'>distributed systems</a>, <a class='category' href='/category/functional-programming/'>functional programming</a>, <a class='category' href='/category/software/'>software</a>, <a class='category' href='/category/strangeloop/'>strangeloop</a>
 	
 
 
@@ -1432,7 +674,7 @@ post</a></p>
 		<a class="older" href="/page/3/">Older</a>
 	
 	
-	<span class="total">2 of 10</span>
+	<span class="total">2 of 33</span>
 	
 	
 		<a class="newer" href="/">Newer</a>

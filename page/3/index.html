@@ -64,20 +64,231 @@
 		<!-- START OF _includes/article.html -->
 <article>
 	<header>
-		<h1><a href="/2012/12/26/decomposing-fat-models/">Decomposing Fat Models</a></h1>
-		<time>26 December 2012</time>
+		<h1><a href="/2015/06/29/notes-on-performance-tuning-a-puma-server/">Notes on performance tuning a Puma server</a></h1>
+		<time>29 June 2015</time>
 	</header>
 		<div class="content">
-			<p>Heard an awesome Ruby Rogues podcast recently: <a href="http://rubyrogues.com/083-rr-decomposing-fat-models-with-bryan-helmkamp/">&ldquo;Decomposing Fat Models&rdquo;</a>.</p>
+			<p>A couple of months ago, I was tuning a Rails app for one of our clients.
+This client wanted to know how performant their app would be under load.</p>
 
-<p>Essentially, they&rsquo;re talking through Bryan Helmkamp&rsquo;s <a href="http://blog.codeclimate.com/blog/2012/10/17/7-ways-to-decompose-fat-activerecord-models/">Code Climate blog entry &ldquo;7 ways to decompose fat ActiveRecord models&rdquo;</a>, which sums up a few strategies that mainly involve extracting objects from your existing code, value, service, policy, decorator objects and the like. Give the entry a read-through, it&rsquo;s opened my eyes a lot to rethinking my architecture of my Rails models.</p>
+<p>To do that, you can do several different things:</p>
 
-<p>A few interesting thoughts that came up in the podcast:</p>
+<ol>
+<li>Tune the thread/process balance within the VM</li>
+<li>Horizontally scale with your cloud platform.</li>
+</ol>
+
+
+<p>This is a discussion of the former (#1):</p>
+
+<h2>1) Set up the test</h2>
+
+<h3>Drive with a synthetic script</h3>
+
+<p>Our application had a synthetic load driver that would run Selenium to
+execute various app tasks. This synthetic driver could be parallelized
+across many notes via Rainforest QA, Sauce Labs or Browserify.</p>
+
+<p>In our case, I only needed to run our synthetic load script on a single
+node in multiple processes, which simulated enough load to anticipate
+another order of magnitude of traffic.</p>
+
+<h3>Know how to inspect the server under load.</h3>
+
+<p>Commands you will want to know:</p>
+
+<pre><code>$ free -m # Find the total amount of free memory on your machine
+$ ps uH p &lt;pid&gt; # List out process threads
+$ kill -TTIN &lt;puma_master_pid&gt; # Add a puma worker
+$ kill -TTOU &lt;puma_master_pid&gt; # Remove a puma worker
+$ kill -USR2 &lt;puma_master_pid&gt; # Kill the puma master &amp; workers
+</code></pre>
+
+<h2>Generating more load: use external load testing services, or plain tools.</h2>
+
+<p>Try using <a href="http://www.flood.io">Flood.io</a> or JMeter for performance load.</p>
+
+<p>I tried looking into the <a href="https://github.com/schneems/puma_auto_tune">puma_auto_tune</a> gem, but it required a higher level of production instrumentation than I was ready to give it.</p>
+
+<h2>Analysis: New Relic scalability analysis</h2>
+
+<p>New Relic gave us a scalability analysis scatter plot, plotting
+throughput against average application response time. In essence, it
+allows you to see spikes in response times as correlated to throughput.</p>
+
+<h2>Process:</h2>
+
+<p>My approach was to use the synthetic script to generate productionlike
+node and ramp up the # of load actors in 5m increments. Each run would
+test the following Puma process/thread balance:</p>
+
+<p>Run #1: Single-process, multi threads.
+Run #2: Multiple processes, single threaded.
+Run #3: Multiple processes, multiple threads.</p>
+
+<blockquote><h3>Aside: <em>how many</em> of these threads/processes should I be using?</h3>
+
+<p>Note that your numbers will be different on the execution
+characteristics of your app and your server environment. Tweak it for
+yourself. You&rsquo;re designing an experiment.</p>
+
+<p>If you&rsquo;re curious, our Rails app started out with 4 threads on 2
+workers. We made the # of Puma workers (both min and max) environment
+variables so we could tweak the variables easily without deploying.</p></blockquote>
+
+<p>The strategy was then to look at the perf characteristics of each run in
+the scatter plot. If there were any spikes in the graph with the
+increase of load, then that would be noted. Even minor features like an
+increase in slope would be noted &ndash; at that point, the incremental cost
+of each request increases with overall system load.</p>
+
+<h2>Results</h2>
+
+<p>I don&rsquo;t have the New Relic data on hand to show, now, but in our case we
+discovered two things:</p>
+
+<ol>
+<li>The server easily scaled from ~10 &ndash;> ~500 rpm with a virtually flat
+line for all runs.</li>
+<li>The app exhibited no noticeable performance differences when flipped
+between uniprocess-multithreaded, multiprocess-unithreaded, and
+multiprocess-multithreaded modes. Any performance gains were under a
+tolerable threshold.</li>
+</ol>
+
+
+<p>How do we parse these results?</p>
 
 <ul>
-<li><p>The &ldquo;Skinny Controller, Fat Model&rdquo; mantra has hurt the Rails community because we start getting these bloated AR classes. &ldquo;&lsquo;fat-&rsquo; anything is bad&rdquo; one of the hosts mentions in the blog. The smaller your models, the more manageable, readable and testable they become.</p></li>
-<li><p>Rubyists don&rsquo;t like the term &ldquo;Factory&rdquo;, even though in Helmkamp&rsquo;s opinion, Ruby classes <em>are</em> factories. &ldquo;We call them &#8220;builders&rdquo;&ldquo; one of the hosts jokes.</p></li>
-<li><p>The Open/Closed Principle as applied to Ruby: using delegators, decorators.</p></li>
+<li>We note that we didn&rsquo;t really push the performance threshold on this
+app (it&rsquo;s not meant to be a public web site and 95% of it is behind a
+login wall to a specialized group of users). Thus, if we pushed the
+concurrent connections even more, we may have seen more of a pronounced
+difference.</li>
+<li>The <em>absence</em> of any major red flags was itself a validation. The
+question we wanted answered coming into this experiment was &ldquo;how close
+are we to maxing out our single-node EC2 configuration such that we will
+have to begin configuring horizontal scaling?&rdquo;? The answer was: we can
+safely scale further out in the near-term future, and cross the bridge
+of horizontal scaling/bursting when we get there.</li>
+<li>We did not have enough statistically significant differences in
+performance for #threads/#processes in Puma. However, if we wanted to
+truly find the optimal performance in our app, we would have turned to
+tools like <a href="https://github.com/schneems/puma_auto_tune">puma_auto_tune</a> to answer those questions.</li>
+</ul>
+
+
+<p>Let me know in the comments if you have any questions!</p>
+
+			
+			
+		</div>
+	<footer>
+		
+
+
+		
+
+
+
+  
+		
+			Tagged under
+		
+    <a class='category' href='/category/performance-tuning/'>performance tuning</a>, <a class='category' href='/category/puma/'>puma</a>, <a class='category' href='/category/rails/'>rails</a>
+	
+
+
+	
+	
+	</footer>
+	
+</article>
+<!-- END OF _includes/article.html -->
+
+	
+		
+		<!-- START OF _includes/article.html -->
+<article>
+	<header>
+		<h1><a href="/2015/06/01/toolbox-learning-swift-and-viper/">Toolbox: learning Swift and VIPER</a></h1>
+		<time>01 June 2015</time>
+	</header>
+		<div class="content">
+			<p>The following are some notes I&rsquo;m compiling as I&rsquo;m beginning a journey
+down the rabbit hole, writing an app in Swift utilizing the <a href="http://www.objc.io/issue-13/viper.html">VIPER app development methodology</a></p>
+
+<ul>
+<li><p>I had trouble importing nested source code into XCode before realizing that I
+needed to import the folder with corresponding Groups. This is done by
+clicking the checkbox &ldquo;Create Groups for any Added Folders&rdquo;</p>
+
+<p><em>Reference</em>: <a href="https://developer.apple.com/library/ios/technotes/iOSStaticLibraries/Articles/configuration.html">https://developer.apple.com/library/ios/technotes/iOSStaticLibraries/Articles/configuration.html</a></p>
+
+<p>Without doing this, the compiler was not able to build the project.</p>
+
+<ul>
+<li>Since there is no way to do method swizzling in Swift, there are no real easy ways to do mocking/stubbing the way we used to do so in Ruby. Instead, this is forcing me to rely on plain old Swift structs. There are some simple ways to stub, but it ends up looking kind of awkward and very wiring-intensive like this:</li>
+</ul>
+</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>class NewRidePresenterSpec: QuickSpec {
+</span><span class='line'>  override func spec() {
+</span><span class='line'>    describe("#startRecordingGpsTrack") {
+</span><span class='line'>      class MockInteractor: NewRideInteractor {
+</span><span class='line'>        var wasCalled: Bool = false
+</span><span class='line'>
+</span><span class='line'>        @objc private override func startRecordingGpsTrack() {
+</span><span class='line'>          wasCalled = true
+</span><span class='line'>        }
+</span><span class='line'>      }
+</span><span class='line'>
+</span><span class='line'>      var subject = NewRidePresenter()
+</span><span class='line'>
+</span><span class='line'>      it("tells the interactor to start recording") {
+</span><span class='line'>        let mockInteractor = MockInteractor()
+</span><span class='line'>        subject.interactor = mockInteractor
+</span><span class='line'>        subject.startRecordingGpsTrack()
+</span><span class='line'>
+</span><span class='line'>        expect(mockInteractor.wasCalled).to(beTrue())
+</span><span class='line'>      }
+</span><span class='line'>    }
+</span><span class='line'>  }
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>Using the <a href="https://github.com/teambox/viper-module-generator"><code>vipergen</code></a> and <a href="https://github.com/team-supercharge/boa"><code>boa</code></a> scaffolding generators helped me understand the concepts behind the view.</li>
+<li>Tip: Build a VIPER module, but don&rsquo;t build it all at once. Just focus on the Presenter-Interactor-Wireframe component, or the DataStore-Entity-Interactor component. This will keep your head from exploding.</li>
+<li>Dude. I miss vim. <a href="http://alcatraz.io/">Alcatraz</a> + xvim helped a little&hellip;</li>
+<li>xcodebuild + <a href="https://github.com/supermarin/xcpretty">xcpretty</a> + Guard-shell == some sort of CI feedback loop.</li>
+<li>Manually creating mocks in Swift = kind of painful. If you override (subclass) a NSObject in Swift, <a href="http://stackoverflow.com/a/30530308/993929">you must provide it with the <code>@objc</code> pragma, otherwise it throws a segfault error</a></li>
+<li>You must contact CircleCI manually if you want to activate an iOS build (it&rsquo;s still in beta). What are some other good CI tools to use with iOS?</li>
 </ul>
 
 
@@ -89,16 +300,14 @@
 
 
 		
-			andrewhao 
-		
 
 
 
   
 		
-			on
+			Tagged under
 		
-    <a class='category' href='/category/rails/'>Rails</a>, <a class='category' href='/category/ruby/'>Ruby</a>, <a class='category' href='/category/software-design/'>Software Design</a>
+    <a class='category' href='/category/ios/'>ios</a>, <a class='category' href='/category/swift/'>swift</a>, <a class='category' href='/category/viper/'>viper</a>
 	
 
 
@@ -114,75 +323,103 @@
 		<!-- START OF _includes/article.html -->
 <article>
 	<header>
-		<h1><a href="/2012/10/04/deploying-janky-on-ubuntu/">Deploying Janky on Ubuntu</a></h1>
-		<time>04 October 2012</time>
+		<h1><a href="/2015/04/30/building-gpx-stats-through-frp-principles-on-bacon-dot-js/">Building GPX stats through FRP principles with Bacon.js</a></h1>
+		<time>30 April 2015</time>
 	</header>
 		<div class="content">
-			<p><a href="https://github.com/blog/1013-janky">Janky</a> is a Github-developed <a href="https://github.com/github/hubot">Hubot</a> + Jenkins control interface. It&rsquo;s developed to be deployed on Heroku. However, what if you need it to live on an internal VM? Here&rsquo;s how I got it running on a Ubuntu (12.04 Precise) VM.</p>
+			<p>With my current fascination with <a href="http://github.com/andrewhao/stressfactor">tracking workouts and location-based-activities</a>, I have been interested in how I might be able to rewrite some of my stats logic with FRP principles.</p>
 
-<h2>Make sure you have the correct MySQL libs installed:</h2>
+<h3>What is FRP?</h3>
 
-<pre><code>sudo apt-get install mysql-server libmysqlclient-dev
-</code></pre>
+<p>FRP, or Functional Reactive Programming, is often defined as &ldquo;functional programming over values that change over time&rdquo;. It uses functional composition for streams of data that may appear in an infinite stream of data for some far indeterminate future &ndash; these types of use cases are served well by FRP which <a href="http://en.wikipedia.org/wiki/Functional_reactive_programming">&ldquo;(simplifies) these problems by explicitly modeling time&rdquo;</a>.</p>
 
-<h2>Clone janky from the <a href="https://github.com/github/janky">Github repository</a></h2>
+<h3>GPS &ndash; your location, varied over time.</h3>
 
-<pre><code>git clone https://github.com/github/janky.git
-cd janky
-</code></pre>
+<p>A great application of this would be a workout. Let&rsquo;s say I wanted to build an app that received realtime updates on a person&rsquo;s position. Say the app was a Node server that received this JSON blob from a web API as a location update:</p>
 
-<h2>Bootstrap your environment</h2>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='json'><span class='line'><span class="p">{</span> <span class="err">&#39;lat&#39;:</span> <span class="err">29.192414,</span>
+</span><span class='line'>  <span class="err">&#39;lon&#39;:</span> <span class="err">148.113241,</span>
+</span><span class='line'>  <span class="err">&#39;ele&#39;:</span> <span class="err">122.1,</span>
+</span><span class='line'>  <span class="err">&#39;time&#39;:</span> <span class="err">&#39;2015-04-18T13:54:56Z&#39;</span> <span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
 
-<p>The following steps are taken nearly verbatim from the &ldquo;Hacking&rdquo; section on the Janky README:</p>
 
-<pre><code>script/bootstrap
+<p>Say that some time later, the API receives this JSON blob:</p>
 
-mysqladmin -uroot create janky_development
-mysqladmin -uroot create janky_test
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='json'><span class='line'><span class="p">{</span> <span class="err">&#39;lat&#39;:</span> <span class="err">29.192424,</span>
+</span><span class='line'>  <span class="err">&#39;lon&#39;:</span> <span class="err">148.113251,</span>
+</span><span class='line'>  <span class="err">&#39;ele&#39;:</span> <span class="err">123.1,</span>
+</span><span class='line'>  <span class="err">&#39;time&#39;:</span> <span class="err">&#39;2015-04-18T13:55:26Z&#39;</span> <span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
 
-RACK_ENV=development bin/rake db:migrate
-RACK_ENV=test bin/rake db:migrate
 
-RACK_ENV=development bundle exec rake db:seed
-</code></pre>
+<p>So we have these data points, that the user has moved <code>+0.00001</code> latitude points and <code>+0.00001</code> longitude points, climbing a total of <code>+1.0</code> meters, over a period of <code>30</code> seconds.</p>
 
-<h2>Configure Thin</h2>
+<h4>Exercise: Get my instantaneous velocity</h4>
 
-<p>Open <code>Gemfile</code> in your text editor and add:</p>
+<p>If we performed this imperatively, we would write it something like this:</p>
 
-<pre><code>gem "foreman"
-</code></pre>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">locations</span> <span class="o">=</span> <span class="p">[{</span> <span class="cm">/*json*/</span> <span class="p">},</span> <span class="p">{</span> <span class="cm">/*json*/</span> <span class="p">}</span> <span class="cm">/*, ...*/</span><span class="p">];</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">last</span> <span class="o">=</span> <span class="nx">locations</span><span class="p">[</span><span class="nx">locations</span><span class="p">.</span><span class="nx">length</span><span class="o">-</span><span class="mi">1</span><span class="p">];</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">secondToLast</span> <span class="o">=</span> <span class="nx">locations</span><span class="p">[</span><span class="nx">locations</span><span class="p">.</span><span class="nx">length</span><span class="o">-</span><span class="mi">2</span><span class="p">];</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">timeDelta</span> <span class="o">=</span> <span class="nx">last</span><span class="p">.</span><span class="nx">time</span> <span class="o">-</span> <span class="nx">secondToLast</span><span class="p">.</span><span class="nx">time</span><span class="p">;</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">distanceDelta</span> <span class="o">=</span> <span class="nx">getDistance</span><span class="p">(</span><span class="nx">last</span><span class="p">.</span><span class="nx">lon</span><span class="p">,</span> <span class="nx">last</span><span class="p">.</span><span class="nx">lat</span><span class="p">,</span> <span class="nx">secondToLast</span><span class="p">.</span><span class="nx">lon</span><span class="p">,</span> <span class="nx">secondToLast</span><span class="p">.</span><span class="nx">lat</span><span class="p">);</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">velocity</span> <span class="o">=</span> <span class="nx">distanceDelta</span> <span class="o">/</span> <span class="nx">timeDelta</span><span class="p">;</span>
+</span><span class='line'><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">velocity</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
 
-<p>Then install it:</p>
 
-<pre><code>bundle install
-</code></pre>
+<p>With FRP, it might look more like this:</p>
 
-<p>Then create a Procfile:</p>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">locationStream</span> <span class="o">=</span> <span class="p">[{</span> <span class="cm">/*json*/</span> <span class="p">},</span> <span class="p">{</span> <span class="cm">/*json*/</span> <span class="p">}</span> <span class="cm">/*, ...some JSON objects that might appear in the future */</span><span class="p">];</span>
+</span><span class='line'><span class="nx">locationStream</span><span class="p">.</span><span class="nx">slidingWindow</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+</span><span class='line'>              <span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">pairs</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>                <span class="kd">var</span> <span class="nx">timeDelta</span> <span class="o">=</span> <span class="nx">pairs</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="nx">time</span> <span class="o">-</span> <span class="nx">pairs</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">time</span><span class="p">;</span>
+</span><span class='line'>                <span class="kd">var</span> <span class="nx">distanceDelta</span> <span class="o">=</span> <span class="nx">getDistance</span><span class="p">(</span><span class="nx">pairs</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="nx">lon</span><span class="p">,</span> <span class="nx">pairs</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="nx">lat</span><span class="p">,</span> <span class="nx">pairs</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">lon</span><span class="p">,</span> <span class="nx">pairs</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">lat</span><span class="p">);</span>
+</span><span class='line'>                <span class="k">return</span> <span class="nx">distanceDelta</span> <span class="o">/</span> <span class="nx">timeDelta</span>
+</span><span class='line'>              <span class="p">})</span>
+</span><span class='line'>              <span class="p">.</span><span class="nx">onValue</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">velocity</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>                <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">velocity</span><span class="p">);</span>
+</span><span class='line'>              <span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
 
-<pre><code>touch Procfile
-</code></pre>
 
-<p>Open the Procfile in your text editor and add the following line:</p>
+<p>There is a key difference that is not easily demonstrated here &ndash; that the former imperative example requires that all JSON arrays be materialized at once &ndash; via db query, in-memory store, etc. It doesn&rsquo;t account for change in time.</p>
 
-<pre><code>web: bundle exec thin start -p $PORT
-</code></pre>
+<p>However, the latter functional example accounts for changing values of time as they appear over the stream &ndash; as soon as a new value shows up in the stream, the velocity is changed instantly.</p>
 
-<p>Add the JANKY_* variables to your environment according to the janky README. I use zsh, so I added these as export statements in my ~/.zshenv</p>
+<h3>Some more location-based experiments: rxlocation</h3>
 
-<h2>Start your server</h2>
+<p>I wrote up a library to parse various facts from a changing stream of GPS events, from instantaneous velocity, average velocity, moving/stopped status, etc.</p>
 
-<pre><code>bundle exec foreman start
-</code></pre>
+<p>I investigated different reactive frameworks, mainly <a href="https://github.com/Reactive-Extensions/RxJS/">RxJS</a> and <a href="https://github.com/baconjs/bacon.js/">Bacon.js</a>. My takeaways were that RxJS does everything and the kitchen sink, but I got lost trying to reconcile Node streams with RxJS cold streams. Bacon.js just seemed to work for me, out of the box. I&rsquo;m still learning, so I hope to have a better understanding of the core issues here.</p>
 
-<p>Note that the server starts on port 5000 by default, and you can override it like so:</p>
-
-<pre><code>PORT=8080 bundle exec foreman start
-</code></pre>
-
-<h2>That&rsquo;s it!</h2>
-
-<p>Let me know how that works for you!</p>
+<p>You can check it out here: <a href="https://github.com/andrewhao/rxlocation">rxlocation</a>.</p>
 
 			
 			
@@ -192,562 +429,14 @@ RACK_ENV=development bundle exec rake db:seed
 
 
 		
-			andrewhao 
-		
 
 
 
   
 		
-			on
+			Tagged under
 		
-    <a class='category' href='/category/andrew-2-dot-0/'>Andrew 2.0</a>
-	
-
-
-	
-	
-	</footer>
-	
-</article>
-<!-- END OF _includes/article.html -->
-
-	
-		
-		<!-- START OF _includes/article.html -->
-<article>
-	<header>
-		<h1><a href="/2012/06/20/updating-max-file-limit-on-osx-lion/">Updating max file limit on OSX Lion</a></h1>
-		<time>20 June 2012</time>
-	</header>
-		<div class="content">
-			<p>I&rsquo;ve been hitting a lot of &ldquo;Maximum file limit exceeded&rdquo; dialogs after a long day at work &mdash; at any point in time I&rsquo;ve got a kajillion Chrome tabs open, five or six Rails envs running (for dev and test) + Guard/Spork actively watching tests, and Sublime with another kajillion tabs open.</p>
-
-<p>Turns out that OSX limits the number of open file descriptors per process to 256. Time to bump up the limit:</p>
-
-<p>First, check out your current file limit:</p>
-
-<p><code>$ launchctl limit</code></p>
-
-<pre><code>    cpu         unlimited      unlimited      
-    filesize    unlimited      unlimited      
-    data        unlimited      unlimited      
-    stack       8388608        67104768       
-    core        0              unlimited      
-    rss         unlimited      unlimited      
-    memlock     unlimited      unlimited      
-    maxproc     709            1064           
-    maxfiles    256            unlimited
-</code></pre>
-
-<p>Okay, let&rsquo;s crank &lsquo;er up. First let&rsquo;s create <code>/etc/launchctl.conf</code></p>
-
-<p><code>$ sudo touch /etc/launchctl.conf</code></p>
-
-<p>And let&rsquo;s open it with your editor of choice. Add the following line to the new file:</p>
-
-<p><code>limit maxfiles 16384 32768</code></p>
-
-<p>Restart your computer. Boom. Easy.</p>
-
-			
-			
-		</div>
-	<footer>
-		
-
-
-		
-			andrewhao 
-		
-
-
-
-  
-		
-			on
-		
-    <a class='category' href='/category/andrew-2-dot-0/'>Andrew 2.0</a>, <a class='category' href='/category/apple/'>Apple</a>, <a class='category' href='/category/os-x/'>OS X</a>, <a class='category' href='/category/tips/'>Tips</a>
-	
-
-
-	
-	
-	</footer>
-	
-</article>
-<!-- END OF _includes/article.html -->
-
-	
-		
-		<!-- START OF _includes/article.html -->
-<article>
-	<header>
-		<h1><a href="/2012/04/27/speeding-up-rspeccucumber-feedback-times-without-sacrificing-coverage/">Speeding up Rspec/Cucumber feedback times without sacrificing coverage</a></h1>
-		<time>27 April 2012</time>
-	</header>
-		<div class="content">
-			<iframe src="http://www.slideshare.net/slideshow/embed_code/4479466" width="512" height="421" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:1px solid #CCC;border-width:1px 1px 0;margin-bottom:5px" allowfullscreen>
-</iframe>
-
-
-<p><a href="http://www.slideshare.net/josephwilk/rocket-fuelled-cucumbers">Rocket Fuelled Cucumbers</a>
-View more <a href="http://www.slideshare.net/">presentations</a> from <a href="http://www.slideshare.net/josephwilk">Joseph Wilk</a></p>
-
-<p>One thing the Blurb devs have been discussing is how we can speed up our test feedback cycles without sacrificing coverage. There&rsquo;s some good tips (mainly Rails+Rspec/Cucumber) in the presentation such as:</p>
-
-<ul>
-<li>Don&rsquo;t run all the tests when developing (tag your tests by function)</li>
-<li>Parallelize, chunk tests over machines/cores using Testjour/<a href="https://github.com/sandro/specjour">Specjour</a>, <a href="https://github.com/ngauthier/hydra">Hydra</a></li>
-<li>Don&rsquo;t run all the tests at once. Tests that never fail should nightly.</li>
-<li>Instead of spinning up a browser for acceptance tests, can you use a js/DOM simulator (e.g. <a href="https://github.com/thatcher/env-js">envjs</a> via <a href="https://github.com/smparkes/capybara-envjs">capybara-envjs</a>, or <a href="https://github.com/jarib/celerity">celerity</a>)</li>
-</ul>
-
-
-			
-			
-		</div>
-	<footer>
-		
-
-
-		
-			andrewhao 
-		
-
-
-
-  
-		
-			on
-		
-    <a class='category' href='/category/rails/'>Rails</a>, <a class='category' href='/category/ruby/'>Ruby</a>, <a class='category' href='/category/software/'>Software</a>, <a class='category' href='/category/tdd/'>TDD</a>
-	
-
-
-	
-	
-	</footer>
-	
-</article>
-<!-- END OF _includes/article.html -->
-
-	
-		
-		<!-- START OF _includes/article.html -->
-<article>
-	<header>
-		<h1><a href="/2012/04/23/backup-backup-backup/">Backup, backup, backup</a></h1>
-		<time>23 April 2012</time>
-	</header>
-		<div class="content">
-			<p>Well, the inevitable happened: I finally experienced a hard drive failure. It&rsquo;s pretty incredible that in the twenty-odd years I&rsquo;ve been around computers I&rsquo;ve never had the horror of losing a drive.</p>
-
-<p>Friday rolls around and my Macbook Pro decides to freeze up on me. <em>Strange, </em>I think to myself. It&rsquo;s making a clicking noise. Crap.</p>
-
-<p>Luckily, I&rsquo;ve been fairly good about making backups and copies of my work. Here&rsquo;s my general strategy:</p>
-
-<ul>
-<li><p>Work/code: keeping local changes on a separate branch and pushing it to a remote Git branch every so often.</p></li>
-<li><p>Everything else: I keep one local copy here with me in Oakland, and have another copy offsite. I rsync my files out to my server at home, which has a cronjob set up to sync with the offsite copy at my parents&#8217; home (I run a <a href="http://pogoplug.com/">Pogoplug</a> with <a href="http://archlinuxarm.org/platforms/armv6/pogoplug-provideov3">Archlinux</a> and a couple of external drives connected to it &mdash; fantastic and totally recommended for a cheap and low-power server setup).</p></li>
-</ul>
-
-
-<p>There was a minor scare this time around though &mdash; I had some photography work (and an engagement photoshoot!) lying around that almost didn&rsquo;t make it to the first stage rsync with my local server. Fortunately, I had the foresight to keep my photos backed up to a random local hard disk, and the rest remained on the memory cards (and some even on a shared Dropbox folder that saved my butt!). Most frustrating thing was learning that I had forgotten to back up my Lightroom catalog, so all my edits were lost. At least I have the original shots.</p>
-
-<p>One thing I think I&rsquo;ll try doing from here on out &mdash; saving my Develop settings/presets directly to the DNGs themselves before backing up. That way if I ever lose my LR catalog, the edit settings are still embedded in the original files.</p>
-
-<p>Jeff Atwood reminds us to <a href="http://www.codinghorror.com/blog/2008/01/whats-your-backup-strategy.html">keep backups around on multiple disks</a>. With the price of storage so low, what&rsquo;s your data worth to you? How are you keeping your backups?</p>
-
-			
-			
-		</div>
-	<footer>
-		
-
-
-		
-			andrewhao 
-		
-
-
-
-  
-		
-			on
-		
-    <a class='category' href='/category/andrew-2-dot-0/'>Andrew 2.0</a>, <a class='category' href='/category/geek/'>Geek</a>, <a class='category' href='/category/linux/'>Linux</a>
-	
-
-
-	
-	
-	</footer>
-	
-</article>
-<!-- END OF _includes/article.html -->
-
-	
-		
-		<!-- START OF _includes/article.html -->
-<article>
-	<header>
-		<h1><a href="/2012/04/12/haml-object-references/">HAML object references</a></h1>
-		<time>12 April 2012</time>
-	</header>
-		<div class="content">
-			<p>Did you guys know that you can use the &lsquo;[ ]&rsquo; brackets in HAML to automatically set the id and class on a tag, kind of like Rails&#8217; <a href="http://api.rubyonrails.org/classes/ActionView/Helpers/TagHelper.html#method-i-tag">tag</a> helper?</p>
-
-<pre><code># file: app/controllers/users_controller.rb
-
-def show
-  @user = CrazyUser.find(15)
-end
-
--# file: app/views/users/show.haml
-
-%div[@user, :greeting]
-  %bar[290]/
-  Hello!
-</code></pre>
-
-<p>is compiled to:</p>
-
-<pre><code>&lt;div class='greeting_crazy_user' id='greeting_crazy_user_15'&gt;
-  &lt;bar class='fixnum' id='fixnum_581' /&gt;
-  Hello!
-&lt;/div&gt;
-</code></pre>
-
-<p>Keeps things nice, concise and DRY. See the <a href="http://haml-lang.com/docs/yardoc/file.HAML_REFERENCE.html#object_reference_">HAML documentation</a>.</p>
-
-			
-			
-		</div>
-	<footer>
-		
-
-
-		
-			andrewhao 
-		
-
-
-
-  
-		
-			on
-		
-    <a class='category' href='/category/haml/'>HAML</a>, <a class='category' href='/category/rails/'>Rails</a>, <a class='category' href='/category/ruby/'>Ruby</a>, <a class='category' href='/category/web/'>Web</a>
-	
-
-
-	
-	
-	</footer>
-	
-</article>
-<!-- END OF _includes/article.html -->
-
-	
-		
-		<!-- START OF _includes/article.html -->
-<article>
-	<header>
-		<h1><a href="/2012/03/23/rspec-order-agnostic-array-matching/">RSpec order-agnostic array matching</a></h1>
-		<time>23 March 2012</time>
-	</header>
-		<div class="content">
-			<p>What&rsquo;s that? <a href="http://stackoverflow.com/questions/2978922/rspec-array-should-another-array-but-without-concern-for-order">You want to write an expectation for an array but your method returns the Array in a nondeterministic ordering</a>?</p>
-
-<p>Simple. Write:</p>
-
-<pre><code>my_method.should =~ &lt;my_expectation&gt;
-</code></pre>
-
-<p>See the <a href="https://github.com/dchelimsky/rspec/blob/master/lib/spec/matchers/match_array.rb">source</a>.</p>
-
-			
-			
-		</div>
-	<footer>
-		
-
-
-		
-			andrewhao 
-		
-
-
-
-  
-		
-			on
-		
-    <a class='category' href='/category/andrew-2-dot-0/'>Andrew 2.0</a>, <a class='category' href='/category/rails/'>Rails</a>, <a class='category' href='/category/ruby/'>Ruby</a>
-	
-
-
-	
-	
-	</footer>
-	
-</article>
-<!-- END OF _includes/article.html -->
-
-	
-		
-		<!-- START OF _includes/article.html -->
-<article>
-	<header>
-		<h1><a href="/2012/01/20/ohm-gotchas/">Ohm gotchas</a></h1>
-		<time>20 January 2012</time>
-	</header>
-		<div class="content">
-			<p>Here&rsquo;s a list of things that have been annoying, or at least a bit frustrating using <a href="http://ohm.keyvalue.org">Ohm</a>, the Redis ORM, in a Rails app. Beware to those who assume Ohm is ActiveRecord in new clothes. It is, but it&rsquo;s not:</p>
-
-<h2>CRUD</h2>
-
-<p>Don&rsquo;t make the mistake of treating your Ohm objects like AR:</p>
-
-<table>
-<thead>
-<tr>
-<th>ActiveRecord        </th>
-<th> Ohm</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>`destroy            </td>
-<td> <code>delete</code></td>
-</tr>
-<tr>
-<td><code>self.find(id)</code>     </td>
-<td> <code>self[id]</code></td>
-</tr>
-<tr>
-<td><code>update_attributes</code> </td>
-<td> <code>update</code></td>
-</tr>
-<tr>
-<td><code>create</code>            </td>
-<td> <code>create</code></td>
-</tr>
-</tbody>
-</table>
-
-
-<p>Also note that Ohm&rsquo;s <code>update_attributes</code> behaves differently from Rails` &mdash; it doesn&rsquo;t persist the updates to DB. That owned me for the good part of the day.</p>
-
-<h2>Callbacks</h2>
-
-<p>Thankfully, these are ActiveRecord-like with the addition of <a href="http://cyx.github.com/ohm-contrib/doc/"><code>ohm/contrib</code></a>.</p>
-
-<h2>Associations</h2>
-
-<table>
-<thead>
-<tr>
-<th>ActiveRecord            </th>
-<th> Ohm</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>has_a</code> or <code>belongs_to</code> </td>
-<td> <code>reference</code></td>
-</tr>
-<tr>
-<td><code>has_many</code>              </td>
-<td> <code>collection</code></td>
-</tr>
-</tbody>
-</table>
-
-
-<p>Read <a href="http://blog.citrusbyte.com/2010/04/12/mixing-ohm-with-activerecord-datamapper-and-sequel/">this article</a> if you&rsquo;re considering creating associations from AR objects to Ohm objects and the other way &lsquo;round.</p>
-
-			
-			
-		</div>
-	<footer>
-		
-
-
-		
-			andrewhao 
-		
-
-
-
-  
-		
-			on
-		
-    <a class='category' href='/category/andrew-2-dot-0/'>Andrew 2.0</a>, <a class='category' href='/category/software/'>Software</a>, <a class='category' href='/category/programming/'>programming</a>
-	
-
-
-	
-	
-	</footer>
-	
-</article>
-<!-- END OF _includes/article.html -->
-
-	
-		
-		<!-- START OF _includes/article.html -->
-<article>
-	<header>
-		<h1><a href="/2011/11/21/now-at-blurb/">Now at Blurb</a></h1>
-		<time>21 November 2011</time>
-	</header>
-		<div class="content">
-			<p>I should have mentioned this long ago, but I started work at Blurb in early August. It&rsquo;s been a quick ramp-up and I&rsquo;m loving it there, surrounded by smart engineers and great designers. I do Rails/JS work there, and I&rsquo;m building a lot of chops around Agile/TDD methodologies.</p>
-
-<p>Anyways, they had me do a Camera Thursdays blog post, which I <a href="http://blog.blurb.com/index.php/2011/11/17/blurberati-with-cameras-nikon-d80-with-f1-8-50mm-prime/">wrote about my Nikon/1.8 camera combo</a>:</p>
-
-<p><a href="http://blog.blurb.com/index.php/2011/11/17/blurberati-with-cameras-nikon-d80-with-f1-8-50mm-prime/"><img src="http://blog.blurb.com/wp-content/uploads/2011/11/andrew.jpg" alt="" /></a></p>
-
-			
-			
-		</div>
-	<footer>
-		
-
-
-		
-			andrewhao 
-		
-
-
-
-  
-		
-			on
-		
-    <a class='category' href='/category/life/'>Life</a>, <a class='category' href='/category/work/'>Work</a>
-	
-
-
-	
-	
-	</footer>
-	
-</article>
-<!-- END OF _includes/article.html -->
-
-	
-		
-		<!-- START OF _includes/article.html -->
-<article>
-	<header>
-		<h1><a href="/2011/10/02/mmtss-a-collaborative-loop-station/">mmtss, a collaborative loop station</a></h1>
-		<time>02 October 2011</time>
-	</header>
-		<div class="content">
-			<h2>mmtss is a loop station built for live performances.</h2>
-
-<p>Let&rsquo;s make music together! This project simplifies a traditional loop tracking station and is designed for interactive collaborative music performances.</p>
-
-<p>The idea: Everybody adds or modifies one &ldquo;part&rdquo; of a 32-bar loop. The user gets to play an instrument over the existing mix and record the 32-bar phrase when she or he is ready. Once the person is finished, the project selects another instrument at random for the next viewer to record.</p>
-
-<p>It&rsquo;s an Ableton Live controller serving a Webkit view, backed by node.js on the backend and socket.io + RaphaelJS on the front. Communication is done through a LiveOSC Live plugin via sockets.</p>
-
-<p>Displayed at the Regeneration &ldquo;We Collaborate&rdquo; art show in Oakland, CA. 9/24/2011.</p>
-
-<h3>Screenshots</h3>
-
-<p><img src="https://a248.e.akamai.net/assets.github.com/img/64abaefb0d10744dda42f362b6cd991522a88da4/687474703a2f2f6661726d372e7374617469632e666c69636b722e636f6d2f363136392f363138383336363537375f376261343864333864315f7a2e6a7067" alt="Practice mode" /></p>
-
-<p>mmtss in practice/playback mode. Here the user is able to practice/mess around with the current instrument to prepare to record the next track.</p>
-
-<p><img src="https://a248.e.akamai.net/assets.github.com/img/3f0c633b9b8d9d35970efe73f84c0f67bf68c6a8/687474703a2f2f6661726d372e7374617469632e666c69636b722e636f6d2f363132312f363138383838363131345f396436643531393937325f7a2e6a7067" alt="Cued mode" /></p>
-
-<p>Pressing &ldquo;record&rdquo; puts the user in a wait state. They are prompted to begin recording when all the black boxes count down and disappear.</p>
-
-<p><img src="https://a248.e.akamai.net/assets.github.com/img/650dc62a52d8ca6441eff57e697307325390caaa/687474703a2f2f6661726d372e7374617469632e666c69636b722e636f6d2f363137372f363138383336373135315f636135623738323733355f7a2e6a7067" alt="Record mode" /></p>
-
-<p>mmtss in record mode.</p>
-
-<p>More screenshots: <a href="http://www.flickr.com/photos/andrewhao/sets/72157627640840853/">http://www.flickr.com/photos/andrewhao/sets/72157627640840853/</a></p>
-
-<h3>Source code</h3>
-
-<p>Github: <a href="http://www.github.com/andrewhao/mmtss.">http://www.github.com/andrewhao/mmtss.</a></p>
-
-<p>MIT/GPL-sourced for your coding pleasure.</p>
-
-<h3>Installation</h3>
-
-<ul>
-<li><p>Make sure you have npm installed: <a href="http://www.npmjs.org/">http://www.npmjs.org</a></p></li>
-<li><p>Copy <code>lib/LiveOSC</code> into <code>/Applications/Live x.y.z OS X/Live.app/Contents/App-Resources/MIDI\ Remote\ Scripts/</code> folder</p></li>
-<li><p>Set it as your MIDI remote in the Ableton Live Preferences pane, in the &ldquo;MIDI Remote&rdquo; tab.</p></li>
-</ul>
-
-
-<h3>Running it</h3>
-
-<ul>
-<li><p>Open <code>Mmtss_0.als</code> as a sample Live project.</p></li>
-<li><p>Install all project dependencies with <code>npm install</code> from the project root.</p></li>
-<li><p>Start the Node server with <code>node app.js</code> from the root directory.</p></li>
-<li><p>Open a Web browser and visit <code>localhost:3000</code></p></li>
-</ul>
-
-
-<h3>Modifying the sample project</h3>
-
-<p>You can modify this project to suit your own needs. Note that there are two sets of tracks; instrument (MIDI input) tracks and loop tracks that actually store clips.</p>
-
-<p>For <code>n</code> tracks, you can add or remove your own instruments. Just make sure that instrument at track <code>x</code> corresponds to track <code>x</code> + <code>n</code>.</p>
-
-<h3>Credits</h3>
-
-<ul>
-<li><p>Design and architectural inspiration taken from <a href="http://github.com/vnoise/vtouch">vtouch</a>, a HTML5/Node/Canvas Ableton controller.</p></li>
-<li><p>Original LiveOSC source is found at: <a href="http://monome.q3f.org/browser/trunk/LiveOSC">http://monome.q3f.org/browser/trunk/LiveOSC</a>. We use a different fork of the project at:<a href="http://github.com/vnoise/vtouch">http://github.com/vnoise/vtouch</a>.</p></li>
-<li><p>Super sweet CSS3 rocker widgets courtesy of <a href="http://www.simurai.com/">Simurai</a>: <a href="http://lab.simurai.com/css/umbrui/">UmbrUI</a></p></li>
-</ul>
-
-
-<h3>License</h3>
-
-<p><a href="http://www.opensource.org/licenses/mit-license.php">MIT</a> and <a href="http://www.gnu.org/copyleft/gpl.html">GPLv3</a> licensed. Go for it.</p>
-
-<p>You will, however, need to get a license for <a href="http://www.ableton.com/live">Ableton Live</a> yourself.</p>
-
-<h3>The handsome collaborators</h3>
-
-<ul>
-<li><p>Andrew Hao: <a href="http://www.g9labs.com/">http://www.g9labs.com</a></p></li>
-<li><p>David Luoh: <a href="http://www.inkproj.com/">http://www.inkproj.com</a></p></li>
-</ul>
-
-
-<h3></h3>
-
-			
-			
-		</div>
-	<footer>
-		
-
-
-		
-			andrewhao 
-		
-
-
-
-  
-		
-			on
-		
-    <a class='category' href='/category/art/'>Art</a>, <a class='category' href='/category/design/'>Design</a>, <a class='category' href='/category/geek/'>Geek</a>, <a class='category' href='/category/javascript/'>Javascript</a>, <a class='category' href='/category/software/'>Software</a>, <a class='category' href='/category/programming/'>programming</a>
+    <a class='category' href='/category/functional-reactive-programming/'>functional reactive programming</a>, <a class='category' href='/category/javascript/'>javascript</a>, <a class='category' href='/category/node/'>node</a>
 	
 
 
@@ -765,7 +454,7 @@ end
 		<a class="older" href="/page/4/">Older</a>
 	
 	
-	<span class="total">3 of 10</span>
+	<span class="total">3 of 33</span>
 	
 	
 		<a class="newer" href="/page/2/">Newer</a>

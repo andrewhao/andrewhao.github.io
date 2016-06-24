@@ -1,0 +1,309 @@
+
+<!doctype html>
+<!-- START OF _layouts/default.html -->
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" >
+		<meta content="width=device-width,initial-scale=1" name="viewport">
+		<meta content="A hacker/designer's brain dump about things like Javascript, Ruby, and typography." name="description">
+		<meta content="The Sweet Spot" name="author">
+
+		<title>The Sweet Spot</title>
+
+		<!-- Styles -->
+		<link href="/stylesheets/main.css" rel="stylesheet">
+
+		<!-- Google webfonts -->
+    <link href="https://fonts.googleapis.com/css?family=Cousine|Suez+One|Yellowtail|Space+Mono|Alike+Angular" rel="stylesheet">
+
+		<!-- jQuery and plugins -->
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+		<script src="/js/jquery.zclip.min.js"></script>
+
+		<!-- Syntax highlighter -->
+		<link href="/stylesheets/prettify-hemisu.css" type="text/css" rel="stylesheet" />
+    <script type="text/javascript" src="/js/prettify.js"></script>
+
+    <link href="/atom.xml" rel="alternate" title="The Sweet Spot" type="application/atom+xml">
+    
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-2330913-9']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+
+  </head>
+
+	<body onload="prettyPrint()">
+		<div class="wrap">
+
+			<header>
+				<div class="title">The Sweet Spot</div>
+
+				<div class="navi">
+					<ul>
+						<li><a href="/">Blog</a></li>
+						<li><a href="/blog/archives">All Articles</a></li>
+					</ul>
+				</div> <!-- // .navi -->
+			</header>
+
+				<!-- START OF index.html -->
+
+	
+		
+		<!-- START OF _includes/article.html -->
+<article>
+	<header>
+		<h1><a href="/2008/01/27/wordpress-bughunt/">Wordpress Bughunt</a></h1>
+		<time>27 January 2008</time>
+	</header>
+		<div class="content">
+			<p>I spent a good four hours today digging through <a href="http://www.wordpress.org">Wordpress</a> code, trying to get our <a href="http://www.ocf.berkeley.edu/~ccf">Cal Christian Fellowship</a> Web site back up.</p>
+
+<p>The problem: the page seemed to freeze when loading page content. The request would time out, leaving a half-loaded page sans content. I dug into the theme at first, trying to track down which function call could have barfed. I tracked it into the apply_filters() call in the the post.</p>
+
+<p>Wordpress uses a filtering system to manage content. This lets us add filters over all kinds of content. I realize that the problem was stemming from the <a href="http://dev.wp-plugins.org/wiki/TextControl">Text Control</a> plugin, where something had barfed!</p>
+
+<p>I disabled the plugin and voila! We were good to go again.</p>
+
+<p>Since we only really used Textile markup on the CCF site, I just re-enabled the default Textile plugin and we were back in business.</p>
+
+<p>I don&rsquo;t know for the life of me what went wrong over the weekend in the Text Control plugin, but I don&rsquo;t have the cajones or the time to dig through server logs, et. al. and find out.</p>
+
+<p>Geeking out like nobody&rsquo;s business,</p>
+
+<p>-Andrew</p>
+
+			
+			
+		</div>
+	<footer>
+		
+
+
+		
+			andrewhao 
+		
+
+
+
+  
+		
+			on
+		
+    <a class='category' href='/category/andrew-2-dot-0/'>Andrew 2.0</a>, <a class='category' href='/category/geek/'>Geek</a>
+	
+
+
+	
+	
+	</footer>
+	
+</article>
+<!-- END OF _includes/article.html -->
+
+	
+		
+		<!-- START OF _includes/article.html -->
+<article>
+	<header>
+		<h1><a href="/2007/12/11/im-ready-for-the-winter/">I&#8217;m ready for the winter.</a></h1>
+		<time>11 December 2007</time>
+	</header>
+		<div class="content">
+			<p>Okay, I confess. I&rsquo;ve been daydreaming about winter break:</p>
+
+<ol>
+<li><p> Sleeping in.</p></li>
+<li><p> The laughter of friends.</p></li>
+<li><p> Taking a day trip with a camera to Monterey/Carmel (or anywhere awesome).</p></li>
+<li><p> Working (uninterrupted) on <a href="http://www.wejoinin.com">Wejoinin</a>.</p></li>
+<li><p> Redesigning the <a href="http://blog.g9labs.com">blog</a>? Updating the <a href="http://portfolio.g9labs.com">portfolio</a>? (Good Lord, it&rsquo;s about time).</p></li>
+<li><p> Kicking it with Jesus.</p></li>
+<li><p> Working on a few songs, and maybe trying a bit of recording.</p></li>
+<li><p> Reading, reading, reading, then writing, writing, writing.</p></li>
+<li><p> Spending the holidays with family.</p></li>
+</ol>
+
+
+<p>And hooray! I&rsquo;m finally done with interviews. I&rsquo;ll be taking an internship at <a href="http://www.apple.com">Apple</a> this summer doing software engineering and Web development. I&rsquo;m real excited about (and very thankful for) the opportunity to hang out with the cool kids.</p>
+
+			
+			
+		</div>
+	<footer>
+		
+
+
+		
+			andrewhao 
+		
+
+
+
+  
+		
+			on
+		
+    <a class='category' href='/category/andrew-2-dot-0/'>Andrew 2.0</a>, <a class='category' href='/category/life/'>Life</a>
+	
+
+
+	
+	
+	</footer>
+	
+</article>
+<!-- END OF _includes/article.html -->
+
+	
+		
+		<!-- START OF _includes/article.html -->
+<article>
+	<header>
+		<h1><a href="/2007/12/05/feeling-awesome-today/">Feeling awesome today</a></h1>
+		<time>05 December 2007</time>
+	</header>
+		<div class="content">
+			<p>So for our <a href="http://inst.eecs.berkeley.edu/~cs188/fa07/announcements.html">CS188 (Artificial Intelligence)</a> project, <a href="http://inst.eecs.berkeley.edu/~cs188/fa07/projects/contest/contest.html">Capture-the-Flag Pac-Man</a>, I&rsquo;m responsible for writing a script that does some processing and analysis on a game board, simulating a Pac-Man agent (my other group members are responsible for far cooler things, like inference and heuristics, but humor me here).</p>
+
+<p>I most definitely need at least several hours of computation time to get the results I need, but figured that I&rsquo;d do best by dividing up the labor between CPUs. So last night I set five cores&#8217; worth of computational power a-workin&#8217;&mdash;1 on my desktop, 2 on my laptop and 2 remote cores on Hsiu-Fan&rsquo;s sweet desktop.</p>
+
+<p>(Then I disconnected sometime last night from Hsiu-Fan&rsquo;s computer, abruptly killing my processes. I&rsquo;m back on using UNIX <a href="http://www.askbjoernhansen.com/2006/02/07/happy_unix_screen.html"><code>screen</code></a> because I read I can remotely detach windows and processes, but I&rsquo;m actually not sure if the process keeps chuggin&#8217; in the case when your program spawns X windows and you&rsquo;ve disconnected).</p>
+
+<p>So humor me here, I feel pretty awesome right now. My room&rsquo;s a bit warm with the sheer heat dissipation from my computers, but at least that negates the need for human companionship. Tally-ho!</p>
+
+<p>&mdash;&ndash; Edit: the joys of Python:</p>
+
+<p><img src="http://imgs.xkcd.com/comics/python.png" alt="" /></p>
+
+			
+			
+		</div>
+	<footer>
+		
+
+
+		
+			andrewhao 
+		
+
+
+
+  
+		
+			on
+		
+    <a class='category' href='/category/andrew-2-dot-0/'>Andrew 2.0</a>, <a class='category' href='/category/geek/'>Geek</a>, <a class='category' href='/category/life/'>Life</a>
+	
+
+
+	
+	
+	</footer>
+	
+</article>
+<!-- END OF _includes/article.html -->
+
+	
+	
+<div class="pagination">
+	
+		<a class="older" href="/page/25/">Older</a>
+	
+	
+	<span class="total">24 of 33</span>
+	
+	
+		<a class="newer" href="/page/23/">Newer</a>
+	
+</div>
+<!-- END OF index.html -->
+
+
+			<footer>
+				Copyright &copy; 2016
+
+	Andrew Hao
+
+
+				
+
+<script type="text/javascript">
+      var disqus_shortname = 'g9labs';
+      
+        
+        var disqus_script = 'count.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+			</footer>
+
+		</div> <!-- // .wrap -->
+  </body>
+
+	<script>
+		$(document).ready(function() {
+			// Make images center
+			$('p:has(img)').css('text-align', 'center');
+
+			// Add the image's title attribute as a caption
+			$('p:has(img)').append(function () {
+				return '<div class="caption">' + ($('img', this).attr('title') || "") + '</div>';
+			});
+
+			// Prettify code
+			$('code').addClass('prettyprint');
+			$('pre code').addClass('linenums');
+
+			// Copy to clipboard with button
+			$('pre:has(code)').prepend(function(){
+				return '<div class="clip-btn">copy to clipboard</div>';
+      });
+
+			$('.clip-btn').zclip({
+				path:'/js/ZeroClipboard.swf',
+				copy: $(this).next('code').text(),
+				afterCopy: function(){
+					$(this).replaceWith('<div class="clip-btn">copied!');
+					}
+			});
+		});
+	</script>
+</html>
+<!-- END OF _layouts/default.html -->

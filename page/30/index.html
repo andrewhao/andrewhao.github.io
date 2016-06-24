@@ -1,0 +1,292 @@
+
+<!doctype html>
+<!-- START OF _layouts/default.html -->
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" >
+		<meta content="width=device-width,initial-scale=1" name="viewport">
+		<meta content="A hacker/designer's brain dump about things like Javascript, Ruby, and typography." name="description">
+		<meta content="The Sweet Spot" name="author">
+
+		<title>The Sweet Spot</title>
+
+		<!-- Styles -->
+		<link href="/stylesheets/main.css" rel="stylesheet">
+
+		<!-- Google webfonts -->
+    <link href="https://fonts.googleapis.com/css?family=Cousine|Suez+One|Yellowtail|Space+Mono|Alike+Angular" rel="stylesheet">
+
+		<!-- jQuery and plugins -->
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+		<script src="/js/jquery.zclip.min.js"></script>
+
+		<!-- Syntax highlighter -->
+		<link href="/stylesheets/prettify-hemisu.css" type="text/css" rel="stylesheet" />
+    <script type="text/javascript" src="/js/prettify.js"></script>
+
+    <link href="/atom.xml" rel="alternate" title="The Sweet Spot" type="application/atom+xml">
+    
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-2330913-9']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+
+  </head>
+
+	<body onload="prettyPrint()">
+		<div class="wrap">
+
+			<header>
+				<div class="title">The Sweet Spot</div>
+
+				<div class="navi">
+					<ul>
+						<li><a href="/">Blog</a></li>
+						<li><a href="/blog/archives">All Articles</a></li>
+					</ul>
+				</div> <!-- // .navi -->
+			</header>
+
+				<!-- START OF index.html -->
+
+	
+		
+		<!-- START OF _includes/article.html -->
+<article>
+	<header>
+		<h1><a href="/2007/03/30/sensations-2/">Sensations</a></h1>
+		<time>30 March 2007</time>
+	</header>
+		<div class="content">
+			<p>Do you remember? We were freckle-faced high schoolers tumbling over China, our obnoxious American mannerisms betraying our origins despite our butter skin. We had agreed to stay in shape during that trip, so the first night one of us had the bright idea to do stairwell repeats up the fire escape. So we laced up our sneakers and bounded up the stairs two by two, laughing between breaths, running single file and breathing musty cigarette air. I remember losing count of the stairs we had climbed, unfocusing my eyes and watching each set of steps blur by in my field of vision, wondering when I would fall. I didn&rsquo;t. By the twenty-fifth floor the stairs ended and we poured out onto the rooftop of Beijing, stars bright as our eyes, daring each other to look down at the maze of city streets below. Some of us pantomimed a fall. We didn&rsquo;t.</p>
+
+			
+			
+		</div>
+	<footer>
+		
+
+
+		
+			andrewhao 
+		
+
+
+
+  
+		
+			on
+		
+    <a class='category' href='/category/andrew-2-dot-0/'>Andrew 2.0</a>
+	
+
+
+	
+	
+	</footer>
+	
+</article>
+<!-- END OF _includes/article.html -->
+
+	
+		
+		<!-- START OF _includes/article.html -->
+<article>
+	<header>
+		<h1><a href="/2007/03/28/verilogical/">Verilogical</a></h1>
+		<time>28 March 2007</time>
+	</header>
+		<div class="content">
+			<p>Oftentimes in <a href="http://en.wikipedia.org/wiki/Verilog">Verilog</a> code, we build testbenches (test fixtures). A common thing to do is to instantiate a module and plug in wires of the same names.</p>
+
+<p>Now a common hack is to copy and paste the module declaration line (the &ldquo;prototype,&rdquo; if you will). The prototype looks like this:</p>
+
+<blockquote><p>module    Foo(    bar,<br></br>       baz,<br></br>       &hellip;<br></br>    );  <br></br></p></blockquote>
+
+<p>The HDL synthesizer can correctly wire inputs, regardless of instantiated order, by surrounding the names of the local wires with the input names as declared in the prototype in a format such as:</p>
+
+<blockquote><p>Foo foo_instance (    .bar(bar),<br></br>         .baz(baz),<br></br>         &hellip;<br></br>        );<br></br></p></blockquote>
+
+<p>So to do so is a rather painful matter of adding a period before the input name, copy and pasting the input name and pasting it after the name, bracketed by parentheses.</p>
+
+<p>But what do you do if your module has thirty inputs? Our previous solution was to surrender our wrists to inevitable Repetitive Stress Injuries. Today, I realized that I should have used a freakin&#8217; elementary <a href="http://en.wikipedia.org/wiki/Regular_expression">regular expression</a>.</p>
+
+<blockquote><p>Search:       (.*),<br></br>Replace:  .$1($1),<br></br></p></blockquote>
+
+<p>Wah-lah! I&rsquo;m kicking myself for not thinking of this earlier. And it has taken me 10 minutes to tell you how I saved forty-five seconds and my poor wrists. Anything to avoid more work (shh, don&rsquo;t tell Alex) :)</p>
+
+<p><a href="http://www.xanga.com/Amazon/Click.aspx?asin=B00004XONN&amp;user=378399"><img src="http://ec1.images-amazon.com/images/P/B00004XONN.01._SCTHUMBZZZ_.jpg" alt="" /></a>
+<strong>Currently Listening</strong><br/>
+<a href="http://www.xanga.com/Amazon/Click.aspx?asin=B00004XONN&amp;user=378399"><strong>Kid A</strong></a><br/>
+By Radiohead<br/>
+<a href="http://www.xanga.com/Amazon/Click.aspx?asin=B00004XONN&amp;user=378399&amp;related=1">see related</a></p>
+
+			
+			
+		</div>
+	<footer>
+		
+
+
+		
+			andrewhao 
+		
+
+
+
+  
+		
+			on
+		
+    <a class='category' href='/category/andrew-2-dot-0/'>Andrew 2.0</a>
+	
+
+
+	
+	
+	</footer>
+	
+</article>
+<!-- END OF _includes/article.html -->
+
+	
+		
+		<!-- START OF _includes/article.html -->
+<article>
+	<header>
+		<h1><a href="/2007/03/10/sensations/">Sensations</a></h1>
+		<time>10 March 2007</time>
+	</header>
+		<div class="content">
+			<p><img src="http://www.g9labs.com/img/blogart/02-those-who-dreamed.jpg" alt="Sensations 02: Those Who Dreamed" /></p>
+
+			
+			
+		</div>
+	<footer>
+		
+
+
+		
+			andrewhao 
+		
+
+
+
+  
+		
+			on
+		
+    <a class='category' href='/category/andrew-2-dot-0/'>Andrew 2.0</a>
+	
+
+
+	
+	
+	</footer>
+	
+</article>
+<!-- END OF _includes/article.html -->
+
+	
+	
+<div class="pagination">
+	
+		<a class="older" href="/page/31/">Older</a>
+	
+	
+	<span class="total">30 of 33</span>
+	
+	
+		<a class="newer" href="/page/29/">Newer</a>
+	
+</div>
+<!-- END OF index.html -->
+
+
+			<footer>
+				Copyright &copy; 2016
+
+	Andrew Hao
+
+
+				
+
+<script type="text/javascript">
+      var disqus_shortname = 'g9labs';
+      
+        
+        var disqus_script = 'count.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+			</footer>
+
+		</div> <!-- // .wrap -->
+  </body>
+
+	<script>
+		$(document).ready(function() {
+			// Make images center
+			$('p:has(img)').css('text-align', 'center');
+
+			// Add the image's title attribute as a caption
+			$('p:has(img)').append(function () {
+				return '<div class="caption">' + ($('img', this).attr('title') || "") + '</div>';
+			});
+
+			// Prettify code
+			$('code').addClass('prettyprint');
+			$('pre code').addClass('linenums');
+
+			// Copy to clipboard with button
+			$('pre:has(code)').prepend(function(){
+				return '<div class="clip-btn">copy to clipboard</div>';
+      });
+
+			$('.clip-btn').zclip({
+				path:'/js/ZeroClipboard.swf',
+				copy: $(this).next('code').text(),
+				afterCopy: function(){
+					$(this).replaceWith('<div class="clip-btn">copied!');
+					}
+			});
+		});
+	</script>
+</html>
+<!-- END OF _layouts/default.html -->

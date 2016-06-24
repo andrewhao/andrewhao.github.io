@@ -138,41 +138,31 @@ it&rsquo;s not a fancy new framework, a how-to guide to do microservices, nor a 
 
 <p>Try this: keep a living document of all the terminology your team uses &ndash; along with all its definitions. This <strong>Glossary</strong> is exactly what it sounds &ndash; a list of terms and their definitions.</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>Delorean Team Glossary
-</span><span class='line'>----------------------
-</span><span class='line'>
-</span><span class='line'>- **Coupon**: an applied discount to a BookingAmount. A coupon may take the form of a Fixed or a Percentage amount.
-</span><span class='line'>   - **Fixed-type**: A coupon that applies a fixed amount of money - e.g. a $30 USD discount.
-</span><span class='line'>   - **Percentage-type**: A coupon that applies a percentage savings off the total BookingAmount.
-</span><span class='line'>- **Driver**: An employed driver who drives within the system, picking up passengers and driving Trips for payment.
-</span><span class='line'>- **Trip**: An itinerary of passenger pick-up and drop-off location and times.
-</span><span class='line'>- **Rider**: The passenger that books the trip and is transported by the *Driver*.
-</span><span class='line'>- **Booking**: A reservation for a Trip, as booked by the *Rider*.
-</span><span class='line'>- **BookingAmount**: The monetary amount of the Trip, accounting for the trip cost, surge pricing, coupons and taxes.
-</span><span class='line'>- **Routing Engine:** The software system that maps out the driving directions for a driver.
-</span><span class='line'>- **Payment**: A record of how a user paid.
-</span><span class='line'>- **Charge**: A financial transaction for a specific dollar amount, for a specific charge method to an institution.
-</span><span class='line'>- **Checkout**: A workflow in which a *Payment* is made for a *Booking*.</span></code></pre></td></tr></table></div></figure>
+<blockquote><h2>Delorean Team Glossary</h2>
 
+<ul>
+<li><strong>Coupon</strong>: an applied discount to a BookingAmount. A coupon may take the form of a Fixed or a Percentage amount.
+
+<ul>
+<li><strong>Fixed-type</strong>: A coupon that applies a fixed amount of money &ndash; e.g. a $30 USD discount.</li>
+<li><strong>Percentage-type</strong>: A coupon that applies a percentage savings off the total BookingAmount.</li>
+</ul>
+</li>
+<li><strong>Driver</strong>: An employed driver who drives within the system, picking up passengers and driving Trips for payment.</li>
+<li><strong>Trip</strong>: An itinerary of passenger pick-up and drop-off location and times.</li>
+<li><strong>Rider</strong>: The passenger that books the trip and is transported by the <em>Driver</em>.</li>
+<li><strong>Booking</strong>: A reservation for a Trip, as booked by the <em>Rider</em>.</li>
+<li><strong>BookingAmount</strong>: The monetary amount of the Trip, accounting for the trip cost, surge pricing, coupons and taxes.</li>
+<li><strong>Routing Engine:</strong> The software system that maps out the driving directions for a driver.</li>
+<li><strong>Payment</strong>: A record of how a user paid.</li>
+<li><strong>Charge</strong>: A financial transaction for a specific dollar amount, for a specific charge method to an institution.</li>
+<li><strong>Checkout</strong>: A workflow in which a <em>Payment</em> is made for a <em>Booking</em>.</li>
+</ul>
+</blockquote>
 
 <p>From now on, use only the term definitions listed here in your stories. Be explicit about how you use your language!</p>
 
-<p>I&rsquo;ve been on many projects where the sloppy usage of a term from project inception led to the usage of that term in the code &ndash; codifying that messy, slippery term throughout the life of the project!</p>
+<p>I&rsquo;ve been on many projects where the sloppy usage of a term from project inception led to the usage of that term in the code &ndash; codifying that messy, slippery term throughout the life of the project.</p>
 
 <p>Which leads us to our next point:</p>
 

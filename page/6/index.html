@@ -64,35 +64,244 @@
 		<!-- START OF _includes/article.html -->
 <article>
 	<header>
-		<h1><a href="/2010/03/12/shiny-font-overhaul/">Shiny font overhaul!</a></h1>
-		<time>12 March 2010</time>
+		<h1><a href="/2014/06/06/running-mocha-tests-with-es6-amd-modules/">Running Mocha tests with ES6/AMD modules</a></h1>
+		<time>06 June 2014</time>
 	</header>
 		<div class="content">
-			<h3><a href="http://www.g9labs.com/2010/03/12/shiny-font-overhaul/screenshot1/"><img src="http://www.g9labs.com/wp-content/uploads/2010/03/screenshot1-500x126.png" alt="" /></a></h3>
+			<p>In one of my personal projects (<a href="https://github.com/andrewhao/chordmeister">Chordmeister</a>), I&rsquo;ve been trying to
+upgrade the code to be written in <a href="http://wiki.ecmascript.org/doku.php?id=harmony:modules#export_declarations">ES6 modules</a> and transpile down to AMD modules with Square&rsquo;s <a href="https://github.com/square/es6-module-transpiler">very excellent es6-module-transpiler project</a>.</p>
 
-<p>A couple of months ago I switched over to TypeKit, a cloud-hosted font service (buzzword! &ldquo;cloud&rdquo; gets me all warm and fuzzy). They basically take your font stack and enhance it with @font-face goodness, pulling in lots of fonts from their library.</p>
+<p>Since I&rsquo;ve already <a href="https://github.com/andrewhao/hendrix">updated</a> an Ember app of mine to try ES6, I figured it was high time to do it on another project.</p>
 
-<h3>Why not roll a @font-face implementation yourself?</h3>
+<h2>Sorry Coffeescript, but I&rsquo;m moving on.</h2>
 
-<p>The availability of good, high-quality, <em>licensed</em> fonts out there is still pretty small. The hoopla over @font-face has been centered around the fact that the fonts are unobfuscated, and anybody with the gumption to do so could go out to your site and steal yer font. So I&rsquo;d say if you have a font you want to put up on the Web, you&rsquo;d better make sure the font publisher/licenseholder is kosher with that.</p>
+<p>First problem: Coffeescript seems indecisive with respect to ES6
+support. In order to support <code>import</code> or <code>export</code> keywords, I had to
+wrap the statements in backticks, making the code look like this:</p>
 
-<p>(Ironically, Microsoft got it pretty right with their EOT font format, drafted way back in the days of IE 4 (!). Oh yeah, TypeKit takes care of EOT fonts for you as well.)</p>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='coffeescript'><span class='line'><span class="o">`</span><span class="nx">import</span> <span class="nx">ClassifiedLine</span> <span class="nx">from</span> <span class="s">&quot;chordmeister/classified_line&quot;</span><span class="o">`</span>
+</span><span class='line'><span class="k">class</span> <span class="nx">Parser</span>
+</span><span class='line'>  <span class="c1"># Implementation</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">`</span><span class="nx">export</span> <span class="nx">default</span> <span class="nx">Parser</span><span class="o">`</span>
+</span></code></pre></td></tr></table></div></figure>
 
-<p>(Also, Mozilla is pushing their <a href="http://hacks.mozilla.org/2009/10/woff/">WOFF format</a> which is currently supported in FF 3.6. Typekit does that too!).</p>
 
-<h3>So, how&rsquo;s TypeKit working out for you?</h3>
+<p>Except this wasn&rsquo;t being picked up by es6-module-transpiler, since
+Coffeescript wraps the entire declaration in a closure: I was
+finding myself having problems compiling from Coffeescript &ndash;> ES5 JS &ndash;> ES6 JS.</p>
 
-<p>Well, TypeKit&rsquo;s not bad. If you&rsquo;re running a cutting-edge browser (Safari 4, FF 3+, Chromium 4), you&rsquo;re going to see the font shininess. If you&rsquo;re not, you still get the default stack.</p>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">define</span><span class="p">(</span><span class="s2">&quot;chordmeister/parser&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="p">[],</span>
+</span><span class='line'>  <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="s2">&quot;use strict&quot;</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>      <span class="c1">// Oops, I wasn&#39;t transpiled!</span>
+</span><span class='line'>      <span class="kr">import</span> <span class="nx">ClassifiedLine</span> <span class="nx">from</span> <span class="s1">&#39;chordmeister/classified_line&#39;</span><span class="p">;</span>
+</span><span class='line'>      <span class="kd">var</span> <span class="nx">Parser</span><span class="p">;</span>
+</span><span class='line'>      <span class="nx">Parser</span> <span class="o">=</span> <span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>        <span class="c1">// Implementation</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>      <span class="p">)();</span>
+</span><span class='line'>      <span class="c1">// Oops, I wasn&#39;t transpiled!</span>
+</span><span class='line'>      <span class="kr">export</span> <span class="k">default</span> <span class="nx">Parser</span><span class="p">;</span>
+</span><span class='line'>      <span class="p">})()</span>
+</span><span class='line'>  <span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
 
-<p>A problem way early on was the fact that Firefox for Windows was rendering certain fonts with very, very jagged features (<a href="http://www.elated.com/articles/typekit-first-impressions/">see comparisons</a>). Turns out this was a fault of both the font and the OS/browser&mdash; certain browsers and OSes don&rsquo;t render hints properly.</p>
 
-<p>The best solution I&rsquo;ve found? <a href="http://blog.typekit.com/2009/12/08/new-fonts-and-improved-hinting-from-our-partners/">Use a better font with better hinting</a>.</p>
+<p>So the first call: ditch Coffeescript. Write this in pure ES6.</p>
 
-<p>I&rsquo;m using FF Nuvo Web and FF Enzo Web Pro:</p>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kr">import</span> <span class="nx">ClassifiedLine</span> <span class="nx">from</span> <span class="s1">&#39;chordmeister/classified_line&#39;</span><span class="p">;</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">Parser</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">Parser</span> <span class="o">=</span> <span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="c1">// implementation</span>
+</span><span class='line'><span class="p">})();</span>
+</span><span class='line'>
+</span><span class='line'><span class="kr">export</span> <span class="k">default</span> <span class="nx">Parser</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
 
-<p><a href="http://www.g9labs.com/2010/03/12/shiny-font-overhaul/screenshot-g9labs-design-studio-typekit-namoroka/"><img src="http://www.g9labs.com/wp-content/uploads/2010/03/Screenshot-g9Labs-Design-Studio-Typekit-Namoroka-500x412.png" alt="" /></a></p>
 
-<p>All in all, I&rsquo;m pretty satisfied.</p>
+<p>Which transpiled nicely to:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">define</span><span class="p">(</span><span class="s2">&quot;chordmeister/parser&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="p">[</span><span class="s2">&quot;chordmeister/classified_line&quot;</span><span class="p">,</span><span class="s2">&quot;exports&quot;</span><span class="p">],</span>
+</span><span class='line'>  <span class="kd">function</span><span class="p">(</span><span class="nx">__dependency1__</span><span class="p">,</span> <span class="nx">__exports__</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="s2">&quot;use strict&quot;</span><span class="p">;</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">ClassifiedLine</span> <span class="o">=</span> <span class="nx">__dependency1__</span><span class="p">[</span><span class="s2">&quot;default&quot;</span><span class="p">];</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">Parser</span><span class="p">;</span>
+</span><span class='line'>    <span class="nx">Parser</span> <span class="o">=</span> <span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>      <span class="c1">// Implementation</span>
+</span><span class='line'>    <span class="p">})();</span>
+</span><span class='line'>    <span class="nx">__exports__</span><span class="p">[</span><span class="s2">&quot;default&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nx">Parser</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Next up: adding AMD support in Mocha</h2>
+
+<p>Okay, so we need to set up a few things to get Mocha playing well with RequireJS, the AMD loader.</p>
+
+<p>Our plan of attach will be to leverage the generated AMD modules and load our tests up with them. We have the benefit of being able to specifically inject dependencies into our test suite.</p>
+
+<p>The tricky parts will be:</p>
+
+<h3>Set up the Mocha index.html runner</h3>
+
+<p>Install <code>mocha</code>, <code>require.js</code>, and <code>chai</code> via <code>bower</code>, then plug them into the harness:</p>
+
+<figure class='code'><figcaption><span>test/index.html</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="cp">&lt;!doctype html&gt;</span>
+</span><span class='line'><span class="nt">&lt;html&gt;</span>
+</span><span class='line'><span class="nt">&lt;head&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;meta</span> <span class="na">charset=</span><span class="s">&quot;utf-8&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;meta</span> <span class="na">http-equiv=</span><span class="s">&quot;X-UA-Compatible&quot;</span> <span class="na">content=</span><span class="s">&quot;IE=edge,chrome=1&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;title&gt;</span>Mocha Spec Runner<span class="nt">&lt;/title&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">href=</span><span class="s">&quot;../bower_components/mocha/mocha.css&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'><span class="nt">&lt;/head&gt;</span>
+</span><span class='line'><span class="nt">&lt;body&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;mocha&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;../bower_components/mocha/mocha.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;../bower_components/chai/chai.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;script </span><span class="na">data-main=</span><span class="s">&quot;test_helper&quot;</span> <span class="na">src=</span><span class="s">&quot;../bower_components/requirejs/require.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nt">&lt;/body&gt;</span>
+</span><span class='line'><span class="nt">&lt;/html&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Note the references to <code>data-main="test_helper"</code>, which is require.js&rsquo;s way of determining its entry point after it loads.</p>
+
+<h3>Set up a test runner.</h3>
+
+<figure class='code'><figcaption><span>test/test_runner.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// Configure and set up the tests.</span>
+</span><span class='line'><span class="nx">require</span><span class="p">.</span><span class="nx">config</span><span class="p">({</span>
+</span><span class='line'>  <span class="nx">baseUrl</span><span class="o">:</span> <span class="s2">&quot;../build/&quot;</span>
+</span><span class='line'><span class="p">})</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// Load up the files to run against</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">specs</span> <span class="o">=</span> <span class="p">[</span>
+</span><span class='line'>  <span class="s1">&#39;chordmeister/chord_spec.js&#39;</span><span class="p">,</span>
+</span><span class='line'>  <span class="s1">&#39;chordmeister/song_spec.js&#39;</span><span class="p">,</span>
+</span><span class='line'>  <span class="s1">&#39;chordmeister/parser_spec.js&#39;</span><span class="p">,</span>
+</span><span class='line'>  <span class="s1">&#39;chordmeister/classified_line_spec.js&#39;</span><span class="p">,</span>
+</span><span class='line'><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// Start up the specs.</span>
+</span><span class='line'><span class="nx">require</span><span class="p">(</span><span class="nx">specs</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">require</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">mocha</span><span class="p">.</span><span class="nx">setup</span><span class="p">(</span><span class="s1">&#39;bdd&#39;</span><span class="p">);</span>
+</span><span class='line'>  <span class="nx">expect</span> <span class="o">=</span> <span class="nx">chai</span><span class="p">.</span><span class="nx">expect</span><span class="p">;</span>
+</span><span class='line'>  <span class="c1">// Why? Some async loading condition? Is there a callback I should be hooking into?</span>
+</span><span class='line'>  <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">mocha</span><span class="p">.</span><span class="nx">run</span><span class="p">();</span>
+</span><span class='line'>  <span class="p">},</span> <span class="mi">100</span><span class="p">);</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You&rsquo;ll notice that I was having synchonicity issues between spec suite load and <code>mocha.run()</code>. Throwing everything back a few hundred ms seemed to have done the fix.</p>
+
+<h2>AMD gotchas</h2>
+
+<p>Pay attention to the <code>default</code> parameter that the module exports with. This is important to remember since native ES6 will allow you to directly import it with its native syntax:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kr">import</span> <span class="nx">Parser</span> <span class="nx">from</span> <span class="s2">&quot;chordmeister/parser&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>But if you&rsquo;re using RequireJS/AMD modules, you&rsquo;ll need to explicitly call out the <code>default</code> namespace from the required module, so like so:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;chordmeister/parser&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">parser</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">Parser</span> <span class="o">=</span> <span class="nx">parser</span><span class="p">.</span><span class="k">default</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">new</span> <span class="nx">Parser</span><span class="p">()</span> <span class="c1">// and do stuff.</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Let me know if you have any questions!</p>
 
 			
 			
@@ -102,16 +311,14 @@
 
 
 		
-			andrewhao 
-		
 
 
 
   
 		
-			on
+			Tagged under
 		
-    <a class='category' href='/category/andrew-2-dot-0/'>Andrew 2.0</a>
+    <a class='category' href='/category/amd/'>AMD</a>, <a class='category' href='/category/tdd/'>TDD</a>, <a class='category' href='/category/mocha/'>mocha</a>, <a class='category' href='/category/node/'>node</a>, <a class='category' href='/category/requirejs/'>requirejs</a>, <a class='category' href='/category/testing/'>testing</a>
 	
 
 
@@ -127,65 +334,63 @@
 		<!-- START OF _includes/article.html -->
 <article>
 	<header>
-		<h1><a href="/2009/02/15/thoughts-on-rural-computing-in-botswana/">Thoughts on rural computing in Botswana</a></h1>
-		<time>15 February 2009</time>
+		<h1><a href="/2014/04/26/implementing-ddd-chapter-2/">Implementing DDD: Domains, Subdomains and Bounded Contexts</a></h1>
+		<time>26 April 2014</time>
 	</header>
 		<div class="content">
-			<p>I&rsquo;m currently in Botswana, doing volunteer work at a nonprofit Christian agency called <a href="http://lovebotswana.org">Love Botswana Outreach Mission</a>. Among my responsibilities are helping out with the organization&rsquo;s IT needs. I was pleasantly surprised to discover that the organization is wired for 24/7 Internet access, despite being located about 10km out from the center of Maun, a medium-sized village.</p>
+			<h2>Chapter 2: Domains, Subdomains, and Bounded Contexts</h2>
 
-<h3>Infrastructure</h3>
+<p>A <em>Domain</em> is what a business does and the surrounding context of how it does business. It is important to model out its supported <em>Subdomains</em> &mdash; that is, the smaller components of the business that collaborate in real, day-to-day operations of the business. The book describes these as <em>Core Domains</em>.</p>
 
-<p>As far as I understand it, there is little-to-no telecom infrastructure here in Maun (i.e. there are no telephone, cable or fiber lines). Thus, most communication links happen via satellite or wifi radio.</p>
+<p>Finally, a <em>Bounded Context</em> is the physical manifestation of the solution space as software &mdash; models living in a real application. Its key feature in the context of DDD is as a linguistic barrier between different domains.</p>
 
-<p>The mission has a 100-ft radio tower, where a local ISP colocates a wireless repeater to hook into its wireless network. In exchange, the mission receives a special deal on its Internet access plan.</p>
+<p>In an ideal world, each <em>Subdomain</em> maps directly to one <em>Bounded Context</em>. In the real world, this is less common since we tend to build things into monolithic systems. Still &mdash; many monolithic applications have several components that could in themselves be bounded contexts.</p>
 
-<h3>Existing network setup</h3>
+<h6>Side note: In Rails, one could think of Engines as a <em>Bounded Context</em>. But that might be a blog post for another time.</h6>
 
-<p>Because of the relatively low price and quick setup of wireless access points, the mission currently uses a mix of wired switches and wireless repeaters to extend the reach of the network.</p>
+<p>It is important to get these ideas and concepts down correctly because we need correct modeling of our systems to determine what they do.</p>
 
-<p>A directional antenna on the tower beams a signal to a directional antenna mounted above the IT office trailer to an access point connected through a gateway serving as the DHCP server and firewall. From there, the signal gets sent via a a wired Ethernet network to the other office buildings.</p>
+<h3>Bounded Contexts and terms</h3>
 
-<p>Wireless access points have been installed at various points along the wired office network, allowing wireless access onto the Net.</p>
+<p>It&rsquo;s not usually realistic to get the entire organization agreeing on a universal linguistic definition for every term. Instead, DDD assumes that different terms have different meanings in different contexts.</p>
 
-<p>Only recently has Internet connectivity been extended to reach a cluster of family homes, situated about 200 meters away from the office buildings. A wireless access point is set up in the IT trailer, broadcasting on a +10dB omnidirectional antenna. The closest house to the office has an outdoor +10dB omnidirectional antenna hooked up to a wireless bridge/repeater. Thus, the link from the houses to the gateway is maintained via a wireless bridge. The houses themselves are connected on a hardwired Ethernet network.</p>
+<p>The author then dives into the an example of a book, where a <em>book</em> means several different things to different people in different contexts. A book is touched upon by authors, graphic designers, editors, marketing folks. In each of these contexts, the features of a book mean different things at different times. It is impossible to develop an all-knowing Book model without disagreement between stakeholders. DDD, instead, acknowledges these differences and allows stakeholders to use linguistic terms from within their unique Bounded Contexts.</p>
 
-<h3>Lessons from the field</h3>
+<p>Bounded Contexts may include things like:</p>
 
-<h4>Lesson: plan for environmental factors.</h4>
+<ul>
+<li>Object models</li>
+<li>A database schema / persistence layer</li>
+<li>A SOAP or REST API</li>
+<li>A user interface</li>
+</ul>
 
-<p>We observed that the wireless link from the homes to the offices would be intermittently reliable at best, often going down for no reason. We discovered later on that our link would fail on particularly humid days, because the signal quality over the wireless bridge would degrade significantly and decrease the range of the network.</p>
 
-<h4>Lesson: keep power voltages in mind.</h4>
+<h3>Bounded context antipatterns</h3>
 
-<p>I fried a power supply when I left it switched to a 115V (US) input, and plugged it into the 220V power plugs there. Sizzle. This led to a lot of apologizing and reassurances from the staff that this was a common thing for Americans to do.</p>
+<p>You may be tempted to divide up a bounded context by architectural concerns, or because you want to assign smaller tasks to developers (resource allocation). Beware that this kind of work tends to fragment the language.</p>
 
-<h4>Lesson: Clean computers frequently.</h4>
+<p>DDD operates on <em>linquistic drivers</em>. The unity, cohesion and domain-adherence of the bounded context should be the first priority in the design.</p>
 
-<p>Dust is a common fact of life here. Thus, computer innards were frequently coated with dust, and more susceptible to overheating and/or a shorter lifecycle on moving parts (fans, etc).</p>
+<p>Assigning two teams to the same bounded context results in fragmentation of the bounded context.</p>
 
-<h4>Lesson: Scan for viruses, too</h4>
+<p>Ideally: we strive to assign one team to work on one Bounded Context with one Ubiquitous Language at a time.</p>
 
-<p>I don&rsquo;t know why, but viruses just seem to be more common here. I&rsquo;ve been passed a few flash drives that have been infected. In the states, I&rsquo;d be (un)lucky to find one a year.</p>
+<h6>In Rails, what are the bounded contexts? It could be the top-level Rails application, or an engine, or a gem, that define the context boundaries._</h6>
 
-<h4>Lesson: Plan for low bandwidth and outages</h4>
+<h3>A story&hellip;</h3>
 
-<p>In the States, we depend on always-on Internet. Here, however, the Internet seems to go down for any of a multitude of reasons. If it <em>is</em> up, it&rsquo;s being shared by fifteen computers all downloading at once over an already-restricted pipeline. Thus, Web pages can&rsquo;t be expected to load reliably, Skype sessions will cut out, and chat services won&rsquo;t be accessible.</p>
+<p>The chapter then goes on to describe their fictional team designing through three iterations off their DDD strategy:</p>
 
-<p>I&rsquo;ve come to depend on <a href="http://gmailblog.blogspot.com/2009/01/new-in-labs-offline-gmail.html">Offline Gmail</a> to compose email when the Internet&rsquo;s down. Other productivity apps like <a href="http://rememberthemilk.com">Remember the Milk</a> and <a href="http://docs.google.com">Google Docs</a> offer offline modes for their applications.</p>
+<p>A system in which all domains live within the same bounded context. They see the folly of this and refactor with some tactical patterns, like creating services.</p>
 
-<p>I rely on Bonjour-enabled chat (iChat on a Mac, <a href="http://pidgin.im">Pidgin</a> + <a href="http://apple.com/support/downloads/bonjourforwindows.htm">Bonjour for Windows</a>) for the times when the Internet or DHCP server goes down and I need to chat with somebody in another office or house.</p>
+<p>This is, however, missing the point. They realized they needed to listen to business and their domain experts to find out exactly where the right places were to segregate the contexts. The team discovers that the business has a desire to go in a new direction which allows them to segregate the domain in such a way that would enable future directions for the business.</p>
 
-<p>When making large-ish downloads, I&rsquo;ve gone to using a download manager (flashback to the days of the 56K modem trying to download a 20 MB file)! I&rsquo;ve been using <a href="http://freedownloadmanager.org">Free Download Manager</a>. It&rsquo;s not much of a name, but it&rsquo;s a full-featured open source program allowing you to schedule, pause, resume downloads.</p>
+<h6>How often are we as developers in conversation with our product owners and asking where the business <em>wants</em> to go in the future?</h6>
 
-<p>Just FYI: my downloads range between 900 bytes/sec up to 28KB/sec.</p>
+<p>Conversations with the business reveal an intention to develop an add-on product to the core product. This implies the development of two subdomains. However, further investigation reveals that the shared overlap of certain domain models (like users, roles, and access management) cannot simply be identically shared between two systems, since their <em>linguistic meanings</em> in the two systems differ slightly. Instead, the developers use the linguistic problem to develop a third bounded context.</p>
 
-<h4>Lesson: Designing Web pages for low bandwidth is still a good idea</h4>
-
-<p>As a Web developer, I tend to make the erroneous assumption people have the same quality of high-speed connection as I do back home in the States. Now that I&rsquo;m a continent away from most of the sites I visit, I&rsquo;m beginning to realize that optimizing a site for bandwidth savings can be a lifesaver. Here, a round trip to and from the States can take up to 20 seconds. That adds up over the course of a page load. As a Web designer or developer, ask yourself if you can be doing anything for the &ldquo;56K guy&rdquo;: Are you using CSS sprites? A CDN? Compressing (gzip, mod_deflate) your output? Are you optimizing your image files for the Web?</p>
-
-<h4>Lesson: Knock out as many failure points as possible</h4>
-
-<p>Because the wireless bridge seemed to be the weakest link in our network, we decided to bypass it. We ran a really long Ethernet line from the IT office to the houses. This meant ordering a 200-meter length of cable, some sleeving and doing a lot of trench-digging to embed the cable under the dirt access roads. Our work paid off as everybody in the houses now enjoys a reliable network link to the main server (including me!).</p>
+<p>The developers separate their app into three bounded contexts built as three software systems.</p>
 
 			
 			
@@ -195,16 +400,14 @@
 
 
 		
-			andrewhao 
-		
 
 
 
   
 		
-			on
+			Tagged under
 		
-    <a class='category' href='/category/andrew-2-dot-0/'>Andrew 2.0</a>, <a class='category' href='/category/geek/'>Geek</a>, <a class='category' href='/category/web/'>Web</a>, <a class='category' href='/category/ict4d/'>ict4d</a>
+    <a class='category' href='/category/book-review/'>Book Review</a>, <a class='category' href='/category/ddd/'>DDD</a>, <a class='category' href='/category/domain-driven-design/'>Domain-Driven Design</a>
 	
 
 
@@ -220,69 +423,68 @@
 		<!-- START OF _includes/article.html -->
 <article>
 	<header>
-		<h1><a href="/2008/11/05/setting-up-a-multi-ap-wireless-network/">Setting up a multi-AP wireless network</a></h1>
-		<time>05 November 2008</time>
+		<h1><a href="/2014/03/08/six-months-as-a-manager/">Six months as a manager</a></h1>
+		<time>08 March 2014</time>
 	</header>
 		<div class="content">
-			<p>A few weeks ago, I couldn&rsquo;t seem to connect my laptop to the wireless AP in my apartment. Additionally, I&rsquo;d be getting weak signals from all these weird corners in my apartment. Since I had a spare AP lying around at home, I decided to do some online research to see if I could get it to behave as a second wireless AP on the same network, extending my network range, allowing our network to handle more wireless users and playing nicely with my laptop.</p>
+			<p>It&rsquo;s been approximately six months since I&rsquo;ve entered engineering management. Here are some thoughts reflecting back on that season now.</p>
 
-<h4>The desired setup:</h4>
+<h2>I didn&rsquo;t like it at first.</h2>
+
+<p>Let&rsquo;s face it: I didn&rsquo;t like the feeling of being a &ldquo;manager&rdquo; now. It comes with too much baggage of pointy-haired bosses or ineffective waste layers. Why do we need managers anyways?</p>
+
+<p>More to the point: I love coding. I love working on rewarding projects. I hated the thought of being tied up in meetings while day by day getting more and more disconnected from code.</p>
+
+<p>So I struggled a lot in those first few months (still do), trying to maintain the balance of working with product management to get a strategic vision communicated, or with other engineering teams to get a tactical vision in place, versus trying to be deeply involved with the code base and doing code reviews.</p>
+
+<h3>You can&rsquo;t code anymore.</h3>
+
+<p>In the end? I had to come to grips with the reality that my team needed me in a different role &mdash; a strategic role, helping them see the big picture, sniffing out dependencies and destroying blockers before they got to them.</p>
+
+<p>But I still needed to be spot-on with the code &mdash; I still needed to be in the know with new product features as they are being developed. So it&rsquo;s my priority to be in design discussions, but I can&rsquo;t be the implementer anymore.</p>
+
+<p>So I&rsquo;ve started a change in mindset &mdash; how can offload all the random codebase knowledge I&rsquo;ve acquired over the years to the team? How can I effectively share my expertise so I&rsquo;m out of a (coding) job? I&rsquo;m starting to be more convinced that the answer to that is pair programming.</p>
+
+<h3>Pairing your way out of a job</h3>
+
+<p>Nowadays if there&rsquo;s a story or task in which I am the only one (or one of few) with domain knowledge about the feature, I&rsquo;ll ask a team member to pair with me on the feature. That way we get a really effective teaching tool about the domain model, and the extra plus in that if I get pulled into a meeting, development can continue.</p>
+
+<h3>But you still have to code.</h3>
+
+<p>So I code on the weekends (not everybody can do this!)</p>
+
+<p>We&rsquo;re a Rails team taking on a new Ember project. I need to get my chops up around Ember so I&rsquo;ve decided to pull in a <a href="https://github.com/andrewhao/hendrix">side project</a> to hack on the weekends. My side work on <a href="http://www.wejoinin.com">Wejoinin</a> lets me do all the Rails things I don&rsquo;t get to do anymore at work.</p>
+
+<p>And it works for me because I love to code, and to be honest, I don&rsquo;t ever want to get weak in that area.</p>
+
+<p>To be honest, I&rsquo;d love more feedback from other engineering managers in that area. How do you keep your chops sharp?</p>
+
+<h3>People are your priority.</h3>
+
+<p>I&rsquo;ve read often that <a href="http://firstround.com/article/My-Management-Lessons-from-Three-Failed-Startups-Google-Apple-Dropbox-Twitter-and-Square">empathy is everything</a> when it comes to management, and it still rings true. No matter how this product launch goes, in the end your team will remember how you treated them, how their thoughts and feelings were taken into account.</p>
+
+<p>One thing I&rsquo;m trying to check myself is my tendency to jump in on other people&rsquo;s sentences and cut them off. It sounds silly, but sometimes I realize I like to talk a lot more than listen. As a manager, sometimes you need to dwell on the feedback of a team member for some time before you write it off. There&rsquo;s usually a core message in there that&rsquo;s completely valid &mdash; a frustration, a desire for change. Empathy means communicating the message: &ldquo;I heard you, and I respect your thoughts.&rdquo;</p>
+
+<h3>It&rsquo;s your attitude</h3>
+
+<p>And finally, here&rsquo;s what I think: your attitude toward your company and the team make <em>ALL</em> the difference.</p>
 
 <ul>
-<li><p>Two wireless routers on the same network: one router acts as the gateway and DHCP server, the other is a simple switch + wireless AP. One router is the Netgear WGR614, the other is the DLink DI-624.</p></li>
-<li><p>Workload: many wired connections, many wireless connections. We have 3 wired computers for me and my roommates&#8217; computers, and up to 10 people connected via wireless at the same time (we tend to have a lot of visitors).</p></li>
+<li>Is your orientation truly to support your team? How will it be clear in the long run that your supported someone in their career?</li>
+<li>Where are places in your workday where you can connect and sympathize with people &mdash; share a joke, listen to someone&rsquo;s frustration, or just simply go out to lunch?</li>
+<li>How are you giving people something to work toward to: a vision of changing the world (for Blurb, it&rsquo;s about transforming the publishing industry).</li>
+<li>How are you addressing negativity? Grumbling is important to address head on in its own space, but how are you empowering people to take charge of issues of culture or organizational friction?</li>
+<li>How are you checking your own negativity &mdash; sometimes we forget that we&rsquo;re the solutions to our own problems, and I&rsquo;ve found oftentimes that the very issues that you assume are impossible to change are crackable by having the right relationships with the right people.</li>
 </ul>
 
 
-<p>After a bit of research, I <a href="http://www.dslreports.com/forum/remark,10664212">found a forum thread online</a> that details how to set it up:</p>
+<p>The little things matter.</p>
 
-<ul>
-<li><p>The host router (the Netgear in my case) stays the DHCP server and broadband gateway. Settings:</p>
+<h3>Growth areas</h3>
 
-<ul>
-<li>Assign a static IP on the MAC address of the secondary router. It&rsquo;s 192.168.1.3 on my network. That way you&rsquo;ll always have an IP address to the second router&rsquo;s admin panel.</li>
-</ul>
-</li>
-<li><p>Run an Ethernet cable from the host router&rsquo;s LAN port in to the LAN port of the second router (the DLink). (Note: it&rsquo;s especially important that you plug this wire in to the LAN port instead of the WAN port).</p></li>
-<li><p>With a computer connected on the network, send your browser on over to the D-Link admin panel at 192.168.1.3. Your settings on the DI-624 should be as follows:</p>
+<p>Lord knows I have a lot to learn here. One area I&rsquo;m learning to grow in is how to give honest and accurate feedback to team members, without fearing how they&rsquo;re going to receive it.</p>
 
-<ul>
-<li><p>&ldquo;WAN Settings&rdquo; section (Note the 20.2.20.x IP is just a random IP address so the AP doesn&rsquo;t go off and try to dynamically resolve a IP address)</p>
-
-<ul>
-<li><p>&ldquo;Static IP Address&rdquo; radio button selected</p></li>
-<li><p>IP Address: 20.2.20.20</p></li>
-<li><p>Subnet mask: 255.255.255.0</p></li>
-<li><p>ISP Gateway Address: 20.2.20.21</p></li>
-<li><p>Primary DNS address: 20.2.20.22</p></li>
-</ul>
-</li>
-<li><p>&ldquo;LAN Settings&rdquo; section:</p>
-
-<ul>
-<li><p>Static IP: 192.168.1.3</p></li>
-<li><p>Subnet mask: 255.255.255.0</p></li>
-<li><p>DNS Relay: Disabled.</p></li>
-</ul>
-</li>
-<li><p>&ldquo;DHCP Settings&rdquo; section:</p>
-
-<ul>
-<li>DHCP Server: Disabled</li>
-</ul>
-</li>
-<li><p>&ldquo;Wireless&rdquo; section:</p>
-
-<ul>
-<li>Set up your wireless AP settings however you&rsquo;d like!</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-
-
-<p>Though these instructions are specific to setting up the DI-624, I&rsquo;m pretty sure you could get your old router to work on an existing network.You can now extend the range of your home&rsquo;s wireless network without any fancy signal booster tricks or expensive repeater equipment. How cool is that?</p>
+<p>Another area? Delegation. I&rsquo;m learning to delegate the little micro-responsibilities in my job that I just kind of expect that I&rsquo;m supposed to do. Case in point: every week we accept a translation import from a third-party translation service. I realized that I was burning a lot of time reviewing hundreds of lines of translation keys every week, and the repetition of it was sapping a lot of my energy. I had to learn to ask a team member for help and give them responsibility to own that function of the process.</p>
 
 			
 			
@@ -292,405 +494,14 @@
 
 
 		
-			andrewhao 
-		
 
 
 
   
 		
-			on
+			Tagged under
 		
-    <a class='category' href='/category/geek/'>Geek</a>
-	
-
-
-	
-	
-	</footer>
-	
-</article>
-<!-- END OF _includes/article.html -->
-
-	
-		
-		<!-- START OF _includes/article.html -->
-<article>
-	<header>
-		<h1><a href="/2008/10/02/first-look-at-sproutcore-and-cappuccino/">First look at SproutCore and Cappuccino</a></h1>
-		<time>02 October 2008</time>
-	</header>
-		<div class="content">
-			<p>One trend on the Web these days is to move away from traditional full-stack frameworks (like <a href="http://rubyonrails.org">Rails</a>) toward client-side, full-stack Javascript frameworks (among them <a href="http://dojotoolkit.org/">Dojo</a>, <a href="http://code.google.com/webtoolkit/">GWT</a>, <a href="http://sproutcore.com">SproutCore</a>, and <a href="http://cappuccino.org">Cappuccino</a>). There&rsquo;s been a lot of buzz about <a href="http://www.sproutcore.com">SproutCore</a> and <a href="http://www.cappuccino.org">Cappuccino</a>, because of their design elegance, shiny Mac-ness and promises of really rich client experiences. I&rsquo;ve been checking them out and here&rsquo;s some of my observations so far:</p>
-
-<ul>
-<li><p>They&rsquo;re both really young: SproutCore and Cappuccino have emerged only in the last three months. I haven&rsquo;t heard of any deployed Cappuccino apps asides from the storied <a href="http://280slides.com/">280 Slides app</a>. Same with SproutCore, looks like asides from <a href="http://www.me.com">MobileMe</a>, they&rsquo;re only beginning to see user-created apps come out (see: <a href="http://blog.otherinbox.com/">OtherInbox</a>).</p></li>
-<li><p>The two frameworks are beautiful. Because they both model on Cocoa, they both take on the same icon set, window chrome, pane behaviors, and so on. Nice work, lifting the good UI work from the Mac and placing it on the Web.</p></li>
-<li><p>Objective-J sounds cool. I just can&rsquo;t see non-Cocoa programmers just picking it up, though. Even though I picked up Cocoa over the summer and I think it&rsquo;s pretty awesome, there was no way I would have the energy to pick up Objective-J on my own (unless Cappuccino proves itself to be THAT big of a draw).</p></li>
-<li><p>Okay, but to be fair, the idea of &ldquo;Cocoa on the Web&rdquo; is phenomenal. I wonder if we&rsquo;ll see a surge of ported Cocoa-to-Web apps. Aligning Cappuccino with AppKit is a great idea, and it&rsquo;s clearly the &ldquo;Web framework for Cocoa apps moving to the Web&rdquo; and you&rsquo;re gonna want to use it for sure if you&rsquo;re a proven Cocoa hacker. I wonder, however, if it can capture users who aren&rsquo;t Cocoa programmers.</p></li>
-<li><p>I&rsquo;m a big sucker for looks. Nothing gets me excited like SproutCore applications do in all their Aqua-like goodness. GWT in comparison looks pretty frumpy. I really like OS X-looking widgets. What can I say, I was brainwashed :)</p></li>
-<li><p>SproutCore and Cappuccino apps are simply not going to be able to out-perform GWT apps: they simply can&rsquo;t beat the compiler optimizations of compiled and optimized JS in GWT. Then again&hellip; we&rsquo;re going to have crazy fast JS engines in the next year or so. We&rsquo;ll see if performance is an issue.</p></li>
-</ul>
-
-
-<p>Even though these two frameworks are only beginning to gather momentum, I&rsquo;m excited at the direction they&rsquo;re moving the Web in. Anybody else want to weigh in?</p>
-
-			
-			
-		</div>
-	<footer>
-		
-
-
-		
-			andrewhao 
-		
-
-
-
-  
-		
-			on
-		
-    <a class='category' href='/category/andrew-2-dot-0/'>Andrew 2.0</a>, <a class='category' href='/category/geek/'>Geek</a>, <a class='category' href='/category/javascript/'>Javascript</a>, <a class='category' href='/category/web/'>Web</a>
-	
-
-
-	
-	
-	</footer>
-	
-</article>
-<!-- END OF _includes/article.html -->
-
-	
-		
-		<!-- START OF _includes/article.html -->
-<article>
-	<header>
-		<h1><a href="/2008/10/01/gwt-vs-sproutcore-vs-cappuccino/">GWT vs. SproutCore vs. Cappuccino</a></h1>
-		<time>01 October 2008</time>
-	</header>
-		<div class="content">
-			<p>I&rsquo;m looking to develop a Web application with a full-stack Javascript framework like <a href="http://code.google.com/webtoolkit/">GWT</a>, <a href="http://www.sproutcore.com">SproutCore</a> or <a href="http://www.cappuccino.org">Cappuccino</a>. I&rsquo;m making the decision to go with a Javascript framework over a traditional full-stack framework (like Rails) because:</p>
-
-<ul>
-<li><p>I get richer, desktop-like functionality in the browser.</p></li>
-<li><p>I can offload much of the work from the server onto the client.</p></li>
-<li><p>There&rsquo;s less Javascript hand-coding so I don&rsquo;t reinvent the wheel.</p></li>
-<li><p>I can bring the desktop app programming paradigm straight to the client.</p></li>
-</ul>
-
-
-<p>I&rsquo;ve been taking a look at <a href="http://code.google.com/webtoolkit/">GWT</a> (Google Web Toolkit), <a href="http://www.sproutcore.com">SproutCore</a> and <a href="http://www.cappuccino.org">Cappuccino</a>, and here&rsquo;s some of my observations so far:</p>
-
-<ul>
-<li><p>GWT is the most mature framework out of the three at 2 years. SproutCore and Cappuccino have emerged only in the last three months.</p></li>
-<li><p>SproutCore is really, really, beautiful. Just look at MobileMe. I&rsquo;m sure Cappuccino looks much the same. It&rsquo;s probably because both emulate Cocoa, and so take on the same icon set, window chrome, pane behaviors, and so on.</p></li>
-<li><p>Objective-J sounds cool. I picked up Cocoa over the summer, and to have it on a Web browser is going to be phenomenal.</p></li>
-<li><p>Cappuccino is so new that there aren&rsquo;t that many apps out there (asides from the storied <a href="http://280slides.com/">280 Slides app</a>). I&rsquo;m worried that it could be buggy and docs are too sparse.</p></li>
-<li><p>Something about Java in GWT makes me cringe. Maybe it&rsquo;s just because I&rsquo;m not used to that extra compilation step. Maybe it&rsquo;s because I&rsquo;ve been mucking in dynamic languages for too long of a time.</p></li>
-<li><p>I&rsquo;m a big sucker for looks. GWT looks pretty frumpy. Honestly, it doesn&rsquo;t get me excited like SproutCore applications do in all their Aqua-like goodness.</p></li>
-<li><p>The Ext widgets from <a href="http://extjs.com/products/gxt/">Ext-GWT</a> are only slightly better. I guess I shouldn&rsquo;t complain&hellip; but gosh, I really like OS X-looking widgets. What can I say, I was brainwashed :)</p></li>
-<li><p>SproutCore and Cappuccino are slower: they simply can&rsquo;t beat the compiler optimizations of compiled and optimized JS in GWT. Then again&hellip; we&rsquo;re going to have crazy fast JS engines in the next year or so.</p></li>
-<li><p>I considered <a href="http://dojotoolkit.org/">Dojo</a>. Sort of. I like it because it&rsquo;s more mature than SC, but it&rsquo;s slower than GWT and doesn&rsquo;t have as many widgets as Ext.</p></li>
-</ul>
-
-
-<p>Honestly, even though my &ldquo;ooh-shiny&rdquo; sense wants to use SproutCore, my objective reasoning tells me to go for GWT for its stronger support, more maturity, better performance and a fuller set of widgets. Anybody else want to weigh in?</p>
-
-			
-			
-		</div>
-	<footer>
-		
-
-
-		
-			andrewhao 
-		
-
-
-
-  
-		
-			on
-		
-    <a class='category' href='/category/geek/'>Geek</a>, <a class='category' href='/category/javascript/'>Javascript</a>, <a class='category' href='/category/web/'>Web</a>
-	
-
-
-	
-	
-	</footer>
-	
-</article>
-<!-- END OF _includes/article.html -->
-
-	
-		
-		<!-- START OF _includes/article.html -->
-<article>
-	<header>
-		<h1><a href="/2008/09/24/updated-portfolio-sort-of/">Updated portfolio&#8230; sort of.</a></h1>
-		<time>24 September 2008</time>
-	</header>
-		<div class="content">
-			<p>Since I&rsquo;m in the process of doing some housekeeping around the blog, I&rsquo;ve begun moving my <a href="http://www.flickr.com/photos/andrewhao/sets/72157602687541585/">old design portfolio over to Flickr</a>.</p>
-
-<p><a href="http://www.flickr.com/photos/andrewhao/sets/72157602687541585/"><img src="http://www.g9labs.com/wp-content/uploads/2008/09/design-gallery-updated-300x288.png" alt="" /></a></p>
-
-<p>This is sort of an intermediary step to another intermediary step of overhauling my portfolio (yeah, I&rsquo;ve been meaning to do this for the past five years). Watch this space for updated project briefs to come trickling in.</p>
-
-			
-			
-		</div>
-	<footer>
-		
-
-
-		
-			andrewhao 
-		
-
-
-
-  
-		
-			on
-		
-    <a class='category' href='/category/andrew-2-dot-0/'>Andrew 2.0</a>, <a class='category' href='/category/design/'>Design</a>
-	
-
-
-	
-	
-	</footer>
-	
-</article>
-<!-- END OF _includes/article.html -->
-
-	
-		
-		<!-- START OF _includes/article.html -->
-<article>
-	<header>
-		<h1><a href="/2008/09/16/a-laymans-guide-to-the-oai-ore-data-aggregation-protocol/">A layman&#8217;s guide to the OAI-ORE data aggregation protocol</a></h1>
-		<time>16 September 2008</time>
-	</header>
-		<div class="content">
-			<p>In Spring 2008, I took an information architecture course in the <a href="http://ischool.berkeley.edu">UC Berkeley School of Information</a>, taught by <a href="http://dret.typepad.com">Erik Wilde</a> (disclaimer: I dropped the course after a month because of schedule conflicts). An interesting part of my research for that class involved investigating the nascent <a href="http://www.openarchives.org/ore/">Object Reuse and Exchange (OAI-ORE)</a> protocol, a way of organizing groups of resources across the Web. I&rsquo;m going to try to describe in laymen&rsquo;s terms what I learned from my research and explain why it&rsquo;s significant.</p>
-
-<h3>Group things together on the Web</h3>
-
-<p>Let&rsquo;s say you&rsquo;re looking for a book online. You&rsquo;ll hit up JStor or Google Books and browse through the pages of that book you found. Easy enough, right?</p>
-
-<p>In reality, the <em>physical, electronic representation</em> of the book online is actually more than just &ldquo;that book on JStor&rdquo; or &ldquo;<a href="http://www.jstor.com/book">http://www.jstor.com/book</a>&rdquo;. It&rsquo;s actually a collection of images on a Web server. We need a uniform way to descibe that jStor&#8217; specific online version of &ldquo;War and Peace&rdquo; is actually comprised of &ldquo;page1.jpg&rdquo;, &ldquo;page2.jpg&rdquo;, et cetera.</p>
-
-<p>As another example, let&rsquo;s say that the local public library wants to create a digital representation of its materials on Jimi Hendrix. Well, the library&rsquo;s got Jimi Hendrix CDs, Jimi Hendrix books, Jimi Hendrix magazine articles, and so on. With the OAI-ORE protocol, we can create a digital &ldquo;Jimi Hendrix @ Your Local Public Library&rdquo; object that lists out each CD, book and magazine article contained in the library.</p>
-
-<p>Let&rsquo;s say on top of that, a certain Jimi Hendrix biography references &ldquo;Little Wing&rdquo; on pages 12, 141 and 254. This &ldquo;Jimi Hendrix&rdquo; object is capable of encoding that reference from those pages to &ldquo;Little Wing&rdquo; on the &ldquo;Axis: Bold as Love&rdquo; album in the library.</p>
-
-<h3>Why even have a description framework?</h3>
-
-<p>As the Web gets more connected and as we&rsquo;re seeing the rise of interoperable Web services, it becomes increasingly important to have a standard resource description language. Various protocols (such as RDF) have built a foundation on which to describe relationships between electronic resources.</p>
-
-<p>Think of OAI-ORE as a way of organizing information for re-use by others. If every library created its own &ldquo;Jimi Hendrix&rdquo; resource object and made them accessible to others, we could potentially create programs and Web services to collect all &ldquo;Jimi Hendrix&rdquo; objects from across the globe and reconstruct the ultimate, canonical Jimi Hendrix electronic resource library. We could note which books made references to &ldquo;Little Wing.&rdquo; We could view &ldquo;Little Wing&rdquo; as an WMA file, an MP3 file, or as lyrics.</p>
-
-<p>The key is that by standardizing a description language, we <strong>enable programmatic ways to collect and synthesize data</strong> that can potentially add to the value of the world&rsquo;s sum knowledge.</p>
-
-<h3>Resource maps &amp; implementation formats</h3>
-
-<p>OAI-ORE is a specification that defines relationships between resources through an object called the <em>resource map</em>. The resource map is a resource file enumerating a collection of resources and describing the relationships between each resource. Each resource map has its own URI, so it can be discoverable and accessible.</p>
-
-<p>There is no standard file format to encode resource maps. Currently, the OAI-ORE working group has suggested the following description formats (HT: <a href="http://www.natlib.govt.nz/downloads/IT19-Hunter-OAI-ORE-Oct30.ppt">Univ. of Queensland</a>):</p>
-
-<ul>
-<li><p><a href="http://www.w3.org/TR/REC-rdf-syntax/">RDF</a> (Resource Description Framework)</p></li>
-<li><p><a href="http://en.wikipedia.org/wiki/Atom_(standard">Atom</a>) syndication format</p></li>
-<li><p><a href="http://nurture.nature.com/yads">YADS</a></p></li>
-<li><p><a href="http://www.w3.org/2004/03/trix/">TriX</a> (RDF triples in XML)</p></li>
-</ul>
-
-
-<p>The <a href="http://www.openarchives.org/ore/0.9/rdfxml">recommended method of describing a resource map is in RDF/XML</a>. I&rsquo;m not very familiar with the RDF syntax, however, and the TriX format, which affords us RDF triples that can easiliy express relationships between objects and resources, seems to make more sense to me.. However, there is a <a href="http://www.openarchives.org/ore/0.1/atom">complete Atom implementation of the protocol</a>, used when syndication is preferred.</p>
-
-<p>I&rsquo;d definitely refer the reader to the <a href="http://www.natlib.govt.nz/downloads/IT19-Hunter-OAI-ORE-Oct30.ppt">Univ. of Queensland&rsquo;s OAI-ORE PDF overview</a> for a broader overview of the protocol and its potential implementations.</p>
-
-<h3>The nitty-gritty</h3>
-
-<blockquote><p><strong>Collections</strong>: Multiple resources can be grouped together, but only via an &ldquo;aggregate object&rdquo; or a &ldquo;collection&rdquo;, which maintains pointers to each object in a collection.</p>
-
-<p><strong>Links</strong>: Links describe relationships between objects in a resource map, such as &ldquo;has-part&rdquo; (&ldquo;War &amp; Peace &rdquo;-has-part-&ldquo;page 2&rdquo;) or &ldquo;derived-from&rdquo; (&ldquo;Radiohead &ndash; 15 Step Remix&rdquo;-derived-from-&ldquo;Radiohead &ndash; 15 Step&rdquo;). Actual relationships depend on selected vocabularies and namespaces (meaning you can change the link relationships to be whatever you need them to be). There is a <a href="http://www.openarchives.org/ore/0.9/primer.html#Namespaces">list of default namespaces on the spec</a>.</p></blockquote>
-
-<h3>In conclusion</h3>
-
-<p>I took a high-level and somewhat abstract tack in describing the protocol, and would direct you to the <a href="http://www.openarchives.org/ore/0.9/primer.html">OAI-ORE Primer</a> for more implementation specifics. Apologies to those of you who were completely lost in this discussion.</p>
-
-<p>I&rsquo;m excited about developing standards like these because resource mapping protocols such as OAI-ORE are an instrumental step in connecting resources, services and information on the Web. They&rsquo;ll help us &ldquo;connect the tubes&rdquo; and create the infrastructure needed to link the world&rsquo;s information together. Now that&rsquo;s pretty cool.</p>
-
-			
-			
-		</div>
-	<footer>
-		
-
-
-		
-			andrewhao 
-		
-
-
-
-  
-		
-			on
-		
-    <a class='category' href='/category/andrew-2-dot-0/'>Andrew 2.0</a>, <a class='category' href='/category/geek/'>Geek</a>, <a class='category' href='/category/information-architecture/'>Information Architecture</a>
-	
-
-
-	
-	
-	</footer>
-	
-</article>
-<!-- END OF _includes/article.html -->
-
-	
-		
-		<!-- START OF _includes/article.html -->
-<article>
-	<header>
-		<h1><a href="/2008/09/03/i-like-google-chrome/">I Like Google Chrome</a></h1>
-		<time>03 September 2008</time>
-	</header>
-		<div class="content">
-			<p>I have to admit, I am an unabashed fan of <a href="http://google.com/chrome">Google Chrome</a>, the new Web browser on the block. Why? UI design that shows attention to detail and a really cool backend architecture that gets a lot of respect from me for tossing convention and rethinking things from the ground up, the way they should have been done.<a href="http://blog.andrewhao.com/wp-content/uploads/2008/09/chrome-resized.png"><img src="http://blog.andrewhao.com/wp-content/uploads/2008/09/chrome-resized.png" alt="Google Chrome" /></a><a href="http://blog.andrewhao.com/wp-content/uploads/2008/09/chrome-resized.png"></a>Things I like:</p>
-
-<ul>
-<li><p>There is so little clutter. There&rsquo;s space for your Web pages and apps to breathe. The search bar and status bar and download pane only slide into view when needed, then they get out of your way so you can keep surfing. I love it.</p></li>
-<li><p>The tabs blend right into the title bar and look really, really slick with Windows Vista Aero glass. (Okay, IE7+ gets points for this too).</p></li>
-<li><p>You can pop tabs out from a window with a cool mini-screenshot.</p></li>
-<li><p>Multiprocessed browsing and using the Vista security model: great ideas.</p></li>
-<li><p>V8 Javascript JIT compiling is probably ridiculously complex but reports come in that say it gives us big performance wins.</p></li>
-<li><p>Webkit engine = awesomeness (and I didn&rsquo;t even have to work at Apple to say that). Hopefully this will speed CSS3 adoption (and don&rsquo;t even get me started on Webkit&rsquo;s CSS rounded corners and gradients!).</p></li>
-<li><p>Great use of (color) contrast: the hostame of the site is given a darker color in the location bar. Everything else is grey. It&rsquo;s all in the details.</p></li>
-<li><p>The Omnibar (location bar) just knows what I want to visit. Credit to Firefox&rsquo;s Awesome Bar for introducing us to the concept, but Chrome seems more accurate.</p></li>
-<li><p>The downloads bar doesn&rsquo;t open up a new window, but slides up a little bar that lets you glance at what just got downloaded. Awesome.
-Needs to improve:</p></li>
-<li><p>Gmail keyboard shortcuts seem to lose focus once I hit the &ldquo;Enter&rdquo; key.</p></li>
-<li><p>I know everybody&rsquo;s working hard over there, but extensions, please!
-So there&rsquo;s a nagging little voice that warns me that Google&rsquo;s seriously going to take over the Interwebs with this killer platform. The other voice in me says to give credit to solid engineering and great design where it&rsquo;s due. This is going to be a game changer, and I&rsquo;m excited to see what&rsquo;s in store for the future.</p></li>
-</ul>
-
-
-			
-			
-		</div>
-	<footer>
-		
-
-
-		
-			andrewhao 
-		
-
-
-
-  
-		
-			on
-		
-    <a class='category' href='/category/andrew-2-dot-0/'>Andrew 2.0</a>, <a class='category' href='/category/geek/'>Geek</a>, <a class='category' href='/category/interfaces/'>Interfaces</a>, <a class='category' href='/category/software/'>Software</a>
-	
-
-
-	
-	
-	</footer>
-	
-</article>
-<!-- END OF _includes/article.html -->
-
-	
-		
-		<!-- START OF _includes/article.html -->
-<article>
-	<header>
-		<h1><a href="/2008/08/14/work-series-graphics-good-shepherd-christian-church/">Work Series Graphics - Good Shepherd Christian Church</a></h1>
-		<time>14 August 2008</time>
-	</header>
-		<div class="content">
-			<p>Part 2 of a summer series:</p>
-
-<p><a href="http://www.flickr.com/photos/andrewhao/2764222573/"><img src="http://farm4.static.flickr.com/3184/2764222573_62576684e8.jpg" alt="Work Series" /></a></p>
-
-<p><a href="http://www.flickr.com/photos/andrewhao/2765067628/"><img src="http://farm4.static.flickr.com/3237/2765067628_f8e05a66d8.jpg" alt="Work Series" /></a></p>
-
-<p><a href="http://www.flickr.com/photos/andrewhao/2764221737/"><img src="http://farm4.static.flickr.com/3117/2764221737_3f4b6ee146.jpg" alt="Work Series" /></a></p>
-
-			
-			
-		</div>
-	<footer>
-		
-
-
-		
-			andrewhao 
-		
-
-
-
-  
-		
-			on
-		
-    <a class='category' href='/category/andrew-2-dot-0/'>Andrew 2.0</a>, <a class='category' href='/category/design/'>Design</a>
-	
-
-
-	
-	
-	</footer>
-	
-</article>
-<!-- END OF _includes/article.html -->
-
-	
-		
-		<!-- START OF _includes/article.html -->
-<article>
-	<header>
-		<h1><a href="/2008/07/01/wisdom-series-graphic-good-shepherd-christian-church/">Wisdom Series Graphic - Good Shepherd Christian Church</a></h1>
-		<time>01 July 2008</time>
-	</header>
-		<div class="content">
-			<p>I was commissioned to create graphics for a sermon series titled &ldquo;Wisdom&rdquo; at my home church, <a href="http://www.gschristian.org/">Good Shepherd</a>. Some of the artists and leaders decided to go with a lantern motif. I went ahead and sketched up these graphics in Illustrator, bumbling around a bit with the <a href="http://createsk8.com/2007/illustrator-tutorial-free-glass-symbol-library/">gradient mesh tool</a> in the process.</p>
-
-<p><a href="http://blog.g9labs.com/wp-content/uploads/2008/07/gscc-wisdom-series.jpg"><img src="http://blog.g9labs.com/wp-content/uploads/2008/07/gscc-wisdom-series.jpg" alt="gscc-wisdom-series.jpg" /></a></p>
-
-<p><a href="http://blog.g9labs.com/wp-content/uploads/2008/07/gscc-wisdom-series-2.jpg"><img src="http://blog.g9labs.com/wp-content/uploads/2008/07/gscc-wisdom-series-2.jpg" alt="gscc-wisdom-series-2.jpg" /></a></p>
-
-			
-			
-		</div>
-	<footer>
-		
-
-
-		
-			andrewhao 
-		
-
-
-
-  
-		
-			on
-		
-    <a class='category' href='/category/andrew-2-dot-0/'>Andrew 2.0</a>, <a class='category' href='/category/design/'>Design</a>
+    <a class='category' href='/category/code/'>Code</a>, <a class='category' href='/category/management/'>Management</a>, <a class='category' href='/category/thoughts/'>Thoughts</a>
 	
 
 
@@ -708,7 +519,7 @@ So there&rsquo;s a nagging little voice that warns me that Google&rsquo;s seriou
 		<a class="older" href="/page/7/">Older</a>
 	
 	
-	<span class="total">6 of 10</span>
+	<span class="total">6 of 33</span>
 	
 	
 		<a class="newer" href="/page/5/">Newer</a>
