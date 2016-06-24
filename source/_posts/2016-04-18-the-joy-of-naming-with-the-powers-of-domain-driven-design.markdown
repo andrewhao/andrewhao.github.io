@@ -78,27 +78,25 @@ Side note: in XP, each team has an "onsite customer" - this is your domain exper
 
 Try this: keep a living document of all the terminology your team uses - along with all its definitions. This __Glossary__ is exactly what it sounds - a list of terms and their definitions.
 
-```
-Delorean Team Glossary
-----------------------
-
-- **Coupon**: an applied discount to a BookingAmount. A coupon may take the form of a Fixed or a Percentage amount.
-   - **Fixed-type**: A coupon that applies a fixed amount of money - e.g. a $30 USD discount.
-   - **Percentage-type**: A coupon that applies a percentage savings off the total BookingAmount.
-- **Driver**: An employed driver who drives within the system, picking up passengers and driving Trips for payment.
-- **Trip**: An itinerary of passenger pick-up and drop-off location and times.
-- **Rider**: The passenger that books the trip and is transported by the *Driver*.
-- **Booking**: A reservation for a Trip, as booked by the *Rider*.
-- **BookingAmount**: The monetary amount of the Trip, accounting for the trip cost, surge pricing, coupons and taxes.
-- **Routing Engine:** The software system that maps out the driving directions for a driver.
-- **Payment**: A record of how a user paid.
-- **Charge**: A financial transaction for a specific dollar amount, for a specific charge method to an institution.
-- **Checkout**: A workflow in which a *Payment* is made for a *Booking*.
-```
+> Delorean Team Glossary
+> ----------------------
+>
+> - __Coupon__: an applied discount to a BookingAmount. A coupon may take the form of a Fixed or a Percentage amount.
+>    - __Fixed-type__: A coupon that applies a fixed amount of money - e.g. a $30 USD discount.
+>    - __Percentage-type__: A coupon that applies a percentage savings off the total BookingAmount.
+> - __Driver__: An employed driver who drives within the system, picking up passengers and driving Trips for payment.
+> - __Trip__: An itinerary of passenger pick-up and drop-off location and times.
+> - __Rider__: The passenger that books the trip and is transported by the *Driver*.
+> - __Booking__: A reservation for a Trip, as booked by the *Rider*.
+> - __BookingAmount__: The monetary amount of the Trip, accounting for the trip cost, surge pricing, coupons and taxes.
+> - __Routing Engine:__ The software system that maps out the driving directions for a driver.
+> - __Payment__: A record of how a user paid.
+> - __Charge__: A financial transaction for a specific dollar amount, for a specific charge method to an institution.
+> - __Checkout__: A workflow in which a *Payment* is made for a *Booking*.
 
 From now on, use only the term definitions listed here in your stories. Be explicit about how you use your language!
 
-I've been on many projects where the sloppy usage of a term from project inception led to the usage of that term in the code - codifying that messy, slippery term throughout the life of the project!
+I've been on many projects where the sloppy usage of a term from project inception led to the usage of that term in the code - codifying that messy, slippery term throughout the life of the project.
 
 Which leads us to our next point:
 
