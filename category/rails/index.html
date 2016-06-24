@@ -47,14 +47,14 @@
 		<div class="wrap">
 
 			<header>
-        <a href=""><div class="title">The Sweet Spot</div></a>
+        <a href="/"><div class="title">The Sweet Spot</div></a>
 				<div class="subtitle">Andrew Hao's thoughts about software engineering, design, and anything shiny.</div>
 
 				<div class="navi">
 					<ul>
-						<li><a href="/">Blog</a></li>
-						<li><a href="/blog/archives">All Articles</a></li>
-						<li><a href="/blog/archives">All Articles</a></li>
+						<li><a href="/blog/archives">Articles</a></li>
+						<li><a href="https://www.github.com/andrewhao">Github</a></li>
+						<li><a href="https://twitter.com/andrewhao">Twitter</a></li>
 					</ul>
 				</div> <!-- // .navi -->
 			</header>
@@ -85,7 +85,7 @@
 
 <div class="post-listing">
   <a class="title-listing" href="/2015/06/29/notes-on-performance-tuning-a-puma-server/">Notes on performance tuning a Puma server</a>
-  <p class="post-listing__preview">{ post.content | strip_html | truncatewords: 15 }}...</p>
+  <p class="post-listing__preview">A couple of months ago, I was tuning a Rails app for one of our clients. This client wanted to know how performant their app would be under load. To &hellip;</p>
 </div>
 <!-- END _includes/archive_post.html -->
 
@@ -104,7 +104,7 @@
 
 <div class="post-listing">
   <a class="title-listing" href="/2015/03/19/docker-rails-and-docker-compose-in-your-development-workflow/">Docker, Rails, and Docker Compose in your development workflow</a>
-  <p class="post-listing__preview">{ post.content | strip_html | truncatewords: 15 }}...</p>
+  <p class="post-listing__preview">(This post [originally appeared](http://blog.carbonfive.com/2015/03/17/docker-rails-docker-compose-together-in-your-development-workflow/) on the Carbon Five blog.) We've been trialing the usage of Docker and [Docker Compose](https://docs.docker.com/compose/) (previously known as [fig](http://www.fig.sh)) on a Rails project here at Carbon &hellip;</p>
 </div>
 <!-- END _includes/archive_post.html -->
 
@@ -126,7 +126,7 @@
 
 <div class="post-listing">
   <a class="title-listing" href="/2013/12/27/ember-data-rails-cors-and-you/">Ember Data, Rails, CORS, and you!</a>
-  <p class="post-listing__preview">{ post.content | strip_html | truncatewords: 15 }}...</p>
+  <p class="post-listing__preview">I'm starting up a new personal project involving Ember-Data and Rails (more to come). The gist of it is that it's a pure frontend app engine built in Yeoman and &hellip;</p>
 </div>
 <!-- END _includes/archive_post.html -->
 
@@ -145,7 +145,7 @@
 
 <div class="post-listing">
   <a class="title-listing" href="/2012/12/26/decomposing-fat-models/">Decomposing Fat Models</a>
-  <p class="post-listing__preview">{ post.content | strip_html | truncatewords: 15 }}...</p>
+  <p class="post-listing__preview">Heard an awesome Ruby Rogues podcast recently: ["Decomposing Fat Models"](http://rubyrogues.com/083-rr-decomposing-fat-models-with-bryan-helmkamp/). Essentially, they're talking through Bryan Helmkamp's [Code Climate blog entry "7 ways to decompose fat ActiveRecord models"](http://blog.codeclimate.com/blog/2012/10/17/7-ways-to-decompose-fat-activerecord-models/), which sums up &hellip;</p>
 </div>
 <!-- END _includes/archive_post.html -->
 
@@ -164,7 +164,7 @@
 
 <div class="post-listing">
   <a class="title-listing" href="/2012/04/27/speeding-up-rspeccucumber-feedback-times-without-sacrificing-coverage/">Speeding up Rspec/Cucumber feedback times without sacrificing coverage</a>
-  <p class="post-listing__preview">{ post.content | strip_html | truncatewords: 15 }}...</p>
+  <p class="post-listing__preview">[Rocket Fuelled Cucumbers](http://www.slideshare.net/josephwilk/rocket-fuelled-cucumbers) View more [presentations](http://www.slideshare.net/) from [Joseph Wilk](http://www.slideshare.net/josephwilk) One thing the Blurb devs have been discussing is how we can speed up our test feedback cycles without sacrificing coverage. &hellip;</p>
 </div>
 <!-- END _includes/archive_post.html -->
 
@@ -180,7 +180,7 @@
 
 <div class="post-listing">
   <a class="title-listing" href="/2012/04/12/haml-object-references/">HAML object references</a>
-  <p class="post-listing__preview">{ post.content | strip_html | truncatewords: 15 }}...</p>
+  <p class="post-listing__preview">Did you guys know that you can use the '[ ]' brackets in HAML to automatically set the id and class on a tag, kind of like Rails' [tag](http://api.rubyonrails.org/classes/ActionView/Helpers/TagHelper.html#method-i-tag) helper? # file: &hellip;</p>
 </div>
 <!-- END _includes/archive_post.html -->
 
@@ -199,7 +199,16 @@
 
 <div class="post-listing">
   <a class="title-listing" href="/2012/03/23/rspec-order-agnostic-array-matching/">RSpec order-agnostic array matching</a>
-  <p class="post-listing__preview">{ post.content | strip_html | truncatewords: 15 }}...</p>
+  <p class="post-listing__preview">What's that? [You want to write an expectation for an array but your method returns the Array in a nondeterministic ordering](http://stackoverflow.com/questions/2978922/rspec-array-should-another-array-but-without-concern-for-order)?
+
+Simple. Write:
+
+    
+    my_method.should =~ 
+
+
+See the [source](https://github.com/dchelimsky/rspec/blob/master/lib/spec/matchers/match_array.rb).
+</p>
 </div>
 <!-- END _includes/archive_post.html -->
 

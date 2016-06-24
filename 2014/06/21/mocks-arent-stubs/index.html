@@ -6,7 +6,7 @@
 		<meta charset="utf-8">
 		<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" >
 		<meta content="width=device-width,initial-scale=1" name="viewport">
-		<meta content="A hacker/designer's brain dump about things like Javascript, Ruby, and typography." name="description">
+		<meta content="" name="description">
 		<meta content="The Sweet Spot" name="author">
 
 		<title>Mocks aren't stubs: mockist & classic testing &mdash; The Sweet Spot</title>
@@ -47,12 +47,14 @@
 		<div class="wrap">
 
 			<header>
-				<div class="title">The Sweet Spot</div>
+        <a href="/"><div class="title">The Sweet Spot</div></a>
+				<div class="subtitle">Andrew Hao's thoughts about software engineering, design, and anything shiny.</div>
 
 				<div class="navi">
 					<ul>
-						<li><a href="/">Blog</a></li>
-						<li><a href="/blog/archives">All Articles</a></li>
+						<li><a href="/blog/archives">Articles</a></li>
+						<li><a href="https://www.github.com/andrewhao">Github</a></li>
+						<li><a href="https://twitter.com/andrewhao">Twitter</a></li>
 					</ul>
 				</div> <!-- // .navi -->
 			</header>
@@ -183,7 +185,7 @@ state instead of the <code>api_client</code>.</p>
 <li>Classic TDDists like using <code>double</code>s or real objects to test collaborators.</li>
 <li>From personal experience, testing classicly is oftentimes the path of least resistance. There isn&rsquo;t expectation setup and verification that mockist testing requires of you.</li>
 <li>Classic TDD sometimes results in creating objects that reveal state &mdash; note how the <code>BookUpdater</code> needed to expose an <code>updated?</code> method.</li>
-<li>Setting up the state of the world prior to your test may be complex, requiring setting up all the objects in your universe. This can be a huge pain (has anybody ever had this problem with overcomplicated Rails models with spidery associations? Raise your hands&hellip;). Classicists may argue that the root cause here is not paying attention to your model architecture, and having too many associations is an antipattern. Alternatively, classicists oftentimes generate test factories (e.g. Rails&#8217; FactoryGirl gem) to manage test setup.</li>
+<li>Setting up the state of the world prior to your test may be complex, requiring setting up all the objects in your universe. This can be a huge pain (has anybody ever had this problem with overcomplicated Rails models with spidery associations? Raise your hands&hellip;). Classicists may argue that the root cause here is not paying attention to your model architecture, and having too many associations is an antipattern. Alternatively, classicists oftentimes generate test factories (e.g. Rails' FactoryGirl gem) to manage test setup.</li>
 <li>Tests tend to be treatable more like black boxes, testable under isolation (due to verifications on object state) and are more resistant to refactoring.</li>
 </ul>
 
@@ -228,7 +230,7 @@ state instead of the <code>api_client</code>.</p>
 		
 			Tagged under
 		
-    <a class='category' href='/category/tdd/'>TDD</a>, <a class='category' href='/category/mocks/'>mocks</a>, <a class='category' href='/category/stubs/'>stubs</a>
+    <a class='category' href='/category/mocks/'>mocks</a>, <a class='category' href='/category/stubs/'>stubs</a>, <a class='category' href='/category/tdd/'>tdd</a>
 	
 
 

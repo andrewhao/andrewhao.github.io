@@ -6,7 +6,7 @@
 		<meta charset="utf-8">
 		<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" >
 		<meta content="width=device-width,initial-scale=1" name="viewport">
-		<meta content="A hacker/designer's brain dump about things like Javascript, Ruby, and typography." name="description">
+		<meta content="" name="description">
 		<meta content="The Sweet Spot" name="author">
 
 		<title>Knex.js and PostGIS cheat sheet &mdash; The Sweet Spot</title>
@@ -47,12 +47,14 @@
 		<div class="wrap">
 
 			<header>
-				<div class="title">The Sweet Spot</div>
+        <a href="/"><div class="title">The Sweet Spot</div></a>
+				<div class="subtitle">Andrew Hao's thoughts about software engineering, design, and anything shiny.</div>
 
 				<div class="navi">
 					<ul>
-						<li><a href="/">Blog</a></li>
-						<li><a href="/blog/archives">All Articles</a></li>
+						<li><a href="/blog/archives">Articles</a></li>
+						<li><a href="https://www.github.com/andrewhao">Github</a></li>
+						<li><a href="https://twitter.com/andrewhao">Twitter</a></li>
 					</ul>
 				</div> <!-- // .navi -->
 			</header>
@@ -145,12 +147,8 @@ Postgres and PostGIS queries.</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
 </pre></td><td class='code'><pre><code class='js'><span class='line'><span class="kr">const</span> <span class="nx">knexPostgis</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;knex-postgis&#39;</span><span class="p">)(</span><span class="nx">knex</span><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'><span class="nx">knex</span><span class="p">(</span><span class="s1">&#39;events&#39;</span><span class="p">)</span>
-</span><span class='line'><span class="p">.</span><span class="nx">select</span><span class="p">(</span><span class="s1">&#39;*&#39;</span><span class="p">,</span> <span class="nx">knexPostgis</span><span class="p">.</span><span class="nx">asGeoJSON</span><span class="p">(</span><span class="s1">&#39;point&#39;</span><span class="p">));</span>
+</span><span class='line'><span class="nx">knex</span><span class="p">(</span><span class="s1">&#39;events&#39;</span><span class="p">).</span><span class="nx">select</span><span class="p">(</span><span class="s1">&#39;*&#39;</span><span class="p">,</span> <span class="nx">knexPostgis</span><span class="p">.</span><span class="nx">asGeoJSON</span><span class="p">(</span><span class="s1">&#39;point&#39;</span><span class="p">));</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -171,7 +169,7 @@ Postgres and PostGIS queries.</p>
 		
 			Tagged under
 		
-    <a class='category' href='/category/javascript/'>Javascript</a>, <a class='category' href='/category/knex-dot-js/'>Knex.js</a>, <a class='category' href='/category/postgis/'>PostGIS</a>
+    <a class='category' href='/category/javascript/'>javascript</a>, <a class='category' href='/category/knex-dot-js/'>knex.js</a>, <a class='category' href='/category/postgis/'>postgis</a>
 	
 
 

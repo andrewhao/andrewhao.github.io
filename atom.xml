@@ -4,7 +4,7 @@
 	<title><![CDATA[The Sweet Spot]]></title>
 	<link href="http://www.g9labs.com/atom.xml" rel="self"/>
 	<link href="http://www.g9labs.com/"/>
-	<updated>2016-06-23T17:31:40-07:00</updated>
+	<updated>2016-06-24T11:21:00-07:00</updated>
 	<id>http://www.g9labs.com/</id>
 	<author>
 		<name><![CDATA[Andrew Hao]]></name>
@@ -121,7 +121,7 @@ to register handlers for the two possible outcomes, <code>hailed</code> and
 <span class='line-number'>19</span>
 </pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">module</span> <span class="nn">Ridesharing</span>
 </span><span class='line'>  <span class="k">class</span> <span class="nc">HailDelorean</span>
-</span><span class='line'>    <span class="kp">include</span> <span class="ss">Wisper</span><span class="p">:</span><span class="ss">:Publisher</span>
+</span><span class='line'>    <span class="kp">include</span> <span class="no">Wisper</span><span class="o">::</span><span class="no">Publisher</span>
 </span><span class='line'>
 </span><span class='line'>    <span class="k">def</span> <span class="nf">hail!</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
 </span><span class='line'>      <span class="c1"># broadcast() is a Wisper method to fire an event</span>
@@ -134,7 +134,7 @@ to register handlers for the two possible outcomes, <code>hailed</code> and
 </span><span class='line'>
 </span><span class='line'>    <span class="k">def</span> <span class="nf">find_driver</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
 </span><span class='line'>      <span class="c1"># Here lies slow, complex domain logic</span>
-</span><span class='line'>      <span class="ss">DriverRouting</span><span class="p">:</span><span class="ss">:FindDriver</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
+</span><span class='line'>      <span class="no">DriverRouting</span><span class="o">::</span><span class="no">FindDriver</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
 </span><span class='line'>    <span class="k">end</span>
 </span><span class='line'>  <span class="k">end</span>
 </span><span class='line'><span class="k">end</span>
@@ -270,7 +270,7 @@ Let&rsquo;s take advantage of that now.</p>
 </span><span class='line'>  <span class="k">end</span>
 </span><span class='line'>
 </span><span class='line'>  <span class="k">class</span> <span class="nc">HailDelorean</span>
-</span><span class='line'>    <span class="kp">include</span> <span class="ss">Wisper</span><span class="p">:</span><span class="ss">:Broadcaster</span>
+</span><span class='line'>    <span class="kp">include</span> <span class="no">Wisper</span><span class="o">::</span><span class="no">Broadcaster</span>
 </span><span class='line'>
 </span><span class='line'>    <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">hail</span><span class="p">(</span><span class="n">passenger_id</span><span class="p">)</span>
 </span><span class='line'>      <span class="n">broadcast</span><span class="p">(</span><span class="ss">:hail</span><span class="p">,</span> <span class="n">passenger_id</span><span class="p">)</span>
@@ -281,7 +281,7 @@ Let&rsquo;s take advantage of that now.</p>
 </span><span class='line'><span class="k">module</span> <span class="nn">DriverRouting</span>
 </span><span class='line'>  <span class="c1"># Note that this class is both a subscriber and a publisher</span>
 </span><span class='line'>  <span class="k">class</span> <span class="nc">FindDriver</span>
-</span><span class='line'>    <span class="kp">include</span> <span class="ss">Wisper</span><span class="p">:</span><span class="ss">:Publisher</span>
+</span><span class='line'>    <span class="kp">include</span> <span class="no">Wisper</span><span class="o">::</span><span class="no">Publisher</span>
 </span><span class='line'>
 </span><span class='line'>    <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">hail</span><span class="p">(</span><span class="n">passenger_id</span><span class="p">)</span>
 </span><span class='line'>      <span class="c1"># Do slow, complex hairy routefinding/optimization/messaging behind the scenes:</span>
@@ -332,8 +332,8 @@ Let&rsquo;s take advantage of that now.</p>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 </pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># config/initializers/domain_event_subscriptions.rb</span>
-</span><span class='line'><span class="ss">Ridesharing</span><span class="p">:</span><span class="ss">:HailDelorean</span><span class="o">.</span><span class="n">subscribe</span><span class="p">(</span><span class="ss">DriverRouting</span><span class="p">:</span><span class="ss">:FindDriver</span><span class="p">,</span> <span class="ss">async</span><span class="p">:</span> <span class="kp">true</span><span class="p">)</span>
-</span><span class='line'><span class="ss">DriverRouting</span><span class="p">:</span><span class="ss">:FindDriver</span><span class="o">.</span><span class="n">subscribe</span><span class="p">(</span><span class="ss">Ridesharing</span><span class="p">:</span><span class="ss">:NotifyPassengerWithDriverStatus</span><span class="p">,</span> <span class="ss">async</span><span class="p">:</span> <span class="kp">true</span><span class="p">)</span>
+</span><span class='line'><span class="no">Ridesharing</span><span class="o">::</span><span class="no">HailDelorean</span><span class="o">.</span><span class="n">subscribe</span><span class="p">(</span><span class="no">DriverRouting</span><span class="o">::</span><span class="no">FindDriver</span><span class="p">,</span> <span class="ss">async</span><span class="p">:</span> <span class="kp">true</span><span class="p">)</span>
+</span><span class='line'><span class="no">DriverRouting</span><span class="o">::</span><span class="no">FindDriver</span><span class="o">.</span><span class="n">subscribe</span><span class="p">(</span><span class="no">Ridesharing</span><span class="o">::</span><span class="no">NotifyPassengerWithDriverStatus</span><span class="p">,</span> <span class="ss">async</span><span class="p">:</span> <span class="kp">true</span><span class="p">)</span>
 </span><span class='line'><span class="no">Wisper</span><span class="o">.</span><span class="n">subscribe</span><span class="p">(</span><span class="no">AnalyticsListener</span><span class="p">,</span> <span class="ss">scope</span><span class="p">:</span> <span class="s2">&quot;Ridesharing::NotifyPassengerWithDriverStatus&quot;</span><span class="p">,</span> <span class="s2">&quot;DriverRouting::FindDriver&quot;</span><span class="o">]</span><span class="p">,</span> <span class="ss">async</span><span class="p">:</span> <span class="kp">true</span><span class="p">)</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -355,7 +355,7 @@ where a domain-centric view (and segregation) of code is present.</p>
 <h2>Caveats: Event subscriptions can be a tangled mess</h2>
 
 <p>Note that the act of wiring can quickly fan out into a spidery mess of handlers &ndash; you could even further
-decouple your handlers by modeling a global event bus as a publisher, and having each domain tap into the bus&#8217; events
+decouple your handlers by modeling a global event bus as a publisher, and having each domain tap into the bus' events
 and figure out how to handle each event on its own.</p>
 
 <h2>Caveats: transactional consistency!</h2>
@@ -438,7 +438,7 @@ it&rsquo;s not a fancy new framework, a how-to guide to do microservices, nor a 
 
 <h3>A better, Domain-Driven way</h3>
 
-<p>In Eric Evans&#8217; book <a href="http://www.amazon.com/Domain-Driven-Design-Tackling-Complexity-Software/dp/0321125215"><strong>Domain-Driven Design</strong></a>, he describes the concept of a <a href="http://martinfowler.com/bliki/UbiquitousLanguage.html">Ubiquitous Language</a> &ndash; a shared, common vocabulary that the entire team shares when discussing software.</p>
+<p>In Eric Evans' book <a href="http://www.amazon.com/Domain-Driven-Design-Tackling-Complexity-Software/dp/0321125215"><strong>Domain-Driven Design</strong></a>, he describes the concept of a <a href="http://martinfowler.com/bliki/UbiquitousLanguage.html">Ubiquitous Language</a> &ndash; a shared, common vocabulary that the entire team shares when discussing software.</p>
 
 <p>When we say the &ldquo;entire team&rdquo;, we mean the combined team of designers, developers, the product owner and any other domain experts that might be at hand.</p>
 
@@ -553,7 +553,7 @@ it&rsquo;s not a fancy new framework, a how-to guide to do microservices, nor a 
 </span><span class='line'>  <span class="k">end</span>
 </span><span class='line'>
 </span><span class='line'>  <span class="k">def</span> <span class="nf">total</span>
-</span><span class='line'>    <span class="vi">@booking_amount</span><span class="o">.</span><span class="n">total</span> <span class="o">-</span> <span class="vi">@discount</span><span class="o">.</span><span class="n">calculate_amount_for</span><span class="p">(</span><span class="n">booking_amount</span><span class="p">:</span> <span class="n">booking_amount</span><span class="p">)</span>
+</span><span class='line'>    <span class="vi">@booking_amount</span><span class="o">.</span><span class="n">total</span> <span class="o">-</span> <span class="vi">@discount</span><span class="o">.</span><span class="n">calculate_amount_for</span><span class="p">(</span><span class="ss">booking_amount</span><span class="p">:</span> <span class="n">booking_amount</span><span class="p">)</span>
 </span><span class='line'>  <span class="k">end</span>
 </span><span class='line'><span class="k">end</span>
 </span><span class='line'>
@@ -566,7 +566,7 @@ it&rsquo;s not a fancy new framework, a how-to guide to do microservices, nor a 
 </span><span class='line'>    <span class="vi">@strategy</span> <span class="o">=</span> <span class="n">strategy</span>
 </span><span class='line'>  <span class="k">end</span>
 </span><span class='line'>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">calculate_amount_for</span><span class="p">(</span><span class="n">booking_amount</span><span class="p">:)</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">calculate_amount_for</span><span class="p">(</span><span class="ss">booking_amount</span><span class="p">:)</span>
 </span><span class='line'>    <span class="c1"># Implementation...</span>
 </span><span class='line'>  <span class="k">end</span>
 </span><span class='line'><span class="k">end</span>
@@ -597,7 +597,7 @@ it&rsquo;s not a fancy new framework, a how-to guide to do microservices, nor a 
 </span><span class='line'>    <span class="vi">@strategy</span> <span class="o">=</span> <span class="n">strategy</span>
 </span><span class='line'>  <span class="k">end</span>
 </span><span class='line'>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">calculate_amount_for</span><span class="p">(</span><span class="n">booking_amount</span><span class="p">:)</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">calculate_amount_for</span><span class="p">(</span><span class="ss">booking_amount</span><span class="p">:)</span>
 </span><span class='line'>    <span class="c1"># Implementation...</span>
 </span><span class='line'>  <span class="k">end</span>
 </span><span class='line'><span class="k">end</span>
@@ -752,7 +752,7 @@ it&rsquo;s not a fancy new framework, a how-to guide to do microservices, nor a 
 
 <p>In an upcoming post, we&rsquo;ll investigate how the <strong>Ubiquitous Language</strong> applies to a core concept of Domain-Driven Design: the <strong>Bounded Context</strong>. Why is that important? Because Bounded Contexts give us tools to organize our code &ndash; and to do further advanced things like <a href="https://speakerdeck.com/andrewhao/ddd-rail-your-monorail">break up monoliths into services</a>.</p>
 
-<script async class="speakerdeck-embed" data-id="1e6dd8983891467381036a321cd274a9" data-ratio="1.77777777777778" src="http://www.g9labs.com//speakerdeck.com/assets/embed.js"></script>
+<script async class="speakerdeck-embed" data-id="1e6dd8983891467381036a321cd274a9" data-ratio="1.77777777777778" src="//speakerdeck.com/assets/embed.js"></script>
 
 ]]>
 		</content>
@@ -850,12 +850,8 @@ Postgres and PostGIS queries.</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
 </pre></td><td class='code'><pre><code class='js'><span class='line'><span class="kr">const</span> <span class="nx">knexPostgis</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;knex-postgis&#39;</span><span class="p">)(</span><span class="nx">knex</span><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'><span class="nx">knex</span><span class="p">(</span><span class="s1">&#39;events&#39;</span><span class="p">)</span>
-</span><span class='line'><span class="p">.</span><span class="nx">select</span><span class="p">(</span><span class="s1">&#39;*&#39;</span><span class="p">,</span> <span class="nx">knexPostgis</span><span class="p">.</span><span class="nx">asGeoJSON</span><span class="p">(</span><span class="s1">&#39;point&#39;</span><span class="p">));</span>
+</span><span class='line'><span class="nx">knex</span><span class="p">(</span><span class="s1">&#39;events&#39;</span><span class="p">).</span><span class="nx">select</span><span class="p">(</span><span class="s1">&#39;*&#39;</span><span class="p">,</span> <span class="nx">knexPostgis</span><span class="p">.</span><span class="nx">asGeoJSON</span><span class="p">(</span><span class="s1">&#39;point&#39;</span><span class="p">));</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -896,7 +892,7 @@ the pipe. You understand the bounds of the data that will ever come over
 the pipe.</li>
 <li>You have a processing script you want to run, which is not part of a
 large system.</li>
-<li>You have a honkin&#8217; large system that can handle the load.</li>
+<li>You have a honkin' large system that can handle the load.</li>
 </ul>
 
 
@@ -2002,7 +1998,7 @@ clicking the checkbox &ldquo;Create Groups for any Added Folders&rdquo;</p>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>will add an entry for <code>db</code> into the Rails&#8217; container&rsquo;s <code>/etc/hosts</code>, linking the hostname to the correct container. This allows us to write our database.yml like so:</p>
+<p>will add an entry for <code>db</code> into the Rails' container&rsquo;s <code>/etc/hosts</code>, linking the hostname to the correct container. This allows us to write our database.yml like so:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -2523,7 +2519,7 @@ each container. You should see output that indicates that both our <code>web</co
 
 <p>Here&rsquo;s a corollary, which I&rsquo;ve heard in various shapes and forms. Paraphrased:</p>
 
-<blockquote><p>An organization&rsquo;s structure tends to pattern after its leaders&#8217; communication patterns.</p></blockquote>
+<blockquote><p>An organization&rsquo;s structure tends to pattern after its leaders' communication patterns.</p></blockquote>
 
 <p>I&rsquo;ve been pushing an effort to unify our company&rsquo;s frontend styles and UX into a unified framework in an attempt to standardize the look and feel of the site.</p>
 
@@ -2666,7 +2662,7 @@ state instead of the <code>api_client</code>.</p>
 <li>Classic TDDists like using <code>double</code>s or real objects to test collaborators.</li>
 <li>From personal experience, testing classicly is oftentimes the path of least resistance. There isn&rsquo;t expectation setup and verification that mockist testing requires of you.</li>
 <li>Classic TDD sometimes results in creating objects that reveal state &mdash; note how the <code>BookUpdater</code> needed to expose an <code>updated?</code> method.</li>
-<li>Setting up the state of the world prior to your test may be complex, requiring setting up all the objects in your universe. This can be a huge pain (has anybody ever had this problem with overcomplicated Rails models with spidery associations? Raise your hands&hellip;). Classicists may argue that the root cause here is not paying attention to your model architecture, and having too many associations is an antipattern. Alternatively, classicists oftentimes generate test factories (e.g. Rails&#8217; FactoryGirl gem) to manage test setup.</li>
+<li>Setting up the state of the world prior to your test may be complex, requiring setting up all the objects in your universe. This can be a huge pain (has anybody ever had this problem with overcomplicated Rails models with spidery associations? Raise your hands&hellip;). Classicists may argue that the root cause here is not paying attention to your model architecture, and having too many associations is an antipattern. Alternatively, classicists oftentimes generate test factories (e.g. Rails' FactoryGirl gem) to manage test setup.</li>
 <li>Tests tend to be treatable more like black boxes, testable under isolation (due to verifications on object state) and are more resistant to refactoring.</li>
 </ul>
 

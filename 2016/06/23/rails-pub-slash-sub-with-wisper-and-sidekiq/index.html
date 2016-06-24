@@ -6,7 +6,7 @@
 		<meta charset="utf-8">
 		<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" >
 		<meta content="width=device-width,initial-scale=1" name="viewport">
-		<meta content="A hacker/designer's brain dump about things like Javascript, Ruby, and typography." name="description">
+		<meta content="" name="description">
 		<meta content="The Sweet Spot" name="author">
 
 		<title>Evented Rails: Decoupling domains in Rails with Wisper pub/sub events &mdash; The Sweet Spot</title>
@@ -47,12 +47,14 @@
 		<div class="wrap">
 
 			<header>
-				<div class="title">The Sweet Spot</div>
+        <a href="/"><div class="title">The Sweet Spot</div></a>
+				<div class="subtitle">Andrew Hao's thoughts about software engineering, design, and anything shiny.</div>
 
 				<div class="navi">
 					<ul>
-						<li><a href="/">Blog</a></li>
-						<li><a href="/blog/archives">All Articles</a></li>
+						<li><a href="/blog/archives">Articles</a></li>
+						<li><a href="https://www.github.com/andrewhao">Github</a></li>
+						<li><a href="https://twitter.com/andrewhao">Twitter</a></li>
 					</ul>
 				</div> <!-- // .navi -->
 			</header>
@@ -161,7 +163,7 @@ to register handlers for the two possible outcomes, <code>hailed</code> and
 <span class='line-number'>19</span>
 </pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">module</span> <span class="nn">Ridesharing</span>
 </span><span class='line'>  <span class="k">class</span> <span class="nc">HailDelorean</span>
-</span><span class='line'>    <span class="kp">include</span> <span class="ss">Wisper</span><span class="p">:</span><span class="ss">:Publisher</span>
+</span><span class='line'>    <span class="kp">include</span> <span class="no">Wisper</span><span class="o">::</span><span class="no">Publisher</span>
 </span><span class='line'>
 </span><span class='line'>    <span class="k">def</span> <span class="nf">hail!</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
 </span><span class='line'>      <span class="c1"># broadcast() is a Wisper method to fire an event</span>
@@ -174,7 +176,7 @@ to register handlers for the two possible outcomes, <code>hailed</code> and
 </span><span class='line'>
 </span><span class='line'>    <span class="k">def</span> <span class="nf">find_driver</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
 </span><span class='line'>      <span class="c1"># Here lies slow, complex domain logic</span>
-</span><span class='line'>      <span class="ss">DriverRouting</span><span class="p">:</span><span class="ss">:FindDriver</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
+</span><span class='line'>      <span class="no">DriverRouting</span><span class="o">::</span><span class="no">FindDriver</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
 </span><span class='line'>    <span class="k">end</span>
 </span><span class='line'>  <span class="k">end</span>
 </span><span class='line'><span class="k">end</span>
@@ -310,7 +312,7 @@ Let&rsquo;s take advantage of that now.</p>
 </span><span class='line'>  <span class="k">end</span>
 </span><span class='line'>
 </span><span class='line'>  <span class="k">class</span> <span class="nc">HailDelorean</span>
-</span><span class='line'>    <span class="kp">include</span> <span class="ss">Wisper</span><span class="p">:</span><span class="ss">:Broadcaster</span>
+</span><span class='line'>    <span class="kp">include</span> <span class="no">Wisper</span><span class="o">::</span><span class="no">Broadcaster</span>
 </span><span class='line'>
 </span><span class='line'>    <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">hail</span><span class="p">(</span><span class="n">passenger_id</span><span class="p">)</span>
 </span><span class='line'>      <span class="n">broadcast</span><span class="p">(</span><span class="ss">:hail</span><span class="p">,</span> <span class="n">passenger_id</span><span class="p">)</span>
@@ -321,7 +323,7 @@ Let&rsquo;s take advantage of that now.</p>
 </span><span class='line'><span class="k">module</span> <span class="nn">DriverRouting</span>
 </span><span class='line'>  <span class="c1"># Note that this class is both a subscriber and a publisher</span>
 </span><span class='line'>  <span class="k">class</span> <span class="nc">FindDriver</span>
-</span><span class='line'>    <span class="kp">include</span> <span class="ss">Wisper</span><span class="p">:</span><span class="ss">:Publisher</span>
+</span><span class='line'>    <span class="kp">include</span> <span class="no">Wisper</span><span class="o">::</span><span class="no">Publisher</span>
 </span><span class='line'>
 </span><span class='line'>    <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">hail</span><span class="p">(</span><span class="n">passenger_id</span><span class="p">)</span>
 </span><span class='line'>      <span class="c1"># Do slow, complex hairy routefinding/optimization/messaging behind the scenes:</span>
@@ -372,8 +374,8 @@ Let&rsquo;s take advantage of that now.</p>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 </pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># config/initializers/domain_event_subscriptions.rb</span>
-</span><span class='line'><span class="ss">Ridesharing</span><span class="p">:</span><span class="ss">:HailDelorean</span><span class="o">.</span><span class="n">subscribe</span><span class="p">(</span><span class="ss">DriverRouting</span><span class="p">:</span><span class="ss">:FindDriver</span><span class="p">,</span> <span class="ss">async</span><span class="p">:</span> <span class="kp">true</span><span class="p">)</span>
-</span><span class='line'><span class="ss">DriverRouting</span><span class="p">:</span><span class="ss">:FindDriver</span><span class="o">.</span><span class="n">subscribe</span><span class="p">(</span><span class="ss">Ridesharing</span><span class="p">:</span><span class="ss">:NotifyPassengerWithDriverStatus</span><span class="p">,</span> <span class="ss">async</span><span class="p">:</span> <span class="kp">true</span><span class="p">)</span>
+</span><span class='line'><span class="no">Ridesharing</span><span class="o">::</span><span class="no">HailDelorean</span><span class="o">.</span><span class="n">subscribe</span><span class="p">(</span><span class="no">DriverRouting</span><span class="o">::</span><span class="no">FindDriver</span><span class="p">,</span> <span class="ss">async</span><span class="p">:</span> <span class="kp">true</span><span class="p">)</span>
+</span><span class='line'><span class="no">DriverRouting</span><span class="o">::</span><span class="no">FindDriver</span><span class="o">.</span><span class="n">subscribe</span><span class="p">(</span><span class="no">Ridesharing</span><span class="o">::</span><span class="no">NotifyPassengerWithDriverStatus</span><span class="p">,</span> <span class="ss">async</span><span class="p">:</span> <span class="kp">true</span><span class="p">)</span>
 </span><span class='line'><span class="no">Wisper</span><span class="o">.</span><span class="n">subscribe</span><span class="p">(</span><span class="no">AnalyticsListener</span><span class="p">,</span> <span class="ss">scope</span><span class="p">:</span> <span class="s2">&quot;Ridesharing::NotifyPassengerWithDriverStatus&quot;</span><span class="p">,</span> <span class="s2">&quot;DriverRouting::FindDriver&quot;</span><span class="o">]</span><span class="p">,</span> <span class="ss">async</span><span class="p">:</span> <span class="kp">true</span><span class="p">)</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -395,7 +397,7 @@ where a domain-centric view (and segregation) of code is present.</p>
 <h2>Caveats: Event subscriptions can be a tangled mess</h2>
 
 <p>Note that the act of wiring can quickly fan out into a spidery mess of handlers &ndash; you could even further
-decouple your handlers by modeling a global event bus as a publisher, and having each domain tap into the bus&#8217; events
+decouple your handlers by modeling a global event bus as a publisher, and having each domain tap into the bus' events
 and figure out how to handle each event on its own.</p>
 
 <h2>Caveats: transactional consistency!</h2>
@@ -425,7 +427,7 @@ want to skip the asynchronous and keep our events synchronous.</p>
 		
 			Tagged under
 		
-    <a class='category' href='/category/ddd/'>DDD</a>, <a class='category' href='/category/domain-driven-design/'>Domain-Driven Design</a>, <a class='category' href='/category/wisper/'>Wisper</a>, <a class='category' href='/category/pub-slash-sub/'>pub/sub</a>
+    <a class='category' href='/category/ddd/'>ddd</a>, <a class='category' href='/category/domain-driven-design/'>domain-driven design</a>, <a class='category' href='/category/pub-slash-sub/'>pub/sub</a>, <a class='category' href='/category/wisper/'>wisper</a>
 	
 
 

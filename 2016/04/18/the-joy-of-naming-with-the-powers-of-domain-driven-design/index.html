@@ -6,7 +6,7 @@
 		<meta charset="utf-8">
 		<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" >
 		<meta content="width=device-width,initial-scale=1" name="viewport">
-		<meta content="A hacker/designer's brain dump about things like Javascript, Ruby, and typography." name="description">
+		<meta content="" name="description">
 		<meta content="The Sweet Spot" name="author">
 
 		<title>Domain-Driven Design & The Joy of Naming &mdash; The Sweet Spot</title>
@@ -47,12 +47,14 @@
 		<div class="wrap">
 
 			<header>
-				<div class="title">The Sweet Spot</div>
+        <a href="/"><div class="title">The Sweet Spot</div></a>
+				<div class="subtitle">Andrew Hao's thoughts about software engineering, design, and anything shiny.</div>
 
 				<div class="navi">
 					<ul>
-						<li><a href="/">Blog</a></li>
-						<li><a href="/blog/archives">All Articles</a></li>
+						<li><a href="/blog/archives">Articles</a></li>
+						<li><a href="https://www.github.com/andrewhao">Github</a></li>
+						<li><a href="https://twitter.com/andrewhao">Twitter</a></li>
 					</ul>
 				</div> <!-- // .navi -->
 			</header>
@@ -118,7 +120,7 @@ it&rsquo;s not a fancy new framework, a how-to guide to do microservices, nor a 
 
 <h3>A better, Domain-Driven way</h3>
 
-<p>In Eric Evans&#8217; book <a href="http://www.amazon.com/Domain-Driven-Design-Tackling-Complexity-Software/dp/0321125215"><strong>Domain-Driven Design</strong></a>, he describes the concept of a <a href="http://martinfowler.com/bliki/UbiquitousLanguage.html">Ubiquitous Language</a> &ndash; a shared, common vocabulary that the entire team shares when discussing software.</p>
+<p>In Eric Evans' book <a href="http://www.amazon.com/Domain-Driven-Design-Tackling-Complexity-Software/dp/0321125215"><strong>Domain-Driven Design</strong></a>, he describes the concept of a <a href="http://martinfowler.com/bliki/UbiquitousLanguage.html">Ubiquitous Language</a> &ndash; a shared, common vocabulary that the entire team shares when discussing software.</p>
 
 <p>When we say the &ldquo;entire team&rdquo;, we mean the combined team of designers, developers, the product owner and any other domain experts that might be at hand.</p>
 
@@ -233,7 +235,7 @@ it&rsquo;s not a fancy new framework, a how-to guide to do microservices, nor a 
 </span><span class='line'>  <span class="k">end</span>
 </span><span class='line'>
 </span><span class='line'>  <span class="k">def</span> <span class="nf">total</span>
-</span><span class='line'>    <span class="vi">@booking_amount</span><span class="o">.</span><span class="n">total</span> <span class="o">-</span> <span class="vi">@discount</span><span class="o">.</span><span class="n">calculate_amount_for</span><span class="p">(</span><span class="n">booking_amount</span><span class="p">:</span> <span class="n">booking_amount</span><span class="p">)</span>
+</span><span class='line'>    <span class="vi">@booking_amount</span><span class="o">.</span><span class="n">total</span> <span class="o">-</span> <span class="vi">@discount</span><span class="o">.</span><span class="n">calculate_amount_for</span><span class="p">(</span><span class="ss">booking_amount</span><span class="p">:</span> <span class="n">booking_amount</span><span class="p">)</span>
 </span><span class='line'>  <span class="k">end</span>
 </span><span class='line'><span class="k">end</span>
 </span><span class='line'>
@@ -246,7 +248,7 @@ it&rsquo;s not a fancy new framework, a how-to guide to do microservices, nor a 
 </span><span class='line'>    <span class="vi">@strategy</span> <span class="o">=</span> <span class="n">strategy</span>
 </span><span class='line'>  <span class="k">end</span>
 </span><span class='line'>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">calculate_amount_for</span><span class="p">(</span><span class="n">booking_amount</span><span class="p">:)</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">calculate_amount_for</span><span class="p">(</span><span class="ss">booking_amount</span><span class="p">:)</span>
 </span><span class='line'>    <span class="c1"># Implementation...</span>
 </span><span class='line'>  <span class="k">end</span>
 </span><span class='line'><span class="k">end</span>
@@ -277,7 +279,7 @@ it&rsquo;s not a fancy new framework, a how-to guide to do microservices, nor a 
 </span><span class='line'>    <span class="vi">@strategy</span> <span class="o">=</span> <span class="n">strategy</span>
 </span><span class='line'>  <span class="k">end</span>
 </span><span class='line'>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">calculate_amount_for</span><span class="p">(</span><span class="n">booking_amount</span><span class="p">:)</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">calculate_amount_for</span><span class="p">(</span><span class="ss">booking_amount</span><span class="p">:)</span>
 </span><span class='line'>    <span class="c1"># Implementation...</span>
 </span><span class='line'>  <span class="k">end</span>
 </span><span class='line'><span class="k">end</span>
@@ -450,7 +452,7 @@ it&rsquo;s not a fancy new framework, a how-to guide to do microservices, nor a 
 		
 			Tagged under
 		
-    <a class='category' href='/category/architecture/'>Architecture</a>, <a class='category' href='/category/ddd/'>DDD</a>, <a class='category' href='/category/domain-driven-design/'>Domain-Driven Design</a>
+    <a class='category' href='/category/architecture/'>architecture</a>, <a class='category' href='/category/ddd/'>ddd</a>, <a class='category' href='/category/domain-driven-design/'>domain-driven design</a>
 	
 
 

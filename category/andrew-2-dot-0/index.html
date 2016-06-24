@@ -47,14 +47,14 @@
 		<div class="wrap">
 
 			<header>
-        <a href=""><div class="title">The Sweet Spot</div></a>
+        <a href="/"><div class="title">The Sweet Spot</div></a>
 				<div class="subtitle">Andrew Hao's thoughts about software engineering, design, and anything shiny.</div>
 
 				<div class="navi">
 					<ul>
-						<li><a href="/">Blog</a></li>
-						<li><a href="/blog/archives">All Articles</a></li>
-						<li><a href="/blog/archives">All Articles</a></li>
+						<li><a href="/blog/archives">Articles</a></li>
+						<li><a href="https://www.github.com/andrewhao">Github</a></li>
+						<li><a href="https://twitter.com/andrewhao">Twitter</a></li>
 					</ul>
 				</div> <!-- // .navi -->
 			</header>
@@ -85,7 +85,7 @@
 
 <div class="post-listing">
   <a class="title-listing" href="/2012/10/04/deploying-janky-on-ubuntu/">Deploying Janky on Ubuntu</a>
-  <p class="post-listing__preview">{ post.content | strip_html | truncatewords: 15 }}...</p>
+  <p class="post-listing__preview">[Janky](https://github.com/blog/1013-janky) is a Github-developed [Hubot](https://github.com/github/hubot) + Jenkins control interface. It's developed to be deployed on Heroku. However, what if you need it to live on an internal VM? Here's how &hellip;</p>
 </div>
 <!-- END _includes/archive_post.html -->
 
@@ -104,7 +104,7 @@
 
 <div class="post-listing">
   <a class="title-listing" href="/2012/06/20/updating-max-file-limit-on-osx-lion/">Updating max file limit on OSX Lion</a>
-  <p class="post-listing__preview">{ post.content | strip_html | truncatewords: 15 }}...</p>
+  <p class="post-listing__preview">I've been hitting a lot of "Maximum file limit exceeded" dialogs after a long day at work -- at any point in time I've got a kajillion Chrome tabs open, &hellip;</p>
 </div>
 <!-- END _includes/archive_post.html -->
 
@@ -123,7 +123,7 @@
 
 <div class="post-listing">
   <a class="title-listing" href="/2012/04/23/backup-backup-backup/">Backup, backup, backup</a>
-  <p class="post-listing__preview">{ post.content | strip_html | truncatewords: 15 }}...</p>
+  <p class="post-listing__preview">Well, the inevitable happened: I finally experienced a hard drive failure. It's pretty incredible that in the twenty-odd years I've been around computers I've never had the horror of losing &hellip;</p>
 </div>
 <!-- END _includes/archive_post.html -->
 
@@ -142,7 +142,16 @@
 
 <div class="post-listing">
   <a class="title-listing" href="/2012/03/23/rspec-order-agnostic-array-matching/">RSpec order-agnostic array matching</a>
-  <p class="post-listing__preview">{ post.content | strip_html | truncatewords: 15 }}...</p>
+  <p class="post-listing__preview">What's that? [You want to write an expectation for an array but your method returns the Array in a nondeterministic ordering](http://stackoverflow.com/questions/2978922/rspec-array-should-another-array-but-without-concern-for-order)?
+
+Simple. Write:
+
+    
+    my_method.should =~ 
+
+
+See the [source](https://github.com/dchelimsky/rspec/blob/master/lib/spec/matchers/match_array.rb).
+</p>
 </div>
 <!-- END _includes/archive_post.html -->
 
@@ -161,7 +170,7 @@
 
 <div class="post-listing">
   <a class="title-listing" href="/2012/01/20/ohm-gotchas/">Ohm gotchas</a>
-  <p class="post-listing__preview">{ post.content | strip_html | truncatewords: 15 }}...</p>
+  <p class="post-listing__preview">Here's a list of things that have been annoying, or at least a bit frustrating using [Ohm](http://ohm.keyvalue.org), the Redis ORM, in a Rails app. Beware to those who assume Ohm is &hellip;</p>
 </div>
 <!-- END _includes/archive_post.html -->
 
@@ -183,7 +192,7 @@
 
 <div class="post-listing">
   <a class="title-listing" href="/2011/06/04/code-for-oakland-barcamp/">Code For Oakland Barcamp</a>
-  <p class="post-listing__preview">{ post.content | strip_html | truncatewords: 15 }}...</p>
+  <p class="post-listing__preview">[caption id="" align="alignnone" width="500" caption="Is that Jon Chan I see? Yes it is. Photo credit Oakland Local."][![](http://farm4.static.flickr.com/3527/5804304389_e539db36a2.jpg)](http://www.flickr.com/photos/oaklandlocal/5804304389/)[/caption] A few notes from this [one-day barcamp/hackfest](http://codeforoakland.org/). The goal was to create mobile &hellip;</p>
 </div>
 <!-- END _includes/archive_post.html -->
 
@@ -202,7 +211,7 @@
 
 <div class="post-listing">
   <a class="title-listing" href="/2011/02/23/save-our-souls-a-twitter-art-installation/">Save our souls - a Twitter art installation</a>
-  <p class="post-listing__preview">{ post.content | strip_html | truncatewords: 15 }}...</p>
+  <p class="post-listing__preview">Here's how the installation looked on the day of the art show. [caption id="" align="alignnone" width="333" caption="We mounted the installation on the inside of the Regeneration cafe. The Arduino lies &hellip;</p>
 </div>
 <!-- END _includes/archive_post.html -->
 
@@ -218,7 +227,7 @@
 
 <div class="post-listing">
   <a class="title-listing" href="/2011/02/01/the-making-of-sos-intro/">The making of SOS: Intro</a>
-  <p class="post-listing__preview">{ post.content | strip_html | truncatewords: 15 }}...</p>
+  <p class="post-listing__preview">[![Save Our Souls - Logo](http://farm6.static.flickr.com/5095/5408231821_b4d0fd6837.jpg)](http://www.flickr.com/photos/andrewhao/5408231821/) I'm starting a project for my church's art show that integrates Twitter, print design and light. I'm titling it "Save Our Souls". The theme of &hellip;</p>
 </div>
 <!-- END _includes/archive_post.html -->
 
@@ -237,7 +246,10 @@
 
 <div class="post-listing">
   <a class="title-listing" href="/2011/01/28/using-37signals-shorthand-for-ux-flows/">Using 37signals shorthand for UX flows</a>
-  <p class="post-listing__preview">{ post.content | strip_html | truncatewords: 15 }}...</p>
+  <p class="post-listing__preview">[http://37signals.com/svn/posts/1926-a-shorthand-for-designing-ui-flows](http://37signals.com/svn/posts/1926-a-shorthand-for-designing-ui-flows)
+
+I've found this technique useful for illustrating workflows quickly, particularly when brainstorming in teams.
+</p>
 </div>
 <!-- END _includes/archive_post.html -->
 
@@ -259,7 +271,7 @@
 
 <div class="post-listing">
   <a class="title-listing" href="/2010/08/03/on-selling-my-soul-and-switching-to-mac/">On selling my soul and switching to Mac</a>
-  <p class="post-listing__preview">{ post.content | strip_html | truncatewords: 15 }}...</p>
+  <p class="post-listing__preview">A month ago I bought an '07 MacBook on Craigslist. No, it's not one of those sexy aluminum hot rods, but it sure is pretty. I was full of mixed &hellip;</p>
 </div>
 <!-- END _includes/archive_post.html -->
 
@@ -278,7 +290,7 @@
 
 <div class="post-listing">
   <a class="title-listing" href="/2010/06/02/post-review-git-svn-and-review-board/">post-review, git-svn and Review Board</a>
-  <p class="post-listing__preview">{ post.content | strip_html | truncatewords: 15 }}...</p>
+  <p class="post-listing__preview">Here's how to set up the excellent VMware-developed open-source [Review Board](http://www.reviewboard.org/) and its `[post-review](http://www.reviewboard.org/docs/releasenotes/dev/rbtools/0.2/)` command line review creation utility to work with git and git-svn on your computer. My assumption &hellip;</p>
 </div>
 <!-- END _includes/archive_post.html -->
 
@@ -297,7 +309,7 @@
 
 <div class="post-listing">
   <a class="title-listing" href="/2010/04/26/yui-widget-lazy-instantiation/">YUI 3 Widget lazy instantiation</a>
-  <p class="post-listing__preview">{ post.content | strip_html | truncatewords: 15 }}...</p>
+  <p class="post-listing__preview">At work, we make good use of [YUI 3](http://developer.yahoo.com/yui/). It's a really well-thought-out framework, from sandboxing and deep namespaces to CSS3 selector support and lazy-loading modules through the Yahoo! CDN. &hellip;</p>
 </div>
 <!-- END _includes/archive_post.html -->
 
@@ -313,7 +325,10 @@
 
 <div class="post-listing">
   <a class="title-listing" href="/2010/04/16/its-official-web-site-becomes-website/">It's official: "Web site" becomes "website"</a>
-  <p class="post-listing__preview">{ post.content | strip_html | truncatewords: 15 }}...</p>
+  <p class="post-listing__preview">[![](http://www.g9labs.com/wp-content/uploads/2010/04/screenshot1-500x350.png)](http://www.g9labs.com/2010/04/16/its-official-web-site-becomes-website/screenshot1-2/)
+
+[](http://www.g9labs.com/2010/04/16/its-official-web-site-becomes-website/screenshot1-2/)File this under "Nobody is going to care", but I've always been instructed to write "Web site" in my technical communications class. I found it grating. Hooray for change!
+</p>
 </div>
 <!-- END _includes/archive_post.html -->
 
@@ -332,7 +347,7 @@
 
 <div class="post-listing">
   <a class="title-listing" href="/2010/03/14/upgrading-wejoinin-to-unicorn/">Upgrading Wejoinin to unicorn</a>
-  <p class="post-listing__preview">{ post.content | strip_html | truncatewords: 15 }}...</p>
+  <p class="post-listing__preview">(Reposted from the [Wejoinin Blog](http://blog.wejoinin.com/2010/03/14/server-transition-nuts-and-bolts/)) When you run a Web app like Wejoinin on minimal VPS resources (read: we're too poor to get a beefy server), it forces you to &hellip;</p>
 </div>
 <!-- END _includes/archive_post.html -->
 
@@ -348,7 +363,7 @@
 
 <div class="post-listing">
   <a class="title-listing" href="/2010/03/12/shiny-font-overhaul/">Shiny font overhaul!</a>
-  <p class="post-listing__preview">{ post.content | strip_html | truncatewords: 15 }}...</p>
+  <p class="post-listing__preview">### [![](http://www.g9labs.com/wp-content/uploads/2010/03/screenshot1-500x126.png)](http://www.g9labs.com/2010/03/12/shiny-font-overhaul/screenshot1/) A couple of months ago I switched over to TypeKit, a cloud-hosted font service (buzzword! "cloud" gets me all warm and fuzzy). They basically take your font stack &hellip;</p>
 </div>
 <!-- END _includes/archive_post.html -->
 
@@ -370,7 +385,7 @@
 
 <div class="post-listing">
   <a class="title-listing" href="/2009/02/15/thoughts-on-rural-computing-in-botswana/">Thoughts on rural computing in Botswana</a>
-  <p class="post-listing__preview">{ post.content | strip_html | truncatewords: 15 }}...</p>
+  <p class="post-listing__preview">I'm currently in Botswana, doing volunteer work at a nonprofit Christian agency called [Love Botswana Outreach Mission](http://lovebotswana.org). Among my responsibilities are helping out with the organization's IT needs. I was &hellip;</p>
 </div>
 <!-- END _includes/archive_post.html -->
 
@@ -392,7 +407,7 @@
 
 <div class="post-listing">
   <a class="title-listing" href="/2008/10/02/first-look-at-sproutcore-and-cappuccino/">First look at SproutCore and Cappuccino</a>
-  <p class="post-listing__preview">{ post.content | strip_html | truncatewords: 15 }}...</p>
+  <p class="post-listing__preview">One trend on the Web these days is to move away from traditional full-stack frameworks (like [Rails](http://rubyonrails.org)) toward client-side, full-stack Javascript frameworks (among them [Dojo](http://dojotoolkit.org/), [GWT](http://code.google.com/webtoolkit/), [SproutCore](http://sproutcore.com), and [Cappuccino](http://cappuccino.org)). There's &hellip;</p>
 </div>
 <!-- END _includes/archive_post.html -->
 
@@ -411,7 +426,7 @@
 
 <div class="post-listing">
   <a class="title-listing" href="/2008/09/24/updated-portfolio-sort-of/">Updated portfolio... sort of.</a>
-  <p class="post-listing__preview">{ post.content | strip_html | truncatewords: 15 }}...</p>
+  <p class="post-listing__preview">Since I'm in the process of doing some housekeeping around the blog, I've begun moving my [old design portfolio over to Flickr](http://www.flickr.com/photos/andrewhao/sets/72157602687541585/). [![](http://www.g9labs.com/wp-content/uploads/2008/09/design-gallery-updated-300x288.png)](http://www.flickr.com/photos/andrewhao/sets/72157602687541585/) This is sort of an intermediary step &hellip;</p>
 </div>
 <!-- END _includes/archive_post.html -->
 
@@ -427,7 +442,7 @@
 
 <div class="post-listing">
   <a class="title-listing" href="/2008/09/16/a-laymans-guide-to-the-oai-ore-data-aggregation-protocol/">A layman's guide to the OAI-ORE data aggregation protocol</a>
-  <p class="post-listing__preview">{ post.content | strip_html | truncatewords: 15 }}...</p>
+  <p class="post-listing__preview">In Spring 2008, I took an information architecture course in the [UC Berkeley School of Information](http://ischool.berkeley.edu), taught by [Erik Wilde](http://dret.typepad.com) (disclaimer: I dropped the course after a month because of &hellip;</p>
 </div>
 <!-- END _includes/archive_post.html -->
 
@@ -443,7 +458,7 @@
 
 <div class="post-listing">
   <a class="title-listing" href="/2008/09/03/i-like-google-chrome/">I Like Google Chrome</a>
-  <p class="post-listing__preview">{ post.content | strip_html | truncatewords: 15 }}...</p>
+  <p class="post-listing__preview">I have to admit, I am an unabashed fan of [Google Chrome](http://google.com/chrome), the new Web browser on the block. Why? UI design that shows attention to detail and a really &hellip;</p>
 </div>
 <!-- END _includes/archive_post.html -->
 
@@ -462,7 +477,14 @@
 
 <div class="post-listing">
   <a class="title-listing" href="/2008/08/14/work-series-graphics-good-shepherd-christian-church/">Work Series Graphics - Good Shepherd Christian Church</a>
-  <p class="post-listing__preview">{ post.content | strip_html | truncatewords: 15 }}...</p>
+  <p class="post-listing__preview">Part 2 of a summer series:
+
+[![Work Series](http://farm4.static.flickr.com/3184/2764222573_62576684e8.jpg)](http://www.flickr.com/photos/andrewhao/2764222573/)
+
+[![Work Series](http://farm4.static.flickr.com/3237/2765067628_f8e05a66d8.jpg)](http://www.flickr.com/photos/andrewhao/2765067628/)
+
+[![Work Series](http://farm4.static.flickr.com/3117/2764221737_3f4b6ee146.jpg)](http://www.flickr.com/photos/andrewhao/2764221737/)
+</p>
 </div>
 <!-- END _includes/archive_post.html -->
 
@@ -481,7 +503,7 @@
 
 <div class="post-listing">
   <a class="title-listing" href="/2008/07/01/wisdom-series-graphic-good-shepherd-christian-church/">Wisdom Series Graphic - Good Shepherd Christian Church</a>
-  <p class="post-listing__preview">{ post.content | strip_html | truncatewords: 15 }}...</p>
+  <p class="post-listing__preview">I was commissioned to create graphics for a sermon series titled "Wisdom" at my home church, [Good Shepherd](http://www.gschristian.org/). Some of the artists and leaders decided to go with a lantern &hellip;</p>
 </div>
 <!-- END _includes/archive_post.html -->
 
@@ -500,7 +522,7 @@
 
 <div class="post-listing">
   <a class="title-listing" href="/2008/04/26/sensations-negotiating-noise/">Sensations - Negotiating Noise</a>
-  <p class="post-listing__preview">{ post.content | strip_html | truncatewords: 15 }}...</p>
+  <p class="post-listing__preview">[![Sensations - Negotiating Noise](http://farm3.static.flickr.com/2124/2443375144_9e096efe29.jpg)](http://www.flickr.com/photos/andrewhao/2443375144/) I'm showing this and a few more design pieces at **Exposed**, Cal Christian Fellowship's art and performance extravaganza tonight. You can visit it today, April 26--the &hellip;</p>
 </div>
 <!-- END _includes/archive_post.html -->
 
@@ -519,7 +541,7 @@
 
 <div class="post-listing">
   <a class="title-listing" href="/2008/03/29/tales-from-the-crypt/">Tales from the crypt</a>
-  <p class="post-listing__preview">{ post.content | strip_html | truncatewords: 15 }}...</p>
+  <p class="post-listing__preview">Now I remember why I love and hate assembling computers. You've got to love the rush of building something cool. The anticipation of the new BIOS screen--blue letters on black &hellip;</p>
 </div>
 <!-- END _includes/archive_post.html -->
 
@@ -535,7 +557,7 @@
 
 <div class="post-listing">
   <a class="title-listing" href="/2008/03/12/after-site-duplication-an-htaccess-redirect-for-old-wordpress-posts/">After site duplication, an .htaccess redirect for old Wordpress posts</a>
-  <p class="post-listing__preview">{ post.content | strip_html | truncatewords: 15 }}...</p>
+  <p class="post-listing__preview">I think I must preface this post with a bit of context: A month ago I added a new blog ([blog.andrewhao.com](http://blog.andrewhao.com)). I wanted that blog to become my personal blog &hellip;</p>
 </div>
 <!-- END _includes/archive_post.html -->
 
@@ -554,7 +576,7 @@
 
 <div class="post-listing">
   <a class="title-listing" href="/2008/02/24/quad-core-and-the-nerd/">Quad Core and the Nerd</a>
-  <p class="post-listing__preview">{ post.content | strip_html | truncatewords: 15 }}...</p>
+  <p class="post-listing__preview">My apartmentmate Mike just upgraded his computer to an Intel Core 2 Quad-core processor. Once he got it up and running, he opened up Task Manager and summoned me over &hellip;</p>
 </div>
 <!-- END _includes/archive_post.html -->
 
@@ -570,7 +592,7 @@
 
 <div class="post-listing">
   <a class="title-listing" href="/2008/02/18/todays-geek-hijinks/">Today's Geek Hijinks</a>
-  <p class="post-listing__preview">{ post.content | strip_html | truncatewords: 15 }}...</p>
+  <p class="post-listing__preview">### Morning: Woke up and attempted to mount a Samba file share under Ubuntu. My Gutsy server in the living room is getting a second life as a backup file &hellip;</p>
 </div>
 <!-- END _includes/archive_post.html -->
 
@@ -586,7 +608,7 @@
 
 <div class="post-listing">
   <a class="title-listing" href="/2008/02/17/noam-chomsky-is-the-man/">Noam Chomsky is The Man</a>
-  <p class="post-listing__preview">{ post.content | strip_html | truncatewords: 15 }}...</p>
+  <p class="post-listing__preview">Why? The man is a respected thinker, theorist and activist. I've had several Mass Communications classes devote a couple of sections to his thoughts about mass media and its effect &hellip;</p>
 </div>
 <!-- END _includes/archive_post.html -->
 
@@ -602,7 +624,7 @@
 
 <div class="post-listing">
   <a class="title-listing" href="/2008/02/03/a-new-blog-is-coming/">A new blog is coming!</a>
-  <p class="post-listing__preview">{ post.content | strip_html | truncatewords: 15 }}...</p>
+  <p class="post-listing__preview">I'm forking this blog in two: a design/development blog and a personal blog. I'll be keeping [blog.g9labs.com](http://blog.g9labs.com) as my technical blog: if you stay with me here, you'll find me &hellip;</p>
 </div>
 <!-- END _includes/archive_post.html -->
 
@@ -621,7 +643,7 @@
 
 <div class="post-listing">
   <a class="title-listing" href="/2008/01/27/wordpress-bughunt/">Wordpress Bughunt</a>
-  <p class="post-listing__preview">{ post.content | strip_html | truncatewords: 15 }}...</p>
+  <p class="post-listing__preview">I spent a good four hours today digging through [Wordpress](http://www.wordpress.org) code, trying to get our [Cal Christian Fellowship](http://www.ocf.berkeley.edu/~ccf) Web site back up. The problem: the page seemed to freeze when &hellip;</p>
 </div>
 <!-- END _includes/archive_post.html -->
 
@@ -643,7 +665,7 @@
 
 <div class="post-listing">
   <a class="title-listing" href="/2007/12/11/im-ready-for-the-winter/">I'm ready for the winter.</a>
-  <p class="post-listing__preview">{ post.content | strip_html | truncatewords: 15 }}...</p>
+  <p class="post-listing__preview">Okay, I confess. I've been daydreaming about winter break: 1. Sleeping in. 2. The laughter of friends. 3. Taking a day trip with a camera to Monterey/Carmel (or anywhere awesome). &hellip;</p>
 </div>
 <!-- END _includes/archive_post.html -->
 
@@ -659,7 +681,7 @@
 
 <div class="post-listing">
   <a class="title-listing" href="/2007/12/05/feeling-awesome-today/">Feeling awesome today</a>
-  <p class="post-listing__preview">{ post.content | strip_html | truncatewords: 15 }}...</p>
+  <p class="post-listing__preview">So for our [CS188 (Artificial Intelligence)](http://inst.eecs.berkeley.edu/~cs188/fa07/announcements.html) project, [Capture-the-Flag Pac-Man](http://inst.eecs.berkeley.edu/~cs188/fa07/projects/contest/contest.html), I'm responsible for writing a script that does some processing and analysis on a game board, simulating a Pac-Man agent (my &hellip;</p>
 </div>
 <!-- END _includes/archive_post.html -->
 
@@ -675,7 +697,7 @@
 
 <div class="post-listing">
   <a class="title-listing" href="/2007/12/03/meeting-joe-hewitt/">Meeting Joe Hewitt</a>
-  <p class="post-listing__preview">{ post.content | strip_html | truncatewords: 15 }}...</p>
+  <p class="post-listing__preview">I shook [Joe Hewitt](http://www.joehewitt.com)'s hand today (psst, he's the guy who did tons of Mozilla stuff but most notably built [Firebug](http://www.getfirebug.com/)). I stammered a lot. But that's okay, because I &hellip;</p>
 </div>
 <!-- END _includes/archive_post.html -->
 
@@ -694,7 +716,7 @@
 
 <div class="post-listing">
   <a class="title-listing" href="/2007/11/15/more-scenes/">More scenes</a>
-  <p class="post-listing__preview">{ post.content | strip_html | truncatewords: 15 }}...</p>
+  <p class="post-listing__preview">_Disclaimer: about 95% of you won't get this. The other 5% should consider getting a life._ So we're in CS lecture (this is with Prof. Papadmitrou), and one student in &hellip;</p>
 </div>
 <!-- END _includes/archive_post.html -->
 
@@ -713,7 +735,8 @@
 
 <div class="post-listing">
   <a class="title-listing" href="/2007/10/25/sensations-6/">Sensations</a>
-  <p class="post-listing__preview">{ post.content | strip_html | truncatewords: 15 }}...</p>
+  <p class="post-listing__preview">[![Sensations - Awaken the Dawn](http://farm3.static.flickr.com/2379/1756742112_a54cf5e9a8.jpg)](http://www.flickr.com/photos/andrewhao/1756742112/)
+</p>
 </div>
 <!-- END _includes/archive_post.html -->
 
@@ -729,7 +752,8 @@
 
 <div class="post-listing">
   <a class="title-listing" href="/2007/10/24/sensations-5/">Sensations</a>
-  <p class="post-listing__preview">{ post.content | strip_html | truncatewords: 15 }}...</p>
+  <p class="post-listing__preview">[![Sensations - Rocks Cry Out](http://farm3.static.flickr.com/2051/1738876421_c2e2aa4ec8.jpg)](http://www.flickr.com/photos/andrewhao/1738876421/)
+</p>
 </div>
 <!-- END _includes/archive_post.html -->
 
@@ -745,7 +769,7 @@
 
 <div class="post-listing">
   <a class="title-listing" href="/2007/10/19/yahoo-university-hack-day/">Yahoo! University Hack Day</a>
-  <p class="post-listing__preview">{ post.content | strip_html | truncatewords: 15 }}...</p>
+  <p class="post-listing__preview">So Hsiu-fan and I had floated the idea of doing a hack for [Yahoo! University Hack Day](http://developer.yahoo.com/hacku/). We had even polled some of our friends about it, and the consensus &hellip;</p>
 </div>
 <!-- END _includes/archive_post.html -->
 
@@ -761,7 +785,7 @@
 
 <div class="post-listing">
   <a class="title-listing" href="/2007/10/17/crusher-website/">Crusher website</a>
-  <p class="post-listing__preview">{ post.content | strip_html | truncatewords: 15 }}...</p>
+  <p class="post-listing__preview">What gives you more geek fuzzies than seeing an Evite competitor with an ASCII logo? [Crusher website ~ Send invites for free](http://crush3r.com/) Fun, simple, bare-bones, everything you need and nothing &hellip;</p>
 </div>
 <!-- END _includes/archive_post.html -->
 
@@ -780,7 +804,10 @@
 
 <div class="post-listing">
   <a class="title-listing" href="/2007/09/11/hello-awesome/">Hello, awesome</a>
-  <p class="post-listing__preview">{ post.content | strip_html | truncatewords: 15 }}...</p>
+  <p class="post-listing__preview">[![Hello awesome](http://farm2.static.flickr.com/1221/1364248426_8f30709fd6.jpg)](http://www.flickr.com/photos/andrewhao/1364248426/)
+
+Only a geek could take a picture of his computer... and be proud of it.
+</p>
 </div>
 <!-- END _includes/archive_post.html -->
 
@@ -799,7 +826,7 @@
 
 <div class="post-listing">
   <a class="title-listing" href="/2007/08/10/thinking-about-writing-a-rhapsody-scrobbler/">Thinking about writing a Rhapsody Scrobbler</a>
-  <p class="post-listing__preview">{ post.content | strip_html | truncatewords: 15 }}...</p>
+  <p class="post-listing__preview">_Filed under "Fun Ideas That Could Take Three Hours or Three Months"_ I want to write a [Rhapsody](http://www.rhapsody.com) [scrobbler](http://www.last.fm/help/). It's already been done as a [desktop application](http://www.atlansky.com/dev/rhapsodyscrobbler.html), but I don't &hellip;</p>
 </div>
 <!-- END _includes/archive_post.html -->
 
@@ -815,7 +842,7 @@
 
 <div class="post-listing">
   <a class="title-listing" href="/2007/08/01/a-web-site-for-word-geeks/">A Web Site for Word Geeks</a>
-  <p class="post-listing__preview">{ post.content | strip_html | truncatewords: 15 }}...</p>
+  <p class="post-listing__preview">Have you ever compiled long lists of words you thought were awesome (don't lie, I've met two or three of you)? Do you love words such as "[phthisis](http://wordie.org/words/phthisis)" and "[tantamount](http://wordie.org/words/tantamount)" &hellip;</p>
 </div>
 <!-- END _includes/archive_post.html -->
 
@@ -834,7 +861,7 @@
 
 <div class="post-listing">
   <a class="title-listing" href="/2007/04/29/taiwan-roundup-ii/">Taiwan Roundup II</a>
-  <p class="post-listing__preview">{ post.content | strip_html | truncatewords: 15 }}...</p>
+  <p class="post-listing__preview">![](http://farm1.static.flickr.com/230/467031358_e06878d13b.jpg?v=0) After weeks of being stuck in a really deep rut, I've finally stumbled upon something that's decently interesting with regards to the state of the Taiwanese blogsophere (this is &hellip;</p>
 </div>
 <!-- END _includes/archive_post.html -->
 
@@ -850,7 +877,7 @@
 
 <div class="post-listing">
   <a class="title-listing" href="/2007/04/22/blog-habits-evolution/">Blog habits & evolution</a>
-  <p class="post-listing__preview">{ post.content | strip_html | truncatewords: 15 }}...</p>
+  <p class="post-listing__preview">[Way back when I started blogging](http://blog.g9labs.com/index.php?page=showcomments&id=5) soph year of high school (it's been five+ years!), I pointed out that the public act of blogging helped me "get my thoughts straight" &hellip;</p>
 </div>
 <!-- END _includes/archive_post.html -->
 
@@ -866,7 +893,14 @@
 
 <div class="post-listing">
   <a class="title-listing" href="/2007/04/15/sensations-3/">Sensations</a>
-  <p class="post-listing__preview">{ post.content | strip_html | truncatewords: 15 }}...</p>
+  <p class="post-listing__preview">![last night i dreamed](http://www.g9labs.com/img/blogart/03-fishing-dream-1.png)
+  
+
+ ![we were fishing together](http://www.g9labs.com/img/blogart/03-fishing-dream-2.png)
+  
+
+ ![(i've never been fishing)](http://www.g9labs.com/img/blogart/03-fishing-dream-3.png)
+</p>
 </div>
 <!-- END _includes/archive_post.html -->
 
@@ -882,7 +916,7 @@
 
 <div class="post-listing">
   <a class="title-listing" href="/2007/04/04/mixtaped/">Mixtaped</a>
-  <p class="post-listing__preview">{ post.content | strip_html | truncatewords: 15 }}...</p>
+  <p class="post-listing__preview">Found over at "[Tiny Mix Tapes](http://www.tinymixtapes.com/-Mix-Tapes-)" -- a mixtape suggestion/request service. Surprisingly poetic (well, most). Gives you a good glimpse into music uses & gratifications. > after you left i &hellip;</p>
 </div>
 <!-- END _includes/archive_post.html -->
 
@@ -901,7 +935,7 @@
 
 <div class="post-listing">
   <a class="title-listing" href="/2007/03/30/sensations-2/">Sensations</a>
-  <p class="post-listing__preview">{ post.content | strip_html | truncatewords: 15 }}...</p>
+  <p class="post-listing__preview">Do you remember? We were freckle-faced high schoolers tumbling over China, our obnoxious American mannerisms betraying our origins despite our butter skin. We had agreed to stay in shape during &hellip;</p>
 </div>
 <!-- END _includes/archive_post.html -->
 
@@ -917,7 +951,7 @@
 
 <div class="post-listing">
   <a class="title-listing" href="/2007/03/28/verilogical/">Verilogical</a>
-  <p class="post-listing__preview">{ post.content | strip_html | truncatewords: 15 }}...</p>
+  <p class="post-listing__preview">Oftentimes in [Verilog](http://en.wikipedia.org/wiki/Verilog) code, we build testbenches (test fixtures). A common thing to do is to instantiate a module and plug in wires of the same names. Now a common &hellip;</p>
 </div>
 <!-- END _includes/archive_post.html -->
 
@@ -933,7 +967,8 @@
 
 <div class="post-listing">
   <a class="title-listing" href="/2007/03/10/sensations/">Sensations</a>
-  <p class="post-listing__preview">{ post.content | strip_html | truncatewords: 15 }}...</p>
+  <p class="post-listing__preview">![Sensations 02: Those Who Dreamed](http://www.g9labs.com/img/blogart/02-those-who-dreamed.jpg)
+</p>
 </div>
 <!-- END _includes/archive_post.html -->
 
@@ -952,7 +987,7 @@
 
 <div class="post-listing">
   <a class="title-listing" href="/2007/02/27/liveblogging-from-the-stacks/">Liveblogging from: the Stacks</a>
-  <p class="post-listing__preview">{ post.content | strip_html | truncatewords: 15 }}...</p>
+  <p class="post-listing__preview">I have friends who run a cost-benefit analysis on every decision. And they're always measuring things up against Time. Freakin, Endless, Time. I think I'm one of them, too. May &hellip;</p>
 </div>
 <!-- END _includes/archive_post.html -->
 
@@ -968,7 +1003,7 @@
 
 <div class="post-listing">
   <a class="title-listing" href="/2007/02/25/taiwan-roundup/">Taiwan Roundup</a>
-  <p class="post-listing__preview">{ post.content | strip_html | truncatewords: 15 }}...</p>
+  <p class="post-listing__preview">So I'm writing the first part of my International Media paper on the structures of the media systems in Taiwan. Just wanted to share with you what I've been coming &hellip;</p>
 </div>
 <!-- END _includes/archive_post.html -->
 
@@ -984,7 +1019,9 @@
 
 <div class="post-listing">
   <a class="title-listing" href="/2007/02/21/extreme-editing/">eXtreme Editing</a>
-  <p class="post-listing__preview">{ post.content | strip_html | truncatewords: 15 }}...</p>
+  <p class="post-listing__preview">I realized today (with a grin) that I wasn't editing my essay as much as I was [refactoring](http://c2.com/xp/RefactorMercilessly.html) it.  
+
+</p>
 </div>
 <!-- END _includes/archive_post.html -->
 
@@ -1000,7 +1037,8 @@
 
 <div class="post-listing">
   <a class="title-listing" href="/2007/02/19/sensations-i/">Sensations I</a>
-  <p class="post-listing__preview">{ post.content | strip_html | truncatewords: 15 }}...</p>
+  <p class="post-listing__preview">![never-ending](http://www.g9labs.com/img/blogart/never-ending.jpg)
+</p>
 </div>
 <!-- END _includes/archive_post.html -->
 
@@ -1022,26 +1060,7 @@
 
 <div class="post-listing">
   <a class="title-listing" href="/2006/09/02/geek-brief/">GTD-izing my Thunderbird client, and other productivity things</a>
-  <p class="post-listing__preview">{ post.content | strip_html | truncatewords: 15 }}...</p>
-</div>
-<!-- END _includes/archive_post.html -->
-
-
-
-
-
-
-
-
-  
-	<div class="cat-month">August</div>
-
-
-<!-- BEGIN _includes/archive_post.html -->
-
-<div class="post-listing">
-  <a class="title-listing" href="/2006/08/28/photoshoot-berkeley-seven-am/">Photoshoot: Berkeley, Seven AM</a>
-  <p class="post-listing__preview">{ post.content | strip_html | truncatewords: 15 }}...</p>
+  <p class="post-listing__preview">Do any fellow geeks out there follow any [GettingThingsDone](http://en.wikipedia.org/wiki/Getting_things_done) (GTD) practices? (I'm trying to get my life organizedï¿½a futile attempt before the sledgehammer of school and responsibilities drops. Organized as &hellip;</p>
 </div>
 <!-- END _includes/archive_post.html -->
 
@@ -1060,7 +1079,7 @@
 
 <div class="post-listing">
   <a class="title-listing" href="/2006/07/31/the-faqqly-tour/">The FAQQLY Tour</a>
-  <p class="post-listing__preview">{ post.content | strip_html | truncatewords: 15 }}...</p>
+  <p class="post-listing__preview">Many of you have wondered what it's like daily indulging in the opulence that are the FAQQLY offices. Allow me to take you on a tour. These are known as &hellip;</p>
 </div>
 <!-- END _includes/archive_post.html -->
 
