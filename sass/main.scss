@@ -80,11 +80,19 @@ header {
 	border-bottom: 1px solid $light-gray;
 	text-align: center;
 
+
 	.title {
 		font-family: $blog-title-font;
 		font-size: $blog-title-font-size;
 		text-transform: $blog-title-text-transform;
-		}
+    @media only screen and (max-width: 400px) {
+      font-size: $blog-title-font-size * 0.7;
+    }
+  }
+
+  .subtitle {
+    margin-bottom: 1em;
+  }
 
 
   a {
