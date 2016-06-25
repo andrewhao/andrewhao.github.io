@@ -31,7 +31,7 @@ The landscape is littered with software projects that began ambitiously, but got
 
 Let's rewind back to a scene from a typical day in the life of your software development team. Think back to the last time you discussed a story with your product owner, how did it unfold?
 
-Let's imagine a scene at Delorean, the Uber for time travel, where you work:
+Let's imagine a scene at Delorean, the Uber for time travel, where you work. Your team is responsible for writing software systems that calculate the payment processing for your users who are hailing rides from your company's time-traveling ridesharing service.
 
 > PO: Our next big project is to update our driver app to show rider locations on the timeline map.
 
@@ -126,9 +126,9 @@ Later that afternoon, your teammate taps you on the shoulder:
 
 You and your teammate then go and update the glossary, scribbling an addendum on the wall (or updating your wiki):
 
-```
-- **Coupon**: ... Coupons may be *applied* to BookingAmounts to discount the total cost of the booking.
-```
+> Delorean Team Glossary
+> ----------------------
+> - __Coupon__: ... Coupons may be *applied* to BookingAmounts to discount the total cost of the booking.
 
 #### Refactoring your code to use the right terms
 
@@ -281,6 +281,6 @@ In this brief time we had together,
 
 ### And there is much more!
 
-In an upcoming post, we'll investigate how the **Ubiquitous Language** applies to a core concept of Domain-Driven Design: the **Bounded Context**. Why is that important? Because Bounded Contexts give us tools to organize our code - and to do further advanced things like [break up monoliths into services](https://speakerdeck.com/andrewhao/ddd-rail-your-monorail). 
+In an upcoming post, we'll investigate how the **Ubiquitous Language** applies to a core concept of Domain-Driven Design: the **Bounded Context**. Why is that important? Because Bounded Contexts give us tools to organize our code - and to do further advanced things like [break up monoliths into services](https://speakerdeck.com/andrewhao/ddd-rail-your-monorail).
 
 <script async class="speakerdeck-embed" data-id="1e6dd8983891467381036a321cd274a9" data-ratio="1.77777777777778" src="//speakerdeck.com/assets/embed.js"></script>
