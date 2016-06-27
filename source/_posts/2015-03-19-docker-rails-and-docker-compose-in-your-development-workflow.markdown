@@ -141,6 +141,7 @@ RUN RAILS_ENV=production bundle exec rake assets:precompile --trace
 CMD ["rails","server","-b","0.0.0.0"]
 ```
 
+
 This links the contents of the app directory on the host to the  `/myapp` directory within the container.
 
 Note that we precompile all our assets before the container boots up - this ensures that the container is preloaded and ready to run and jives with Docker tenets that a container should be the same container that runs in development, test, and production environments.

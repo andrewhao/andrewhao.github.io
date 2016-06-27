@@ -33,13 +33,11 @@ destination: public
 plugins: plugins
 code_dir: downloads/code
 category_dir: category
-markdown: rdiscount
-rdiscount:
-  extensions:
-    - autolink
-    - footnotes
-    - smart
+markdown: kramdown
 highlighter: pygments # default python pygments have been replaced by pygments.rb
+
+kramdown:
+  input: GFM
 
 paginate: 5          # Posts per page on the blog index
 paginate_path: "posts/:num"  # Directory base for pagination URLs eg. /posts/2/

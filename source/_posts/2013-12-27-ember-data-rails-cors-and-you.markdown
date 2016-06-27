@@ -25,11 +25,13 @@ So since it's a remote API, I've got to enable CORS, right?
 
 ## Install CORS via rack-cors
 
-```ruby Gemfile.rb
+```ruby
+# Gemfile
 gem "rack-cors", :require => "rack/cors"
 ```
 
-```ruby config/application.rb
+```ruby
+# config/application.rb
 config.middleware.use Rack::Cors do
   allow do
     origins "*"
@@ -59,7 +61,8 @@ it should support CORS out of the box. Apparently this is not so.
 In my ember app's `store.js` (or anywhere your app loads before the
 application adapter is defined, do this:
 
-```javascript store.js
+```javascript
+# store.js
 $.ajaxSetup({
   crossDomain: true,
   xhrFields: {
@@ -108,7 +111,8 @@ I chose to have Ember append the `.json` suffix to the URL, thanks to
 this [SO
 post](http://stackoverflow.com/questions/13648807/ds-model-url-not-working-in-ember-js)
 
-```javascript store.js
+```javascript
+# store.js
 Hendrix.ApplicationAdapter = DS.RESTAdapter.extend({
   host: "http://localhost:3000",
   // Force ember-data to append the `json` suffix
