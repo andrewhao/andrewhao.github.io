@@ -68,26 +68,31 @@
 		<time>26 April 2010</time>
 	</header>
 		<div class="content">
-			<p>At work, we make good use of <a href="http://developer.yahoo.com/yui/">YUI 3</a>. It&rsquo;s a really well-thought-out framework, from sandboxing and deep namespaces to CSS3 selector support and lazy-loading modules through the Yahoo! CDN. One of YUI 3&rsquo;s biggest features is the Widget framework, which specifies an object on the page that the user can tweak to his or her whims.</p>
+			<p>At work, we make good use of <a href="http://developer.yahoo.com/yui/">YUI 3</a>. It’s a really well-thought-out framework, from sandboxing and deep namespaces to CSS3 selector support and lazy-loading modules through the Yahoo! CDN. One of YUI 3’s biggest features is the Widget framework, which specifies an object on the page that the user can tweak to his or her whims.</p>
 
 <p>Now typically, a YUI widget must be instantiated, then rendered onto the page. The render method is responsible for:</p>
 
 <ol>
-<li><p> Writing the widget&rsquo;s DOM elements out to the page</p></li>
-<li><p> Binding handlers onto the DOM object.</p></li>
-<li><p> Updating the widget state to match the JS object state.</p></li>
+  <li>
+    <p>Writing the widget’s DOM elements out to the page</p>
+  </li>
+  <li>
+    <p>Binding handlers onto the DOM object.</p>
+  </li>
+  <li>
+    <p>Updating the widget state to match the JS object state.</p>
+  </li>
 </ol>
 
-
-<p>(This information didn&rsquo;t come easily. I had to dig around in some YUI slides and found this in <a href="http://developer.yahoo.com/yui/theater/video.php?v=desai-yuiconf2009-widgets">Satyen Desai&rsquo;s &ldquo;A Widget Walkthrough&rdquo; presentation</a> at YUIConf 2009.)</p>
+<p>(This information didn’t come easily. I had to dig around in some YUI slides and found this in <a href="http://developer.yahoo.com/yui/theater/video.php?v=desai-yuiconf2009-widgets">Satyen Desai’s “A Widget Walkthrough” presentation</a> at YUIConf 2009.)</p>
 
 <p><a href="http://www.g9labs.com/2010/04/27/yui-widget-lazy-instantiation/screenshot5/"><img src="http://www.g9labs.com/wp-content/uploads/2010/04/screenshot5-499x374.png" alt="" /></a></p>
 
 <p>Now we have a page that generates hundreds if not thousands of these tooltips. Instantiating each tooltip, rendering them into the DOM and generating event handlers for each was wasteful and slowed IE browsers down to a crawl. So this brought us to the decision to lazily instantiate each Tooltip instance. My first thought was that I should be able to overwrite the render() method to write to the DOM only after a mouseover onto the Tooltip trigger.</p>
 
-<p>Here&rsquo;s the folly: note that in the previous slide, the event handlers don&rsquo;t go live until after the widget HTML is rendered into the DOM. Rats. Is there any way I can get around this?</p>
+<p>Here’s the folly: note that in the previous slide, the event handlers don’t go live until after the widget HTML is rendered into the DOM. Rats. Is there any way I can get around this?</p>
 
-<p>Here&rsquo;s some peculiar code for the Tooltip wrapper:</p>
+<p>Here’s some peculiar code for the Tooltip wrapper:</p>
 
 <pre><code>function ttWrapper(triggerNode) {
   this.tt = null;

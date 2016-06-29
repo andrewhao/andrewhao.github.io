@@ -4,7 +4,7 @@
   <title><![CDATA[Category: information architecture | The Sweet Spot]]></title>
   <link href="http://www.g9labs.com/category/information-architecture/atom.xml" rel="self"/>
   <link href="http://www.g9labs.com/"/>
-  <updated>2016-06-24T11:31:59-07:00</updated>
+  <updated>2016-06-29T16:33:32-07:00</updated>
   <id>http://www.g9labs.com/</id>
   <author>
     <name><![CDATA[Andrew Hao]]></name>
@@ -18,55 +18,58 @@
     <link href="http://www.g9labs.com/2008/09/16/a-laymans-guide-to-the-oai-ore-data-aggregation-protocol/"/>
     <updated>2008-09-16T18:37:12-07:00</updated>
     <id>http://www.g9labs.com/2008/09/16/a-laymans-guide-to-the-oai-ore-data-aggregation-protocol</id>
-    <content type="html"><![CDATA[<p>In Spring 2008, I took an information architecture course in the <a href="http://ischool.berkeley.edu">UC Berkeley School of Information</a>, taught by <a href="http://dret.typepad.com">Erik Wilde</a> (disclaimer: I dropped the course after a month because of schedule conflicts). An interesting part of my research for that class involved investigating the nascent <a href="http://www.openarchives.org/ore/">Object Reuse and Exchange (OAI-ORE)</a> protocol, a way of organizing groups of resources across the Web. I&rsquo;m going to try to describe in laymen&rsquo;s terms what I learned from my research and explain why it&rsquo;s significant.</p>
+    <content type="html"><![CDATA[<p>In Spring 2008, I took an information architecture course in the <a href="http://ischool.berkeley.edu">UC Berkeley School of Information</a>, taught by <a href="http://dret.typepad.com">Erik Wilde</a> (disclaimer: I dropped the course after a month because of schedule conflicts). An interesting part of my research for that class involved investigating the nascent <a href="http://www.openarchives.org/ore/">Object Reuse and Exchange (OAI-ORE)</a> protocol, a way of organizing groups of resources across the Web. I’m going to try to describe in laymen’s terms what I learned from my research and explain why it’s significant.</p>
 
-<h3>Group things together on the Web</h3>
+<h3 id="group-things-together-on-the-web">Group things together on the Web</h3>
 
-<p>Let&rsquo;s say you&rsquo;re looking for a book online. You&rsquo;ll hit up JStor or Google Books and browse through the pages of that book you found. Easy enough, right?</p>
+<p>Let’s say you’re looking for a book online. You’ll hit up JStor or Google Books and browse through the pages of that book you found. Easy enough, right?</p>
 
-<p>In reality, the <em>physical, electronic representation</em> of the book online is actually more than just &ldquo;that book on JStor&rdquo; or &ldquo;<a href="http://www.jstor.com/book">http://www.jstor.com/book</a>&rdquo;. It&rsquo;s actually a collection of images on a Web server. We need a uniform way to descibe that jStor' specific online version of &ldquo;War and Peace&rdquo; is actually comprised of &ldquo;page1.jpg&rdquo;, &ldquo;page2.jpg&rdquo;, et cetera.</p>
+<p>In reality, the <em>physical, electronic representation</em> of the book online is actually more than just “that book on JStor” or “http://www.jstor.com/book”. It’s actually a collection of images on a Web server. We need a uniform way to descibe that jStor’ specific online version of “War and Peace” is actually comprised of “page1.jpg”, “page2.jpg”, et cetera.</p>
 
-<p>As another example, let&rsquo;s say that the local public library wants to create a digital representation of its materials on Jimi Hendrix. Well, the library&rsquo;s got Jimi Hendrix CDs, Jimi Hendrix books, Jimi Hendrix magazine articles, and so on. With the OAI-ORE protocol, we can create a digital &ldquo;Jimi Hendrix @ Your Local Public Library&rdquo; object that lists out each CD, book and magazine article contained in the library.</p>
+<p>As another example, let’s say that the local public library wants to create a digital representation of its materials on Jimi Hendrix. Well, the library’s got Jimi Hendrix CDs, Jimi Hendrix books, Jimi Hendrix magazine articles, and so on. With the OAI-ORE protocol, we can create a digital “Jimi Hendrix @ Your Local Public Library” object that lists out each CD, book and magazine article contained in the library.</p>
 
-<p>Let&rsquo;s say on top of that, a certain Jimi Hendrix biography references &ldquo;Little Wing&rdquo; on pages 12, 141 and 254. This &ldquo;Jimi Hendrix&rdquo; object is capable of encoding that reference from those pages to &ldquo;Little Wing&rdquo; on the &ldquo;Axis: Bold as Love&rdquo; album in the library.</p>
+<p>Let’s say on top of that, a certain Jimi Hendrix biography references “Little Wing” on pages 12, 141 and 254. This “Jimi Hendrix” object is capable of encoding that reference from those pages to “Little Wing” on the “Axis: Bold as Love” album in the library.</p>
 
-<h3>Why even have a description framework?</h3>
+<h3 id="why-even-have-a-description-framework">Why even have a description framework?</h3>
 
-<p>As the Web gets more connected and as we&rsquo;re seeing the rise of interoperable Web services, it becomes increasingly important to have a standard resource description language. Various protocols (such as RDF) have built a foundation on which to describe relationships between electronic resources.</p>
+<p>As the Web gets more connected and as we’re seeing the rise of interoperable Web services, it becomes increasingly important to have a standard resource description language. Various protocols (such as RDF) have built a foundation on which to describe relationships between electronic resources.</p>
 
-<p>Think of OAI-ORE as a way of organizing information for re-use by others. If every library created its own &ldquo;Jimi Hendrix&rdquo; resource object and made them accessible to others, we could potentially create programs and Web services to collect all &ldquo;Jimi Hendrix&rdquo; objects from across the globe and reconstruct the ultimate, canonical Jimi Hendrix electronic resource library. We could note which books made references to &ldquo;Little Wing.&rdquo; We could view &ldquo;Little Wing&rdquo; as an WMA file, an MP3 file, or as lyrics.</p>
+<p>Think of OAI-ORE as a way of organizing information for re-use by others. If every library created its own “Jimi Hendrix” resource object and made them accessible to others, we could potentially create programs and Web services to collect all “Jimi Hendrix” objects from across the globe and reconstruct the ultimate, canonical Jimi Hendrix electronic resource library. We could note which books made references to “Little Wing.” We could view “Little Wing” as an WMA file, an MP3 file, or as lyrics.</p>
 
-<p>The key is that by standardizing a description language, we <strong>enable programmatic ways to collect and synthesize data</strong> that can potentially add to the value of the world&rsquo;s sum knowledge.</p>
+<p>The key is that by standardizing a description language, we <strong>enable programmatic ways to collect and synthesize data</strong> that can potentially add to the value of the world’s sum knowledge.</p>
 
-<h3>Resource maps &amp; implementation formats</h3>
+<h3 id="resource-maps--implementation-formats">Resource maps &amp; implementation formats</h3>
 
 <p>OAI-ORE is a specification that defines relationships between resources through an object called the <em>resource map</em>. The resource map is a resource file enumerating a collection of resources and describing the relationships between each resource. Each resource map has its own URI, so it can be discoverable and accessible.</p>
 
 <p>There is no standard file format to encode resource maps. Currently, the OAI-ORE working group has suggested the following description formats (HT: <a href="http://www.natlib.govt.nz/downloads/IT19-Hunter-OAI-ORE-Oct30.ppt">Univ. of Queensland</a>):</p>
 
 <ul>
-<li><a href="http://www.w3.org/TR/REC-rdf-syntax/">RDF</a> (Resource Description Framework)</li>
-<li><a href="http://en.wikipedia.org/wiki/Atom_(standard">Atom</a>) syndication format</li>
-<li><a href="http://nurture.nature.com/yads">YADS</a></li>
-<li><a href="http://www.w3.org/2004/03/trix/">TriX</a> (RDF triples in XML)</li>
+  <li><a href="http://www.w3.org/TR/REC-rdf-syntax/">RDF</a> (Resource Description Framework)</li>
+  <li><a href="http://en.wikipedia.org/wiki/Atom_(standard)">Atom</a> syndication format</li>
+  <li><a href="http://nurture.nature.com/yads">YADS</a></li>
+  <li><a href="http://www.w3.org/2004/03/trix/">TriX</a> (RDF triples in XML)</li>
 </ul>
 
+<p>The <a href="http://www.openarchives.org/ore/0.9/rdfxml">recommended method of describing a resource map is in RDF/XML</a>. I’m not very familiar with the RDF syntax, however, and the TriX format, which affords us RDF triples that can easiliy express relationships between objects and resources, seems to make more sense to me.. However, there is a <a href="http://www.openarchives.org/ore/0.1/atom">complete Atom implementation of the protocol</a>, used when syndication is preferred.</p>
 
-<p>The <a href="http://www.openarchives.org/ore/0.9/rdfxml">recommended method of describing a resource map is in RDF/XML</a>. I&rsquo;m not very familiar with the RDF syntax, however, and the TriX format, which affords us RDF triples that can easiliy express relationships between objects and resources, seems to make more sense to me.. However, there is a <a href="http://www.openarchives.org/ore/0.1/atom">complete Atom implementation of the protocol</a>, used when syndication is preferred.</p>
+<p>I’d definitely refer the reader to the <a href="http://www.natlib.govt.nz/downloads/IT19-Hunter-OAI-ORE-Oct30.ppt">Univ. of Queensland’s OAI-ORE PDF overview</a> for a broader overview of the protocol and its potential implementations.</p>
 
-<p>I&rsquo;d definitely refer the reader to the <a href="http://www.natlib.govt.nz/downloads/IT19-Hunter-OAI-ORE-Oct30.ppt">Univ. of Queensland&rsquo;s OAI-ORE PDF overview</a> for a broader overview of the protocol and its potential implementations.</p>
+<h3 id="the-nitty-gritty">The nitty-gritty</h3>
 
-<h3>The nitty-gritty</h3>
+<blockquote>
+  <p><strong>Collections</strong>: Multiple resources can be grouped together, but only via an “aggregate object” or a “collection”, which maintains pointers to each object in a collection.</p>
+</blockquote>
 
-<blockquote><p><strong>Collections</strong>: Multiple resources can be grouped together, but only via an &ldquo;aggregate object&rdquo; or a &ldquo;collection&rdquo;, which maintains pointers to each object in a collection.</p>
+<blockquote>
+  <p><strong>Links</strong>: Links describe relationships between objects in a resource map, such as “has-part” (“War &amp; Peace “-has-part-“page 2”) or “derived-from” (“Radiohead - 15 Step Remix”-derived-from-“Radiohead - 15 Step”). Actual relationships depend on selected vocabularies and namespaces (meaning you can change the link relationships to be whatever you need them to be). There is a <a href="http://www.openarchives.org/ore/0.9/primer.html#Namespaces">list of default namespaces on the spec</a>.</p>
+</blockquote>
 
-<p><strong>Links</strong>: Links describe relationships between objects in a resource map, such as &ldquo;has-part&rdquo; (&ldquo;War &amp; Peace &rdquo;-has-part-&ldquo;page 2&rdquo;) or &ldquo;derived-from&rdquo; (&ldquo;Radiohead &ndash; 15 Step Remix&rdquo;-derived-from-&ldquo;Radiohead &ndash; 15 Step&rdquo;). Actual relationships depend on selected vocabularies and namespaces (meaning you can change the link relationships to be whatever you need them to be). There is a <a href="http://www.openarchives.org/ore/0.9/primer.html#Namespaces">list of default namespaces on the spec</a>.</p></blockquote>
-
-<h3>In conclusion</h3>
+<h3 id="in-conclusion">In conclusion</h3>
 
 <p>I took a high-level and somewhat abstract tack in describing the protocol, and would direct you to the <a href="http://www.openarchives.org/ore/0.9/primer.html">OAI-ORE Primer</a> for more implementation specifics. Apologies to those of you who were completely lost in this discussion.</p>
 
-<p>I&rsquo;m excited about developing standards like these because resource mapping protocols such as OAI-ORE are an instrumental step in connecting resources, services and information on the Web. They&rsquo;ll help us &ldquo;connect the tubes&rdquo; and create the infrastructure needed to link the world&rsquo;s information together. Now that&rsquo;s pretty cool.</p>
+<p>I’m excited about developing standards like these because resource mapping protocols such as OAI-ORE are an instrumental step in connecting resources, services and information on the Web. They’ll help us “connect the tubes” and create the infrastructure needed to link the world’s information together. Now that’s pretty cool.</p>
 ]]></content>
   </entry>
   

@@ -1,0 +1,691 @@
+
+<!doctype html>
+<!-- START OF _layouts/default.html -->
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" >
+		<meta content="width=device-width,initial-scale=1" name="viewport">
+		<meta content="Andrew Hao's thoughts on software engineering, team leadership & product design." name="description">
+		<meta content="The Sweet Spot" name="author">
+
+		<title>The Sweet Spot</title>
+
+		<!-- Styles -->
+		<link href="/stylesheets/main.css" rel="stylesheet">
+
+		<!-- Google webfonts -->
+    <link href="https://fonts.googleapis.com/css?family=Cousine|Suez+One|Yellowtail|Space+Mono|Alike+Angular" rel="stylesheet">
+
+		<!-- jQuery and plugins -->
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+		<script src="/js/jquery.zclip.min.js"></script>
+
+		<!-- Syntax highlighter -->
+		<link href="/stylesheets/prettify-hemisu.css" type="text/css" rel="stylesheet" />
+    <script type="text/javascript" src="/js/prettify.js"></script>
+
+    <link href="/atom.xml" rel="alternate" title="The Sweet Spot" type="application/atom+xml">
+    
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-2330913-9']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+
+  </head>
+
+	<body onload="prettyPrint()">
+		<div class="wrap">
+
+			<header>
+        <a href="/"><div class="title">The Sweet Spot</div></a>
+				<div class="subtitle">On software, engineering leadership, and anything shiny.</div>
+
+				<div class="navi">
+					<ul>
+						<li><a href="/blog/archives">Articles</a></li>
+						<li><a href="https://www.github.com/andrewhao">Github</a></li>
+						<li><a href="https://twitter.com/andrewhao">Twitter</a></li>
+					</ul>
+				</div> <!-- // .navi -->
+			</header>
+
+				<!-- START OF index.html -->
+
+	
+		
+		<!-- START OF _includes/article.html -->
+<article>
+	<header>
+		<h1><a href="/2014/01/26/moving-to-ember-app-kit/">Moving to Ember App Kit</a></h1>
+		<time>26 January 2014</time>
+	</header>
+		<div class="content">
+			<p>I’ve noticed a bit of the buzz around <a href="https://github.com/stefanpenner/ember-app-kit">Ember App Kit</a><br />
+recently and decided to move Hendrix, my music management app, over from<br />
+a <a href="http://yeoman.io/">Yeoman</a>-generated Ember app to EAK with all its<br />
+bells and whistles.</p>
+
+<h3 id="whats-the-difference">What’s the difference?</h3>
+
+<p>Well on the surface, the two frameworks aren’t very different. The<br />
+standard Yeoman build tool sets you up with Grunt and Bower, which is<br />
+what EAK provides you out of the box. The cool stuff happens when you<br />
+dive under the hood: ES6 module transpilation and an AMD-compatible<br />
+Ember Resolver, built-in Karma integration and a built-in API stub<br />
+framework for development and test environments.</p>
+
+<h3 id="the-joys-of-modules">The joys of modules</h3>
+
+<p>What I didn’t realize was that compiling to ES6 modules required that my<br />
+filenames be renamed exactly how the modules were going to be placed,<br />
+with the extra caveat that resource actions needed to live in their own<br />
+directories. Recall that in the old way of doing things with globals and<br />
+namespaces, you could get away with throwing a route file like this in<br />
+your app directory:</p>
+
+<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">routes/
+</span><span class="line">  songs_index_controller.js</span></code></pre></td></tr></table></div></figure>
+
+<p>And inside:</p>
+
+<figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="javascript"><span class="line"><span class="nx">MyApp</span><span class="p">.</span><span class="nx">SongsIndexRoute</span> <span class="o">=</span> <span class="nx">Ember</span><span class="p">.</span><span class="nx">Route</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
+</span><span class="line">  <span class="c1">//...</span>
+</span><span class="line"><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+<p>In EAK’s world, you need to nest the file under the <code>songs/</code> directory,<br />
+and strip the type from the filename, like so:</p>
+
+<figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="javascript"><span class="line"><span class="nx">routes</span><span class="o">/</span>
+</span><span class="line">  <span class="nx">songs</span><span class="o">/</span>
+</span><span class="line">    <span class="nx">index</span><span class="p">.</span><span class="nx">js</span>
+</span></code></pre></td></tr></table></div></figure>
+
+<p>Inside the file, you assign the function to a variable and let it be<br />
+exported in the default namespace.</p>
+
+<figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+</pre></td><td class="code"><pre><code class="javascript"><span class="line"><span class="kd">var</span> <span class="nx">SongsIndexRoute</span> <span class="o">=</span> <span class="nx">Ember</span><span class="p">.</span><span class="nx">Route</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
+</span><span class="line">  <span class="c1">//...</span>
+</span><span class="line"><span class="p">});</span>
+</span><span class="line"><span class="kr">export</span> <span class="k">default</span> <span class="nx">SongsIndexRoute</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+<h3 id="file-name-matters">File name matters</h3>
+
+<p>The <a href="https://github.com/stefanpenner/ember-jj-abrams-resolver/">new Ember resolver</a> <br />
+loads modules in a smart way – according to how the framework<br />
+structures resources, controllers and their corresponding actions. So<br />
+visiting <code>#/songs</code> from my app caused the app to look up and load<br />
+<code>appkit/routes/songs/index</code>. What I didn’t realize was <em>this module must<br />
+live at a very specific place in the file directory structure</em>.<br />
+I realized that I left the module type in the file name the first time<br />
+around, like this:</p>
+
+<figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="javascript"><span class="line"><span class="nx">routes</span><span class="o">/</span>
+</span><span class="line">  <span class="nx">songs</span><span class="o">/</span>
+</span><span class="line">    <span class="nx">index_route</span><span class="p">.</span><span class="nx">js</span>
+</span></code></pre></td></tr></table></div></figure>
+
+<p>There are no types in the module names – or the filenames, for that<br />
+matter. I had not realized this (I’m also an AMD newbie) – so I had<br />
+left my files un-renamed as <code>songs_index_route</code>, which meant that<br />
+the module loader had stored the SongsIndexRoute module under<br />
+<code>appkit/routes/songs/index_route</code>, but was doing a route lookup through<br />
+the Resolver for: <code>appkit/routes/songs/index</code>. Renaming the file to:</p>
+
+<figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="javascript"><span class="line"><span class="nx">routes</span><span class="o">/</span>
+</span><span class="line">  <span class="nx">songs</span><span class="o">/</span>
+</span><span class="line">    <span class="nx">index</span><span class="p">.</span><span class="nx">js</span>
+</span></code></pre></td></tr></table></div></figure>
+
+<p>did the trick.</p>
+
+			
+			
+		</div>
+	<footer>
+		
+
+
+		
+
+
+
+  
+		
+			Tagged under
+		
+    <a class='category' href='/category/development/'>development</a>, <a class='category' href='/category/ember/'>ember</a>, <a class='category' href='/category/ember-app-kit/'>ember app kit</a>, <a class='category' href='/category/programming/'>programming</a>
+	
+
+
+	
+	
+	</footer>
+	
+</article>
+<!-- END OF _includes/article.html -->
+
+	
+		
+		<!-- START OF _includes/article.html -->
+<article>
+	<header>
+		<h1><a href="/2013/12/27/ember-data-rails-cors-and-you/">Ember Data, Rails, CORS, and you!</a></h1>
+		<time>27 December 2013</time>
+	</header>
+		<div class="content">
+			<p>I’m starting up a new personal project involving Ember-Data and Rails<br />
+(more to come). The gist of it is that it’s a pure frontend app engine<br />
+built in Yeoman and Grunt, and designed to talk to a remote API service<br />
+built on Rails.</p>
+
+<p>So since it’s a remote API, I’ve got to enable CORS, right?</p>
+
+<h2 id="install-cors-via-rack-cors">Install CORS via rack-cors</h2>
+
+<figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class="ruby"><span class="line"><span class="c1"># Gemfile</span>
+</span><span class="line"><span class="n">gem</span> <span class="s2">&quot;rack-cors&quot;</span><span class="p">,</span> <span class="ss">:require</span> <span class="o">=&gt;</span> <span class="s2">&quot;rack/cors&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+<figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+</pre></td><td class="code"><pre><code class="ruby"><span class="line"><span class="c1"># config/application.rb</span>
+</span><span class="line"><span class="n">config</span><span class="o">.</span><span class="n">middleware</span><span class="o">.</span><span class="n">use</span> <span class="no">Rack</span><span class="o">::</span><span class="no">Cors</span> <span class="k">do</span>
+</span><span class="line">  <span class="n">allow</span> <span class="k">do</span>
+</span><span class="line">    <span class="n">origins</span> <span class="s2">&quot;*&quot;</span>
+</span><span class="line">
+</span><span class="line">    <span class="n">resource</span> <span class="s2">&quot;*&quot;</span><span class="p">,</span>
+</span><span class="line">      <span class="ss">:headers</span> <span class="o">=&gt;</span> <span class="ss">:any</span><span class="p">,</span>
+</span><span class="line">      <span class="ss">:methods</span> <span class="o">=&gt;</span> <span class="o">[</span><span class="ss">:get</span><span class="p">,</span> <span class="ss">:post</span><span class="p">,</span> <span class="ss">:put</span><span class="p">,</span> <span class="ss">:delete</span><span class="p">,</span> <span class="ss">:options</span><span class="p">,</span> <span class="ss">:patch</span><span class="o">]</span>
+</span><span class="line">    <span class="k">end</span>
+</span><span class="line">
+</span><span class="line">  <span class="n">allow</span> <span class="k">do</span>
+</span><span class="line">    <span class="n">origins</span> <span class="s2">&quot;*&quot;</span>
+</span><span class="line">    <span class="n">resource</span> <span class="s2">&quot;/public/*&quot;</span><span class="p">,</span>
+</span><span class="line">      <span class="ss">:headers</span> <span class="o">=&gt;</span> <span class="ss">:any</span><span class="p">,</span>
+</span><span class="line">      <span class="ss">:methods</span> <span class="o">=&gt;</span> <span class="ss">:get</span>
+</span><span class="line">  <span class="k">end</span>
+</span><span class="line"><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+<p>A very naive implementation with zero security whatsoever. Anyways.<br />
+Onward!</p>
+
+<h2 id="get-ember-data-dsrestadapter-talkin-cors">Get Ember-Data DS.RESTAdapter talkin’ CORS</h2>
+
+<p>I saw conflicting documentation on Ember-Data and CORS – it seemed like<br />
+it should support CORS out of the box. Apparently this is not so.</p>
+
+<p>In my ember app’s <code>store.js</code> (or anywhere your app loads before the<br />
+application adapter is defined, do this:</p>
+
+<figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+</pre></td><td class="code"><pre><code class="javascript"><span class="line"><span class="err">#</span> <span class="nx">store</span><span class="p">.</span><span class="nx">js</span>
+</span><span class="line"><span class="nx">$</span><span class="p">.</span><span class="nx">ajaxSetup</span><span class="p">({</span>
+</span><span class="line">  <span class="nx">crossDomain</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+</span><span class="line">  <span class="nx">xhrFields</span><span class="o">:</span> <span class="p">{</span>
+</span><span class="line">    <span class="nx">withCredentials</span><span class="o">:</span> <span class="kc">true</span>
+</span><span class="line">  <span class="p">}</span>
+</span><span class="line"><span class="p">});</span>
+</span><span class="line">
+</span><span class="line"><span class="nx">Hendrix</span><span class="p">.</span><span class="nx">Store</span> <span class="o">=</span> <span class="nx">DS</span><span class="p">.</span><span class="nx">Store</span><span class="p">.</span><span class="nx">extend</span><span class="p">();</span>
+</span><span class="line"><span class="nx">Hendrix</span><span class="p">.</span><span class="nx">ApplicationAdapter</span> <span class="o">=</span> <span class="nx">DS</span><span class="p">.</span><span class="nx">RESTAdapter</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
+</span><span class="line">  <span class="nx">host</span><span class="o">:</span> <span class="s2">&quot;http://localhost:3000&quot;</span><span class="p">,</span>
+</span><span class="line"><span class="p">})</span>
+</span></code></pre></td></tr></table></div></figure>
+
+<p><a href="http://api.jquery.com/jQuery.ajaxSetup/"><code>$.ajaxSetup</code></a>, though its<br />
+usage is not recommended, is designed to set global options on the<br />
+jQuery <code>ajax</code> object. It provides some information on the options you can modify.</p>
+
+<p>Why doesn’t Ember support this out of the box? I think it’s because they<br />
+cannot support IE, where one must use an XDR object to support CORS.</p>
+
+<p>I’ve posted an <a href="http://discuss.emberjs.com/t/ember-data-and-cors/3690">Ember follow-up question in the<br />
+forums</a> for discussion.</p>
+
+<h2 id="get-rails-talking-json-out-of-its-mimetype-confusion">Get Rails talking JSON out of its mimetype confusion.</h2>
+
+<p>Did you know that if you rely on the <code>Accepts:</code> header in HTTP that<br />
+Rails does not obey its ordering<code>*</code>? I was trying to figure out why my<br />
+Rails controllers were trying to render HTML instead of JSON when the<br />
+headers were:</p>
+
+<p><code>'Accept: application/json, text/javascript, */*; q=0.01'</code></p>
+
+<p>A <a href="https://github.com/rails/rails/issues/9940">very long winded<br />
+discussion</a> on the Rails<br />
+project reveals that, well, nobody has it figured out yet. Most modern<br />
+browsers do obey <code>Accepts:</code> specificity, but for the sake of older<br />
+browser compatibility, the best practice for browsers is still to return<br />
+HTML when <code>*/*</code> is specified.</p>
+
+<p>What does this mean for Rails developers who want to use <code>Accepts:</code><br />
+mimetype lists? Well, we either wait for the Rails projects to support<br />
+mimetype specificity (and for older browsers to die out), or we are<br />
+encouraged to include the format explicitly in the URI.</p>
+
+<p>I chose to have Ember append the <code>.json</code> suffix to the URL, thanks to<br />
+this <a href="http://stackoverflow.com/questions/13648807/ds-model-url-not-working-in-ember-js">SO<br />
+post</a></p>
+
+<figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+</pre></td><td class="code"><pre><code class="javascript"><span class="line"><span class="err">#</span> <span class="nx">store</span><span class="p">.</span><span class="nx">js</span>
+</span><span class="line"><span class="nx">Hendrix</span><span class="p">.</span><span class="nx">ApplicationAdapter</span> <span class="o">=</span> <span class="nx">DS</span><span class="p">.</span><span class="nx">RESTAdapter</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
+</span><span class="line">  <span class="nx">host</span><span class="o">:</span> <span class="s2">&quot;http://localhost:3000&quot;</span><span class="p">,</span>
+</span><span class="line">  <span class="c1">// Force ember-data to append the `json` suffix</span>
+</span><span class="line">  <span class="nx">buildURL</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">record</span><span class="p">,</span> <span class="nx">suffix</span><span class="p">)</span> <span class="p">{</span>
+</span><span class="line">    <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">_super</span><span class="p">(</span><span class="nx">record</span><span class="p">,</span> <span class="nx">suffix</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;.json&quot;</span><span class="p">;</span>
+</span><span class="line">  <span class="p">}</span>
+</span><span class="line"><span class="p">})</span>
+</span></code></pre></td></tr></table></div></figure>
+
+<p>More to come how how this app works.</p>
+
+			
+			
+		</div>
+	<footer>
+		
+
+
+		
+
+
+
+  
+		
+			Tagged under
+		
+    <a class='category' href='/category/ajax/'>ajax</a>, <a class='category' href='/category/api/'>api</a>, <a class='category' href='/category/cors/'>cors</a>, <a class='category' href='/category/crossdomain/'>crossdomain</a>, <a class='category' href='/category/ember/'>ember</a>, <a class='category' href='/category/ember-data/'>ember data</a>, <a class='category' href='/category/json/'>json</a>, <a class='category' href='/category/rails/'>rails</a>
+	
+
+
+	
+	
+	</footer>
+	
+</article>
+<!-- END OF _includes/article.html -->
+
+	
+		
+		<!-- START OF _includes/article.html -->
+<article>
+	<header>
+		<h1><a href="/2012/12/26/decomposing-fat-models/">Decomposing Fat Models</a></h1>
+		<time>26 December 2012</time>
+	</header>
+		<div class="content">
+			<p>Heard an awesome Ruby Rogues podcast recently: <a href="http://rubyrogues.com/083-rr-decomposing-fat-models-with-bryan-helmkamp/">“Decomposing Fat Models”</a>.</p>
+
+<p>Essentially, they’re talking through Bryan Helmkamp’s <a href="http://blog.codeclimate.com/blog/2012/10/17/7-ways-to-decompose-fat-activerecord-models/">Code Climate blog entry “7 ways to decompose fat ActiveRecord models”</a>, which sums up a few strategies that mainly involve extracting objects from your existing code, value, service, policy, decorator objects and the like. Give the entry a read-through, it’s opened my eyes a lot to rethinking my architecture of my Rails models.</p>
+
+<p>A few interesting thoughts that came up in the podcast:</p>
+
+<ul>
+  <li>
+    <p>The “Skinny Controller, Fat Model” mantra has hurt the Rails community because we start getting these bloated AR classes. “‘fat-‘ anything is bad” one of the hosts mentions in the blog. The smaller your models, the more manageable, readable and testable they become.</p>
+  </li>
+  <li>
+    <p>Rubyists don’t like the term “Factory”, even though in Helmkamp’s opinion, Ruby classes <em>are</em> factories. “We call them “builders”” one of the hosts jokes.</p>
+  </li>
+  <li>
+    <p>The Open/Closed Principle as applied to Ruby: using delegators, decorators.</p>
+  </li>
+</ul>
+
+
+			
+			
+		</div>
+	<footer>
+		
+
+
+		
+			andrewhao 
+		
+
+
+
+  
+		
+			on
+		
+    <a class='category' href='/category/rails/'>rails</a>, <a class='category' href='/category/ruby/'>ruby</a>, <a class='category' href='/category/software-design/'>software design</a>
+	
+
+
+	
+	
+	</footer>
+	
+</article>
+<!-- END OF _includes/article.html -->
+
+	
+		
+		<!-- START OF _includes/article.html -->
+<article>
+	<header>
+		<h1><a href="/2012/10/04/deploying-janky-on-ubuntu/">Deploying Janky on Ubuntu</a></h1>
+		<time>04 October 2012</time>
+	</header>
+		<div class="content">
+			<p><a href="https://github.com/blog/1013-janky">Janky</a> is a Github-developed <a href="https://github.com/github/hubot">Hubot</a> + Jenkins control interface. It’s developed to be deployed on Heroku. However, what if you need it to live on an internal VM? Here’s how I got it running on a Ubuntu (12.04 Precise) VM.</p>
+
+<h2 id="make-sure-you-have-the-correct-mysql-libs-installed">Make sure you have the correct MySQL libs installed:</h2>
+
+<pre><code>sudo apt-get install mysql-server libmysqlclient-dev
+</code></pre>
+
+<h2 id="clone-janky-from-the-github-repositoryhttpsgithubcomgithubjanky">Clone janky from the <a href="https://github.com/github/janky">Github repository</a></h2>
+
+<pre><code>git clone https://github.com/github/janky.git
+cd janky
+</code></pre>
+
+<h2 id="bootstrap-your-environment">Bootstrap your environment</h2>
+
+<p>The following steps are taken nearly verbatim from the “Hacking” section on the Janky README:</p>
+
+<pre><code>script/bootstrap
+
+mysqladmin -uroot create janky_development
+mysqladmin -uroot create janky_test
+
+RACK_ENV=development bin/rake db:migrate
+RACK_ENV=test bin/rake db:migrate
+
+RACK_ENV=development bundle exec rake db:seed
+</code></pre>
+
+<h2 id="configure-thin">Configure Thin</h2>
+
+<p>Open <code>Gemfile</code> in your text editor and add:</p>
+
+<pre><code>gem "foreman"
+</code></pre>
+
+<p>Then install it:</p>
+
+<pre><code>bundle install
+</code></pre>
+
+<p>Then create a Procfile:</p>
+
+<pre><code>touch Procfile
+</code></pre>
+
+<p>Open the Procfile in your text editor and add the following line:</p>
+
+<pre><code>web: bundle exec thin start -p $PORT
+</code></pre>
+
+<p>Add the JANKY_* variables to your environment according to the janky README. I use zsh, so I added these as export statements in my ~/.zshenv</p>
+
+<h2 id="start-your-server">Start your server</h2>
+
+<pre><code>bundle exec foreman start
+</code></pre>
+
+<p>Note that the server starts on port 5000 by default, and you can override it like so:</p>
+
+<pre><code>PORT=8080 bundle exec foreman start
+</code></pre>
+
+<h2 id="thats-it">That’s it!</h2>
+
+<p>Let me know how that works for you!</p>
+
+			
+			
+		</div>
+	<footer>
+		
+
+
+		
+			andrewhao 
+		
+
+
+
+  
+		
+			on
+		
+    <a class='category' href='/category/andrew-2-dot-0/'>andrew 2.0</a>
+	
+
+
+	
+	
+	</footer>
+	
+</article>
+<!-- END OF _includes/article.html -->
+
+	
+		
+		<!-- START OF _includes/article.html -->
+<article>
+	<header>
+		<h1><a href="/2012/06/20/updating-max-file-limit-on-osx-lion/">Updating max file limit on OSX Lion</a></h1>
+		<time>20 June 2012</time>
+	</header>
+		<div class="content">
+			<p>I’ve been hitting a lot of “Maximum file limit exceeded” dialogs after a long day at work – at any point in time I’ve got a kajillion Chrome tabs open, five or six Rails envs running (for dev and test) + Guard/Spork actively watching tests, and Sublime with another kajillion tabs open.</p>
+
+<p>Turns out that OSX limits the number of open file descriptors per process to 256. Time to bump up the limit:</p>
+
+<p>First, check out your current file limit:</p>
+
+<p><code>$ launchctl limit</code></p>
+
+<pre><code>    cpu         unlimited      unlimited      
+    filesize    unlimited      unlimited      
+    data        unlimited      unlimited      
+    stack       8388608        67104768       
+    core        0              unlimited      
+    rss         unlimited      unlimited      
+    memlock     unlimited      unlimited      
+    maxproc     709            1064           
+    maxfiles    256            unlimited
+</code></pre>
+
+<p>Okay, let’s crank ‘er up. First let’s create <code>/etc/launchctl.conf</code></p>
+
+<p><code>$ sudo touch /etc/launchctl.conf</code></p>
+
+<p>And let’s open it with your editor of choice. Add the following line to the new file:</p>
+
+<p><code>limit maxfiles 16384 32768</code></p>
+
+<p>Restart your computer. Boom. Easy.</p>
+
+			
+			
+		</div>
+	<footer>
+		
+
+
+		
+			andrewhao 
+		
+
+
+
+  
+		
+			on
+		
+    <a class='category' href='/category/andrew-2-dot-0/'>andrew 2.0</a>, <a class='category' href='/category/apple/'>apple</a>, <a class='category' href='/category/os-x/'>os x</a>, <a class='category' href='/category/tips/'>tips</a>
+	
+
+
+	
+	
+	</footer>
+	
+</article>
+<!-- END OF _includes/article.html -->
+
+	
+	
+<div class="pagination">
+	
+		<a class="older" href="6">Older</a>
+	
+	
+	<span class="total">5 of 20</span>
+	
+	
+		<a class="newer" href="4">Newer</a>
+	
+</div>
+<!-- END OF index.html -->
+
+
+			<footer>
+				Copyright &copy; 2016
+
+	Andrew Hao
+
+
+				
+
+<script type="text/javascript">
+      var disqus_shortname = 'g9labs';
+      
+        
+        var disqus_script = 'count.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+			</footer>
+
+		</div> <!-- // .wrap -->
+  </body>
+
+	<script>
+		$(document).ready(function() {
+			// Make images center
+			$('p:has(img)').css('text-align', 'center');
+
+			// Add the image's title attribute as a caption
+			$('p:has(img)').append(function () {
+				return '<div class="caption">' + ($('img', this).attr('title') || "") + '</div>';
+			});
+
+			// Prettify code
+			$('code').addClass('prettyprint');
+			$('pre code').addClass('linenums');
+
+			// Copy to clipboard with button
+			$('pre:has(code)').prepend(function(){
+				return '<div class="clip-btn">copy to clipboard</div>';
+      });
+
+			$('.clip-btn').zclip({
+				path:'/js/ZeroClipboard.swf',
+				copy: $(this).next('code').text(),
+				afterCopy: function(){
+					$(this).replaceWith('<div class="clip-btn">copied!');
+					}
+			});
+		});
+	</script>
+</html>
+<!-- END OF _layouts/default.html -->

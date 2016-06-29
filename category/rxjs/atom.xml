@@ -4,7 +4,7 @@
   <title><![CDATA[Category: rxjs | The Sweet Spot]]></title>
   <link href="http://www.g9labs.com/category/rxjs/atom.xml" rel="self"/>
   <link href="http://www.g9labs.com/"/>
-  <updated>2016-06-24T11:31:59-07:00</updated>
+  <updated>2016-06-29T16:33:32-07:00</updated>
   <id>http://www.g9labs.com/</id>
   <author>
     <name><![CDATA[Andrew Hao]]></name>
@@ -18,66 +18,68 @@
     <link href="http://www.g9labs.com/2016/03/21/lossless-rate-limiting-with-rxjs/"/>
     <updated>2016-03-21T13:09:00-07:00</updated>
     <id>http://www.g9labs.com/2016/03/21/lossless-rate-limiting-with-rxjs</id>
-    <content type="html"><![CDATA[<p>Much of RxJS involves working with
-<a href="http://reactivex.io/documentation/operators/backpressure.html">backpressure</a> &ndash; how to reconcile
-streams that emit/process data at different rates, without overloading
-the system. Much of that model is built with lossy handling in mind &ndash; it
-makes sense that when your system is under duress, that you design your
-streams to degrade gracefully (e.g. drop certain events, or rate limit
+    <content type="html"><![CDATA[<p>Much of RxJS involves working with<br />
+<a href="http://reactivex.io/documentation/operators/backpressure.html">backpressure</a> - how to reconcile<br />
+streams that emit/process data at different rates, without overloading<br />
+the system. Much of that model is built with lossy handling in mind - it<br />
+makes sense that when your system is under duress, that you design your<br />
+streams to degrade gracefully (e.g. drop certain events, or rate limit<br />
 them by chunking into windows, etc).</p>
 
-<p>However, there are times when it is appropriate to have a lossless
-approach to backpressure &ndash; e.g., to store every chunk of data that comes
-through a stream in memory, and not drop things. These use cases may
+<p>However, there are times when it is appropriate to have a lossless<br />
+approach to backpressure - e.g., to store every chunk of data that comes<br />
+through a stream in memory, and not drop things. These use cases may<br />
 come about when:</p>
 
 <ul>
-<li>You have a short-lived, or bounded set of data you know will come over
-the pipe. You understand the bounds of the data that will ever come over
+  <li>You have a short-lived, or bounded set of data you know will come over<br />
+the pipe. You understand the bounds of the data that will ever come over<br />
 the pipe.</li>
-<li>You have a processing script you want to run, which is not part of a
+  <li>You have a processing script you want to run, which is not part of a<br />
 large system.</li>
-<li>You have a honkin' large system that can handle the load.</li>
+  <li>You have a honkin’ large system that can handle the load.</li>
 </ul>
 
-
-<p>In my case, I had a script that called the Google Geocoding API for a
-set of GPS coordinates. Now for a set of several hundred coordinates, I
-would end up calling the API several hundred times all at once with this
+<p>In my case, I had a script that called the Google Geocoding API for a<br />
+set of GPS coordinates. Now for a set of several hundred coordinates, I<br />
+would end up calling the API several hundred times all at once with this<br />
 naive implementation:</p>
 
-<p><code>javascript
-// address$: [ "1234 Widget Way, Promiseland, WV" ] -- [...] -- [...]
-const geocoded$ = addresses$
-.flatMap(address =&gt; Rx.Observable.fromPromise(callGoogleGeocodingService(address)))
-// geocoded$: [ { latitude: 89.99, longitude: 90.00, ... } ] -- [...] -- [...]
-</code></p>
+<div class="language-javascript highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n1" name="n1">1</a></span><span style="color:#777">// address$: [ &quot;1234 Widget Way, Promiseland, WV&quot; ] -- [...] -- [...]</span>
+<span class="line-numbers"><a href="#n2" name="n2">2</a></span>const <span style="color:#369;font-weight:bold">geocoded$</span> = <span style="color:#369;font-weight:bold">addresses$</span>
+<span class="line-numbers"><a href="#n3" name="n3">3</a></span>.flatMap(address =&gt; Rx.Observable.fromPromise(callGoogleGeocodingService(address)))
+<span class="line-numbers"><a href="#n4" name="n4">4</a></span><span style="color:#777">// geocoded$: [ { latitude: 89.99, longitude: 90.00, ... } ] -- [...] -- [...]</span>
+</pre></div>
+</div>
+</div>
 
-<p>I searched all over for a lossless throttling mechanism, but all I could
-find was references to RxJS&rsquo;s lossy <a href="">throttle</a> behavior.</p>
+<p>I searched all over for a lossless throttling mechanism, but all I could<br />
+find was references to RxJS’s lossy <a href="">throttle</a> behavior.</p>
 
-<p>Other frameworks, like <a href="https://github.com/baconjs/bacon.js/#observable-bufferingthrottle">Bacon.js&rsquo;s bufferingThrottle()</a> and <a href="http://highlandjs.org/#ratelimit">Highland.js ratelimit()</a> seemed attractive. Where was RxJS&rsquo;s equivalent?</p>
+<p>Other frameworks, like <a href="https://github.com/baconjs/bacon.js/#observable-bufferingthrottle">Bacon.js’s bufferingThrottle()</a> and <a href="http://highlandjs.org/#ratelimit">Highland.js ratelimit()</a> seemed attractive. Where was RxJS’s equivalent?</p>
 
-<p>Thanks to a <a href="http://stackoverflow.com/questions/34955842/rate-limiting-http-calls-made-by-rxjs">helpful StackOverflow post</a>,
-I found the answer: the use of
-<a href="https://github.com/Reactive-Extensions/RxJS/blob/master/doc/api/core/operators/concatmap.md">concatMap()</a>
-and
-<a href="https://github.com/Reactive-Extensions/RxJS/blob/master/doc/api/core/operators/delay.md">delay()</a>
+<p>Thanks to a <a href="http://stackoverflow.com/questions/34955842/rate-limiting-http-calls-made-by-rxjs">helpful StackOverflow post</a>,<br />
+I found the answer: the use of<br />
+<a href="https://github.com/Reactive-Extensions/RxJS/blob/master/doc/api/core/operators/concatmap.md">concatMap()</a><br />
+and<br />
+<a href="https://github.com/Reactive-Extensions/RxJS/blob/master/doc/api/core/operators/delay.md">delay()</a><br />
 forces the incoming stream to execute serially over artificial time delayed streams.</p>
 
-<p><code>javascript
-const geocoded$ = addresses$
-.concatMap(address =&gt; Rx.Observable.just(address).delay(TIME_INTERVAL))
-.flatMap(address =&gt; Rx.Observable.fromPromise(callGoogleGeocodingService(address)))
-</code></p>
+<div class="language-javascript highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n1" name="n1">1</a></span>const <span style="color:#369;font-weight:bold">geocoded$</span> = <span style="color:#369;font-weight:bold">addresses$</span>
+<span class="line-numbers"><a href="#n2" name="n2">2</a></span>.concatMap(address =&gt; Rx.Observable.just(address).delay(TIME_INTERVAL))
+<span class="line-numbers"><a href="#n3" name="n3">3</a></span>.flatMap(address =&gt; Rx.Observable.fromPromise(callGoogleGeocodingService(address)))
+</pre></div>
+</div>
+</div>
 
 <p>Thanks to:</p>
 
 <ul>
-<li><a href="http://stackoverflow.com/questions/34955842/rate-limiting-http-calls-made-by-rxjs">http://stackoverflow.com/questions/34955842/rate-limiting-http-calls-made-by-rxjs</a></li>
-<li><a href="http://stackoverflow.com/questions/30876361/rxjs-rate-limit-requests-per-second-and-concurrency?rq=1">http://stackoverflow.com/questions/30876361/rxjs-rate-limit-requests-per-second-and-concurrency?rq=1</a></li>
+  <li>http://stackoverflow.com/questions/34955842/rate-limiting-http-calls-made-by-rxjs</li>
+  <li>http://stackoverflow.com/questions/30876361/rxjs-rate-limit-requests-per-second-and-concurrency?rq=1</li>
 </ul>
-
 ]]></content>
   </entry>
   
@@ -86,133 +88,132 @@ const geocoded$ = addresses$
     <link href="http://www.g9labs.com/2016/02/17/partitioning-rxjs-streams-adventures-in-nested-observables-with-groupby-and-flatmap/"/>
     <updated>2016-02-17T22:47:00-08:00</updated>
     <id>http://www.g9labs.com/2016/02/17/partitioning-rxjs-streams-adventures-in-nested-observables-with-groupby-and-flatmap</id>
-    <content type="html"><![CDATA[<p>One of the confusing aspects about working with streams is diving into
+    <content type="html"><![CDATA[<p>One of the confusing aspects about working with streams is diving into<br />
 Rx operators that take a stream and fan out into multiple streams.</p>
 
 <p>Is your head exploding yet?</p>
 
-<h2>The problem:</h2>
+<h2 id="the-problem">The problem:</h2>
 
-<p>Let&rsquo;s dive into a problem I ran into while working on a personal
+<p>Let’s dive into a problem I ran into while working on a personal<br />
 project:</p>
 
-<p>The task at hand is to take a list of GPS moving point data and
-partition the group data into multiple clusters of points, count up each
-group, then return the aggregate stats. As a cyclist is moving, I want
+<p>The task at hand is to take a list of GPS moving point data and<br />
+partition the group data into multiple clusters of points, count up each<br />
+group, then return the aggregate stats. As a cyclist is moving, I want<br />
 to know how often they are moving at that specific velocity (speed).</p>
 
-<p>Our weapon of choice is the <a href="http://reactivex.io/documentation/operators/groupby.html">RxJS groupBy() function</a>,
+<p>Our weapon of choice is the <a href="http://reactivex.io/documentation/operators/groupby.html">RxJS groupBy() function</a>,<br />
 which groups like stream values based on a key value you define.</p>
 
 <p><a href="http://reactivex.io/documentation/operators/groupby.html"><img src="http://reactivex.io/documentation/operators/images/groupBy.c.png" alt="Image of groupBy() at work, with marbles." /></a></p>
 
 <p>OK. Easy enough. So my implementation looked something like this:</p>
 
-<p><code>js
-gpsPointStream
-.groupBy((point) =&gt; point.velocity)
-</code></p>
+<div class="language-js highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n1" name="n1">1</a></span>gpsPointStream
+<span class="line-numbers"><a href="#n2" name="n2">2</a></span>.groupBy((point) =&gt; point.velocity)
+</pre></div>
+</div>
+</div>
 
-<p>The supplied <code>(point) =&gt; point.velocity</code> function determines the <code>key</code>
-value for the supplied event, which then 1) creates a new Observable
-sequence for that specific <code>key</code> value, if it doesn&rsquo;t exist, or 2)
+<p>The supplied <code>(point) =&gt; point.velocity</code> function determines the <code>key</code><br />
+value for the supplied event, which then 1) creates a new Observable<br />
+sequence for that specific <code>key</code> value, if it doesn’t exist, or 2)<br />
 assigns your event to an existing Observable sequence.</p>
 
-<p>Let&rsquo;s illustrate:</p>
+<p>Let’s illustrate:</p>
 
-<p><code>
-src:     -- { velocity: 0 } ---------- { velocity: 0.1 } ----------------------------------- { velocity: 0 } --&gt;
+<pre><code>src:     -- { velocity: 0 } ---------- { velocity: 0.1 } ----------------------------------- { velocity: 0 } --&gt;
 groupBy: -- [{ Observable key: 0 }] -- [ { Observable key: 0 }, { Observable key: 0.1 } ] -- [ { Observable key: 0 count: 2 }, { Observable key: 0.1 } ] --&gt;
-</code></p>
+</code></pre>
 
-<h2>Never fear, <code>flatMap()</code> to the rescue.</h2>
+<h2 id="never-fear-flatmap-to-the-rescue">Never fear, <code>flatMap()</code> to the rescue.</h2>
 
-<p>So the story turns to our hero
-<a href="http://reactivex.io/documentation/operators/flatmap.html"><code>flatMap()</code></a>, which as it turns out is
+<p>So the story turns to our hero<br />
+<a href="http://reactivex.io/documentation/operators/flatmap.html"><code>flatMap()</code></a>, which as it turns out is<br />
 specifically tuned to deal with issues of dealing with multiple streams.</p>
 
 <p><a href="http://reactivex.io/documentation/operators/flatmap.html"><img src="http://reactivex.io/documentation/operators/images/flatMap.c.png" alt="Marble diagram for flatMap" /></a></p>
 
-<p><code>flatMap</code> will take a supplied function as its argument, which is the
+<p><code>flatMap</code> will take a supplied function as its argument, which is the<br />
 operation to apply to each argument within the supplied stream.</p>
 
-<p>```js
-gpsPointStream
-.groupBy((point) => point.velocity)
-.flatMap((group) => {
-  return group.scan((h, v) => h + 1, 0)</p>
+<div class="language-js highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n1" name="n1">1</a></span>gpsPointStream
+<span class="line-numbers"><a href="#n2" name="n2">2</a></span>.groupBy((point) =&gt; point.velocity)
+<span class="line-numbers"><a href="#n3" name="n3">3</a></span>.flatMap((group) =&gt; {
+<span class="line-numbers"><a href="#n4" name="n4">4</a></span>  <span style="color:#080;font-weight:bold">return</span> group.scan((h, v) =&gt; h + <span style="color:#00D">1</span>, <span style="color:#00D">0</span>)
+<span class="line-numbers"><a href="#n5" name="n5">5</a></span>              .zip(Observable.just(group.key))
+<span class="line-numbers"><a href="#n6" name="n6">6</a></span>});
+</pre></div>
+</div>
+</div>
 
-<pre><code>          .zip(Observable.just(group.key))
-</code></pre>
-
-<p>});
-```</p>
-
-<p><code>
-src:     -- { velocity: 0 } ---------- { velocity: 0.1 } ----------------------------------- { velocity: 0 } ----&gt;
+<pre><code>src:     -- { velocity: 0 } ---------- { velocity: 0.1 } ----------------------------------- { velocity: 0 } ----&gt;
 groupBy: -- [{ Observable key: 0 }] -- [ { Observable key: 0 }, { Observable key: 0.1 } ] -- [ { Observable key: 0 count: 2 }, { Observable key: 0.1 } ] --&gt;
 flatMap: -- [ 1, 0 ] ----------------- [ 1, 0.1 ] ------------------------------------------ [ 2, 0 ] --&gt;
-</code></p>
+</code></pre>
 
 <p>What just happened here?</p>
 
-<p>I specified a merging function for the <code>flatMap()</code> stream, which
-performed the <code>scan()</code> counting aggregation on my group before merging the
-stream back into the main stream. I threw in a <code>zip</code>, which annotated my
-aggregate count value with a record of the group key (velocity) that
+<p>I specified a merging function for the <code>flatMap()</code> stream, which<br />
+performed the <code>scan()</code> counting aggregation on my group before merging the<br />
+stream back into the main stream. I threw in a <code>zip</code>, which annotated my<br />
+aggregate count value with a record of the group key (velocity) that<br />
 this value was computed for.</p>
 
-<h2>Compare it to imperative</h2>
+<h2 id="compare-it-to-imperative">Compare it to imperative</h2>
 
-<p>The equivalent of <code>groupBy</code>/<code>flatMap</code> in imperative programming is, quite
-literally, just <code>_.groupBy()</code> and <code>_.flatMap()</code>. With a few key
+<p>The equivalent of <code>groupBy</code>/<code>flatMap</code> in imperative programming is, quite<br />
+literally, just <code>_.groupBy()</code> and <code>_.flatMap()</code>. With a few key<br />
 differences. Here it is in <a href="https://lodash.com/docs#groupBy">lodash</a>:</p>
 
-<p>```js
-var grouped = _([ { velocity: 0 }, { velocity: 0.1 }, { velocity: 0 } ])
-.groupBy((point) => point.velocity)</p>
+<div class="language-js highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"> <a href="#n1" name="n1">1</a></span><span style="color:#080;font-weight:bold">var</span> grouped = _([ { <span style="color:#606">velocity</span>: <span style="color:#00D">0</span> }, { <span style="color:#606">velocity</span>: <span style="color:#60E">0.1</span> }, { <span style="color:#606">velocity</span>: <span style="color:#00D">0</span> } ])
+<span class="line-numbers"> <a href="#n2" name="n2">2</a></span>.groupBy((point) =&gt; point.velocity)
+<span class="line-numbers"> <a href="#n3" name="n3">3</a></span>
+<span class="line-numbers"> <a href="#n4" name="n4">4</a></span>grouped.value()
+<span class="line-numbers"> <a href="#n5" name="n5">5</a></span><span style="color:#777">// { 0: [ { velocity: 0 }, { velocity: 0 } ], 0.1: [ { velocity: 0.1 } ] }</span>
+<span class="line-numbers"> <a href="#n6" name="n6">6</a></span>
+<span class="line-numbers"> <a href="#n7" name="n7">7</a></span><span style="color:#080;font-weight:bold">var</span> flatmapped = grouped.flatMap((v, k) =&gt; {
+<span class="line-numbers"> <a href="#n8" name="n8">8</a></span>  <span style="color:#080;font-weight:bold">return</span> [ [v.length, k] ]
+<span class="line-numbers"> <a href="#n9" name="n9">9</a></span>  })
+<span class="line-numbers"><strong><a href="#n10" name="n10">10</a></strong></span>
+<span class="line-numbers"><a href="#n11" name="n11">11</a></span>flatmapped.value()
+<span class="line-numbers"><a href="#n12" name="n12">12</a></span><span style="color:#777">// [[2, &quot;0&quot;], [1, &quot;0.1&quot;]]</span>
+</pre></div>
+</div>
+</div>
 
-<p>grouped.value()
-// { 0: [ { velocity: 0 }, { velocity: 0 } ], 0.1: [ { velocity: 0.1 } ] }</p>
-
-<p>var flatmapped = grouped.flatMap((v, k) => {
-  return [ [v.length, k] ]
-  })</p>
-
-<p>flatmapped.value()
-// [[2, &ldquo;0&rdquo;], [1, &ldquo;0.1&rdquo;]]
-```</p>
-
-<p>So in the end, the end result was the same with one crucial difference &ndash;
-our Observable, reactive version was able to take intermediate accounts
-into time and perform an intermediate calculation as data was flowing
-in. This allowed us to generate an intermediate count for the &ldquo;0&rdquo; velocity
+<p>So in the end, the end result was the same with one crucial difference -<br />
+our Observable, reactive version was able to take intermediate accounts<br />
+into time and perform an intermediate calculation as data was flowing<br />
+in. This allowed us to generate an intermediate count for the “0” velocity<br />
 group.</p>
 
-<h2>Takeaways</h2>
+<h2 id="takeaways">Takeaways</h2>
 
 <ul>
-<li>When you want to fan out a stream into groups or partitions based on a
-specific stream value, turn to
+  <li>When you want to fan out a stream into groups or partitions based on a<br />
+specific stream value, turn to<br />
 <a href="https://github.com/Reactive-Extensions/RxJS/blob/master/doc/api/core/operators/groupby.md"><code>groupBy</code></a>.</li>
-<li>When you have a need to combine a stream-of-streams, you want to look at
+  <li>When you have a need to combine a stream-of-streams, you want to look at<br />
 <a href="https://github.com/Reactive-Extensions/RxJS/blob/master/doc/api/core/operators/selectmany.md"><code>flatMap</code></a>. You may also consider looking at <a href="https://github.com/Reactive-Extensions/RxJS/blob/master/doc/api/core/operators/concatmap.md"><code>concatMap</code></a>, a close cousin of <code>flatMap</code>.</li>
-<li>Reactive programming gives you more expressive abilities to reason
-about time and event ordering. You just have to tilt your head a little
+  <li>Reactive programming gives you more expressive abilities to reason<br />
+about time and event ordering. You just have to tilt your head a little<br />
 bit.</li>
 </ul>
 
-
-<h2>Further reading:</h2>
+<h2 id="further-reading">Further reading:</h2>
 
 <ul>
-<li><a href="http://blogs.microsoft.co.il/iblogger/2015/08/11/animations-of-rx-operators-groupby/">http://blogs.microsoft.co.il/iblogger/2015/08/11/animations-of-rx-operators-groupby/</a></li>
+  <li>http://blogs.microsoft.co.il/iblogger/2015/08/11/animations-of-rx-operators-groupby/</li>
 </ul>
-
 
 <p><strong>Update: 2016/03/22</strong></p>
 
-<p>Updated typo where the <code>index</code> variable on a GroupedObservable was
+<p>Updated typo where the <code>index</code> variable on a GroupedObservable was<br />
 changed to correctly be <code>key</code>.</p>
 ]]></content>
   </entry>

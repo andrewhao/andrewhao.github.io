@@ -4,7 +4,7 @@
   <title><![CDATA[Category: life | The Sweet Spot]]></title>
   <link href="http://www.g9labs.com/category/life/atom.xml" rel="self"/>
   <link href="http://www.g9labs.com/"/>
-  <updated>2016-06-24T11:31:59-07:00</updated>
+  <updated>2016-06-29T16:33:32-07:00</updated>
   <id>http://www.g9labs.com/</id>
   <author>
     <name><![CDATA[Andrew Hao]]></name>
@@ -18,7 +18,7 @@
     <link href="http://www.g9labs.com/2011/11/21/now-at-blurb/"/>
     <updated>2011-11-21T04:12:53-08:00</updated>
     <id>http://www.g9labs.com/2011/11/21/now-at-blurb</id>
-    <content type="html"><![CDATA[<p>I should have mentioned this long ago, but I started work at Blurb in early August. It&rsquo;s been a quick ramp-up and I&rsquo;m loving it there, surrounded by smart engineers and great designers. I do Rails/JS work there, and I&rsquo;m building a lot of chops around Agile/TDD methodologies.</p>
+    <content type="html"><![CDATA[<p>I should have mentioned this long ago, but I started work at Blurb in early August. It’s been a quick ramp-up and I’m loving it there, surrounded by smart engineers and great designers. I do Rails/JS work there, and I’m building a lot of chops around Agile/TDD methodologies.</p>
 
 <p>Anyways, they had me do a Camera Thursdays blog post, which I <a href="http://blog.blurb.com/index.php/2011/11/17/blurberati-with-cameras-nikon-d80-with-f1-8-50mm-prime/">wrote about my Nikon/1.8 camera combo</a>:</p>
 
@@ -31,22 +31,39 @@
     <link href="http://www.g9labs.com/2007/12/11/im-ready-for-the-winter/"/>
     <updated>2007-12-11T11:24:15-08:00</updated>
     <id>http://www.g9labs.com/2007/12/11/im-ready-for-the-winter</id>
-    <content type="html"><![CDATA[<p>Okay, I confess. I&rsquo;ve been daydreaming about winter break:</p>
+    <content type="html"><![CDATA[<p>Okay, I confess. I’ve been daydreaming about winter break:</p>
 
 <ol>
-<li><p> Sleeping in.</p></li>
-<li><p> The laughter of friends.</p></li>
-<li><p> Taking a day trip with a camera to Monterey/Carmel (or anywhere awesome).</p></li>
-<li><p> Working (uninterrupted) on <a href="http://www.wejoinin.com">Wejoinin</a>.</p></li>
-<li><p> Redesigning the <a href="http://blog.g9labs.com">blog</a>? Updating the <a href="http://portfolio.g9labs.com">portfolio</a>? (Good Lord, it&rsquo;s about time).</p></li>
-<li><p> Kicking it with Jesus.</p></li>
-<li><p> Working on a few songs, and maybe trying a bit of recording.</p></li>
-<li><p> Reading, reading, reading, then writing, writing, writing.</p></li>
-<li><p> Spending the holidays with family.</p></li>
+  <li>
+    <p>Sleeping in.</p>
+  </li>
+  <li>
+    <p>The laughter of friends.</p>
+  </li>
+  <li>
+    <p>Taking a day trip with a camera to Monterey/Carmel (or anywhere awesome).</p>
+  </li>
+  <li>
+    <p>Working (uninterrupted) on <a href="http://www.wejoinin.com">Wejoinin</a>.</p>
+  </li>
+  <li>
+    <p>Redesigning the <a href="http://blog.g9labs.com">blog</a>? Updating the <a href="http://portfolio.g9labs.com">portfolio</a>? (Good Lord, it’s about time).</p>
+  </li>
+  <li>
+    <p>Kicking it with Jesus.</p>
+  </li>
+  <li>
+    <p>Working on a few songs, and maybe trying a bit of recording.</p>
+  </li>
+  <li>
+    <p>Reading, reading, reading, then writing, writing, writing.</p>
+  </li>
+  <li>
+    <p>Spending the holidays with family.</p>
+  </li>
 </ol>
 
-
-<p>And hooray! I&rsquo;m finally done with interviews. I&rsquo;ll be taking an internship at <a href="http://www.apple.com">Apple</a> this summer doing software engineering and Web development. I&rsquo;m real excited about (and very thankful for) the opportunity to hang out with the cool kids.</p>
+<p>And hooray! I’m finally done with interviews. I’ll be taking an internship at <a href="http://www.apple.com">Apple</a> this summer doing software engineering and Web development. I’m real excited about (and very thankful for) the opportunity to hang out with the cool kids.</p>
 ]]></content>
   </entry>
   
@@ -55,15 +72,15 @@
     <link href="http://www.g9labs.com/2007/12/05/feeling-awesome-today/"/>
     <updated>2007-12-05T02:55:08-08:00</updated>
     <id>http://www.g9labs.com/2007/12/05/feeling-awesome-today</id>
-    <content type="html"><![CDATA[<p>So for our <a href="http://inst.eecs.berkeley.edu/~cs188/fa07/announcements.html">CS188 (Artificial Intelligence)</a> project, <a href="http://inst.eecs.berkeley.edu/~cs188/fa07/projects/contest/contest.html">Capture-the-Flag Pac-Man</a>, I&rsquo;m responsible for writing a script that does some processing and analysis on a game board, simulating a Pac-Man agent (my other group members are responsible for far cooler things, like inference and heuristics, but humor me here).</p>
+    <content type="html"><![CDATA[<p>So for our <a href="http://inst.eecs.berkeley.edu/~cs188/fa07/announcements.html">CS188 (Artificial Intelligence)</a> project, <a href="http://inst.eecs.berkeley.edu/~cs188/fa07/projects/contest/contest.html">Capture-the-Flag Pac-Man</a>, I’m responsible for writing a script that does some processing and analysis on a game board, simulating a Pac-Man agent (my other group members are responsible for far cooler things, like inference and heuristics, but humor me here).</p>
 
-<p>I most definitely need at least several hours of computation time to get the results I need, but figured that I&rsquo;d do best by dividing up the labor between CPUs. So last night I set five cores' worth of computational power a-workin'&mdash;1 on my desktop, 2 on my laptop and 2 remote cores on Hsiu-Fan&rsquo;s sweet desktop.</p>
+<p>I most definitely need at least several hours of computation time to get the results I need, but figured that I’d do best by dividing up the labor between CPUs. So last night I set five cores’ worth of computational power a-workin’–1 on my desktop, 2 on my laptop and 2 remote cores on Hsiu-Fan’s sweet desktop.</p>
 
-<p>(Then I disconnected sometime last night from Hsiu-Fan&rsquo;s computer, abruptly killing my processes. I&rsquo;m back on using UNIX <a href="http://www.askbjoernhansen.com/2006/02/07/happy_unix_screen.html"><code>screen</code></a> because I read I can remotely detach windows and processes, but I&rsquo;m actually not sure if the process keeps chuggin' in the case when your program spawns X windows and you&rsquo;ve disconnected).</p>
+<p>(Then I disconnected sometime last night from Hsiu-Fan’s computer, abruptly killing my processes. I’m back on using UNIX <a href="http://www.askbjoernhansen.com/2006/02/07/happy_unix_screen.html"><code>screen</code></a> because I read I can remotely detach windows and processes, but I’m actually not sure if the process keeps chuggin’ in the case when your program spawns X windows and you’ve disconnected).</p>
 
-<p>So humor me here, I feel pretty awesome right now. My room&rsquo;s a bit warm with the sheer heat dissipation from my computers, but at least that negates the need for human companionship. Tally-ho!</p>
+<p>So humor me here, I feel pretty awesome right now. My room’s a bit warm with the sheer heat dissipation from my computers, but at least that negates the need for human companionship. Tally-ho!</p>
 
-<p>&mdash;&ndash; Edit: the joys of Python:</p>
+<p>— Edit: the joys of Python:</p>
 
 <p><img src="http://imgs.xkcd.com/comics/python.png" alt="" /></p>
 ]]></content>

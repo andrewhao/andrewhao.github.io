@@ -68,25 +68,44 @@
 		<time>02 June 2010</time>
 	</header>
 		<div class="content">
-			<p>Here&rsquo;s how to set up the excellent VMware-developed open-source <a href="http://www.reviewboard.org/">Review Board</a> and its <code>[post-review](http://www.reviewboard.org/docs/releasenotes/dev/rbtools/0.2/)</code> command line review creation utility to work with git and git-svn on your computer.</p>
+			<p>Here’s how to set up the excellent VMware-developed open-source <a href="http://www.reviewboard.org/">Review Board</a> and its <code>[post-review](http://www.reviewboard.org/docs/releasenotes/dev/rbtools/0.2/)</code> command line review creation utility to work with git and git-svn on your computer.</p>
 
-<p>My assumption is that you&rsquo;re working with a local Git repository that is remotely linked to an SVN repository via the <a href="http://utsl.gen.nz/talks/git-svn/intro.html">git-svn</a> bridge. Let&rsquo;s assume that your master branch is synced with the SVN repository, and you&rsquo;re working on <code>bug_12345_branch</code>.</p>
+<p>My assumption is that you’re working with a local Git repository that is remotely linked to an SVN repository via the <a href="http://utsl.gen.nz/talks/git-svn/intro.html">git-svn</a> bridge. Let’s assume that your master branch is synced with the SVN repository, and you’re working on <code>bug_12345_branch</code>.</p>
 
 <ol>
-<li><p> Make sure you have RBTools installed (<code>sudo easy_install rbtools</code> for me on Ubuntu Linux), and Review Board set up elsewhere.</p></li>
-<li><p> Add a link to your Review Board URL in .git/config:</p></li>
+  <li>
+    <p>Make sure you have RBTools installed (<code>sudo easy_install rbtools</code> for me on Ubuntu Linux), and Review Board set up elsewhere.</p>
+  </li>
+  <li>
+    <p>Add a link to your Review Board URL in .git/config:</p>
+  </li>
 </ol>
 
+<blockquote>
 
-<blockquote><pre><code>[reviewboard]
+</blockquote>
+
+<blockquote>
+
+  <pre><code>[reviewboard]
  url = &lt;a href="#"&gt;https://(url_for_review_board)/&lt;/a&gt;
-</code></pre></blockquote>
+</code></pre>
+
+</blockquote>
 
 <ol>
-<li><p> Make sure all your changes in <code>bug_12345_branch</code> have been locally committed.</p></li>
-<li><p> <code>post-review -o</code>, and&hellip;</p></li>
-<li><p> Voila! You should have a new review up on your Review Board instance.</p></li>
-<li><p> (After you get reviews, you can modify <code>bug_12345_branch</code>, pull the changes into master, and then <code>git svn dcommit</code>, blah, blah, blah.)</p></li>
+  <li>
+    <p>Make sure all your changes in <code>bug_12345_branch</code> have been locally committed.</p>
+  </li>
+  <li>
+    <p><code>post-review -o</code>, and…</p>
+  </li>
+  <li>
+    <p>Voila! You should have a new review up on your Review Board instance.</p>
+  </li>
+  <li>
+    <p>(After you get reviews, you can modify <code>bug_12345_branch</code>, pull the changes into master, and then <code>git svn dcommit</code>, blah, blah, blah.)</p>
+  </li>
 </ol>
 
 

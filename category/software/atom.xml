@@ -4,7 +4,7 @@
   <title><![CDATA[Category: software | The Sweet Spot]]></title>
   <link href="http://www.g9labs.com/category/software/atom.xml" rel="self"/>
   <link href="http://www.g9labs.com/"/>
-  <updated>2016-06-24T11:31:59-07:00</updated>
+  <updated>2016-06-29T16:33:32-07:00</updated>
   <id>http://www.g9labs.com/</id>
   <author>
     <name><![CDATA[Andrew Hao]]></name>
@@ -18,287 +18,246 @@
     <link href="http://www.g9labs.com/2015/09/27/strange-loop-2015-reflections/"/>
     <updated>2015-09-27T15:40:00-07:00</updated>
     <id>http://www.g9labs.com/2015/09/27/strange-loop-2015-reflections</id>
-    <content type="html"><![CDATA[<p>Going to Strange Loop was a huge check off my conference bucket list
-(lanyard?). I&rsquo;d always heard about this slightly-weird, highly academic
-collision between academia and industry, skewing toward programming
-languages you haven&rsquo;t heard of (or, at the very least, you&rsquo;ve never used
-in production). I anticipated sitting at the feet of gray-haired wizards
+    <content type="html"><![CDATA[<p>Going to Strange Loop was a huge check off my conference bucket list<br />
+(lanyard?). I’d always heard about this slightly-weird, highly academic<br />
+collision between academia and industry, skewing toward programming<br />
+languages you haven’t heard of (or, at the very least, you’ve never used<br />
+in production). I anticipated sitting at the feet of gray-haired wizards<br />
 and bright-eyed hipsters with Ph.Ds.</p>
 
-<p>The conference did not disappoint. And it was not quite what I
-expected-I less sat at the feet of geniuses than I did talk with them,
-peer-to-peer, about topics of interest. All around me people were saying
-&ldquo;Don&rsquo;t be afraid to ask questions. Don&rsquo;t feel stupid &ndash; nobody knows
-everything.&rdquo; Speakers were tweeting about how much they were learning.
-It was comforting, because lots of topics I had come to see were those
+<p>The conference did not disappoint. And it was not quite what I<br />
+expected-I less sat at the feet of geniuses than I did talk with them,<br />
+peer-to-peer, about topics of interest. All around me people were saying<br />
+“Don’t be afraid to ask questions. Don’t feel stupid - nobody knows<br />
+everything.” Speakers were tweeting about how much they were learning.<br />
+It was comforting, because lots of topics I had come to see were those<br />
 in which I had no. freakin. clue. about.</p>
 
-<p>The following is culled from my notes from different sessions I
+<p>The following is culled from my notes from different sessions I<br />
 attended. I will focus on brevity. I will keep it clear. Here we go:</p>
 
-<h3>Opening Keynote: &ldquo;I see what you mean&rdquo; &ndash; Peter Alvaro</h3>
+<h3 id="opening-keynote-i-see-what-you-mean---peter-alvaro">Opening Keynote: “I see what you mean” - Peter Alvaro</h3>
 
-<iframe width="560" height="315"
-src="https://www.youtube.com/embed/R2Aa4PivG0g" frameborder="0"
-allowfullscreen></iframe>
-
+<iframe width="560" height="315" src="https://www.youtube.com/embed/R2Aa4PivG0g" frameborder="0" allowfullscreen=""></iframe>
 
 <ul>
-<li>Instructions, behaviors &amp; outcomes.</li>
-<li>It &ldquo;feels good&rdquo; to write in C (a hardcore 1000 liner)</li>
-<li>But a declarative program (e.g. SQL) works well, but is harder to come
+  <li>Instructions, behaviors &amp; outcomes.</li>
+  <li>It “feels good” to write in C (a hardcore 1000 liner)</li>
+  <li>But a declarative program (e.g. SQL) works well, but is harder to come<br />
 up with.</li>
-<li>The declarative world &ndash; as described in the work done in Datalog</li>
-<li>How can we take concepts from Datalog and apply to real-world
+  <li>The declarative world - as described in the work done in Datalog</li>
+  <li>How can we take concepts from Datalog and apply to real-world<br />
 resources like network actors (distributed systems)?</li>
-<li>It becomes easier to model these systems declaratively when we
+  <li>It becomes easier to model these systems declaratively when we<br />
 explicitly capture time.</li>
-<li>Enter Dedalus: extension to Datalog where time is a modeling
+  <li>Enter Dedalus: extension to Datalog where time is a modeling<br />
 construct.</li>
-<li>(Show off usage of <code>@next</code> and <code>@async</code> annotations</li>
-<li>Computation is redezvous &ndash; the only thing that you know is what YOU
+  <li>(Show off usage of <code>@next</code> and <code>@async</code> annotations</li>
+  <li>Computation is redezvous - the only thing that you know is what YOU<br />
 know at that point in time.</li>
-<li>Takeaway: Abstractions leak. Model them better (e.g. with time)</li>
-<li>Inventing languages is dope.</li>
+  <li>Takeaway: Abstractions leak. Model them better (e.g. with time)</li>
+  <li>Inventing languages is dope.</li>
 </ul>
 
+<h3 id="have-your-causality-and-your-wall-clocks-too-jon-moore">Have your Causality and your Wall Clocks Too (Jon Moore)</h3>
 
-<h3>Have your Causality and your Wall Clocks Too (Jon Moore)</h3>
-
-<iframe width="560" height="315"
-src="https://www.youtube.com/embed/YqNGbvFHoKM" frameborder="0"
-allowfullscreen></iframe>
-
+<iframe width="560" height="315" src="https://www.youtube.com/embed/YqNGbvFHoKM" frameborder="0" allowfullscreen=""></iframe>
 
 <ul>
-<li>Take concept of Lamport clocks and extend them with hybrid clocks.</li>
-<li>And extend them one further with: Distributed Monotonic Clocks</li>
-<li>These DMCs use population protocol (flocking) to each actor in the
-system communicate with another, updating their source of truth to
+  <li>Take concept of Lamport clocks and extend them with hybrid clocks.</li>
+  <li>And extend them one further with: Distributed Monotonic Clocks</li>
+  <li>These DMCs use population protocol (flocking) to each actor in the<br />
+system communicate with another, updating their source of truth to<br />
 eventually agree on a media time w/in the group</li>
-<li>DMC components:
-
-<ol>
-<li>Have a reset button by adding epoch bit</li>
-<li>Use flocking (via population protocol) to avoid resets</li>
-<li>Accomodates for some clockless nodes</li>
-<li>Explicitly reflects causality</li>
-</ol>
-</li>
+  <li>DMC components:
+    <ol>
+      <li>Have a reset button by adding epoch bit</li>
+      <li>Use flocking (via population protocol) to avoid resets</li>
+      <li>Accomodates for some clockless nodes</li>
+      <li>Explicitly reflects causality</li>
+    </ol>
+  </li>
 </ul>
 
+<h3 id="building-isomorphic-web-apps-with-react---elyse-gordon">Building Isomorphic Web Apps with React - Elyse Gordon</h3>
 
-<h3>Building Isomorphic Web Apps with React &ndash; Elyse Gordon</h3>
-
-<iframe width="560" height="315"
-src="https://www.youtube.com/embed/QPXNb6bl7hc" frameborder="0"
-allowfullscreen></iframe>
-
+<iframe width="560" height="315" src="https://www.youtube.com/embed/QPXNb6bl7hc" frameborder="0" allowfullscreen=""></iframe>
 
 <ul>
-<li>Vevo needed better SEO for SPAs. Old soln was to snapshot page and upload to S3.</li>
-<li>Beneficial for SEO crawlers</li>
-<li>React in frontend. Node in backend.</li>
-<li>Vevo-developed <a href="">pellet</a> project as Flux-like framework to organize
+  <li>Vevo needed better SEO for SPAs. Old soln was to snapshot page and upload to S3.</li>
+  <li>Beneficial for SEO crawlers</li>
+  <li>React in frontend. Node in backend.</li>
+  <li>Vevo-developed <a href="">pellet</a> project as Flux-like framework to organize<br />
 files.</li>
-<li>Webpack aliases/shims</li>
-<li>Server hands off to browser, bootstraps React in client.</li>
-<li>Alternatives: Relay, Ember</li>
+  <li>Webpack aliases/shims</li>
+  <li>Server hands off to browser, bootstraps React in client.</li>
+  <li>Alternatives: Relay, Ember</li>
 </ul>
 
+<h3 id="designing-for-the-worst-case-peter-bailis-pbailis">Designing for the Worst Case: Peter Bailis (@pbailis)</h3>
 
-<h3>Designing for the Worst Case: Peter Bailis (@pbailis)</h3>
-
-<iframe width="560" height="315"
-src="https://www.youtube.com/embed/ZGIAypUUwoQ" frameborder="0"
-allowfullscreen></iframe>
-
+<iframe width="560" height="315" src="https://www.youtube.com/embed/ZGIAypUUwoQ" frameborder="0" allowfullscreen=""></iframe>
 
 <ul>
-<li>Designing for worst case often penalizes average case</li>
-<li>But what if designing for the worst case actually helps avg case?</li>
-<li>Examples from dstbd systems:
-
-<ul>
-<li>Worst case of disconnected data centers, packet loss/link loss. Fix
-by introducing coordination-free protocols. Boom, you&rsquo;ve now made your
+  <li>Designing for worst case often penalizes average case</li>
+  <li>But what if designing for the worst case actually helps avg case?</li>
+  <li>Examples from dstbd systems:
+    <ul>
+      <li>Worst case of disconnected data centers, packet loss/link loss. Fix<br />
+by introducing coordination-free protocols. Boom, you’ve now made your<br />
 network more scalable, performant, resistent to downtime.</li>
-<li>Worst case: hard to coordinate a distributed transaction between
-services. What do you do? You implement something like buffered writes
+      <li>Worst case: hard to coordinate a distributed transaction between<br />
+services. What do you do? You implement something like buffered writes<br />
 out of process.
-
-<ul>
-<li>CRDT, RAMP, HAT, bloom</li>
-<li>Suddenly, you have fault tolerance</li>
-</ul>
-</li>
-<li>Tail latency problem in microservices: the more microservices you
+        <ul>
+          <li>CRDT, RAMP, HAT, bloom</li>
+          <li>Suddenly, you have fault tolerance</li>
+        </ul>
+      </li>
+      <li>Tail latency problem in microservices: the more microservices you<br />
 query, the higher the probability of hitting a slow server response.
-
-<ul>
-<li>Your service&rsquo;s corner case is your user&rsquo;s average case</li>
-</ul>
-</li>
-<li>HCI: accessibility guidelines in W3C lift standards for all. Make
-webpages easier to navigate. Side effect of better page performance,
+        <ul>
+          <li>Your service’s corner case is your user’s average case</li>
+        </ul>
+      </li>
+      <li>HCI: accessibility guidelines in W3C lift standards for all. Make<br />
+webpages easier to navigate. Side effect of better page performance,<br />
 higher conversion.</li>
-<li>Netflix designing CC subtitles also benefits other users.</li>
-<li>Curb cuts in the real world to help ADA/mobility-assisted folks also
+      <li>Netflix designing CC subtitles also benefits other users.</li>
+      <li>Curb cuts in the real world to help ADA/mobility-assisted folks also<br />
 benefit normal folks too</li>
-</ul>
-</li>
-<li>Best has pitfalls too: your notion of best may be hard to hit, or
-risky. You may want to optimize for &ldquo;stable&rdquo; solution. (Robust
+    </ul>
+  </li>
+  <li>Best has pitfalls too: your notion of best may be hard to hit, or<br />
+risky. You may want to optimize for “stable” solution. (Robust<br />
 optimization)</li>
-<li>When to design for worst case?
-
-<ul>
-<li>common corner cases</li>
-<li>environmental conditions vary</li>
-<li>&ldquo;normal&rdquo; isn&rsquo;t normal</li>
-</ul>
-</li>
-<li>worst forces a conversation
-
-<ul>
-<li>how do we plan for failures?</li>
-<li>what is our scale-out strategy?</li>
-<li>how do we audit failures? data breaches?</li>
-</ul>
-</li>
+  <li>When to design for worst case?
+    <ul>
+      <li>common corner cases</li>
+      <li>environmental conditions vary</li>
+      <li>“normal” isn’t normal</li>
+    </ul>
+  </li>
+  <li>worst forces a conversation
+    <ul>
+      <li>how do we plan for failures?</li>
+      <li>what is our scale-out strategy?</li>
+      <li>how do we audit failures? data breaches?</li>
+    </ul>
+  </li>
 </ul>
 
-
-<h3>Ideology by Gary Bernardt</h3>
-
-<ul>
-<li>Rumsfeld: known knowns, known unknowns, and unknown unknowns.</li>
-<li>Ideology is the thing you know you do not know you know</li>
-<li>Conflict between typed vs dynamic programmers:
+<h3 id="ideology-by-gary-bernardt">Ideology by Gary Bernardt</h3>
 
 <ul>
-<li>Typed: &ldquo;I don&rsquo;t need tests, I have types&rdquo;</li>
-<li>Dynamic: &ldquo;I write tests, so I don&rsquo;t need types&rdquo;</li>
-</ul>
-</li>
-<li>In reality, they are solving different places in the problem domain,
-but they have different beliefs about the world that are hidden in the
+  <li>Rumsfeld: known knowns, known unknowns, and unknown unknowns.</li>
+  <li>Ideology is the thing you know you do not know you know</li>
+  <li>Conflict between typed vs dynamic programmers:
+    <ul>
+      <li>Typed: “I don’t need tests, I have types”</li>
+      <li>Dynamic: “I write tests, so I don’t need types”</li>
+    </ul>
+  </li>
+  <li>In reality, they are solving different places in the problem domain,<br />
+but they have different beliefs about the world that are hidden in the<br />
 shadows:
+    <ul>
+      <li>Typed: “Correctness comes solely from types”</li>
+      <li>Dynamic: “Correctness comes solely from example”</li>
+    </ul>
+  </li>
+  <li>“I need nulls” -&gt; You believe nulls are the only way to represent absence</li>
+  <li>“Immutable data structures are slow” -&gt; You believe all immutable types are slow</li>
+  <li>“GC is impractical” -&gt; you believe GC algorithms won’t get faster.</li>
+  <li>Read CSE 341 Type systems, Dan Grossman</li>
+</ul>
+
+<h3 id="building-scalable-stateful-services-caitlin-mccaffrey">Building Scalable, Stateful Services: Caitlin McCaffrey</h3>
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/H0i_bXKwujQ" frameborder="0" allowfullscreen=""></iframe>
+
+<h4 id="sticky-connection-always-talk-to-the-same-machine">Sticky connection: always talk to the same machine</h4>
+<p>Building sticky connections:<br />
+- persistent connections (load balancing cannot rebalance server)<br />
+- implement backpressure (d/c connection)</p>
+
+<h4 id="dynamic-cluster-membership">dynamic cluster membership</h4>
 
 <ul>
-<li>Typed: &ldquo;Correctness comes solely from types&rdquo;</li>
-<li>Dynamic: &ldquo;Correctness comes solely from example&rdquo;</li>
-</ul>
-</li>
-<li>&ldquo;I need nulls&rdquo; &ndash;> You believe nulls are the only way to represent absence</li>
-<li>&ldquo;Immutable data structures are slow&rdquo; &ndash;> You believe all immutable types are slow</li>
-<li>&ldquo;GC is impractical&rdquo; &ndash;> you believe GC algorithms won&rsquo;t get faster.</li>
-<li>Read CSE 341 Type systems, Dan Grossman</li>
-</ul>
-
-
-<h3>Building Scalable, Stateful Services: Caitlin McCaffrey</h3>
-
-<iframe width="560" height="315"
-src="https://www.youtube.com/embed/H0i_bXKwujQ" frameborder="0"
-allowfullscreen></iframe>
-
-
-<h4>Sticky connection: always talk to the same machine</h4>
-
-<p>Building sticky connections:
-&ndash; persistent connections (load balancing cannot rebalance server)
-&ndash; implement backpressure (d/c connection)</p>
-
-<h4>dynamic cluster membership</h4>
-
-<ul>
-<li>gossip protocols &ndash;> availability</li>
-<li>consensus systems &ndash;> consistency
+  <li>gossip protocols -&gt; availability</li>
+  <li>consensus systems -&gt; consistency<br />
 (everybody needs to have the same worldview.</li>
 </ul>
 
+<h4 id="work-distribution">work distribution:</h4>
 
-<h4>work distribution:</h4>
-
-<h5>random:</h5>
-
+<h5 id="random">random:</h5>
 <ul>
-<li>write anywhere, read from all</li>
+  <li>write anywhere, read from all</li>
 </ul>
 
+<h5 id="consistent-hashing-on-session-id">consistent hashing: on session ID</h5>
 
-<h5>consistent hashing: on session ID</h5>
-
-<p>hash space &ndash;> node
+<p>hash space -&gt; node<br />
 dynamoDB, Manhattan</p>
 
 <p>con: can have hotspots, could have uneven distribution of resources cannot move work.</p>
 
-<h4>distributed hash table</h4>
-
+<h4 id="distributed-hash-table">distributed hash table</h4>
 <p>statefully store hash</p>
 
-<h4>Real world</h4>
+<h4 id="real-world">Real world</h4>
+<p>Scuba (Facebook)<br />
+- distributed in-memory DB</p>
 
-<p>Scuba (Facebook)
-&ndash; distributed in-memory DB</p>
+<p>Ringpop (Uber)<br />
+- Node.js swim gossip protocol, consistent hashing</p>
 
-<p>Ringpop (Uber)
-&ndash; Node.js swim gossip protocol, consistent hashing</p>
+<p>Orleans (MS Research)<br />
+- actor model<br />
+- gossip<br />
+- consistent hash<br />
+- distributed hashtable</p>
 
-<p>Orleans (MS Research)
-&ndash; actor model
-&ndash; gossip
-&ndash; consistent hash
-&ndash; distributed hashtable</p>
+<h3 id="idalin-abby-bob-from-protesting-to-programming-becoming-a-tech-activist">Idalin “Abby” Bobé: From Protesting to Programming: Becoming a Tech Activist</h3>
 
-<h3>Idalin &ldquo;Abby&rdquo; Bobé: From Protesting to Programming: Becoming a Tech Activist</h3>
-
-<iframe width="560" height="315"
-src="https://www.youtube.com/embed/gy82S8tjJX8" frameborder="0"
-allowfullscreen></iframe>
-
+<iframe width="560" height="315" src="https://www.youtube.com/embed/gy82S8tjJX8" frameborder="0" allowfullscreen=""></iframe>
 
 <ul>
-<li>Tech to resist exploitation</li>
-<li>Technologists as activists</li>
-<li>Idalin Bobé &ndash;> Changed name to &ldquo;Abby&rdquo; to get a job.</li>
-<li>Pastor Jenkins &ndash; magnifying glass vs paper</li>
-<li>Philadelphia Partnership Program:
-
-<ul>
-<li>1st to college</li>
-<li>work &lt;> school</li>
-</ul>
-</li>
-<li>Difficult to balance.</li>
-<li>Mills MBA, CS</li>
-<li>Joined Black Girls Code
-
-<ul>
-<li>Apply technology in the right way</li>
-</ul>
-</li>
-<li>Ferguson happened
-
-<ul>
-<li>Thoughtworkers joined on the ground</li>
-<li>Hands Up United: www.handsupunited.org</li>
-</ul>
-</li>
-<li>&ldquo;Do not be led by digital metrics&rdquo; &ndash; even though the activists had
-digital tooling, the tools were being used against activists. Phone
+  <li>Tech to resist exploitation</li>
+  <li>Technologists as activists</li>
+  <li>Idalin Bobé -&gt; Changed name to “Abby” to get a job.</li>
+  <li>Pastor Jenkins - magnifying glass vs paper</li>
+  <li>Philadelphia Partnership Program:
+    <ul>
+      <li>1st to college</li>
+      <li>work &lt;&gt; school</li>
+    </ul>
+  </li>
+  <li>Difficult to balance.</li>
+  <li>Mills MBA, CS</li>
+  <li>Joined Black Girls Code
+    <ul>
+      <li>Apply technology in the right way</li>
+    </ul>
+  </li>
+  <li>Ferguson happened
+    <ul>
+      <li>Thoughtworkers joined on the ground</li>
+      <li>Hands Up United: www.handsupunited.org</li>
+    </ul>
+  </li>
+  <li>“Do not be led by digital metrics” - even though the activists had<br />
+digital tooling, the tools were being used against activists. Phone<br />
 calls, chats monitored. Movement tracked.</li>
-<li>New group starting up in St. Louis called &ldquo;Ray Clark, Sr.&rdquo; &ndash; named
-after a black man who played a strong role in the founding of Silicon
+  <li>New group starting up in St. Louis called “Ray Clark, Sr.” - named<br />
+after a black man who played a strong role in the founding of Silicon<br />
 Valley.</li>
-<li>21st century technologists need 21st century skillsets.</li>
-<li>Dream Defenders</li>
-<li>&ldquo;it is our duty to fight for our freedom/it is our duty to win/we must
-love and support one another/we have nothing to lose but our chains&rdquo;</li>
+  <li>21st century technologists need 21st century skillsets.</li>
+  <li>Dream Defenders</li>
+  <li>“it is our duty to fight for our freedom/it is our duty to win/we must<br />
+love and support one another/we have nothing to lose but our chains”</li>
 </ul>
-
 ]]></content>
   </entry>
   
@@ -307,13 +266,13 @@ love and support one another/we have nothing to lose but our chains&rdquo;</li>
     <link href="http://www.g9labs.com/2014/11/15/my-own-robot-training-buddy/"/>
     <updated>2014-11-15T10:03:00-08:00</updated>
     <id>http://www.g9labs.com/2014/11/15/my-own-robot-training-buddy</id>
-    <content type="html"><![CDATA[<p>As an ultra runner, I am really into the mountains. As a software engineer, I&rsquo;m really into data. So naturally, I&rsquo;m interested in the intersection of both.</p>
+    <content type="html"><![CDATA[<p>As an ultra runner, I am really into the mountains. As a software engineer, I’m really into data. So naturally, I’m interested in the intersection of both.</p>
 
-<p>I&rsquo;ve particularly been interested in how systems like <a href="http://www.strava.com">Strava</a> work, especially when they quantify what is known as a &ldquo;Suffer Score&rdquo;, a single number denoting the amount of training stress (a.k.a. suffering) you put yourself through in a workout.</p>
+<p>I’ve particularly been interested in how systems like <a href="http://www.strava.com">Strava</a> work, especially when they quantify what is known as a “Suffer Score”, a single number denoting the amount of training stress (a.k.a. suffering) you put yourself through in a workout.</p>
 
 <p>How does a track workout compare to a long day on the trails? Which is tougher: a 5m tempo road run in and around my neighborhood, or a tough 2m climb into a local regional park?</p>
 
-<h2>Data in&hellip;</h2>
+<h2 id="data-in">Data in…</h2>
 
 <p>I first attacked the problem of getting data off of my phone. I record my GPX tracks in <a href="http://runmeter.com/">Runmeter</a>, a fantastic iPhone application with all sorts of metrics and data export capabilities. What I wanted was a seamless way to get the data off my phone without fuss after a hard workout.</p>
 
@@ -322,39 +281,39 @@ love and support one another/we have nothing to lose but our chains&rdquo;</li>
 <p>I wrote an <a href="https://github.com/andrewhao/velocitas">email ingester, Velocitas</a>, with the help of <a href="http://cloudmailin.com/">Cloudmailin</a>, which fires off a POST request to the Node application. Velocitas does the following:</p>
 
 <ul>
-<li><code>curl</code>s and downloads the GPX link embedded in the email.</li>
-<li>Saves the GPX file to a linked Dropbox account.</li>
-<li>Republishes the GPX file to a linked Strava account.</li>
+  <li><code>curl</code>s and downloads the GPX link embedded in the email.</li>
+  <li>Saves the GPX file to a linked Dropbox account.</li>
+  <li>Republishes the GPX file to a linked Strava account.</li>
 </ul>
 
-
-<h2>Deriving the Training Stress Score</h2>
+<h2 id="deriving-the-training-stress-score">Deriving the Training Stress Score</h2>
 
 <p>Next up: I wanted to do a quick and dirty implementation of the (run-based) Training Stress Score. <a href="https://github.com/andrewhao/stressfactor">Stressfactor</a>, a Ruby gem, is what came out of it.</p>
 
 <p>It implements the rTSS as detailed in <a href="http://home.trainingpeaks.com/blog/article/running-training-stress-score-rtss-explained">this article</a>.</p>
 
-<p><code>ruby
-(duration_seconds * normalized_graded_pace * intensity_factor) /
-(functional_threshold_pace * 3600) * 100
-</code></p>
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n1" name="n1">1</a></span>(duration_seconds * normalized_graded_pace * intensity_factor) /
+<span class="line-numbers"><a href="#n2" name="n2">2</a></span>(functional_threshold_pace * <span style="color:#00D">3600</span>) * <span style="color:#00D">100</span>
+</pre></div>
+</div>
+</div>
 
 <p>Stressfactor is a higher-order tookit for deriving meaning from GPX tracks, so it, at the moment, attempts to calculate the stress score and grade adjusted pace.</p>
 
-<p>The data still needs validation, so I&rsquo;m eager to run it on my data set of GPX tracks from the past years.</p>
+<p>The data still needs validation, so I’m eager to run it on my data set of GPX tracks from the past years.</p>
 
-<h2>Generating reports</h2>
+<h2 id="generating-reports">Generating reports</h2>
 
-<p>I&rsquo;m working on this part right now &mdash; I need to nicely display a report from my workout history in Dropbox and display per-GPX. I&rsquo;ve started the project &mdash; <a href="https://github.com/andrewhao/stressreport">Stressreport</a>.</p>
+<p>I’m working on this part right now – I need to nicely display a report from my workout history in Dropbox and display per-GPX. I’ve started the project – <a href="https://github.com/andrewhao/stressreport">Stressreport</a>.</p>
 
-<h2>Some things I&rsquo;ve learned and am learning</h2>
+<h2 id="some-things-ive-learned-and-am-learning">Some things I’ve learned and am learning</h2>
 
 <ul>
-<li>The human body is complex, and cannot be <a href="http://fellrnr.com/wiki/Modeling_Human_Performance">easily modeled</a> without sufficient data. That said, what I&rsquo;m doing now may be sufficient for basic training data.</li>
-<li>The nature of parsing and generating higher-order stats from raw data may lend itself well to experimentation with functional languages. I&rsquo;m interested in trying to reimplement Stressfactor in Scala, or a functional equivalent.</li>
-<li>Deploying all my apps on Heroku&rsquo;s free tier may actually be an interesting start to building a microservice architecture &mdash; with the space limitations on Heroku, I&rsquo;m forced to build new features on new services. Call it cheapskate architecture.</li>
+  <li>The human body is complex, and cannot be <a href="http://fellrnr.com/wiki/Modeling_Human_Performance">easily modeled</a> without sufficient data. That said, what I’m doing now may be sufficient for basic training data.</li>
+  <li>The nature of parsing and generating higher-order stats from raw data may lend itself well to experimentation with functional languages. I’m interested in trying to reimplement Stressfactor in Scala, or a functional equivalent.</li>
+  <li>Deploying all my apps on Heroku’s free tier may actually be an interesting start to building a microservice architecture – with the space limitations on Heroku, I’m forced to build new features on new services. Call it cheapskate architecture.</li>
 </ul>
-
 ]]></content>
   </entry>
   
@@ -365,41 +324,38 @@ love and support one another/we have nothing to lose but our chains&rdquo;</li>
     <id>http://www.g9labs.com/2014/11/05/qcon-sf-2014</id>
     <content type="html"><![CDATA[<p>Blurb sent me off to QCon SF 2014 for three days.</p>
 
-<h2>Notes</h2>
+<h2 id="notes">Notes</h2>
 
 <p>I took a series of notes each day in attendance:</p>
 
 <ul>
-<li><a href="/notes/2014-11-03-qconsf-day-one.html">Day One: Architectures, Functional</a></li>
-<li><a href="/notes/2014-11-04-qconsf-day-two.html">Day Two: Rx Systems, API Platforms</a></li>
-<li><a href="/notes/2014-11-05-qconsf-day-three.html">Day Three: Microservices, Culture</a></li>
+  <li><a href="/notes/2014-11-03-qconsf-day-one.html">Day One: Architectures, Functional</a></li>
+  <li><a href="/notes/2014-11-04-qconsf-day-two.html">Day Two: Rx Systems, API Platforms</a></li>
+  <li><a href="/notes/2014-11-05-qconsf-day-three.html">Day Three: Microservices, Culture</a></li>
 </ul>
 
-
-<h2>Summary</h2>
+<h2 id="summary">Summary</h2>
 
 <ul>
-<li>Big trends in continuous delivery and deployment &mdash; deploy more often, smaller feedback loops</li>
-<li>A lot of emphasis on event driven architectures + microservices. Lots of emphasis on DDD as a design tool.</li>
-<li>Reactive systems with functional implementations were widely discussed as a scaling tool (backpressure-sensitive) and as a coordination tool between multiple async services.</li>
-<li>Big data/realtime streaming talks were interesting &mdash; my personal experience with them is limited, but it seems there is a debate over the merits of existing Lambda architecture practice.</li>
-<li>A lot of talk about microservice orchestration tools &mdash; acknowledging the pain of configuration and management of many services.</li>
-<li>Scala got a lotttt of attention. Probably because of its presence in bigger companies like Netflix, Twitter, LinkedIn. Wonder what smaller startups are using.</li>
-<li>Web Components were a big upcoming trend in frontend technologies. Strong modularization of views + behaviors in HTML documents.</li>
+  <li>Big trends in continuous delivery and deployment – deploy more often, smaller feedback loops</li>
+  <li>A lot of emphasis on event driven architectures + microservices. Lots of emphasis on DDD as a design tool.</li>
+  <li>Reactive systems with functional implementations were widely discussed as a scaling tool (backpressure-sensitive) and as a coordination tool between multiple async services.</li>
+  <li>Big data/realtime streaming talks were interesting – my personal experience with them is limited, but it seems there is a debate over the merits of existing Lambda architecture practice.</li>
+  <li>A lot of talk about microservice orchestration tools – acknowledging the pain of configuration and management of many services.</li>
+  <li>Scala got a lotttt of attention. Probably because of its presence in bigger companies like Netflix, Twitter, LinkedIn. Wonder what smaller startups are using.</li>
+  <li>Web Components were a big upcoming trend in frontend technologies. Strong modularization of views + behaviors in HTML documents.</li>
 </ul>
 
-
-<h2>Questions</h2>
+<h2 id="questions">Questions</h2>
 
 <ul>
-<li>If I could do a startup over again, would I begin an app in Rails? Where is the sweet spot for that sort of application architecture?</li>
-<li>How can I design systems such that they can be extractible into focused components/services as early as possible?</li>
-<li>How can we plan for failures (<a href="http://en.wikipedia.org/wiki/Fault_injection">fault injection</a>)?</li>
-<li>How does one implement change in software engineering organizations? Bottom-up (organic initiatives bubbling up through management) vs top-down (management/software leaders direct org to implement).</li>
-<li>How are we doing with encouraging women and minorities who traditionally are underrepresented in our industry?</li>
-<li>What are places in our hiring funnels that, unbeknownst to us, may be turning away or detracting women and minorities?</li>
+  <li>If I could do a startup over again, would I begin an app in Rails? Where is the sweet spot for that sort of application architecture?</li>
+  <li>How can I design systems such that they can be extractible into focused components/services as early as possible?</li>
+  <li>How can we plan for failures (<a href="http://en.wikipedia.org/wiki/Fault_injection">fault injection</a>)?</li>
+  <li>How does one implement change in software engineering organizations? Bottom-up (organic initiatives bubbling up through management) vs top-down (management/software leaders direct org to implement).</li>
+  <li>How are we doing with encouraging women and minorities who traditionally are underrepresented in our industry?</li>
+  <li>What are places in our hiring funnels that, unbeknownst to us, may be turning away or detracting women and minorities?</li>
 </ul>
-
 ]]></content>
   </entry>
   
@@ -408,20 +364,18 @@ love and support one another/we have nothing to lose but our chains&rdquo;</li>
     <link href="http://www.g9labs.com/2012/04/27/speeding-up-rspeccucumber-feedback-times-without-sacrificing-coverage/"/>
     <updated>2012-04-27T10:27:17-07:00</updated>
     <id>http://www.g9labs.com/2012/04/27/speeding-up-rspeccucumber-feedback-times-without-sacrificing-coverage</id>
-    <content type="html"><![CDATA[<iframe src="http://www.slideshare.net/slideshow/embed_code/4479466" width="512" height="421" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:1px solid #CCC;border-width:1px 1px 0;margin-bottom:5px" allowfullscreen>
+    <content type="html"><![CDATA[<iframe src="http://www.slideshare.net/slideshow/embed_code/4479466" width="512" height="421" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:1px solid #CCC;border-width:1px 1px 0;margin-bottom:5px" allowfullscreen="">
 </iframe>
-
-
-<p><a href="http://www.slideshare.net/josephwilk/rocket-fuelled-cucumbers">Rocket Fuelled Cucumbers</a>
+<p><a href="http://www.slideshare.net/josephwilk/rocket-fuelled-cucumbers">Rocket Fuelled Cucumbers</a><br />
 View more <a href="http://www.slideshare.net/">presentations</a> from <a href="http://www.slideshare.net/josephwilk">Joseph Wilk</a></p>
 
-<p>One thing the Blurb devs have been discussing is how we can speed up our test feedback cycles without sacrificing coverage. There&rsquo;s some good tips (mainly Rails+Rspec/Cucumber) in the presentation such as:</p>
+<p>One thing the Blurb devs have been discussing is how we can speed up our test feedback cycles without sacrificing coverage. There’s some good tips (mainly Rails+Rspec/Cucumber) in the presentation such as:</p>
 
 <ul>
-<li>Don&rsquo;t run all the tests when developing (tag your tests by function)</li>
-<li>Parallelize, chunk tests over machines/cores using Testjour/<a href="https://github.com/sandro/specjour">Specjour</a>, <a href="https://github.com/ngauthier/hydra">Hydra</a></li>
-<li>Don&rsquo;t run all the tests at once. Tests that never fail should nightly.</li>
-<li>Instead of spinning up a browser for acceptance tests, can you use a js/DOM simulator (e.g. <a href="https://github.com/thatcher/env-js">envjs</a> via <a href="https://github.com/smparkes/capybara-envjs">capybara-envjs</a>, or <a href="https://github.com/jarib/celerity">celerity</a>)</li>
+  <li>Don’t run all the tests when developing (tag your tests by function)</li>
+  <li>Parallelize, chunk tests over machines/cores using Testjour/<a href="https://github.com/sandro/specjour">Specjour</a>, <a href="https://github.com/ngauthier/hydra">Hydra</a></li>
+  <li>Don’t run all the tests at once. Tests that never fail should nightly.</li>
+  <li>Instead of spinning up a browser for acceptance tests, can you use a js/DOM simulator (e.g. <a href="https://github.com/thatcher/env-js">envjs</a> via <a href="https://github.com/smparkes/capybara-envjs">capybara-envjs</a>, or <a href="https://github.com/jarib/celerity">celerity</a>)</li>
 </ul>
 
 ]]></content>
@@ -432,69 +386,67 @@ View more <a href="http://www.slideshare.net/">presentations</a> from <a href="h
     <link href="http://www.g9labs.com/2012/01/20/ohm-gotchas/"/>
     <updated>2012-01-20T10:19:50-08:00</updated>
     <id>http://www.g9labs.com/2012/01/20/ohm-gotchas</id>
-    <content type="html"><![CDATA[<p>Here&rsquo;s a list of things that have been annoying, or at least a bit frustrating using <a href="http://ohm.keyvalue.org">Ohm</a>, the Redis ORM, in a Rails app. Beware to those who assume Ohm is ActiveRecord in new clothes. It is, but it&rsquo;s not:</p>
+    <content type="html"><![CDATA[<p>Here’s a list of things that have been annoying, or at least a bit frustrating using <a href="http://ohm.keyvalue.org">Ohm</a>, the Redis ORM, in a Rails app. Beware to those who assume Ohm is ActiveRecord in new clothes. It is, but it’s not:</p>
 
-<h2>CRUD</h2>
+<h2 id="crud">CRUD</h2>
 
-<p>Don&rsquo;t make the mistake of treating your Ohm objects like AR:</p>
+<p>Don’t make the mistake of treating your Ohm objects like AR:</p>
 
 <table>
-<thead>
-<tr>
-<th>ActiveRecord        </th>
-<th> Ohm</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>`destroy            </td>
-<td> <code>delete</code></td>
-</tr>
-<tr>
-<td><code>self.find(id)</code>     </td>
-<td> <code>self[id]</code></td>
-</tr>
-<tr>
-<td><code>update_attributes</code> </td>
-<td> <code>update</code></td>
-</tr>
-<tr>
-<td><code>create</code>            </td>
-<td> <code>create</code></td>
-</tr>
-</tbody>
+  <thead>
+    <tr>
+      <th>ActiveRecord</th>
+      <th>Ohm</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>destroy            | </code>delete`</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code>self.find(id)</code></td>
+      <td><code>self[id]</code></td>
+    </tr>
+    <tr>
+      <td><code>update_attributes</code></td>
+      <td><code>update</code></td>
+    </tr>
+    <tr>
+      <td><code>create</code></td>
+      <td><code>create</code></td>
+    </tr>
+  </tbody>
 </table>
 
+<p>Also note that Ohm’s <code>update_attributes</code> behaves differently from Rails` – it doesn’t persist the updates to DB. That owned me for the good part of the day.</p>
 
-<p>Also note that Ohm&rsquo;s <code>update_attributes</code> behaves differently from Rails` &mdash; it doesn&rsquo;t persist the updates to DB. That owned me for the good part of the day.</p>
-
-<h2>Callbacks</h2>
+<h2 id="callbacks">Callbacks</h2>
 
 <p>Thankfully, these are ActiveRecord-like with the addition of <a href="http://cyx.github.com/ohm-contrib/doc/"><code>ohm/contrib</code></a>.</p>
 
-<h2>Associations</h2>
+<h2 id="associations">Associations</h2>
 
 <table>
-<thead>
-<tr>
-<th>ActiveRecord            </th>
-<th> Ohm</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>has_a</code> or <code>belongs_to</code> </td>
-<td> <code>reference</code></td>
-</tr>
-<tr>
-<td><code>has_many</code>              </td>
-<td> <code>collection</code></td>
-</tr>
-</tbody>
+  <thead>
+    <tr>
+      <th>ActiveRecord</th>
+      <th>Ohm</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>has_a</code> or <code>belongs_to</code></td>
+      <td><code>reference</code></td>
+    </tr>
+    <tr>
+      <td><code>has_many</code></td>
+      <td><code>collection</code></td>
+    </tr>
+  </tbody>
 </table>
 
-
-<p>Read <a href="http://blog.citrusbyte.com/2010/04/12/mixing-ohm-with-activerecord-datamapper-and-sequel/">this article</a> if you&rsquo;re considering creating associations from AR objects to Ohm objects and the other way &lsquo;round.</p>
+<p>Read <a href="http://blog.citrusbyte.com/2010/04/12/mixing-ohm-with-activerecord-datamapper-and-sequel/">this article</a> if you’re considering creating associations from AR objects to Ohm objects and the other way ‘round.</p>
 ]]></content>
   </entry>
   

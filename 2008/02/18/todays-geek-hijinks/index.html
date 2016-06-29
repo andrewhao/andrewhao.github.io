@@ -68,25 +68,25 @@
 		<time>18 February 2008</time>
 	</header>
 		<div class="content">
-			<h3>Morning: Woke up and attempted to mount a Samba file share under Ubuntu.</h3>
+			<h3 id="morning-woke-up-and-attempted-to-mount-a-samba-file-share-under-ubuntu">Morning: Woke up and attempted to mount a Samba file share under Ubuntu.</h3>
 
 <p>My Gutsy server in the living room is getting a second life as a backup file server. I need to mount it in my filesystem so I can rsync certain directories on my desktop over to the server.</p>
 
 <p><code>mount -t //my_server_ip/share_folder /media/mount_folder</code></p>
 
-<p>Alas! I couldn&rsquo;t get write access into the mount point! At first I thought this was a chmod problem, so I added myself as the mount_folder owner.</p>
+<p>Alas! I couldn’t get write access into the mount point! At first I thought this was a chmod problem, so I added myself as the mount_folder owner.</p>
 
 <p><code>sudo chown username mount_folder/</code></p>
 
-<p>To no avail. So then I attempted to use the &ldquo;permit all&rdquo; chmod sledgehammer:</p>
+<p>To no avail. So then I attempted to use the “permit all” chmod sledgehammer:</p>
 
 <p><code>sudo chmod 777 mount_folder/</code></p>
 
 <p>Argh! STILL no good!</p>
 
-<p>So then I went back to the drawing board and did some investigating. I could, 50% of the time, gain write access to child subfolders on the Samba share via GNOME Nautilus interface (smb://my_server_ip). Weird! Was this a Samba config problem? I didn&rsquo;t have the cajones to find out.</p>
+<p>So then I went back to the drawing board and did some investigating. I could, 50% of the time, gain write access to child subfolders on the Samba share via GNOME Nautilus interface (smb://my_server_ip). Weird! Was this a Samba config problem? I didn’t have the cajones to find out.</p>
 
-<p>As a last-ditch attempt, I tried to modify my fstab file to mount the Samba share (I read somewhere that the uid and gid option flags give you the win). Side note: you can find your username&rsquo;s uid and gid numbers from the <code>/etc/passwd file</code>.</p>
+<p>As a last-ditch attempt, I tried to modify my fstab file to mount the Samba share (I read somewhere that the uid and gid option flags give you the win). Side note: you can find your username’s uid and gid numbers from the <code>/etc/passwd file</code>.</p>
 
 <pre><code># TEMPORARY SAMBA SHARE FROM LIVINGROOM SERVER
 
@@ -97,22 +97,28 @@
 
 <p><em>Still</em> no good! Arghs! At this point, I gave up and simply SFTP-ed in to dump my files. Admitting defeat is a sad, sad thing.</p>
 
-<h3>Afternoon: Designed some logo comps for a Web company.</h3>
+<h3 id="afternoon-designed-some-logo-comps-for-a-web-company">Afternoon: Designed some logo comps for a Web company.</h3>
 
 <p><a href="http://blog.g9labs.com/wp-content/uploads/2008/02/logo.png"><img src="http://blog.g9labs.com/wp-content/uploads/2008/02/logo.png" alt="Logo I started on." /></a></p>
 
-<p>I&rsquo;m working under contract from Ryan Waliany. This site should be doing some cool things. Unfortunately, I can&rsquo;t reveal too much. All this to say that I&rsquo;ve taken a long hiatus from design and I really miss it.</p>
+<p>I’m working under contract from Ryan Waliany. This site should be doing some cool things. Unfortunately, I can’t reveal too much. All this to say that I’ve taken a long hiatus from design and I really miss it.</p>
 
-<h3>Late Afternoon: Set up Google Apps for g9labs.com</h3>
+<h3 id="late-afternoon-set-up-google-apps-for-g9labscom">Late Afternoon: Set up Google Apps for g9labs.com</h3>
 
 <p>I gave in to the hype, and began setting up a Google Apps For Your Domain (GFYD) account for this g9labs site, primarily so I can hook into the awesome GMail interface instead of being chained to the Thunderbird client.</p>
 
 <p>This was a multi-step process of:</p>
 
 <ol>
-<li><p> <strong>Verifying ownership of your domain. </strong>Google has you modify a CNAME entry on your domain so they can ping it to check that it&rsquo;s changed. I marched happily over to the <a href="http://dreamhost.com">Dreamhost</a> panel where I found the DNS page for <a href="http://g9labs.com">g9labs.com</a>. There I added a CNAME value of googlexxxxxxxxx (a unique value given to you) and set its CNAME value to &ldquo;google.com&rdquo;.</p></li>
-<li><p> While Google takes 48 hours to verify you&rsquo;ve done the right steps, you can go ahead and <strong>modify the MX records for your domain </strong>so mail gets sent on over to Google instead of your Dreamhost server. This was easily set in the Dreamhost panel under Mail >> MX Records. You change your MX records to Google&rsquo;s special MX server, and you&rsquo;re on your way!</p></li>
-<li><p> I&rsquo;m waiting for verification to go through, then I&rsquo;ll talk about how to get <strong>IMAP for GFYD working</strong>.</p></li>
+  <li>
+    <p>**Verifying ownership of your domain. **Google has you modify a CNAME entry on your domain so they can ping it to check that it’s changed. I marched happily over to the <a href="http://dreamhost.com">Dreamhost</a> panel where I found the DNS page for <a href="http://g9labs.com">g9labs.com</a>. There I added a CNAME value of googlexxxxxxxxx (a unique value given to you) and set its CNAME value to “google.com”.</p>
+  </li>
+  <li>
+    <p>While Google takes 48 hours to verify you’ve done the right steps, you can go ahead and **modify the MX records for your domain **so mail gets sent on over to Google instead of your Dreamhost server. This was easily set in the Dreamhost panel under Mail » MX Records. You change your MX records to Google’s special MX server, and you’re on your way!</p>
+  </li>
+  <li>
+    <p>I’m waiting for verification to go through, then I’ll talk about how to get <strong>IMAP for GFYD working</strong>.</p>
+  </li>
 </ol>
 
 

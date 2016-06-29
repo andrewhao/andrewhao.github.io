@@ -1,0 +1,961 @@
+
+<!doctype html>
+<!-- START OF _layouts/default.html -->
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" >
+		<meta content="width=device-width,initial-scale=1" name="viewport">
+		<meta content="Andrew Hao's thoughts on software engineering, team leadership & product design." name="description">
+		<meta content="The Sweet Spot" name="author">
+
+		<title>The Sweet Spot</title>
+
+		<!-- Styles -->
+		<link href="/stylesheets/main.css" rel="stylesheet">
+
+		<!-- Google webfonts -->
+    <link href="https://fonts.googleapis.com/css?family=Cousine|Suez+One|Yellowtail|Space+Mono|Alike+Angular" rel="stylesheet">
+
+		<!-- jQuery and plugins -->
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+		<script src="/js/jquery.zclip.min.js"></script>
+
+		<!-- Syntax highlighter -->
+		<link href="/stylesheets/prettify-hemisu.css" type="text/css" rel="stylesheet" />
+    <script type="text/javascript" src="/js/prettify.js"></script>
+
+    <link href="/atom.xml" rel="alternate" title="The Sweet Spot" type="application/atom+xml">
+    
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-2330913-9']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+
+  </head>
+
+	<body onload="prettyPrint()">
+		<div class="wrap">
+
+			<header>
+        <a href="/"><div class="title">The Sweet Spot</div></a>
+				<div class="subtitle">On software, engineering leadership, and anything shiny.</div>
+
+				<div class="navi">
+					<ul>
+						<li><a href="/blog/archives">Articles</a></li>
+						<li><a href="https://www.github.com/andrewhao">Github</a></li>
+						<li><a href="https://twitter.com/andrewhao">Twitter</a></li>
+					</ul>
+				</div> <!-- // .navi -->
+			</header>
+
+				<!-- START OF index.html -->
+
+	
+		
+		<!-- START OF _includes/article.html -->
+<article>
+	<header>
+		<h1><a href="/2014/06/21/mocks-arent-stubs/">Mocks aren't stubs: mockist & classic testing</a></h1>
+		<time>21 June 2014</time>
+	</header>
+		<div class="content">
+			<p>With the famed “TDD is dead” debate around the Rails community largely<br />
+coming to an end, I found myself referencing Martin Fowler’s article,<br />
+<a href="http://martinfowler.com/articles/mocksArentStubs.html">Mocks Aren’t Stubs</a> a good deal, trying to make sense of it in terms of how I write tests and code.</p>
+
+<p>In this post I’m going to talk about mocking and stubbing and their<br />
+roots, paraphrase Fowler in an attempt to explain their differences, and<br />
+walk through a couple of code examples. In each case, I’m going to<br />
+attempt to build this example out in Ruby and RSpec 3.</p>
+
+<p>Let’s assume this implementation in our code for a <code>BookUpdater</code> object in Ruby. Its job is to call through its collaborating <code>ApiClient</code>, which wraps some aspect of an API that we want to call.</p>
+
+<figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+</pre></td><td class="code"><pre><code class="ruby"><span class="line"><span class="c1"># Update a book&#39;s metadata in our systems.</span>
+</span><span class="line"><span class="k">class</span> <span class="nc">BookUpdater</span>
+</span><span class="line">  <span class="kp">attr_accessor</span> <span class="ss">:book</span><span class="p">,</span> <span class="ss">:api_client</span><span class="p">,</span> <span class="ss">:response</span>
+</span><span class="line">
+</span><span class="line">  <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">book</span><span class="p">,</span> <span class="n">api_client</span><span class="p">)</span>
+</span><span class="line">    <span class="vi">@book</span> <span class="o">=</span> <span class="n">book</span>
+</span><span class="line">    <span class="vi">@api_client</span> <span class="o">=</span> <span class="n">api_client</span>
+</span><span class="line">  <span class="k">end</span>
+</span><span class="line">
+</span><span class="line">  <span class="k">def</span> <span class="nf">updated?</span>
+</span><span class="line">    <span class="o">!!</span><span class="n">response</span><span class="o">.</span><span class="n">success?</span>
+</span><span class="line">  <span class="k">end</span>
+</span><span class="line">
+</span><span class="line">  <span class="k">def</span> <span class="nf">update!</span>
+</span><span class="line">    <span class="n">response</span> <span class="o">=</span> <span class="n">api_client</span><span class="o">.</span><span class="n">call_update_api</span><span class="p">(</span><span class="n">book</span><span class="p">)</span>
+</span><span class="line">  <span class="k">end</span>
+</span><span class="line"><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+<h2 id="what-they-are">What they are</h2>
+
+<h3 id="mocks">Mocks</h3>
+
+<p>Mocks are fake objects that verify that they have received messages. In<br />
+RSpec, we traditionally use the <code>mock</code> object utility to create these objects.</p>
+
+<figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+</pre></td><td class="code"><pre><code class="ruby"><span class="line"><span class="n">api_client</span> <span class="o">=</span> <span class="n">mock</span><span class="p">(</span><span class="s1">&#39;api client&#39;</span><span class="p">)</span>
+</span><span class="line"><span class="n">book</span> <span class="o">=</span> <span class="no">Book</span><span class="o">.</span><span class="n">new</span>
+</span><span class="line">
+</span><span class="line"><span class="n">expect</span><span class="p">(</span><span class="n">api_client</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">receive</span><span class="p">(</span><span class="ss">:call_update_api</span><span class="p">)</span><span class="o">.</span><span class="n">with</span><span class="p">(</span><span class="n">book</span><span class="p">)</span><span class="o">.</span><span class="n">and_return</span><span class="p">(</span><span class="kp">true</span><span class="p">)</span>
+</span><span class="line">
+</span><span class="line"><span class="n">subject</span> <span class="o">=</span> <span class="no">BookUpdater</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">api_client</span><span class="p">,</span> <span class="n">book</span><span class="p">)</span>
+</span><span class="line"><span class="n">subject</span><span class="o">.</span><span class="n">list!</span>
+</span></code></pre></td></tr></table></div></figure>
+
+<p>What’s happening here? RSpec creates a mock <code>api_client</code> object that will verify that, after the test case executes, it has received the <code>:call_update_api</code> message with the correct arguments.</p>
+
+<p>The main point of this style of testing is <em>behavior verification</em> – that is, that your object is behaving correctly in relation with its collaborators.</p>
+
+<h3 id="double">Double</h3>
+
+<p>Let’s take a look at a <code>double</code> – also known as a <code>stub</code>. A <code>double</code> is a fake object that is set up to respond to a certain message with a pre-canned response, each time. Let’s take a look at how I would set up a test using doubles:</p>
+
+<figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+</pre></td><td class="code"><pre><code class="ruby"><span class="line"><span class="n">api_client</span> <span class="o">=</span> <span class="n">double</span><span class="p">(</span><span class="s1">&#39;api client&#39;</span><span class="p">)</span>
+</span><span class="line"><span class="n">response</span> <span class="o">=</span> <span class="n">double</span><span class="p">(</span><span class="s1">&#39;response&#39;</span><span class="p">,</span> <span class="ss">:success?</span> <span class="o">=&gt;</span> <span class="kp">true</span><span class="p">)</span>
+</span><span class="line"><span class="n">book</span> <span class="o">=</span> <span class="no">Book</span><span class="o">.</span><span class="n">new</span>
+</span><span class="line">
+</span><span class="line"><span class="n">allow</span><span class="p">(</span><span class="n">api_client</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">receive</span><span class="p">(</span><span class="ss">:call_update_api</span><span class="p">)</span><span class="o">.</span><span class="n">with</span><span class="p">(</span><span class="n">book</span><span class="p">)</span><span class="o">.</span><span class="n">and_return</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+</span><span class="line"><span class="n">expect</span><span class="p">(</span><span class="n">subject</span><span class="o">.</span><span class="n">update!</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">change</span><span class="p">(</span><span class="n">subject</span><span class="p">,</span> <span class="ss">:updated?</span><span class="p">)</span><span class="o">.</span><span class="n">from</span><span class="p">(</span><span class="kp">false</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="kp">true</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+<p>Okay, so what’s the big deal here? My test case still passes. Note that<br />
+I had to change my code to focus its expectation on the <code>subject</code>’s<br />
+state instead of the <code>api_client</code>.</p>
+
+<p>The focus of using doubles is for <em>state verification</em> – that is, that so long as everybody around me is behaving according to their contracts, the test merely has to verify that internal object state changes correctly.</p>
+
+<h3 id="a-third-way----real-objects">A third way – real objects</h3>
+
+<p>I won’t cover this very much in depth, but with sufficiently simple objects, one could actually instantiate real objects instead of doubles, and test an object against all its collaborators. This is, in my experience, the most common experience of working in Rails + ActiveRecord applications.</p>
+
+<h2 id="classic-vs-mockist-testing-different-strokes-for-different-folks">Classic vs Mockist testing: different strokes for different folks</h2>
+
+<p>As we saw above, the key difference between the mock and the stub (the <code>double</code>). The focus of the test in the mock case is on the messages being sent to the collaborators. The focus of the test when using the double is on the the <code>subject</code> under test (SUT).</p>
+
+<p>Mocks and stubs/doubles are tools that we can use under the larger umbrellas of two TDD philosophical styles: <em>classic</em> vs <em>mockist</em> styles.</p>
+
+<h3 id="classic-tdd">Classic TDD</h3>
+
+<ul>
+  <li>Classic TDDists like using <code>double</code>s or real objects to test collaborators.</li>
+  <li>From personal experience, testing classicly is oftentimes the path of least resistance. There isn’t expectation setup and verification that mockist testing requires of you.</li>
+  <li>Classic TDD sometimes results in creating objects that reveal state – note how the <code>BookUpdater</code> needed to expose an <code>updated?</code> method.</li>
+  <li>Setting up the state of the world prior to your test may be complex, requiring setting up all the objects in your universe. This can be a huge pain (has anybody ever had this problem with overcomplicated Rails models with spidery associations? Raise your hands…). Classicists may argue that the root cause here is not paying attention to your model architecture, and having too many associations is an antipattern. Alternatively, classicists oftentimes generate test factories (e.g. Rails’ FactoryGirl gem) to manage test setup.</li>
+  <li>Tests tend to be treatable more like black boxes, testable under isolation (due to verifications on object state) and are more resistant to refactoring.</li>
+</ul>
+
+<h3 id="mockist-tdd">Mockist TDD</h3>
+
+<ul>
+  <li>Mockist TDD utilizes <code>mock</code>s to verify behavior between objects and collaborators.</li>
+  <li>It can be argued to develop “purer” objects, that are mainly concerned with objects passing messages to each other. Fowler refers to these objects as preferring role-interfaces.</li>
+  <li>These tests are easier to set up, as they don’t require setting up the state of the world prior to test invocation.</li>
+  <li>Tests tend to be more coupled to implementation, and may be more difficult to refactor due to very specific requirements for message passing between collaborators.</li>
+  <li>Fowler brings up a point where being a mockist means that your objects prefer to <a href="https://pragprog.com/articles/tell-dont-ask">Tell Don’t Ask</a>. A nice side effect of TDA is you generally can avoid Demeter violations.</li>
+</ul>
+
+<h2 id="in-conclusion">In conclusion</h2>
+
+<p>In coming from a classic TDD background, I’ve oftentimes viewed mockist testing with some suspicion, particularly around how much work is involved to bring them about. Over the years, I’ve warmed up to the usage of mockist testing, but have not been diligent enough at doing pure driving TDD with mocks. In reviewing Fowler’s comments, I’m intruiged at the possibilities of mockist TDD in affecting system design, particularly in their natural inclinations toward <a href="http://martinfowler.com/bliki/RoleInterface.html">role interfaces</a>. I look forward to trying pure mockist TDD in a future project.</p>
+
+<h4 id="further-reading">Further reading:</h4>
+<ul>
+  <li><a href="http://dannorth.net/introducing-bdd/">Dan North: “Introducing BDD”</a></li>
+  <li><a href="http://jamesgolick.com/2010/3/10/on-mocks-and-mockist-testing.html">James Golick: “On Mocks and Mockist Testing”</a></li>
+  <li><a href="http://jmock.org/oopsla2004.pdf">OOPSLA 2004: “Mock Roles, Not Objects”</a></li>
+  <li><a href="http://www.amazon.com/Growing-Object-Oriented-Software-Guided-Tests/dp/0321503627">Amazon: “Growing Object Oriented Software, Guided by Tests”</a></li>
+</ul>
+
+			
+			
+		</div>
+	<footer>
+		
+
+
+		
+
+
+
+  
+		
+			Tagged under
+		
+    <a class='category' href='/category/mocks/'>mocks</a>, <a class='category' href='/category/stubs/'>stubs</a>, <a class='category' href='/category/tdd/'>tdd</a>
+	
+
+
+	
+	
+	</footer>
+	
+</article>
+<!-- END OF _includes/article.html -->
+
+	
+		
+		<!-- START OF _includes/article.html -->
+<article>
+	<header>
+		<h1><a href="/2014/06/06/running-mocha-tests-with-es6-amd-modules/">Running Mocha tests with ES6/AMD modules</a></h1>
+		<time>06 June 2014</time>
+	</header>
+		<div class="content">
+			<p>In one of my personal projects (<a href="https://github.com/andrewhao/chordmeister">Chordmeister</a>), I’ve been trying to<br />
+upgrade the code to be written in <a href="http://wiki.ecmascript.org/doku.php?id=harmony:modules#export_declarations">ES6 modules</a> and transpile down to AMD modules with Square’s <a href="https://github.com/square/es6-module-transpiler">very excellent es6-module-transpiler project</a>.</p>
+
+<p>Since I’ve already <a href="https://github.com/andrewhao/hendrix">updated</a> an Ember app of mine to try ES6, I figured it was high time to do it on another project.</p>
+
+<h2 id="sorry-coffeescript-but-im-moving-on">Sorry Coffeescript, but I’m moving on.</h2>
+
+<p>First problem: Coffeescript seems indecisive with respect to ES6<br />
+support. In order to support <code>import</code> or <code>export</code> keywords, I had to<br />
+wrap the statements in backticks, making the code look like this:</p>
+
+<figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+</pre></td><td class="code"><pre><code class="coffeescript"><span class="line"><span class="o">`</span><span class="nx">import</span> <span class="nx">ClassifiedLine</span> <span class="nx">from</span> <span class="s">&quot;chordmeister/classified_line&quot;</span><span class="o">`</span>
+</span><span class="line"><span class="k">class</span> <span class="nx">Parser</span>
+</span><span class="line">  <span class="c1"># Implementation</span>
+</span><span class="line">
+</span><span class="line"><span class="o">`</span><span class="nx">export</span> <span class="nx">default</span> <span class="nx">Parser</span><span class="o">`</span>
+</span></code></pre></td></tr></table></div></figure>
+
+<p>Except this wasn’t being picked up by es6-module-transpiler, since<br />
+Coffeescript wraps the entire declaration in a closure: I was<br />
+finding myself having problems compiling from Coffeescript -&gt; ES5 JS -&gt; ES6 JS.</p>
+
+<figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+</pre></td><td class="code"><pre><code class="javascript"><span class="line"><span class="nx">define</span><span class="p">(</span><span class="s2">&quot;chordmeister/parser&quot;</span><span class="p">,</span>
+</span><span class="line">  <span class="p">[],</span>
+</span><span class="line">  <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class="line">    <span class="s2">&quot;use strict&quot;</span><span class="p">;</span>
+</span><span class="line">    <span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class="line">      <span class="c1">// Oops, I wasn&#39;t transpiled!</span>
+</span><span class="line">      <span class="kr">import</span> <span class="nx">ClassifiedLine</span> <span class="nx">from</span> <span class="s1">&#39;chordmeister/classified_line&#39;</span><span class="p">;</span>
+</span><span class="line">      <span class="kd">var</span> <span class="nx">Parser</span><span class="p">;</span>
+</span><span class="line">      <span class="nx">Parser</span> <span class="o">=</span> <span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class="line">        <span class="c1">// Implementation</span>
+</span><span class="line">      <span class="p">}</span>
+</span><span class="line">      <span class="p">)();</span>
+</span><span class="line">      <span class="c1">// Oops, I wasn&#39;t transpiled!</span>
+</span><span class="line">      <span class="kr">export</span> <span class="k">default</span> <span class="nx">Parser</span><span class="p">;</span>
+</span><span class="line">      <span class="p">})()</span>
+</span><span class="line">  <span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+<p>So the first call: ditch Coffeescript. Write this in pure ES6.</p>
+
+<figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+</pre></td><td class="code"><pre><code class="javascript"><span class="line"><span class="kr">import</span> <span class="nx">ClassifiedLine</span> <span class="nx">from</span> <span class="s1">&#39;chordmeister/classified_line&#39;</span><span class="p">;</span>
+</span><span class="line"><span class="kd">var</span> <span class="nx">Parser</span><span class="p">;</span>
+</span><span class="line">
+</span><span class="line"><span class="nx">Parser</span> <span class="o">=</span> <span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class="line">  <span class="c1">// implementation</span>
+</span><span class="line"><span class="p">})();</span>
+</span><span class="line">
+</span><span class="line"><span class="kr">export</span> <span class="k">default</span> <span class="nx">Parser</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+<p>Which transpiled nicely to:</p>
+
+<figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+</pre></td><td class="code"><pre><code class="javascript"><span class="line"><span class="nx">define</span><span class="p">(</span><span class="s2">&quot;chordmeister/parser&quot;</span><span class="p">,</span>
+</span><span class="line">  <span class="p">[</span><span class="s2">&quot;chordmeister/classified_line&quot;</span><span class="p">,</span><span class="s2">&quot;exports&quot;</span><span class="p">],</span>
+</span><span class="line">  <span class="kd">function</span><span class="p">(</span><span class="nx">__dependency1__</span><span class="p">,</span> <span class="nx">__exports__</span><span class="p">)</span> <span class="p">{</span>
+</span><span class="line">    <span class="s2">&quot;use strict&quot;</span><span class="p">;</span>
+</span><span class="line">    <span class="kd">var</span> <span class="nx">ClassifiedLine</span> <span class="o">=</span> <span class="nx">__dependency1__</span><span class="p">[</span><span class="s2">&quot;default&quot;</span><span class="p">];</span>
+</span><span class="line">    <span class="kd">var</span> <span class="nx">Parser</span><span class="p">;</span>
+</span><span class="line">    <span class="nx">Parser</span> <span class="o">=</span> <span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class="line">      <span class="c1">// Implementation</span>
+</span><span class="line">    <span class="p">})();</span>
+</span><span class="line">    <span class="nx">__exports__</span><span class="p">[</span><span class="s2">&quot;default&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nx">Parser</span><span class="p">;</span>
+</span><span class="line">    <span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+<h2 id="next-up-adding-amd-support-in-mocha">Next up: adding AMD support in Mocha</h2>
+
+<p>Okay, so we need to set up a few things to get Mocha playing well with RequireJS, the AMD loader.</p>
+
+<p>Our plan of attach will be to leverage the generated AMD modules and load our tests up with them. We have the benefit of being able to specifically inject dependencies into our test suite.</p>
+
+<p>The tricky parts will be:</p>
+
+<h3 id="set-up-the-mocha-indexhtml-runner">Set up the Mocha index.html runner</h3>
+
+<p>Install <code>mocha</code>, <code>require.js</code>, and <code>chai</code> via <code>bower</code>, then plug them into the harness:</p>
+
+<figure class="code"><figcaption><span>test/index.html</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+</pre></td><td class="code"><pre><code class="html"><span class="line"><span class="cp">&lt;!doctype html&gt;</span>
+</span><span class="line"><span class="nt">&lt;html&gt;</span>
+</span><span class="line"><span class="nt">&lt;head&gt;</span>
+</span><span class="line">    <span class="nt">&lt;meta</span> <span class="na">charset=</span><span class="s">&quot;utf-8&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">    <span class="nt">&lt;meta</span> <span class="na">http-equiv=</span><span class="s">&quot;X-UA-Compatible&quot;</span> <span class="na">content=</span><span class="s">&quot;IE=edge,chrome=1&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">    <span class="nt">&lt;title&gt;</span>Mocha Spec Runner<span class="nt">&lt;/title&gt;</span>
+</span><span class="line">    <span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">href=</span><span class="s">&quot;../bower_components/mocha/mocha.css&quot;</span><span class="nt">&gt;</span>
+</span><span class="line"><span class="nt">&lt;/head&gt;</span>
+</span><span class="line"><span class="nt">&lt;body&gt;</span>
+</span><span class="line">    <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;mocha&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+</span><span class="line">    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;../bower_components/mocha/mocha.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+</span><span class="line">    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;../bower_components/chai/chai.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+</span><span class="line">    <span class="nt">&lt;script </span><span class="na">data-main=</span><span class="s">&quot;test_helper&quot;</span> <span class="na">src=</span><span class="s">&quot;../bower_components/requirejs/require.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+</span><span class="line">
+</span><span class="line"><span class="nt">&lt;/body&gt;</span>
+</span><span class="line"><span class="nt">&lt;/html&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+<p>Note the references to <code>data-main="test_helper"</code>, which is require.js’s way of determining its entry point after it loads.</p>
+
+<h3 id="set-up-a-test-runner">Set up a test runner.</h3>
+
+<figure class="code"><figcaption><span>test/test_runner.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+</pre></td><td class="code"><pre><code class="javascript"><span class="line"><span class="c1">// Configure and set up the tests.</span>
+</span><span class="line"><span class="nx">require</span><span class="p">.</span><span class="nx">config</span><span class="p">({</span>
+</span><span class="line">  <span class="nx">baseUrl</span><span class="o">:</span> <span class="s2">&quot;../build/&quot;</span>
+</span><span class="line"><span class="p">})</span>
+</span><span class="line">
+</span><span class="line"><span class="c1">// Load up the files to run against</span>
+</span><span class="line"><span class="kd">var</span> <span class="nx">specs</span> <span class="o">=</span> <span class="p">[</span>
+</span><span class="line">  <span class="s1">&#39;chordmeister/chord_spec.js&#39;</span><span class="p">,</span>
+</span><span class="line">  <span class="s1">&#39;chordmeister/song_spec.js&#39;</span><span class="p">,</span>
+</span><span class="line">  <span class="s1">&#39;chordmeister/parser_spec.js&#39;</span><span class="p">,</span>
+</span><span class="line">  <span class="s1">&#39;chordmeister/classified_line_spec.js&#39;</span><span class="p">,</span>
+</span><span class="line"><span class="p">];</span>
+</span><span class="line">
+</span><span class="line"><span class="c1">// Start up the specs.</span>
+</span><span class="line"><span class="nx">require</span><span class="p">(</span><span class="nx">specs</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">require</span><span class="p">)</span> <span class="p">{</span>
+</span><span class="line">  <span class="nx">mocha</span><span class="p">.</span><span class="nx">setup</span><span class="p">(</span><span class="s1">&#39;bdd&#39;</span><span class="p">);</span>
+</span><span class="line">  <span class="nx">expect</span> <span class="o">=</span> <span class="nx">chai</span><span class="p">.</span><span class="nx">expect</span><span class="p">;</span>
+</span><span class="line">  <span class="c1">// Why? Some async loading condition? Is there a callback I should be hooking into?</span>
+</span><span class="line">  <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class="line">    <span class="nx">mocha</span><span class="p">.</span><span class="nx">run</span><span class="p">();</span>
+</span><span class="line">  <span class="p">},</span> <span class="mi">100</span><span class="p">);</span>
+</span><span class="line"><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+<p>You’ll notice that I was having synchonicity issues between spec suite load and <code>mocha.run()</code>. Throwing everything back a few hundred ms seemed to have done the fix.</p>
+
+<h2 id="amd-gotchas">AMD gotchas</h2>
+
+<p>Pay attention to the <code>default</code> parameter that the module exports with. This is important to remember since native ES6 will allow you to directly import it with its native syntax:</p>
+
+<figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="javascript"><span class="line"><span class="kr">import</span> <span class="nx">Parser</span> <span class="nx">from</span> <span class="s2">&quot;chordmeister/parser&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+<p>But if you’re using RequireJS/AMD modules, you’ll need to explicitly call out the <code>default</code> namespace from the required module, so like so:</p>
+
+<figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+</pre></td><td class="code"><pre><code class="javascript"><span class="line"><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;chordmeister/parser&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">parser</span><span class="p">)</span> <span class="p">{</span>
+</span><span class="line">  <span class="nx">Parser</span> <span class="o">=</span> <span class="nx">parser</span><span class="p">.</span><span class="k">default</span><span class="p">;</span>
+</span><span class="line">  <span class="k">new</span> <span class="nx">Parser</span><span class="p">()</span> <span class="c1">// and do stuff.</span>
+</span><span class="line"><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+<p>Let me know if you have any questions!</p>
+
+			
+			
+		</div>
+	<footer>
+		
+
+
+		
+
+
+
+  
+		
+			Tagged under
+		
+    <a class='category' href='/category/amd/'>amd</a>, <a class='category' href='/category/mocha/'>mocha</a>, <a class='category' href='/category/node/'>node</a>, <a class='category' href='/category/requirejs/'>requirejs</a>, <a class='category' href='/category/tdd/'>tdd</a>, <a class='category' href='/category/testing/'>testing</a>
+	
+
+
+	
+	
+	</footer>
+	
+</article>
+<!-- END OF _includes/article.html -->
+
+	
+		
+		<!-- START OF _includes/article.html -->
+<article>
+	<header>
+		<h1><a href="/2014/04/26/implementing-ddd-chapter-2/">Implementing DDD: Domains, Subdomains and Bounded Contexts</a></h1>
+		<time>26 April 2014</time>
+	</header>
+		<div class="content">
+			<h2 id="chapter-2-domains-subdomains-and-bounded-contexts">Chapter 2: Domains, Subdomains, and Bounded Contexts</h2>
+
+<p>A <em>Domain</em> is what a business does and the surrounding context of how it does business. It is important to model out its supported <em>Subdomains</em> – that is, the smaller components of the business that collaborate in real, day-to-day operations of the business. The book describes these as <em>Core Domains</em>.</p>
+
+<p>Finally, a <em>Bounded Context</em> is the physical manifestation of the solution space as software – models living in a real application. Its key feature in the context of DDD is as a linguistic barrier between different domains.</p>
+
+<p>In an ideal world, each <em>Subdomain</em> maps directly to one <em>Bounded Context</em>. In the real world, this is less common since we tend to build things into monolithic systems. Still – many monolithic applications have several components that could in themselves be bounded contexts.</p>
+
+<h6 id="side-note-in-rails-one-could-think-of-engines-as-a-bounded-context-but-that-might-be-a-blog-post-for-another-time">Side note: In Rails, one could think of Engines as a <em>Bounded Context</em>. But that might be a blog post for another time.</h6>
+
+<p>It is important to get these ideas and concepts down correctly because we need correct modeling of our systems to determine what they do.</p>
+
+<h3 id="bounded-contexts-and-terms">Bounded Contexts and terms</h3>
+
+<p>It’s not usually realistic to get the entire organization agreeing on a universal linguistic definition for every term. Instead, DDD assumes that different terms have different meanings in different contexts.</p>
+
+<p>The author then dives into the an example of a book, where a <em>book</em> means several different things to different people in different contexts. A book is touched upon by authors, graphic designers, editors, marketing folks. In each of these contexts, the features of a book mean different things at different times. It is impossible to develop an all-knowing Book model without disagreement between stakeholders. DDD, instead, acknowledges these differences and allows stakeholders to use linguistic terms from within their unique Bounded Contexts.</p>
+
+<p>Bounded Contexts may include things like:</p>
+
+<ul>
+  <li>Object models</li>
+  <li>A database schema / persistence layer</li>
+  <li>A SOAP or REST API</li>
+  <li>A user interface</li>
+</ul>
+
+<h3 id="bounded-context-antipatterns">Bounded context antipatterns</h3>
+
+<p>You may be tempted to divide up a bounded context by architectural concerns, or because you want to assign smaller tasks to developers (resource allocation). Beware that this kind of work tends to fragment the language.</p>
+
+<p>DDD operates on <em>linquistic drivers</em>. The unity, cohesion and domain-adherence of the bounded context should be the first priority in the design.</p>
+
+<p>Assigning two teams to the same bounded context results in fragmentation of the bounded context.</p>
+
+<p>Ideally: we strive to assign one team to work on one Bounded Context with one Ubiquitous Language at a time.</p>
+
+<h6 id="in-rails-what-are-the-bounded-contexts-it-could-be-the-top-level-rails-application-or-an-engine-or-a-gem-that-define-the-context-boundaries">In Rails, what are the bounded contexts? It could be the top-level Rails application, or an engine, or a gem, that define the context boundaries._</h6>
+
+<h3 id="a-story">A story…</h3>
+
+<p>The chapter then goes on to describe their fictional team designing through three iterations off their DDD strategy:</p>
+
+<p>A system in which all domains live within the same bounded context. They see the folly of this and refactor with some tactical patterns, like creating services.</p>
+
+<p>This is, however, missing the point. They realized they needed to listen to business and their domain experts to find out exactly where the right places were to segregate the contexts. The team discovers that the business has a desire to go in a new direction which allows them to segregate the domain in such a way that would enable future directions for the business.</p>
+
+<h6 id="how-often-are-we-as-developers-in-conversation-with-our-product-owners-and-asking-where-the-business-wants-to-go-in-the-future">How often are we as developers in conversation with our product owners and asking where the business <em>wants</em> to go in the future?</h6>
+
+<p>Conversations with the business reveal an intention to develop an add-on product to the core product. This implies the development of two subdomains. However, further investigation reveals that the shared overlap of certain domain models (like users, roles, and access management) cannot simply be identically shared between two systems, since their <em>linguistic meanings</em> in the two systems differ slightly. Instead, the developers use the linguistic problem to develop a third bounded context.</p>
+
+<p>The developers separate their app into three bounded contexts built as three software systems.</p>
+
+			
+			
+		</div>
+	<footer>
+		
+
+
+		
+
+
+
+  
+		
+			Tagged under
+		
+    <a class='category' href='/category/book-review/'>book review</a>, <a class='category' href='/category/ddd/'>ddd</a>, <a class='category' href='/category/domain-driven-design/'>domain-driven design</a>
+	
+
+
+	
+	
+	</footer>
+	
+</article>
+<!-- END OF _includes/article.html -->
+
+	
+		
+		<!-- START OF _includes/article.html -->
+<article>
+	<header>
+		<h1><a href="/2014/03/08/six-months-as-a-manager/">Six months as a manager</a></h1>
+		<time>08 March 2014</time>
+	</header>
+		<div class="content">
+			<p>It’s been approximately six months since I’ve entered engineering management. Here are some thoughts reflecting back on that season now.</p>
+
+<h2 id="i-didnt-like-it-at-first">I didn’t like it at first.</h2>
+
+<p>Let’s face it: I didn’t like the feeling of being a “manager” now. It comes with too much baggage of pointy-haired bosses or ineffective waste layers. Why do we need managers anyways?</p>
+
+<p>More to the point: I love coding. I love working on rewarding projects. I hated the thought of being tied up in meetings while day by day getting more and more disconnected from code.</p>
+
+<p>So I struggled a lot in those first few months (still do), trying to maintain the balance of working with product management to get a strategic vision communicated, or with other engineering teams to get a tactical vision in place, versus trying to be deeply involved with the code base and doing code reviews.</p>
+
+<h3 id="you-cant-code-anymore">You can’t code anymore.</h3>
+
+<p>In the end? I had to come to grips with the reality that my team needed me in a different role – a strategic role, helping them see the big picture, sniffing out dependencies and destroying blockers before they got to them.</p>
+
+<p>But I still needed to be spot-on with the code – I still needed to be in the know with new product features as they are being developed. So it’s my priority to be in design discussions, but I can’t be the implementer anymore.</p>
+
+<p>So I’ve started a change in mindset – how can offload all the random codebase knowledge I’ve acquired over the years to the team? How can I effectively share my expertise so I’m out of a (coding) job? I’m starting to be more convinced that the answer to that is pair programming.</p>
+
+<h3 id="pairing-your-way-out-of-a-job">Pairing your way out of a job</h3>
+
+<p>Nowadays if there’s a story or task in which I am the only one (or one of few) with domain knowledge about the feature, I’ll ask a team member to pair with me on the feature. That way we get a really effective teaching tool about the domain model, and the extra plus in that if I get pulled into a meeting, development can continue.</p>
+
+<h3 id="but-you-still-have-to-code">But you still have to code.</h3>
+
+<p>So I code on the weekends (not everybody can do this!)</p>
+
+<p>We’re a Rails team taking on a new Ember project. I need to get my chops up around Ember so I’ve decided to pull in a <a href="https://github.com/andrewhao/hendrix">side project</a> to hack on the weekends. My side work on <a href="http://www.wejoinin.com">Wejoinin</a> lets me do all the Rails things I don’t get to do anymore at work.</p>
+
+<p>And it works for me because I love to code, and to be honest, I don’t ever want to get weak in that area.</p>
+
+<p>To be honest, I’d love more feedback from other engineering managers in that area. How do you keep your chops sharp?</p>
+
+<h3 id="people-are-your-priority">People are your priority.</h3>
+
+<p>I’ve read often that <a href="http://firstround.com/article/My-Management-Lessons-from-Three-Failed-Startups-Google-Apple-Dropbox-Twitter-and-Square">empathy is everything</a> when it comes to management, and it still rings true. No matter how this product launch goes, in the end your team will remember how you treated them, how their thoughts and feelings were taken into account.</p>
+
+<p>One thing I’m trying to check myself is my tendency to jump in on other people’s sentences and cut them off. It sounds silly, but sometimes I realize I like to talk a lot more than listen. As a manager, sometimes you need to dwell on the feedback of a team member for some time before you write it off. There’s usually a core message in there that’s completely valid – a frustration, a desire for change. Empathy means communicating the message: “I heard you, and I respect your thoughts.”</p>
+
+<h3 id="its-your-attitude">It’s your attitude</h3>
+
+<p>And finally, here’s what I think: your attitude toward your company and the team make <em>ALL</em> the difference.</p>
+
+<ul>
+  <li>Is your orientation truly to support your team? How will it be clear in the long run that your supported someone in their career?</li>
+  <li>Where are places in your workday where you can connect and sympathize with people – share a joke, listen to someone’s frustration, or just simply go out to lunch?</li>
+  <li>How are you giving people something to work toward to: a vision of changing the world (for Blurb, it’s about transforming the publishing industry).</li>
+  <li>How are you addressing negativity? Grumbling is important to address head on in its own space, but how are you empowering people to take charge of issues of culture or organizational friction?</li>
+  <li>How are you checking your own negativity – sometimes we forget that we’re the solutions to our own problems, and I’ve found oftentimes that the very issues that you assume are impossible to change are crackable by having the right relationships with the right people.</li>
+</ul>
+
+<p>The little things matter.</p>
+
+<h3 id="growth-areas">Growth areas</h3>
+
+<p>Lord knows I have a lot to learn here. One area I’m learning to grow in is how to give honest and accurate feedback to team members, without fearing how they’re going to receive it.</p>
+
+<p>Another area? Delegation. I’m learning to delegate the little micro-responsibilities in my job that I just kind of expect that I’m supposed to do. Case in point: every week we accept a translation import from a third-party translation service. I realized that I was burning a lot of time reviewing hundreds of lines of translation keys every week, and the repetition of it was sapping a lot of my energy. I had to learn to ask a team member for help and give them responsibility to own that function of the process.</p>
+
+			
+			
+		</div>
+	<footer>
+		
+
+
+		
+
+
+
+  
+		
+			Tagged under
+		
+    <a class='category' href='/category/code/'>code</a>, <a class='category' href='/category/management/'>management</a>, <a class='category' href='/category/thoughts/'>thoughts</a>
+	
+
+
+	
+	
+	</footer>
+	
+</article>
+<!-- END OF _includes/article.html -->
+
+	
+		
+		<!-- START OF _includes/article.html -->
+<article>
+	<header>
+		<h1><a href="/2014/02/02/blogging-through-implementing-domain-driven-design/">Blogging through: Implementing Domain-Driven Design</a></h1>
+		<time>02 February 2014</time>
+	</header>
+		<div class="content">
+			<p>In recent conversations with coworkers, the topic of Domain-Driven Design has<br />
+arisen on more than a few occasions in design and architecture meetings.<br />
+“Have you read it?” a coworker asked, “I think it’d help us a lot.”</p>
+
+<p>I’ve gotten my hands on a copy of <a href="http://www.amazon.com/Implementing-Domain-Driven-Design-Vaughn-Vernon/dp/0321834577">Implementing Domain-Driven Design</a><br />
+by <a href="https://vaughnvernon.co/">Vaughn Vernon</a>, which is a more pragmatic<br />
+approach to DDD than the original <a href="http://www.amazon.com/Domain-Driven-Design-Tackling-Complexity-Software/dp/0321125215/ref=pd_bxgy_b_text_y">Domain-Driven Design</a> book by Eric Evans.</p>
+
+<p>My desire is to share my outlines of the book chapter-by-chapter,<br />
+hopefully once a week.</p>
+
+<h2 id="chapter-1-getting-started-with-ddd">Chapter 1: Getting Started with DDD</h2>
+
+<h3 id="can-i-ddd">Can I DDD?</h3>
+<ul>
+  <li>DDD helps us design software models where “our design is exactly how<br />
+the software works” (1).</li>
+  <li>DDD isn’t a technology, it’s a set of principles that involve<br />
+discussion, listening, and business value so you can <em>centralize<br />
+knowledge</em>.</li>
+  <li>The main principle here is that we must “understand the business in<br />
+which our software works” (3). This means we learn from domain experts<br />
+in our field.</li>
+  <li>What is a domain model? an object model where objects have<br />
+data/persistence concerns with an accurate business meaning.</li>
+</ul>
+
+<h3 id="why-you-should-do-ddd">Why You Should Do DDD</h3>
+
+<ul>
+  <li>Domain experts and devs on same playing field, cooperation required as<br />
+one team. (Agile teams, anyone?)</li>
+  <li>The business can learn more about itself through the questions asked<br />
+about itself.</li>
+  <li>Knowledge is centralized.</li>
+  <li>Zero translations between domain experts and software devs and<br />
+software.</li>
+  <li>“The design is the code, and code is the design.” (7)</li>
+  <li>It is not without up-front cost</li>
+</ul>
+
+<h4 id="the-problem">The problem</h4>
+
+<ul>
+  <li>The schism between business domain experts and software developers<br />
+puts your project (and your business) at a risk.</li>
+  <li>The more time passes, the greater the divide grows.</li>
+</ul>
+
+<h4 id="solution">Solution</h4>
+
+<ul>
+  <li>DDD brings domain experts and software developers together to develop<br />
+software that reflects the business domain mental model.</li>
+  <li>Oftentimes this requires that they jointly develop a “Ubiquitous<br />
+Language” - a shared vocabulary and set of concepts that are jointly<br />
+spoken by everybody.</li>
+  <li>DDD produces software that is better designed &amp; architected -&gt; better testable -&gt;<br />
+clearer code.</li>
+  <li>Take heed: DDD should only be used to simplify your domain. If the net<br />
+cost of implementing DDD is only going to add complexity, then you<br />
+should stay away.</li>
+</ul>
+
+<h4 id="domain-model-health">Domain model health</h4>
+<ul>
+  <li>As time passes, our domain models can become<br />
+<a href="http://www.martinfowler.com/bliki/AnemicDomainModel.html">anemic</a>,<br />
+and lose their expressive capabilities and clean boundaries. This can<br />
+lead to spaghetti code and a violation of object responsibilities.</li>
+  <li>Why do anemic domain models hurt us? They claim to be well-formed<br />
+models but they hide a badly designed system that is still unfocused<br />
+in what it does. (Andrew: I’ve seen a lot of Service objects that<br />
+claim to be services but really are long scripts to get things done.<br />
+There might be a cost of designing the Service interface, but inside<br />
+things are just as messy as before we got there.)</li>
+  <li>Seems like Vernon is blaming the influence of IDEs for Visual Basic as<br />
+they influenced Java libraries – too many explicit getters and<br />
+setters.</li>
+  <li>Vernon throws up some code samples comparing two different code<br />
+samples – one with an anemic model that looks like a long string of<br />
+commands and another with descriptive method names. He makes the case<br />
+that simply reading the code is documentation of the domain itself.</li>
+</ul>
+
+<h4 id="how-to-do-ddd">How to do DDD</h4>
+
+<ul>
+  <li>Have a <a href="http://martinfowler.com/bliki/UbiquitousLanguage.html"><em>Ubiquitous Language</em></a><br />
+where the team of domain experts share the language together, from<br />
+domain experts to programmers.</li>
+  <li>
+    <p>Steps to coming up with a language:</p>
+
+    <ol>
+      <li>Draw out the domain and label it.</li>
+      <li>Make a glossary of terms and definitions.</li>
+      <li>Have the team review the language document.</li>
+    </ol>
+  </li>
+  <li>Note that a Ubiquitous Language is specific to the context it is<br />
+implemented in. In other words, there is one Ubiquitous Language per<br />
+Bounded Context.</li>
+</ul>
+
+<h3 id="business-value-of-ddd">Business value of DDD</h3>
+
+<ol>
+  <li>The organization gains a useful model of its domain</li>
+  <li>The precise definition of the business is developed</li>
+  <li>Domain experts contribute to software design.</li>
+  <li>A better user experience is gained.</li>
+  <li>Clean boundaries for models keep them pure.</li>
+  <li>Enterprise architecture is better designed.</li>
+  <li>Continuous modeling is used – the working software we produce is the<br />
+model we worked so hard to create.</li>
+  <li>New tools and patterns are used.</li>
+</ol>
+
+<h4 id="challenges">Challenges</h4>
+
+<ul>
+  <li>The time and effort required to think about the busines domain,<br />
+research concepts, and converse with domain experts.</li>
+  <li>It may be hard to get a domain expert involved due to their<br />
+availability.</li>
+  <li>There is a lot of thought required to clarify pure models and do<br />
+domain modeling.</li>
+</ul>
+
+<h4 id="tactical-modeling">Tactical modeling</h4>
+
+<ul>
+  <li>The <em>Core Domain</em> is the part of your application that has key and<br />
+important business value – and may require high thought and attention<br />
+to design.</li>
+  <li>Sometimes DDD may not be the right fit for you – if you have a lot of<br />
+experienced developers who are very comfortable with domain modeling,<br />
+you may be better off trusting their opinion.</li>
+</ul>
+
+<h4 id="ddd-is-not-heavy">DDD is not heavy.</h4>
+
+<ul>
+  <li>It fits into any Agile or XP framework. It leans into TDD, eg: you use<br />
+TDD to develop a new domain model that describes how it interacts with<br />
+other existing models. You go through the red-green-refactor cycle.</li>
+  <li>DDD promotes lightweight development. As domain experts read the code, they<br />
+are able to provide in-flight feedback to the development of the<br />
+system.</li>
+</ul>
+
+
+			
+			
+		</div>
+	<footer>
+		
+
+
+		
+
+
+
+  
+		
+			Tagged under
+		
+    <a class='category' href='/category/blog-a-book/'>blog a book</a>, <a class='category' href='/category/book-review/'>book review</a>, <a class='category' href='/category/ddd/'>ddd</a>, <a class='category' href='/category/domain-driven-design/'>domain-driven design</a>
+	
+
+
+	
+	
+	</footer>
+	
+</article>
+<!-- END OF _includes/article.html -->
+
+	
+	
+<div class="pagination">
+	
+		<a class="older" href="5">Older</a>
+	
+	
+	<span class="total">4 of 20</span>
+	
+	
+		<a class="newer" href="3">Newer</a>
+	
+</div>
+<!-- END OF index.html -->
+
+
+			<footer>
+				Copyright &copy; 2016
+
+	Andrew Hao
+
+
+				
+
+<script type="text/javascript">
+      var disqus_shortname = 'g9labs';
+      
+        
+        var disqus_script = 'count.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+			</footer>
+
+		</div> <!-- // .wrap -->
+  </body>
+
+	<script>
+		$(document).ready(function() {
+			// Make images center
+			$('p:has(img)').css('text-align', 'center');
+
+			// Add the image's title attribute as a caption
+			$('p:has(img)').append(function () {
+				return '<div class="caption">' + ($('img', this).attr('title') || "") + '</div>';
+			});
+
+			// Prettify code
+			$('code').addClass('prettyprint');
+			$('pre code').addClass('linenums');
+
+			// Copy to clipboard with button
+			$('pre:has(code)').prepend(function(){
+				return '<div class="clip-btn">copy to clipboard</div>';
+      });
+
+			$('.clip-btn').zclip({
+				path:'/js/ZeroClipboard.swf',
+				copy: $(this).next('code').text(),
+				afterCopy: function(){
+					$(this).replaceWith('<div class="clip-btn">copied!');
+					}
+			});
+		});
+	</script>
+</html>
+<!-- END OF _layouts/default.html -->

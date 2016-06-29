@@ -68,65 +68,91 @@
 		<time>05 November 2008</time>
 	</header>
 		<div class="content">
-			<p>A few weeks ago, I couldn&rsquo;t seem to connect my laptop to the wireless AP in my apartment. Additionally, I&rsquo;d be getting weak signals from all these weird corners in my apartment. Since I had a spare AP lying around at home, I decided to do some online research to see if I could get it to behave as a second wireless AP on the same network, extending my network range, allowing our network to handle more wireless users and playing nicely with my laptop.</p>
+			<p>A few weeks ago, I couldn’t seem to connect my laptop to the wireless AP in my apartment. Additionally, I’d be getting weak signals from all these weird corners in my apartment. Since I had a spare AP lying around at home, I decided to do some online research to see if I could get it to behave as a second wireless AP on the same network, extending my network range, allowing our network to handle more wireless users and playing nicely with my laptop.</p>
 
-<h4>The desired setup:</h4>
+<h4 id="the-desired-setup">The desired setup:</h4>
 
 <ul>
-<li><p>Two wireless routers on the same network: one router acts as the gateway and DHCP server, the other is a simple switch + wireless AP. One router is the Netgear WGR614, the other is the DLink DI-624.</p></li>
-<li><p>Workload: many wired connections, many wireless connections. We have 3 wired computers for me and my roommates' computers, and up to 10 people connected via wireless at the same time (we tend to have a lot of visitors).</p></li>
+  <li>
+    <p>Two wireless routers on the same network: one router acts as the gateway and DHCP server, the other is a simple switch + wireless AP. One router is the Netgear WGR614, the other is the DLink DI-624.</p>
+  </li>
+  <li>
+    <p>Workload: many wired connections, many wireless connections. We have 3 wired computers for me and my roommates’ computers, and up to 10 people connected via wireless at the same time (we tend to have a lot of visitors).</p>
+  </li>
 </ul>
-
 
 <p>After a bit of research, I <a href="http://www.dslreports.com/forum/remark,10664212">found a forum thread online</a> that details how to set it up:</p>
 
 <ul>
-<li><p>The host router (the Netgear in my case) stays the DHCP server and broadband gateway. Settings:</p>
+  <li>
+    <p>The host router (the Netgear in my case) stays the DHCP server and broadband gateway. Settings:</p>
 
-<ul>
-<li>Assign a static IP on the MAC address of the secondary router. It&rsquo;s 192.168.1.3 on my network. That way you&rsquo;ll always have an IP address to the second router&rsquo;s admin panel.</li>
+    <ul>
+      <li>Assign a static IP on the MAC address of the secondary router. It’s 192.168.1.3 on my network. That way you’ll always have an IP address to the second router’s admin panel.</li>
+    </ul>
+  </li>
+  <li>
+    <p>Run an Ethernet cable from the host router’s LAN port in to the LAN port of the second router (the DLink). (Note: it’s especially important that you plug this wire in to the LAN port instead of the WAN port).</p>
+  </li>
+  <li>
+    <p>With a computer connected on the network, send your browser on over to the D-Link admin panel at 192.168.1.3. Your settings on the DI-624 should be as follows:</p>
+
+    <ul>
+      <li>
+        <p>“WAN Settings” section (Note the 20.2.20.x IP is just a random IP address so the AP doesn’t go off and try to dynamically resolve a IP address)</p>
+
+        <ul>
+          <li>
+            <p>“Static IP Address” radio button selected</p>
+          </li>
+          <li>
+            <p>IP Address: 20.2.20.20</p>
+          </li>
+          <li>
+            <p>Subnet mask: 255.255.255.0</p>
+          </li>
+          <li>
+            <p>ISP Gateway Address: 20.2.20.21</p>
+          </li>
+          <li>
+            <p>Primary DNS address: 20.2.20.22</p>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <p>“LAN Settings” section:</p>
+
+        <ul>
+          <li>
+            <p>Static IP: 192.168.1.3</p>
+          </li>
+          <li>
+            <p>Subnet mask: 255.255.255.0</p>
+          </li>
+          <li>
+            <p>DNS Relay: Disabled.</p>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <p>“DHCP Settings” section:</p>
+
+        <ul>
+          <li>DHCP Server: Disabled</li>
+        </ul>
+      </li>
+      <li>
+        <p>“Wireless” section:</p>
+
+        <ul>
+          <li>Set up your wireless AP settings however you’d like!</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
 </ul>
-</li>
-<li><p>Run an Ethernet cable from the host router&rsquo;s LAN port in to the LAN port of the second router (the DLink). (Note: it&rsquo;s especially important that you plug this wire in to the LAN port instead of the WAN port).</p></li>
-<li><p>With a computer connected on the network, send your browser on over to the D-Link admin panel at 192.168.1.3. Your settings on the DI-624 should be as follows:</p>
 
-<ul>
-<li><p>&ldquo;WAN Settings&rdquo; section (Note the 20.2.20.x IP is just a random IP address so the AP doesn&rsquo;t go off and try to dynamically resolve a IP address)</p>
-
-<ul>
-<li><p>&ldquo;Static IP Address&rdquo; radio button selected</p></li>
-<li><p>IP Address: 20.2.20.20</p></li>
-<li><p>Subnet mask: 255.255.255.0</p></li>
-<li><p>ISP Gateway Address: 20.2.20.21</p></li>
-<li><p>Primary DNS address: 20.2.20.22</p></li>
-</ul>
-</li>
-<li><p>&ldquo;LAN Settings&rdquo; section:</p>
-
-<ul>
-<li><p>Static IP: 192.168.1.3</p></li>
-<li><p>Subnet mask: 255.255.255.0</p></li>
-<li><p>DNS Relay: Disabled.</p></li>
-</ul>
-</li>
-<li><p>&ldquo;DHCP Settings&rdquo; section:</p>
-
-<ul>
-<li>DHCP Server: Disabled</li>
-</ul>
-</li>
-<li><p>&ldquo;Wireless&rdquo; section:</p>
-
-<ul>
-<li>Set up your wireless AP settings however you&rsquo;d like!</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-
-
-<p>Though these instructions are specific to setting up the DI-624, I&rsquo;m pretty sure you could get your old router to work on an existing network.You can now extend the range of your home&rsquo;s wireless network without any fancy signal booster tricks or expensive repeater equipment. How cool is that?</p>
+<p>Though these instructions are specific to setting up the DI-624, I’m pretty sure you could get your old router to work on an existing network.You can now extend the range of your home’s wireless network without any fancy signal booster tricks or expensive repeater equipment. How cool is that?</p>
 
 			
 			

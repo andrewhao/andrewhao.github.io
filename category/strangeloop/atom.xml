@@ -4,7 +4,7 @@
   <title><![CDATA[Category: strangeloop | The Sweet Spot]]></title>
   <link href="http://www.g9labs.com/category/strangeloop/atom.xml" rel="self"/>
   <link href="http://www.g9labs.com/"/>
-  <updated>2016-06-24T11:31:59-07:00</updated>
+  <updated>2016-06-29T16:33:32-07:00</updated>
   <id>http://www.g9labs.com/</id>
   <author>
     <name><![CDATA[Andrew Hao]]></name>
@@ -18,287 +18,246 @@
     <link href="http://www.g9labs.com/2015/09/27/strange-loop-2015-reflections/"/>
     <updated>2015-09-27T15:40:00-07:00</updated>
     <id>http://www.g9labs.com/2015/09/27/strange-loop-2015-reflections</id>
-    <content type="html"><![CDATA[<p>Going to Strange Loop was a huge check off my conference bucket list
-(lanyard?). I&rsquo;d always heard about this slightly-weird, highly academic
-collision between academia and industry, skewing toward programming
-languages you haven&rsquo;t heard of (or, at the very least, you&rsquo;ve never used
-in production). I anticipated sitting at the feet of gray-haired wizards
+    <content type="html"><![CDATA[<p>Going to Strange Loop was a huge check off my conference bucket list<br />
+(lanyard?). I’d always heard about this slightly-weird, highly academic<br />
+collision between academia and industry, skewing toward programming<br />
+languages you haven’t heard of (or, at the very least, you’ve never used<br />
+in production). I anticipated sitting at the feet of gray-haired wizards<br />
 and bright-eyed hipsters with Ph.Ds.</p>
 
-<p>The conference did not disappoint. And it was not quite what I
-expected-I less sat at the feet of geniuses than I did talk with them,
-peer-to-peer, about topics of interest. All around me people were saying
-&ldquo;Don&rsquo;t be afraid to ask questions. Don&rsquo;t feel stupid &ndash; nobody knows
-everything.&rdquo; Speakers were tweeting about how much they were learning.
-It was comforting, because lots of topics I had come to see were those
+<p>The conference did not disappoint. And it was not quite what I<br />
+expected-I less sat at the feet of geniuses than I did talk with them,<br />
+peer-to-peer, about topics of interest. All around me people were saying<br />
+“Don’t be afraid to ask questions. Don’t feel stupid - nobody knows<br />
+everything.” Speakers were tweeting about how much they were learning.<br />
+It was comforting, because lots of topics I had come to see were those<br />
 in which I had no. freakin. clue. about.</p>
 
-<p>The following is culled from my notes from different sessions I
+<p>The following is culled from my notes from different sessions I<br />
 attended. I will focus on brevity. I will keep it clear. Here we go:</p>
 
-<h3>Opening Keynote: &ldquo;I see what you mean&rdquo; &ndash; Peter Alvaro</h3>
+<h3 id="opening-keynote-i-see-what-you-mean---peter-alvaro">Opening Keynote: “I see what you mean” - Peter Alvaro</h3>
 
-<iframe width="560" height="315"
-src="https://www.youtube.com/embed/R2Aa4PivG0g" frameborder="0"
-allowfullscreen></iframe>
-
+<iframe width="560" height="315" src="https://www.youtube.com/embed/R2Aa4PivG0g" frameborder="0" allowfullscreen=""></iframe>
 
 <ul>
-<li>Instructions, behaviors &amp; outcomes.</li>
-<li>It &ldquo;feels good&rdquo; to write in C (a hardcore 1000 liner)</li>
-<li>But a declarative program (e.g. SQL) works well, but is harder to come
+  <li>Instructions, behaviors &amp; outcomes.</li>
+  <li>It “feels good” to write in C (a hardcore 1000 liner)</li>
+  <li>But a declarative program (e.g. SQL) works well, but is harder to come<br />
 up with.</li>
-<li>The declarative world &ndash; as described in the work done in Datalog</li>
-<li>How can we take concepts from Datalog and apply to real-world
+  <li>The declarative world - as described in the work done in Datalog</li>
+  <li>How can we take concepts from Datalog and apply to real-world<br />
 resources like network actors (distributed systems)?</li>
-<li>It becomes easier to model these systems declaratively when we
+  <li>It becomes easier to model these systems declaratively when we<br />
 explicitly capture time.</li>
-<li>Enter Dedalus: extension to Datalog where time is a modeling
+  <li>Enter Dedalus: extension to Datalog where time is a modeling<br />
 construct.</li>
-<li>(Show off usage of <code>@next</code> and <code>@async</code> annotations</li>
-<li>Computation is redezvous &ndash; the only thing that you know is what YOU
+  <li>(Show off usage of <code>@next</code> and <code>@async</code> annotations</li>
+  <li>Computation is redezvous - the only thing that you know is what YOU<br />
 know at that point in time.</li>
-<li>Takeaway: Abstractions leak. Model them better (e.g. with time)</li>
-<li>Inventing languages is dope.</li>
+  <li>Takeaway: Abstractions leak. Model them better (e.g. with time)</li>
+  <li>Inventing languages is dope.</li>
 </ul>
 
+<h3 id="have-your-causality-and-your-wall-clocks-too-jon-moore">Have your Causality and your Wall Clocks Too (Jon Moore)</h3>
 
-<h3>Have your Causality and your Wall Clocks Too (Jon Moore)</h3>
-
-<iframe width="560" height="315"
-src="https://www.youtube.com/embed/YqNGbvFHoKM" frameborder="0"
-allowfullscreen></iframe>
-
+<iframe width="560" height="315" src="https://www.youtube.com/embed/YqNGbvFHoKM" frameborder="0" allowfullscreen=""></iframe>
 
 <ul>
-<li>Take concept of Lamport clocks and extend them with hybrid clocks.</li>
-<li>And extend them one further with: Distributed Monotonic Clocks</li>
-<li>These DMCs use population protocol (flocking) to each actor in the
-system communicate with another, updating their source of truth to
+  <li>Take concept of Lamport clocks and extend them with hybrid clocks.</li>
+  <li>And extend them one further with: Distributed Monotonic Clocks</li>
+  <li>These DMCs use population protocol (flocking) to each actor in the<br />
+system communicate with another, updating their source of truth to<br />
 eventually agree on a media time w/in the group</li>
-<li>DMC components:
-
-<ol>
-<li>Have a reset button by adding epoch bit</li>
-<li>Use flocking (via population protocol) to avoid resets</li>
-<li>Accomodates for some clockless nodes</li>
-<li>Explicitly reflects causality</li>
-</ol>
-</li>
+  <li>DMC components:
+    <ol>
+      <li>Have a reset button by adding epoch bit</li>
+      <li>Use flocking (via population protocol) to avoid resets</li>
+      <li>Accomodates for some clockless nodes</li>
+      <li>Explicitly reflects causality</li>
+    </ol>
+  </li>
 </ul>
 
+<h3 id="building-isomorphic-web-apps-with-react---elyse-gordon">Building Isomorphic Web Apps with React - Elyse Gordon</h3>
 
-<h3>Building Isomorphic Web Apps with React &ndash; Elyse Gordon</h3>
-
-<iframe width="560" height="315"
-src="https://www.youtube.com/embed/QPXNb6bl7hc" frameborder="0"
-allowfullscreen></iframe>
-
+<iframe width="560" height="315" src="https://www.youtube.com/embed/QPXNb6bl7hc" frameborder="0" allowfullscreen=""></iframe>
 
 <ul>
-<li>Vevo needed better SEO for SPAs. Old soln was to snapshot page and upload to S3.</li>
-<li>Beneficial for SEO crawlers</li>
-<li>React in frontend. Node in backend.</li>
-<li>Vevo-developed <a href="">pellet</a> project as Flux-like framework to organize
+  <li>Vevo needed better SEO for SPAs. Old soln was to snapshot page and upload to S3.</li>
+  <li>Beneficial for SEO crawlers</li>
+  <li>React in frontend. Node in backend.</li>
+  <li>Vevo-developed <a href="">pellet</a> project as Flux-like framework to organize<br />
 files.</li>
-<li>Webpack aliases/shims</li>
-<li>Server hands off to browser, bootstraps React in client.</li>
-<li>Alternatives: Relay, Ember</li>
+  <li>Webpack aliases/shims</li>
+  <li>Server hands off to browser, bootstraps React in client.</li>
+  <li>Alternatives: Relay, Ember</li>
 </ul>
 
+<h3 id="designing-for-the-worst-case-peter-bailis-pbailis">Designing for the Worst Case: Peter Bailis (@pbailis)</h3>
 
-<h3>Designing for the Worst Case: Peter Bailis (@pbailis)</h3>
-
-<iframe width="560" height="315"
-src="https://www.youtube.com/embed/ZGIAypUUwoQ" frameborder="0"
-allowfullscreen></iframe>
-
+<iframe width="560" height="315" src="https://www.youtube.com/embed/ZGIAypUUwoQ" frameborder="0" allowfullscreen=""></iframe>
 
 <ul>
-<li>Designing for worst case often penalizes average case</li>
-<li>But what if designing for the worst case actually helps avg case?</li>
-<li>Examples from dstbd systems:
-
-<ul>
-<li>Worst case of disconnected data centers, packet loss/link loss. Fix
-by introducing coordination-free protocols. Boom, you&rsquo;ve now made your
+  <li>Designing for worst case often penalizes average case</li>
+  <li>But what if designing for the worst case actually helps avg case?</li>
+  <li>Examples from dstbd systems:
+    <ul>
+      <li>Worst case of disconnected data centers, packet loss/link loss. Fix<br />
+by introducing coordination-free protocols. Boom, you’ve now made your<br />
 network more scalable, performant, resistent to downtime.</li>
-<li>Worst case: hard to coordinate a distributed transaction between
-services. What do you do? You implement something like buffered writes
+      <li>Worst case: hard to coordinate a distributed transaction between<br />
+services. What do you do? You implement something like buffered writes<br />
 out of process.
-
-<ul>
-<li>CRDT, RAMP, HAT, bloom</li>
-<li>Suddenly, you have fault tolerance</li>
-</ul>
-</li>
-<li>Tail latency problem in microservices: the more microservices you
+        <ul>
+          <li>CRDT, RAMP, HAT, bloom</li>
+          <li>Suddenly, you have fault tolerance</li>
+        </ul>
+      </li>
+      <li>Tail latency problem in microservices: the more microservices you<br />
 query, the higher the probability of hitting a slow server response.
-
-<ul>
-<li>Your service&rsquo;s corner case is your user&rsquo;s average case</li>
-</ul>
-</li>
-<li>HCI: accessibility guidelines in W3C lift standards for all. Make
-webpages easier to navigate. Side effect of better page performance,
+        <ul>
+          <li>Your service’s corner case is your user’s average case</li>
+        </ul>
+      </li>
+      <li>HCI: accessibility guidelines in W3C lift standards for all. Make<br />
+webpages easier to navigate. Side effect of better page performance,<br />
 higher conversion.</li>
-<li>Netflix designing CC subtitles also benefits other users.</li>
-<li>Curb cuts in the real world to help ADA/mobility-assisted folks also
+      <li>Netflix designing CC subtitles also benefits other users.</li>
+      <li>Curb cuts in the real world to help ADA/mobility-assisted folks also<br />
 benefit normal folks too</li>
-</ul>
-</li>
-<li>Best has pitfalls too: your notion of best may be hard to hit, or
-risky. You may want to optimize for &ldquo;stable&rdquo; solution. (Robust
+    </ul>
+  </li>
+  <li>Best has pitfalls too: your notion of best may be hard to hit, or<br />
+risky. You may want to optimize for “stable” solution. (Robust<br />
 optimization)</li>
-<li>When to design for worst case?
-
-<ul>
-<li>common corner cases</li>
-<li>environmental conditions vary</li>
-<li>&ldquo;normal&rdquo; isn&rsquo;t normal</li>
-</ul>
-</li>
-<li>worst forces a conversation
-
-<ul>
-<li>how do we plan for failures?</li>
-<li>what is our scale-out strategy?</li>
-<li>how do we audit failures? data breaches?</li>
-</ul>
-</li>
+  <li>When to design for worst case?
+    <ul>
+      <li>common corner cases</li>
+      <li>environmental conditions vary</li>
+      <li>“normal” isn’t normal</li>
+    </ul>
+  </li>
+  <li>worst forces a conversation
+    <ul>
+      <li>how do we plan for failures?</li>
+      <li>what is our scale-out strategy?</li>
+      <li>how do we audit failures? data breaches?</li>
+    </ul>
+  </li>
 </ul>
 
-
-<h3>Ideology by Gary Bernardt</h3>
-
-<ul>
-<li>Rumsfeld: known knowns, known unknowns, and unknown unknowns.</li>
-<li>Ideology is the thing you know you do not know you know</li>
-<li>Conflict between typed vs dynamic programmers:
+<h3 id="ideology-by-gary-bernardt">Ideology by Gary Bernardt</h3>
 
 <ul>
-<li>Typed: &ldquo;I don&rsquo;t need tests, I have types&rdquo;</li>
-<li>Dynamic: &ldquo;I write tests, so I don&rsquo;t need types&rdquo;</li>
-</ul>
-</li>
-<li>In reality, they are solving different places in the problem domain,
-but they have different beliefs about the world that are hidden in the
+  <li>Rumsfeld: known knowns, known unknowns, and unknown unknowns.</li>
+  <li>Ideology is the thing you know you do not know you know</li>
+  <li>Conflict between typed vs dynamic programmers:
+    <ul>
+      <li>Typed: “I don’t need tests, I have types”</li>
+      <li>Dynamic: “I write tests, so I don’t need types”</li>
+    </ul>
+  </li>
+  <li>In reality, they are solving different places in the problem domain,<br />
+but they have different beliefs about the world that are hidden in the<br />
 shadows:
+    <ul>
+      <li>Typed: “Correctness comes solely from types”</li>
+      <li>Dynamic: “Correctness comes solely from example”</li>
+    </ul>
+  </li>
+  <li>“I need nulls” -&gt; You believe nulls are the only way to represent absence</li>
+  <li>“Immutable data structures are slow” -&gt; You believe all immutable types are slow</li>
+  <li>“GC is impractical” -&gt; you believe GC algorithms won’t get faster.</li>
+  <li>Read CSE 341 Type systems, Dan Grossman</li>
+</ul>
+
+<h3 id="building-scalable-stateful-services-caitlin-mccaffrey">Building Scalable, Stateful Services: Caitlin McCaffrey</h3>
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/H0i_bXKwujQ" frameborder="0" allowfullscreen=""></iframe>
+
+<h4 id="sticky-connection-always-talk-to-the-same-machine">Sticky connection: always talk to the same machine</h4>
+<p>Building sticky connections:<br />
+- persistent connections (load balancing cannot rebalance server)<br />
+- implement backpressure (d/c connection)</p>
+
+<h4 id="dynamic-cluster-membership">dynamic cluster membership</h4>
 
 <ul>
-<li>Typed: &ldquo;Correctness comes solely from types&rdquo;</li>
-<li>Dynamic: &ldquo;Correctness comes solely from example&rdquo;</li>
-</ul>
-</li>
-<li>&ldquo;I need nulls&rdquo; &ndash;> You believe nulls are the only way to represent absence</li>
-<li>&ldquo;Immutable data structures are slow&rdquo; &ndash;> You believe all immutable types are slow</li>
-<li>&ldquo;GC is impractical&rdquo; &ndash;> you believe GC algorithms won&rsquo;t get faster.</li>
-<li>Read CSE 341 Type systems, Dan Grossman</li>
-</ul>
-
-
-<h3>Building Scalable, Stateful Services: Caitlin McCaffrey</h3>
-
-<iframe width="560" height="315"
-src="https://www.youtube.com/embed/H0i_bXKwujQ" frameborder="0"
-allowfullscreen></iframe>
-
-
-<h4>Sticky connection: always talk to the same machine</h4>
-
-<p>Building sticky connections:
-&ndash; persistent connections (load balancing cannot rebalance server)
-&ndash; implement backpressure (d/c connection)</p>
-
-<h4>dynamic cluster membership</h4>
-
-<ul>
-<li>gossip protocols &ndash;> availability</li>
-<li>consensus systems &ndash;> consistency
+  <li>gossip protocols -&gt; availability</li>
+  <li>consensus systems -&gt; consistency<br />
 (everybody needs to have the same worldview.</li>
 </ul>
 
+<h4 id="work-distribution">work distribution:</h4>
 
-<h4>work distribution:</h4>
-
-<h5>random:</h5>
-
+<h5 id="random">random:</h5>
 <ul>
-<li>write anywhere, read from all</li>
+  <li>write anywhere, read from all</li>
 </ul>
 
+<h5 id="consistent-hashing-on-session-id">consistent hashing: on session ID</h5>
 
-<h5>consistent hashing: on session ID</h5>
-
-<p>hash space &ndash;> node
+<p>hash space -&gt; node<br />
 dynamoDB, Manhattan</p>
 
 <p>con: can have hotspots, could have uneven distribution of resources cannot move work.</p>
 
-<h4>distributed hash table</h4>
-
+<h4 id="distributed-hash-table">distributed hash table</h4>
 <p>statefully store hash</p>
 
-<h4>Real world</h4>
+<h4 id="real-world">Real world</h4>
+<p>Scuba (Facebook)<br />
+- distributed in-memory DB</p>
 
-<p>Scuba (Facebook)
-&ndash; distributed in-memory DB</p>
+<p>Ringpop (Uber)<br />
+- Node.js swim gossip protocol, consistent hashing</p>
 
-<p>Ringpop (Uber)
-&ndash; Node.js swim gossip protocol, consistent hashing</p>
+<p>Orleans (MS Research)<br />
+- actor model<br />
+- gossip<br />
+- consistent hash<br />
+- distributed hashtable</p>
 
-<p>Orleans (MS Research)
-&ndash; actor model
-&ndash; gossip
-&ndash; consistent hash
-&ndash; distributed hashtable</p>
+<h3 id="idalin-abby-bob-from-protesting-to-programming-becoming-a-tech-activist">Idalin “Abby” Bobé: From Protesting to Programming: Becoming a Tech Activist</h3>
 
-<h3>Idalin &ldquo;Abby&rdquo; Bobé: From Protesting to Programming: Becoming a Tech Activist</h3>
-
-<iframe width="560" height="315"
-src="https://www.youtube.com/embed/gy82S8tjJX8" frameborder="0"
-allowfullscreen></iframe>
-
+<iframe width="560" height="315" src="https://www.youtube.com/embed/gy82S8tjJX8" frameborder="0" allowfullscreen=""></iframe>
 
 <ul>
-<li>Tech to resist exploitation</li>
-<li>Technologists as activists</li>
-<li>Idalin Bobé &ndash;> Changed name to &ldquo;Abby&rdquo; to get a job.</li>
-<li>Pastor Jenkins &ndash; magnifying glass vs paper</li>
-<li>Philadelphia Partnership Program:
-
-<ul>
-<li>1st to college</li>
-<li>work &lt;> school</li>
-</ul>
-</li>
-<li>Difficult to balance.</li>
-<li>Mills MBA, CS</li>
-<li>Joined Black Girls Code
-
-<ul>
-<li>Apply technology in the right way</li>
-</ul>
-</li>
-<li>Ferguson happened
-
-<ul>
-<li>Thoughtworkers joined on the ground</li>
-<li>Hands Up United: www.handsupunited.org</li>
-</ul>
-</li>
-<li>&ldquo;Do not be led by digital metrics&rdquo; &ndash; even though the activists had
-digital tooling, the tools were being used against activists. Phone
+  <li>Tech to resist exploitation</li>
+  <li>Technologists as activists</li>
+  <li>Idalin Bobé -&gt; Changed name to “Abby” to get a job.</li>
+  <li>Pastor Jenkins - magnifying glass vs paper</li>
+  <li>Philadelphia Partnership Program:
+    <ul>
+      <li>1st to college</li>
+      <li>work &lt;&gt; school</li>
+    </ul>
+  </li>
+  <li>Difficult to balance.</li>
+  <li>Mills MBA, CS</li>
+  <li>Joined Black Girls Code
+    <ul>
+      <li>Apply technology in the right way</li>
+    </ul>
+  </li>
+  <li>Ferguson happened
+    <ul>
+      <li>Thoughtworkers joined on the ground</li>
+      <li>Hands Up United: www.handsupunited.org</li>
+    </ul>
+  </li>
+  <li>“Do not be led by digital metrics” - even though the activists had<br />
+digital tooling, the tools were being used against activists. Phone<br />
 calls, chats monitored. Movement tracked.</li>
-<li>New group starting up in St. Louis called &ldquo;Ray Clark, Sr.&rdquo; &ndash; named
-after a black man who played a strong role in the founding of Silicon
+  <li>New group starting up in St. Louis called “Ray Clark, Sr.” - named<br />
+after a black man who played a strong role in the founding of Silicon<br />
 Valley.</li>
-<li>21st century technologists need 21st century skillsets.</li>
-<li>Dream Defenders</li>
-<li>&ldquo;it is our duty to fight for our freedom/it is our duty to win/we must
-love and support one another/we have nothing to lose but our chains&rdquo;</li>
+  <li>21st century technologists need 21st century skillsets.</li>
+  <li>Dream Defenders</li>
+  <li>“it is our duty to fight for our freedom/it is our duty to win/we must<br />
+love and support one another/we have nothing to lose but our chains”</li>
 </ul>
-
 ]]></content>
   </entry>
   

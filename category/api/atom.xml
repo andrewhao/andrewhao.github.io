@@ -4,7 +4,7 @@
   <title><![CDATA[Category: api | The Sweet Spot]]></title>
   <link href="http://www.g9labs.com/category/api/atom.xml" rel="self"/>
   <link href="http://www.g9labs.com/"/>
-  <updated>2016-06-24T11:31:59-07:00</updated>
+  <updated>2016-06-29T16:33:32-07:00</updated>
   <id>http://www.g9labs.com/</id>
   <author>
     <name><![CDATA[Andrew Hao]]></name>
@@ -18,118 +18,119 @@
     <link href="http://www.g9labs.com/2013/12/27/ember-data-rails-cors-and-you/"/>
     <updated>2013-12-27T16:22:00-08:00</updated>
     <id>http://www.g9labs.com/2013/12/27/ember-data-rails-cors-and-you</id>
-    <content type="html"><![CDATA[<p>I&rsquo;m starting up a new personal project involving Ember-Data and Rails
-(more to come). The gist of it is that it&rsquo;s a pure frontend app engine
-built in Yeoman and Grunt, and designed to talk to a remote API service
+    <content type="html"><![CDATA[<p>I’m starting up a new personal project involving Ember-Data and Rails<br />
+(more to come). The gist of it is that it’s a pure frontend app engine<br />
+built in Yeoman and Grunt, and designed to talk to a remote API service<br />
 built on Rails.</p>
 
-<p>So since it&rsquo;s a remote API, I&rsquo;ve got to enable CORS, right?</p>
+<p>So since it’s a remote API, I’ve got to enable CORS, right?</p>
 
-<h2>Install CORS via rack-cors</h2>
+<h2 id="install-cors-via-rack-cors">Install CORS via rack-cors</h2>
 
-<p><code>ruby Gemfile.rb
-gem "rack-cors", :require =&gt; "rack/cors"
-</code></p>
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n1" name="n1">1</a></span><span style="color:#777"># Gemfile</span>
+<span class="line-numbers"><a href="#n2" name="n2">2</a></span>gem <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">rack-cors</span><span style="color:#710">&quot;</span></span>, <span style="color:#A60">:require</span> =&gt; <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">rack/cors</span><span style="color:#710">&quot;</span></span>
+</pre></div>
+</div>
+</div>
 
-<p>```ruby config/application.rb
-config.middleware.use Rack::Cors do
-  allow do</p>
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"> <a href="#n1" name="n1">1</a></span><span style="color:#777"># config/application.rb</span>
+<span class="line-numbers"> <a href="#n2" name="n2">2</a></span>config.middleware.use <span style="color:#036;font-weight:bold">Rack</span>::<span style="color:#036;font-weight:bold">Cors</span> <span style="color:#080;font-weight:bold">do</span>
+<span class="line-numbers"> <a href="#n3" name="n3">3</a></span>  allow <span style="color:#080;font-weight:bold">do</span>
+<span class="line-numbers"> <a href="#n4" name="n4">4</a></span>    origins <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">*</span><span style="color:#710">&quot;</span></span>
+<span class="line-numbers"> <a href="#n5" name="n5">5</a></span>
+<span class="line-numbers"> <a href="#n6" name="n6">6</a></span>    resource <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">*</span><span style="color:#710">&quot;</span></span>,
+<span class="line-numbers"> <a href="#n7" name="n7">7</a></span>      <span style="color:#A60">:headers</span> =&gt; <span style="color:#A60">:any</span>,
+<span class="line-numbers"> <a href="#n8" name="n8">8</a></span>      <span style="color:#A60">:methods</span> =&gt; [<span style="color:#A60">:get</span>, <span style="color:#A60">:post</span>, <span style="color:#A60">:put</span>, <span style="color:#A60">:delete</span>, <span style="color:#A60">:options</span>, <span style="color:#A60">:patch</span>]
+<span class="line-numbers"> <a href="#n9" name="n9">9</a></span>    <span style="color:#080;font-weight:bold">end</span>
+<span class="line-numbers"><strong><a href="#n10" name="n10">10</a></strong></span>
+<span class="line-numbers"><a href="#n11" name="n11">11</a></span>  allow <span style="color:#080;font-weight:bold">do</span>
+<span class="line-numbers"><a href="#n12" name="n12">12</a></span>    origins <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">*</span><span style="color:#710">&quot;</span></span>
+<span class="line-numbers"><a href="#n13" name="n13">13</a></span>    resource <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">/public/*</span><span style="color:#710">&quot;</span></span>,
+<span class="line-numbers"><a href="#n14" name="n14">14</a></span>      <span style="color:#A60">:headers</span> =&gt; <span style="color:#A60">:any</span>,
+<span class="line-numbers"><a href="#n15" name="n15">15</a></span>      <span style="color:#A60">:methods</span> =&gt; <span style="color:#A60">:get</span>
+<span class="line-numbers"><a href="#n16" name="n16">16</a></span>  <span style="color:#080;font-weight:bold">end</span>
+<span class="line-numbers"><a href="#n17" name="n17">17</a></span><span style="color:#080;font-weight:bold">end</span>
+</pre></div>
+</div>
+</div>
 
-<pre><code>origins "*"
-
-resource "*",
-  :headers =&gt; :any,
-  :methods =&gt; [:get, :post, :put, :delete, :options, :patch]
-end
-</code></pre>
-
-<p>  allow do</p>
-
-<pre><code>origins "*"
-resource "/public/*",
-  :headers =&gt; :any,
-  :methods =&gt; :get
-</code></pre>
-
-<p>  end
-end
-```</p>
-
-<p>A very naive implementation with zero security whatsoever. Anyways.
+<p>A very naive implementation with zero security whatsoever. Anyways.<br />
 Onward!</p>
 
-<h2>Get Ember-Data DS.RESTAdapter talkin' CORS</h2>
+<h2 id="get-ember-data-dsrestadapter-talkin-cors">Get Ember-Data DS.RESTAdapter talkin’ CORS</h2>
 
-<p>I saw conflicting documentation on Ember-Data and CORS &mdash; it seemed like
+<p>I saw conflicting documentation on Ember-Data and CORS – it seemed like<br />
 it should support CORS out of the box. Apparently this is not so.</p>
 
-<p>In my ember app&rsquo;s <code>store.js</code> (or anywhere your app loads before the
+<p>In my ember app’s <code>store.js</code> (or anywhere your app loads before the<br />
 application adapter is defined, do this:</p>
 
-<p>```javascript store.js
-$.ajaxSetup({
-  crossDomain: true,
-  xhrFields: {</p>
+<div class="language-javascript highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"> <a href="#n1" name="n1">1</a></span><span style="color:#F00;background-color:#FAA">#</span> store.js
+<span class="line-numbers"> <a href="#n2" name="n2">2</a></span><span style="color:#369;font-weight:bold">$</span>.ajaxSetup({
+<span class="line-numbers"> <a href="#n3" name="n3">3</a></span>  <span style="color:#606">crossDomain</span>: <span style="color:#069">true</span>,
+<span class="line-numbers"> <a href="#n4" name="n4">4</a></span>  <span style="color:#606">xhrFields</span>: {
+<span class="line-numbers"> <a href="#n5" name="n5">5</a></span>    <span style="color:#606">withCredentials</span>: <span style="color:#069">true</span>
+<span class="line-numbers"> <a href="#n6" name="n6">6</a></span>  }
+<span class="line-numbers"> <a href="#n7" name="n7">7</a></span>});
+<span class="line-numbers"> <a href="#n8" name="n8">8</a></span>
+<span class="line-numbers"> <a href="#n9" name="n9">9</a></span>Hendrix.Store = DS.Store.extend();
+<span class="line-numbers"><strong><a href="#n10" name="n10">10</a></strong></span>Hendrix.ApplicationAdapter = DS.RESTAdapter.extend({
+<span class="line-numbers"><a href="#n11" name="n11">11</a></span>  <span style="color:#606">host</span>: <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">http://localhost:3000</span><span style="color:#710">&quot;</span></span>,
+<span class="line-numbers"><a href="#n12" name="n12">12</a></span>})
+</pre></div>
+</div>
+</div>
 
-<pre><code>withCredentials: true
-</code></pre>
-
-<p>  }
-});</p>
-
-<p>Hendrix.Store = DS.Store.extend();
-Hendrix.ApplicationAdapter = DS.RESTAdapter.extend({
-  host: &ldquo;<a href="http://localhost:3000">http://localhost:3000</a>&rdquo;,
-})
-```</p>
-
-<p><a href="http://api.jquery.com/jQuery.ajaxSetup/"><code>$.ajaxSetup</code></a>, though its
-usage is not recommended, is designed to set global options on the
+<p><a href="http://api.jquery.com/jQuery.ajaxSetup/"><code>$.ajaxSetup</code></a>, though its<br />
+usage is not recommended, is designed to set global options on the<br />
 jQuery <code>ajax</code> object. It provides some information on the options you can modify.</p>
 
-<p>Why doesn&rsquo;t Ember support this out of the box? I think it&rsquo;s because they
+<p>Why doesn’t Ember support this out of the box? I think it’s because they<br />
 cannot support IE, where one must use an XDR object to support CORS.</p>
 
-<p>I&rsquo;ve posted an <a href="http://discuss.emberjs.com/t/ember-data-and-cors/3690">Ember follow-up question in the
+<p>I’ve posted an <a href="http://discuss.emberjs.com/t/ember-data-and-cors/3690">Ember follow-up question in the<br />
 forums</a> for discussion.</p>
 
-<h2>Get Rails talking JSON out of its mimetype confusion.</h2>
+<h2 id="get-rails-talking-json-out-of-its-mimetype-confusion">Get Rails talking JSON out of its mimetype confusion.</h2>
 
-<p>Did you know that if you rely on the <code>Accepts:</code> header in HTTP that
-Rails does not obey its ordering<code>*</code>? I was trying to figure out why my
-Rails controllers were trying to render HTML instead of JSON when the
+<p>Did you know that if you rely on the <code>Accepts:</code> header in HTTP that<br />
+Rails does not obey its ordering<code>*</code>? I was trying to figure out why my<br />
+Rails controllers were trying to render HTML instead of JSON when the<br />
 headers were:</p>
 
 <p><code>'Accept: application/json, text/javascript, */*; q=0.01'</code></p>
 
-<p>A <a href="https://github.com/rails/rails/issues/9940">very long winded
-discussion</a> on the Rails
-project reveals that, well, nobody has it figured out yet. Most modern
-browsers do obey <code>Accepts:</code> specificity, but for the sake of older
-browser compatibility, the best practice for browsers is still to return
+<p>A <a href="https://github.com/rails/rails/issues/9940">very long winded<br />
+discussion</a> on the Rails<br />
+project reveals that, well, nobody has it figured out yet. Most modern<br />
+browsers do obey <code>Accepts:</code> specificity, but for the sake of older<br />
+browser compatibility, the best practice for browsers is still to return<br />
 HTML when <code>*/*</code> is specified.</p>
 
-<p>What does this mean for Rails developers who want to use <code>Accepts:</code>
-mimetype lists? Well, we either wait for the Rails projects to support
-mimetype specificity (and for older browsers to die out), or we are
+<p>What does this mean for Rails developers who want to use <code>Accepts:</code><br />
+mimetype lists? Well, we either wait for the Rails projects to support<br />
+mimetype specificity (and for older browsers to die out), or we are<br />
 encouraged to include the format explicitly in the URI.</p>
 
-<p>I chose to have Ember append the <code>.json</code> suffix to the URL, thanks to
-this <a href="http://stackoverflow.com/questions/13648807/ds-model-url-not-working-in-ember-js">SO
+<p>I chose to have Ember append the <code>.json</code> suffix to the URL, thanks to<br />
+this <a href="http://stackoverflow.com/questions/13648807/ds-model-url-not-working-in-ember-js">SO<br />
 post</a></p>
 
-<p><code>``javascript store.js
-Hendrix.ApplicationAdapter = DS.RESTAdapter.extend({
-  host: "http://localhost:3000",
-  // Force ember-data to append the</code>json` suffix
-  buildURL: function(record, suffix) {</p>
-
-<pre><code>return this._super(record, suffix) + ".json";
-</code></pre>
-
-<p>  }
-})
-```</p>
+<div class="language-javascript highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n1" name="n1">1</a></span><span style="color:#F00;background-color:#FAA">#</span> store.js
+<span class="line-numbers"><a href="#n2" name="n2">2</a></span>Hendrix.ApplicationAdapter = DS.RESTAdapter.extend({
+<span class="line-numbers"><a href="#n3" name="n3">3</a></span>  <span style="color:#606">host</span>: <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">http://localhost:3000</span><span style="color:#710">&quot;</span></span>,
+<span class="line-numbers"><a href="#n4" name="n4">4</a></span>  <span style="color:#777">// Force ember-data to append the `json` suffix</span>
+<span class="line-numbers"><a href="#n5" name="n5">5</a></span>  <span style="color:#06B;font-weight:bold">buildURL</span>: <span style="color:#080;font-weight:bold">function</span>(record, suffix) {
+<span class="line-numbers"><a href="#n6" name="n6">6</a></span>    <span style="color:#080;font-weight:bold">return</span> <span style="color:#950">this</span>._super(record, suffix) + <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">.json</span><span style="color:#710">&quot;</span></span>;
+<span class="line-numbers"><a href="#n7" name="n7">7</a></span>  }
+<span class="line-numbers"><a href="#n8" name="n8">8</a></span>})
+</pre></div>
+</div>
+</div>
 
 <p>More to come how how this app works.</p>
 ]]></content>

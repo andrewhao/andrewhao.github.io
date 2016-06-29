@@ -4,7 +4,7 @@
   <title><![CDATA[Category: tdd | The Sweet Spot]]></title>
   <link href="http://www.g9labs.com/category/tdd/atom.xml" rel="self"/>
   <link href="http://www.g9labs.com/"/>
-  <updated>2016-06-24T11:31:59-07:00</updated>
+  <updated>2016-06-29T16:33:32-07:00</updated>
   <id>http://www.g9labs.com/</id>
   <author>
     <name><![CDATA[Andrew Hao]]></name>
@@ -18,133 +18,124 @@
     <link href="http://www.g9labs.com/2014/06/21/mocks-arent-stubs/"/>
     <updated>2014-06-21T17:55:00-07:00</updated>
     <id>http://www.g9labs.com/2014/06/21/mocks-arent-stubs</id>
-    <content type="html"><![CDATA[<p>With the famed &ldquo;TDD is dead&rdquo; debate around the Rails community largely
-coming to an end, I found myself referencing Martin Fowler&rsquo;s article,
-<a href="http://martinfowler.com/articles/mocksArentStubs.html">Mocks Aren&rsquo;t Stubs</a> a good deal, trying to make sense of it in terms of how I write tests and code.</p>
+    <content type="html"><![CDATA[<p>With the famed “TDD is dead” debate around the Rails community largely<br />
+coming to an end, I found myself referencing Martin Fowler’s article,<br />
+<a href="http://martinfowler.com/articles/mocksArentStubs.html">Mocks Aren’t Stubs</a> a good deal, trying to make sense of it in terms of how I write tests and code.</p>
 
-<p>In this post I&rsquo;m going to talk about mocking and stubbing and their
-roots, paraphrase Fowler in an attempt to explain their differences, and
-walk through a couple of code examples. In each case, I&rsquo;m going to
+<p>In this post I’m going to talk about mocking and stubbing and their<br />
+roots, paraphrase Fowler in an attempt to explain their differences, and<br />
+walk through a couple of code examples. In each case, I’m going to<br />
 attempt to build this example out in Ruby and RSpec 3.</p>
 
-<p>Let&rsquo;s assume this implementation in our code for a <code>BookUpdater</code> object in Ruby. Its job is to call through its collaborating <code>ApiClient</code>, which wraps some aspect of an API that we want to call.</p>
+<p>Let’s assume this implementation in our code for a <code>BookUpdater</code> object in Ruby. Its job is to call through its collaborating <code>ApiClient</code>, which wraps some aspect of an API that we want to call.</p>
 
-<p>```ruby</p>
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"> <a href="#n1" name="n1">1</a></span><span style="color:#777"># Update a book's metadata in our systems.</span>
+<span class="line-numbers"> <a href="#n2" name="n2">2</a></span><span style="color:#080;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">BookUpdater</span>
+<span class="line-numbers"> <a href="#n3" name="n3">3</a></span>  attr_accessor <span style="color:#A60">:book</span>, <span style="color:#A60">:api_client</span>, <span style="color:#A60">:response</span>
+<span class="line-numbers"> <a href="#n4" name="n4">4</a></span>
+<span class="line-numbers"> <a href="#n5" name="n5">5</a></span>  <span style="color:#080;font-weight:bold">def</span> <span style="color:#06B;font-weight:bold">initialize</span>(book, api_client)
+<span class="line-numbers"> <a href="#n6" name="n6">6</a></span>    <span style="color:#33B">@book</span> = book
+<span class="line-numbers"> <a href="#n7" name="n7">7</a></span>    <span style="color:#33B">@api_client</span> = api_client
+<span class="line-numbers"> <a href="#n8" name="n8">8</a></span>  <span style="color:#080;font-weight:bold">end</span>
+<span class="line-numbers"> <a href="#n9" name="n9">9</a></span>
+<span class="line-numbers"><strong><a href="#n10" name="n10">10</a></strong></span>  <span style="color:#080;font-weight:bold">def</span> <span style="color:#06B;font-weight:bold">updated?</span>
+<span class="line-numbers"><a href="#n11" name="n11">11</a></span>    !!response.success?
+<span class="line-numbers"><a href="#n12" name="n12">12</a></span>  <span style="color:#080;font-weight:bold">end</span>
+<span class="line-numbers"><a href="#n13" name="n13">13</a></span>
+<span class="line-numbers"><a href="#n14" name="n14">14</a></span>  <span style="color:#080;font-weight:bold">def</span> <span style="color:#06B;font-weight:bold">update!</span>
+<span class="line-numbers"><a href="#n15" name="n15">15</a></span>    response = api_client.call_update_api(book)
+<span class="line-numbers"><a href="#n16" name="n16">16</a></span>  <span style="color:#080;font-weight:bold">end</span>
+<span class="line-numbers"><a href="#n17" name="n17">17</a></span><span style="color:#080;font-weight:bold">end</span>
+</pre></div>
+</div>
+</div>
 
-<h1>Update a book&rsquo;s metadata in our systems.</h1>
+<h2 id="what-they-are">What they are</h2>
 
-<p>class BookUpdater
-  attr_accessor :book, :api_client, :response</p>
+<h3 id="mocks">Mocks</h3>
 
-<p>  def initialize(book, api_client)</p>
-
-<pre><code>@book = book
-@api_client = api_client
-</code></pre>
-
-<p>  end</p>
-
-<p>  def updated?</p>
-
-<pre><code>!!response.success?
-</code></pre>
-
-<p>  end</p>
-
-<p>  def update!</p>
-
-<pre><code>response = api_client.call_update_api(book)
-</code></pre>
-
-<p>  end
-end
-```</p>
-
-<h2>What they are</h2>
-
-<h3>Mocks</h3>
-
-<p>Mocks are fake objects that verify that they have received messages. In
+<p>Mocks are fake objects that verify that they have received messages. In<br />
 RSpec, we traditionally use the <code>mock</code> object utility to create these objects.</p>
 
-<p>```ruby
-api_client = mock(&lsquo;api client&rsquo;)
-book = Book.new</p>
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n1" name="n1">1</a></span>api_client = mock(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">api client</span><span style="color:#710">'</span></span>)
+<span class="line-numbers"><a href="#n2" name="n2">2</a></span>book = <span style="color:#036;font-weight:bold">Book</span>.new
+<span class="line-numbers"><a href="#n3" name="n3">3</a></span>
+<span class="line-numbers"><a href="#n4" name="n4">4</a></span>expect(api_client).to receive(<span style="color:#A60">:call_update_api</span>).with(book).and_return(<span style="color:#069">true</span>)
+<span class="line-numbers"><a href="#n5" name="n5">5</a></span>
+<span class="line-numbers"><a href="#n6" name="n6">6</a></span>subject = <span style="color:#036;font-weight:bold">BookUpdater</span>.new(api_client, book)
+<span class="line-numbers"><a href="#n7" name="n7">7</a></span>subject.list!
+</pre></div>
+</div>
+</div>
 
-<p>expect(api_client).to receive(:call_update_api).with(book).and_return(true)</p>
+<p>What’s happening here? RSpec creates a mock <code>api_client</code> object that will verify that, after the test case executes, it has received the <code>:call_update_api</code> message with the correct arguments.</p>
 
-<p>subject = BookUpdater.new(api_client, book)
-subject.list!
-```</p>
+<p>The main point of this style of testing is <em>behavior verification</em> – that is, that your object is behaving correctly in relation with its collaborators.</p>
 
-<p>What&rsquo;s happening here? RSpec creates a mock <code>api_client</code> object that will verify that, after the test case executes, it has received the <code>:call_update_api</code> message with the correct arguments.</p>
+<h3 id="double">Double</h3>
 
-<p>The main point of this style of testing is <em>behavior verification</em> &mdash; that is, that your object is behaving correctly in relation with its collaborators.</p>
+<p>Let’s take a look at a <code>double</code> – also known as a <code>stub</code>. A <code>double</code> is a fake object that is set up to respond to a certain message with a pre-canned response, each time. Let’s take a look at how I would set up a test using doubles:</p>
 
-<h3>Double</h3>
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n1" name="n1">1</a></span>api_client = double(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">api client</span><span style="color:#710">'</span></span>)
+<span class="line-numbers"><a href="#n2" name="n2">2</a></span>response = double(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">response</span><span style="color:#710">'</span></span>, <span style="color:#A60">:success?</span> =&gt; <span style="color:#069">true</span>)
+<span class="line-numbers"><a href="#n3" name="n3">3</a></span>book = <span style="color:#036;font-weight:bold">Book</span>.new
+<span class="line-numbers"><a href="#n4" name="n4">4</a></span>
+<span class="line-numbers"><a href="#n5" name="n5">5</a></span>allow(api_client).to receive(<span style="color:#A60">:call_update_api</span>).with(book).and_return(response)
+<span class="line-numbers"><a href="#n6" name="n6">6</a></span>expect(subject.update!).to change(subject, <span style="color:#A60">:updated?</span>).from(<span style="color:#069">false</span>).to(<span style="color:#069">true</span>)
+</pre></div>
+</div>
+</div>
 
-<p>Let&rsquo;s take a look at a <code>double</code> &mdash; also known as a <code>stub</code>. A <code>double</code> is a fake object that is set up to respond to a certain message with a pre-canned response, each time. Let&rsquo;s take a look at how I would set up a test using doubles:</p>
-
-<p>```ruby
-api_client = double(&lsquo;api client&rsquo;)
-response = double(&lsquo;response&rsquo;, :success? => true)
-book = Book.new</p>
-
-<p>allow(api_client).to receive(:call_update_api).with(book).and_return(response)
-expect(subject.update!).to change(subject, :updated?).from(false).to(true)
-```</p>
-
-<p>Okay, so what&rsquo;s the big deal here? My test case still passes. Note that
-I had to change my code to focus its expectation on the <code>subject</code>&rsquo;s
+<p>Okay, so what’s the big deal here? My test case still passes. Note that<br />
+I had to change my code to focus its expectation on the <code>subject</code>’s<br />
 state instead of the <code>api_client</code>.</p>
 
-<p>The focus of using doubles is for <em>state verification</em> &mdash; that is, that so long as everybody around me is behaving according to their contracts, the test merely has to verify that internal object state changes correctly.</p>
+<p>The focus of using doubles is for <em>state verification</em> – that is, that so long as everybody around me is behaving according to their contracts, the test merely has to verify that internal object state changes correctly.</p>
 
-<h3>A third way &mdash; real objects</h3>
+<h3 id="a-third-way----real-objects">A third way – real objects</h3>
 
-<p>I won&rsquo;t cover this very much in depth, but with sufficiently simple objects, one could actually instantiate real objects instead of doubles, and test an object against all its collaborators. This is, in my experience, the most common experience of working in Rails + ActiveRecord applications.</p>
+<p>I won’t cover this very much in depth, but with sufficiently simple objects, one could actually instantiate real objects instead of doubles, and test an object against all its collaborators. This is, in my experience, the most common experience of working in Rails + ActiveRecord applications.</p>
 
-<h2>Classic vs Mockist testing: different strokes for different folks</h2>
+<h2 id="classic-vs-mockist-testing-different-strokes-for-different-folks">Classic vs Mockist testing: different strokes for different folks</h2>
 
 <p>As we saw above, the key difference between the mock and the stub (the <code>double</code>). The focus of the test in the mock case is on the messages being sent to the collaborators. The focus of the test when using the double is on the the <code>subject</code> under test (SUT).</p>
 
 <p>Mocks and stubs/doubles are tools that we can use under the larger umbrellas of two TDD philosophical styles: <em>classic</em> vs <em>mockist</em> styles.</p>
 
-<h3>Classic TDD</h3>
+<h3 id="classic-tdd">Classic TDD</h3>
 
 <ul>
-<li>Classic TDDists like using <code>double</code>s or real objects to test collaborators.</li>
-<li>From personal experience, testing classicly is oftentimes the path of least resistance. There isn&rsquo;t expectation setup and verification that mockist testing requires of you.</li>
-<li>Classic TDD sometimes results in creating objects that reveal state &mdash; note how the <code>BookUpdater</code> needed to expose an <code>updated?</code> method.</li>
-<li>Setting up the state of the world prior to your test may be complex, requiring setting up all the objects in your universe. This can be a huge pain (has anybody ever had this problem with overcomplicated Rails models with spidery associations? Raise your hands&hellip;). Classicists may argue that the root cause here is not paying attention to your model architecture, and having too many associations is an antipattern. Alternatively, classicists oftentimes generate test factories (e.g. Rails' FactoryGirl gem) to manage test setup.</li>
-<li>Tests tend to be treatable more like black boxes, testable under isolation (due to verifications on object state) and are more resistant to refactoring.</li>
+  <li>Classic TDDists like using <code>double</code>s or real objects to test collaborators.</li>
+  <li>From personal experience, testing classicly is oftentimes the path of least resistance. There isn’t expectation setup and verification that mockist testing requires of you.</li>
+  <li>Classic TDD sometimes results in creating objects that reveal state – note how the <code>BookUpdater</code> needed to expose an <code>updated?</code> method.</li>
+  <li>Setting up the state of the world prior to your test may be complex, requiring setting up all the objects in your universe. This can be a huge pain (has anybody ever had this problem with overcomplicated Rails models with spidery associations? Raise your hands…). Classicists may argue that the root cause here is not paying attention to your model architecture, and having too many associations is an antipattern. Alternatively, classicists oftentimes generate test factories (e.g. Rails’ FactoryGirl gem) to manage test setup.</li>
+  <li>Tests tend to be treatable more like black boxes, testable under isolation (due to verifications on object state) and are more resistant to refactoring.</li>
 </ul>
 
-
-<h3>Mockist TDD</h3>
+<h3 id="mockist-tdd">Mockist TDD</h3>
 
 <ul>
-<li>Mockist TDD utilizes <code>mock</code>s to verify behavior between objects and collaborators.</li>
-<li>It can be argued to develop &ldquo;purer&rdquo; objects, that are mainly concerned with objects passing messages to each other. Fowler refers to these objects as preferring role-interfaces.</li>
-<li>These tests are easier to set up, as they don&rsquo;t require setting up the state of the world prior to test invocation.</li>
-<li>Tests tend to be more coupled to implementation, and may be more difficult to refactor due to very specific requirements for message passing between collaborators.</li>
-<li>Fowler brings up a point where being a mockist means that your objects prefer to <a href="https://pragprog.com/articles/tell-dont-ask">Tell Don&rsquo;t Ask</a>. A nice side effect of TDA is you generally can avoid Demeter violations.</li>
+  <li>Mockist TDD utilizes <code>mock</code>s to verify behavior between objects and collaborators.</li>
+  <li>It can be argued to develop “purer” objects, that are mainly concerned with objects passing messages to each other. Fowler refers to these objects as preferring role-interfaces.</li>
+  <li>These tests are easier to set up, as they don’t require setting up the state of the world prior to test invocation.</li>
+  <li>Tests tend to be more coupled to implementation, and may be more difficult to refactor due to very specific requirements for message passing between collaborators.</li>
+  <li>Fowler brings up a point where being a mockist means that your objects prefer to <a href="https://pragprog.com/articles/tell-dont-ask">Tell Don’t Ask</a>. A nice side effect of TDA is you generally can avoid Demeter violations.</li>
 </ul>
 
+<h2 id="in-conclusion">In conclusion</h2>
 
-<h2>In conclusion</h2>
+<p>In coming from a classic TDD background, I’ve oftentimes viewed mockist testing with some suspicion, particularly around how much work is involved to bring them about. Over the years, I’ve warmed up to the usage of mockist testing, but have not been diligent enough at doing pure driving TDD with mocks. In reviewing Fowler’s comments, I’m intruiged at the possibilities of mockist TDD in affecting system design, particularly in their natural inclinations toward <a href="http://martinfowler.com/bliki/RoleInterface.html">role interfaces</a>. I look forward to trying pure mockist TDD in a future project.</p>
 
-<p>In coming from a classic TDD background, I&rsquo;ve oftentimes viewed mockist testing with some suspicion, particularly around how much work is involved to bring them about. Over the years, I&rsquo;ve warmed up to the usage of mockist testing, but have not been diligent enough at doing pure driving TDD with mocks. In reviewing Fowler&rsquo;s comments, I&rsquo;m intruiged at the possibilities of mockist TDD in affecting system design, particularly in their natural inclinations toward <a href="http://martinfowler.com/bliki/RoleInterface.html">role interfaces</a>. I look forward to trying pure mockist TDD in a future project.</p>
-
-<h4>Further reading:</h4>
-
+<h4 id="further-reading">Further reading:</h4>
 <ul>
-<li><a href="http://dannorth.net/introducing-bdd/">Dan North: &ldquo;Introducing BDD&rdquo;</a></li>
-<li><a href="http://jamesgolick.com/2010/3/10/on-mocks-and-mockist-testing.html">James Golick: &ldquo;On Mocks and Mockist Testing&rdquo;</a></li>
-<li><a href="http://jmock.org/oopsla2004.pdf">OOPSLA 2004: &ldquo;Mock Roles, Not Objects&rdquo;</a></li>
-<li><a href="http://www.amazon.com/Growing-Object-Oriented-Software-Guided-Tests/dp/0321503627">Amazon: &ldquo;Growing Object Oriented Software, Guided by Tests&rdquo;</a></li>
+  <li><a href="http://dannorth.net/introducing-bdd/">Dan North: “Introducing BDD”</a></li>
+  <li><a href="http://jamesgolick.com/2010/3/10/on-mocks-and-mockist-testing.html">James Golick: “On Mocks and Mockist Testing”</a></li>
+  <li><a href="http://jmock.org/oopsla2004.pdf">OOPSLA 2004: “Mock Roles, Not Objects”</a></li>
+  <li><a href="http://www.amazon.com/Growing-Object-Oriented-Software-Guided-Tests/dp/0321503627">Amazon: “Growing Object Oriented Software, Guided by Tests”</a></li>
 </ul>
-
 ]]></content>
   </entry>
   
@@ -153,85 +144,87 @@ state instead of the <code>api_client</code>.</p>
     <link href="http://www.g9labs.com/2014/06/06/running-mocha-tests-with-es6-amd-modules/"/>
     <updated>2014-06-06T15:11:00-07:00</updated>
     <id>http://www.g9labs.com/2014/06/06/running-mocha-tests-with-es6-amd-modules</id>
-    <content type="html"><![CDATA[<p>In one of my personal projects (<a href="https://github.com/andrewhao/chordmeister">Chordmeister</a>), I&rsquo;ve been trying to
-upgrade the code to be written in <a href="http://wiki.ecmascript.org/doku.php?id=harmony:modules#export_declarations">ES6 modules</a> and transpile down to AMD modules with Square&rsquo;s <a href="https://github.com/square/es6-module-transpiler">very excellent es6-module-transpiler project</a>.</p>
+    <content type="html"><![CDATA[<p>In one of my personal projects (<a href="https://github.com/andrewhao/chordmeister">Chordmeister</a>), I’ve been trying to<br />
+upgrade the code to be written in <a href="http://wiki.ecmascript.org/doku.php?id=harmony:modules#export_declarations">ES6 modules</a> and transpile down to AMD modules with Square’s <a href="https://github.com/square/es6-module-transpiler">very excellent es6-module-transpiler project</a>.</p>
 
-<p>Since I&rsquo;ve already <a href="https://github.com/andrewhao/hendrix">updated</a> an Ember app of mine to try ES6, I figured it was high time to do it on another project.</p>
+<p>Since I’ve already <a href="https://github.com/andrewhao/hendrix">updated</a> an Ember app of mine to try ES6, I figured it was high time to do it on another project.</p>
 
-<h2>Sorry Coffeescript, but I&rsquo;m moving on.</h2>
+<h2 id="sorry-coffeescript-but-im-moving-on">Sorry Coffeescript, but I’m moving on.</h2>
 
-<p>First problem: Coffeescript seems indecisive with respect to ES6
-support. In order to support <code>import</code> or <code>export</code> keywords, I had to
+<p>First problem: Coffeescript seems indecisive with respect to ES6<br />
+support. In order to support <code>import</code> or <code>export</code> keywords, I had to<br />
 wrap the statements in backticks, making the code look like this:</p>
 
-<p><code>``coffeescript
-</code>import ClassifiedLine from &ldquo;chordmeister/classified_line&rdquo;`
-class Parser
-  # Implementation</p>
+<div class="language-coffeescript highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n1" name="n1">1</a></span>`import ClassifiedLine from &quot;chordmeister/classified_line&quot;`
+<span class="line-numbers"><a href="#n2" name="n2">2</a></span>class Parser
+<span class="line-numbers"><a href="#n3" name="n3">3</a></span>  # Implementation
+<span class="line-numbers"><a href="#n4" name="n4">4</a></span>
+<span class="line-numbers"><a href="#n5" name="n5">5</a></span>`export default Parser`
+</pre></div>
+</div>
+</div>
 
-<p><code>export default Parser</code>
-```</p>
+<p>Except this wasn’t being picked up by es6-module-transpiler, since<br />
+Coffeescript wraps the entire declaration in a closure: I was<br />
+finding myself having problems compiling from Coffeescript -&gt; ES5 JS -&gt; ES6 JS.</p>
 
-<p>Except this wasn&rsquo;t being picked up by es6-module-transpiler, since
-Coffeescript wraps the entire declaration in a closure: I was
-finding myself having problems compiling from Coffeescript &ndash;> ES5 JS &ndash;> ES6 JS.</p>
-
-<p>```javascript
-define(&ldquo;chordmeister/parser&rdquo;,
-  [],
-  function() {</p>
-
-<pre><code>"use strict";
-(function() {
-  // Oops, I wasn't transpiled!
-  import ClassifiedLine from 'chordmeister/classified_line';
-  var Parser;
-  Parser = (function() {
-    // Implementation
-  }
-  )();
-  // Oops, I wasn't transpiled!
-  export default Parser;
-  })()
-</code></pre>
-
-<p>  });</p>
-
-<p>```</p>
+<div class="language-javascript highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"> <a href="#n1" name="n1">1</a></span>define(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">chordmeister/parser</span><span style="color:#710">&quot;</span></span>,
+<span class="line-numbers"> <a href="#n2" name="n2">2</a></span>  [],
+<span class="line-numbers"> <a href="#n3" name="n3">3</a></span>  <span style="color:#080;font-weight:bold">function</span>() {
+<span class="line-numbers"> <a href="#n4" name="n4">4</a></span>    <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">use strict</span><span style="color:#710">&quot;</span></span>;
+<span class="line-numbers"> <a href="#n5" name="n5">5</a></span>    (<span style="color:#080;font-weight:bold">function</span>() {
+<span class="line-numbers"> <a href="#n6" name="n6">6</a></span>      <span style="color:#777">// Oops, I wasn't transpiled!</span>
+<span class="line-numbers"> <a href="#n7" name="n7">7</a></span>      <span style="color:#080;font-weight:bold">import</span> ClassifiedLine from <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">chordmeister/classified_line</span><span style="color:#710">'</span></span>;
+<span class="line-numbers"> <a href="#n8" name="n8">8</a></span>      <span style="color:#080;font-weight:bold">var</span> Parser;
+<span class="line-numbers"> <a href="#n9" name="n9">9</a></span>      Parser = (<span style="color:#080;font-weight:bold">function</span>() {
+<span class="line-numbers"><strong><a href="#n10" name="n10">10</a></strong></span>        <span style="color:#777">// Implementation</span>
+<span class="line-numbers"><a href="#n11" name="n11">11</a></span>      }
+<span class="line-numbers"><a href="#n12" name="n12">12</a></span>      )();
+<span class="line-numbers"><a href="#n13" name="n13">13</a></span>      <span style="color:#777">// Oops, I wasn't transpiled!</span>
+<span class="line-numbers"><a href="#n14" name="n14">14</a></span>      <span style="color:#080;font-weight:bold">export</span> <span style="color:#080;font-weight:bold">default</span> Parser;
+<span class="line-numbers"><a href="#n15" name="n15">15</a></span>      })()
+<span class="line-numbers"><a href="#n16" name="n16">16</a></span>  });
+<span class="line-numbers"><a href="#n17" name="n17">17</a></span>
+</pre></div>
+</div>
+</div>
 
 <p>So the first call: ditch Coffeescript. Write this in pure ES6.</p>
 
-<p>```javascript
-import ClassifiedLine from &lsquo;chordmeister/classified_line&rsquo;;
-var Parser;</p>
-
-<p>Parser = (function() {
-  // implementation
-})();</p>
-
-<p>export default Parser;
-```</p>
+<div class="language-javascript highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n1" name="n1">1</a></span><span style="color:#080;font-weight:bold">import</span> ClassifiedLine from <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">chordmeister/classified_line</span><span style="color:#710">'</span></span>;
+<span class="line-numbers"><a href="#n2" name="n2">2</a></span><span style="color:#080;font-weight:bold">var</span> Parser;
+<span class="line-numbers"><a href="#n3" name="n3">3</a></span>
+<span class="line-numbers"><a href="#n4" name="n4">4</a></span>Parser = (<span style="color:#080;font-weight:bold">function</span>() {
+<span class="line-numbers"><a href="#n5" name="n5">5</a></span>  <span style="color:#777">// implementation</span>
+<span class="line-numbers"><a href="#n6" name="n6">6</a></span>})();
+<span class="line-numbers"><a href="#n7" name="n7">7</a></span>
+<span class="line-numbers"><a href="#n8" name="n8">8</a></span><span style="color:#080;font-weight:bold">export</span> <span style="color:#080;font-weight:bold">default</span> Parser;
+</pre></div>
+</div>
+</div>
 
 <p>Which transpiled nicely to:</p>
 
-<p>```javascript
-define(&ldquo;chordmeister/parser&rdquo;,
-  [&ldquo;chordmeister/classified_line&rdquo;,&ldquo;exports&rdquo;],
-  function(<strong>dependency1</strong>, <strong>exports</strong>) {</p>
+<div class="language-javascript highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"> <a href="#n1" name="n1">1</a></span>define(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">chordmeister/parser</span><span style="color:#710">&quot;</span></span>, 
+<span class="line-numbers"> <a href="#n2" name="n2">2</a></span>  [<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">chordmeister/classified_line</span><span style="color:#710">&quot;</span></span>,<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">exports</span><span style="color:#710">&quot;</span></span>],
+<span class="line-numbers"> <a href="#n3" name="n3">3</a></span>  <span style="color:#080;font-weight:bold">function</span>(__dependency1__, __exports__) {
+<span class="line-numbers"> <a href="#n4" name="n4">4</a></span>    <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">use strict</span><span style="color:#710">&quot;</span></span>;
+<span class="line-numbers"> <a href="#n5" name="n5">5</a></span>    <span style="color:#080;font-weight:bold">var</span> ClassifiedLine = __dependency1__[<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">default</span><span style="color:#710">&quot;</span></span>];
+<span class="line-numbers"> <a href="#n6" name="n6">6</a></span>    <span style="color:#080;font-weight:bold">var</span> Parser;
+<span class="line-numbers"> <a href="#n7" name="n7">7</a></span>    Parser = (<span style="color:#080;font-weight:bold">function</span>() {
+<span class="line-numbers"> <a href="#n8" name="n8">8</a></span>      <span style="color:#777">// Implementation</span>
+<span class="line-numbers"> <a href="#n9" name="n9">9</a></span>    })();
+<span class="line-numbers"><strong><a href="#n10" name="n10">10</a></strong></span>    __exports__[<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">default</span><span style="color:#710">&quot;</span></span>] = Parser;
+<span class="line-numbers"><a href="#n11" name="n11">11</a></span>    });
+</pre></div>
+</div>
+</div>
 
-<pre><code>"use strict";
-var ClassifiedLine = __dependency1__["default"];
-var Parser;
-Parser = (function() {
-  // Implementation
-})();
-__exports__["default"] = Parser;
-});
-</code></pre>
-
-<p>```</p>
-
-<h2>Next up: adding AMD support in Mocha</h2>
+<h2 id="next-up-adding-amd-support-in-mocha">Next up: adding AMD support in Mocha</h2>
 
 <p>Okay, so we need to set up a few things to get Mocha playing well with RequireJS, the AMD loader.</p>
 
@@ -239,85 +232,80 @@ __exports__["default"] = Parser;
 
 <p>The tricky parts will be:</p>
 
-<h3>Set up the Mocha index.html runner</h3>
+<h3 id="set-up-the-mocha-indexhtml-runner">Set up the Mocha index.html runner</h3>
 
 <p>Install <code>mocha</code>, <code>require.js</code>, and <code>chai</code> via <code>bower</code>, then plug them into the harness:</p>
 
-<p>``` html test/index.html
-&lt;!doctype html>
+<p>``` html test/index.html<br />
+&lt;!doctype html&gt;</p>
 <html>
-<head></p>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title>Mocha Spec Runner</title>
+    <link rel="stylesheet" href="../bower_components/mocha/mocha.css" />
+</head>
+<body>
+    <div id="mocha"></div>
+    <script src="../bower_components/mocha/mocha.js"></script>
+    <script src="../bower_components/chai/chai.js"></script>
+    <script data-main="test_helper" src="../bower_components/requirejs/require.js"></script>
 
-<pre><code>&lt;meta charset="utf-8"&gt;
-&lt;meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"&gt;
-&lt;title&gt;Mocha Spec Runner&lt;/title&gt;
-&lt;link rel="stylesheet" href="../bower_components/mocha/mocha.css"&gt;
-</code></pre>
+</body>
+</html>
 
-<p></head>
-<body></p>
+<pre><code>
+Note the references to `data-main="test_helper"`, which is require.js's way of determining its entry point after it loads.
 
-<pre><code>&lt;div id="mocha"&gt;&lt;/div&gt;
-&lt;script src="../bower_components/mocha/mocha.js"&gt;&lt;/script&gt;
-&lt;script src="../bower_components/chai/chai.js"&gt;&lt;/script&gt;
-&lt;script data-main="test_helper" src="../bower_components/requirejs/require.js"&gt;&lt;/script&gt;
-</code></pre>
+### Set up a test runner.
 
-<p></body>
-</html></p>
-
-<p>```</p>
-
-<p>Note the references to <code>data-main="test_helper"</code>, which is require.js&rsquo;s way of determining its entry point after it loads.</p>
-
-<h3>Set up a test runner.</h3>
-
-<p>``` javascript test/test_runner.js
+``` javascript test/test_runner.js
 // Configure and set up the tests.
 require.config({
-  baseUrl: &ldquo;../build/&rdquo;
-})</p>
+  baseUrl: "../build/"
+})
 
-<p>// Load up the files to run against
+// Load up the files to run against
 var specs = [
-  &lsquo;chordmeister/chord_spec.js&rsquo;,
-  &lsquo;chordmeister/song_spec.js&rsquo;,
-  &lsquo;chordmeister/parser_spec.js&rsquo;,
-  &lsquo;chordmeister/classified_line_spec.js&rsquo;,
-];</p>
+  'chordmeister/chord_spec.js',
+  'chordmeister/song_spec.js',
+  'chordmeister/parser_spec.js',
+  'chordmeister/classified_line_spec.js',
+];
 
-<p>// Start up the specs.
+// Start up the specs.
 require(specs, function(require) {
-  mocha.setup(&lsquo;bdd&rsquo;);
+  mocha.setup('bdd');
   expect = chai.expect;
   // Why? Some async loading condition? Is there a callback I should be hooking into?
-  setTimeout(function() {</p>
-
-<pre><code>mocha.run();
+  setTimeout(function() {
+    mocha.run();
+  }, 100);
+});
 </code></pre>
 
-<p>  }, 100);
-});
-```</p>
+<p>You’ll notice that I was having synchonicity issues between spec suite load and <code>mocha.run()</code>. Throwing everything back a few hundred ms seemed to have done the fix.</p>
 
-<p>You&rsquo;ll notice that I was having synchonicity issues between spec suite load and <code>mocha.run()</code>. Throwing everything back a few hundred ms seemed to have done the fix.</p>
-
-<h2>AMD gotchas</h2>
+<h2 id="amd-gotchas">AMD gotchas</h2>
 
 <p>Pay attention to the <code>default</code> parameter that the module exports with. This is important to remember since native ES6 will allow you to directly import it with its native syntax:</p>
 
-<p><code>javascript
-import Parser from "chordmeister/parser"
-</code></p>
+<div class="language-javascript highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n1" name="n1">1</a></span><span style="color:#080;font-weight:bold">import</span> Parser from <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">chordmeister/parser</span><span style="color:#710">&quot;</span></span>
+</pre></div>
+</div>
+</div>
 
-<p>But if you&rsquo;re using RequireJS/AMD modules, you&rsquo;ll need to explicitly call out the <code>default</code> namespace from the required module, so like so:</p>
+<p>But if you’re using RequireJS/AMD modules, you’ll need to explicitly call out the <code>default</code> namespace from the required module, so like so:</p>
 
-<p><code>javascript
-require(["chordmeister/parser"], function(parser) {
-  Parser = parser.default;
-  new Parser() // and do stuff.
-});
-</code></p>
+<div class="language-javascript highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n1" name="n1">1</a></span>require([<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">chordmeister/parser</span><span style="color:#710">&quot;</span></span>], <span style="color:#080;font-weight:bold">function</span>(parser) {
+<span class="line-numbers"><a href="#n2" name="n2">2</a></span>  Parser = parser.<span style="color:#080;font-weight:bold">default</span>;
+<span class="line-numbers"><a href="#n3" name="n3">3</a></span>  <span style="color:#080;font-weight:bold">new</span> Parser() <span style="color:#777">// and do stuff.</span>
+<span class="line-numbers"><a href="#n4" name="n4">4</a></span>});
+</pre></div>
+</div>
+</div>
 
 <p>Let me know if you have any questions!</p>
 ]]></content>
@@ -328,20 +316,18 @@ require(["chordmeister/parser"], function(parser) {
     <link href="http://www.g9labs.com/2012/04/27/speeding-up-rspeccucumber-feedback-times-without-sacrificing-coverage/"/>
     <updated>2012-04-27T10:27:17-07:00</updated>
     <id>http://www.g9labs.com/2012/04/27/speeding-up-rspeccucumber-feedback-times-without-sacrificing-coverage</id>
-    <content type="html"><![CDATA[<iframe src="http://www.slideshare.net/slideshow/embed_code/4479466" width="512" height="421" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:1px solid #CCC;border-width:1px 1px 0;margin-bottom:5px" allowfullscreen>
+    <content type="html"><![CDATA[<iframe src="http://www.slideshare.net/slideshow/embed_code/4479466" width="512" height="421" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:1px solid #CCC;border-width:1px 1px 0;margin-bottom:5px" allowfullscreen="">
 </iframe>
-
-
-<p><a href="http://www.slideshare.net/josephwilk/rocket-fuelled-cucumbers">Rocket Fuelled Cucumbers</a>
+<p><a href="http://www.slideshare.net/josephwilk/rocket-fuelled-cucumbers">Rocket Fuelled Cucumbers</a><br />
 View more <a href="http://www.slideshare.net/">presentations</a> from <a href="http://www.slideshare.net/josephwilk">Joseph Wilk</a></p>
 
-<p>One thing the Blurb devs have been discussing is how we can speed up our test feedback cycles without sacrificing coverage. There&rsquo;s some good tips (mainly Rails+Rspec/Cucumber) in the presentation such as:</p>
+<p>One thing the Blurb devs have been discussing is how we can speed up our test feedback cycles without sacrificing coverage. There’s some good tips (mainly Rails+Rspec/Cucumber) in the presentation such as:</p>
 
 <ul>
-<li>Don&rsquo;t run all the tests when developing (tag your tests by function)</li>
-<li>Parallelize, chunk tests over machines/cores using Testjour/<a href="https://github.com/sandro/specjour">Specjour</a>, <a href="https://github.com/ngauthier/hydra">Hydra</a></li>
-<li>Don&rsquo;t run all the tests at once. Tests that never fail should nightly.</li>
-<li>Instead of spinning up a browser for acceptance tests, can you use a js/DOM simulator (e.g. <a href="https://github.com/thatcher/env-js">envjs</a> via <a href="https://github.com/smparkes/capybara-envjs">capybara-envjs</a>, or <a href="https://github.com/jarib/celerity">celerity</a>)</li>
+  <li>Don’t run all the tests when developing (tag your tests by function)</li>
+  <li>Parallelize, chunk tests over machines/cores using Testjour/<a href="https://github.com/sandro/specjour">Specjour</a>, <a href="https://github.com/ngauthier/hydra">Hydra</a></li>
+  <li>Don’t run all the tests at once. Tests that never fail should nightly.</li>
+  <li>Instead of spinning up a browser for acceptance tests, can you use a js/DOM simulator (e.g. <a href="https://github.com/thatcher/env-js">envjs</a> via <a href="https://github.com/smparkes/capybara-envjs">capybara-envjs</a>, or <a href="https://github.com/jarib/celerity">celerity</a>)</li>
 </ul>
 
 ]]></content>

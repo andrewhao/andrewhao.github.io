@@ -70,18 +70,23 @@
 		<div class="content">
 			<p>(Reposted from the <a href="http://blog.wejoinin.com/2010/03/14/server-transition-nuts-and-bolts/">Wejoinin Blog</a>)</p>
 
-<p>When you run a Web app like Wejoinin on minimal VPS resources (read: we&rsquo;re too poor to get a beefy server), it forces you to go lean. We started to realize a year ago that our out-of-the-box Rails and nginx/Mongrel setup was starting to show its age; resource utilization would climb every so often and we&rsquo;d have to kill and restart a Mongrel thread.</p>
+<p>When you run a Web app like Wejoinin on minimal VPS resources (read: we’re too poor to get a beefy server), it forces you to go lean. We started to realize a year ago that our out-of-the-box Rails and nginx/Mongrel setup was starting to show its age; resource utilization would climb every so often and we’d have to kill and restart a Mongrel thread.</p>
 
-<p>Well, with last night&rsquo;s Wejoinin push, we&rsquo;ve upgraded our server environment a few ways:</p>
+<p>Well, with last night’s Wejoinin push, we’ve upgraded our server environment a few ways:</p>
 
 <ol>
-<li><p> We&rsquo;ve switched to <a href="http://prgmr.com/xen/">prgmr.com with a killer deal</a> on a 512MiB VPS. This is a step up from the 256 slice we used to hold at <a href="www.slicehost.com">Slicehost</a> at almost half the price.</p></li>
-<li><p> We&rsquo;ve switched from vanilla Ruby to <a href="http://www.rubyenterpriseedition.com/">Ruby Enterprise Edition </a>&mdash; advertised to take &ldquo;33% less memory [when used with Passenger]&rdquo;. It&rsquo;s got a tweaked garbage collector, memory allocator and the ability to go in a tweak memory usage settings for yourself.</p></li>
-<li><p> We&rsquo;ve set up <a href="http://unicorn.bogomips.org/">Unicorn</a>, the new HTTP server on the block. It&rsquo;s special in that each worker is in its own process, meaning that the load balancing is done natively by the OS. Also, this means that should a worker process start to get bloated, we can take it down gracefully without touching the others. Really. <a href="http://tomayko.com/writings/unicorn-is-unix">We can trust the OS</a>. Plus, <a href="http://github.com/blog/517-unicorn">Git&rsquo;s doing it</a>.</p></li>
+  <li>
+    <p>We’ve switched to <a href="http://prgmr.com/xen/">prgmr.com with a killer deal</a> on a 512MiB VPS. This is a step up from the 256 slice we used to hold at <a href="www.slicehost.com">Slicehost</a> at almost half the price.</p>
+  </li>
+  <li>
+    <p>We’ve switched from vanilla Ruby to <a href="http://www.rubyenterpriseedition.com/">Ruby Enterprise Edition </a>– advertised to take “33% less memory [when used with Passenger]”. It’s got a tweaked garbage collector, memory allocator and the ability to go in a tweak memory usage settings for yourself.</p>
+  </li>
+  <li>
+    <p>We’ve set up <a href="http://unicorn.bogomips.org/">Unicorn</a>, the new HTTP server on the block. It’s special in that each worker is in its own process, meaning that the load balancing is done natively by the OS. Also, this means that should a worker process start to get bloated, we can take it down gracefully without touching the others. Really. <a href="http://tomayko.com/writings/unicorn-is-unix">We can trust the OS</a>. Plus, <a href="http://github.com/blog/517-unicorn">Git’s doing it</a>.</p>
+  </li>
 </ol>
 
-
-<p>With all these tweaks, we should be seeing Wejoinin rarin' to go. Let us know what you think!</p>
+<p>With all these tweaks, we should be seeing Wejoinin rarin’ to go. Let us know what you think!</p>
 
 <p>-Andrew</p>
 

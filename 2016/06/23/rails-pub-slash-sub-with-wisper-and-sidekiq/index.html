@@ -68,348 +68,340 @@
 		<time>23 June 2016</time>
 	</header>
 		<div class="content">
-			<p>One common pattern in Domain-Driven Design is the use of
-publish/subscribe messaging to communicate between domains. When
-<a href="http://martinfowler.com/eaaDev/DomainEvent.html">Domain Events</a> are created from within a domain, other domains are
-able to subscribe to these events and take action within their own
+			<p>One common pattern in Domain-Driven Design is the use of<br />
+publish/subscribe messaging to communicate between domains. When<br />
+<a href="http://martinfowler.com/eaaDev/DomainEvent.html">Domain Events</a> are created from within a domain, other domains are<br />
+able to subscribe to these events and take action within their own<br />
 domains, respectively.</p>
 
-<p>This is not a common pattern in Rails, particularly because of Ruby&rsquo;s
-lack of language support for functional programming paradigms that exist
-in other languages. However, with a nifty framework and the help of
+<p>This is not a common pattern in Rails, particularly because of Ruby’s<br />
+lack of language support for functional programming paradigms that exist<br />
+in other languages. However, with a nifty framework and the help of<br />
 Sidekiq, we can get just a little bit closer.</p>
 
-<h3>What is a Domain Event?</h3>
+<h3 id="what-is-a-domain-event">What is a Domain Event?</h3>
 
-<p>A domain event is a recorded property in the system that tracks an
-action that the system performs, and the factors/properties that lead to
+<p>A domain event is a recorded property in the system that tracks an<br />
+action that the system performs, and the factors/properties that lead to<br />
 its creation.</p>
 
-<p>In the following examples, we are going to use the <a href="https://github.com/krisleech/wisper">Wisper</a> gem to
+<p>In the following examples, we are going to use the <a href="https://github.com/krisleech/wisper">Wisper</a> gem to<br />
 implement domain events in our sample <a href="http://github.com/andrewhao/delorean">Delorean</a> app.</p>
 
-<p>Imagine that we are writing an endpoint that our users will hit,
-indicating that they want to hail a time-traveling cab. Now the logic to
-hail a cab is rather complicated and lives in an entirely different area
-of the codebase, perhaps even in another application. How should we call
+<p>Imagine that we are writing an endpoint that our users will hit,<br />
+indicating that they want to hail a time-traveling cab. Now the logic to<br />
+hail a cab is rather complicated and lives in an entirely different area<br />
+of the codebase, perhaps even in another application. How should we call<br />
 the other code and ensure that our code is cleanly decoupled?</p>
 
-<p>With our Domain-Driven powers, we&rsquo;ve been smart enough to segregate our code into different
-subdomains and bounded contexts,
+<p>With our Domain-Driven powers, we’ve been smart enough to segregate our code into different<br />
+subdomains and bounded contexts,<br />
 denoted by these two Ruby modules <code>Ridesharing</code> and <code>DriverRouting</code>.</p>
 
-<h2>Example 1: In-process pub-sub event modeling, with a service object.</h2>
+<h2 id="example-1-in-process-pub-sub-event-modeling-with-a-service-object">Example 1: In-process pub-sub event modeling, with a service object.</h2>
 
-<p>A simple way to use Wisper is to use it to implement your service
+<p>A simple way to use Wisper is to use it to implement your service<br />
 objects with Wisper, calling the service from the controller.</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">module</span> <span class="nn">Ridesharing</span>
-</span><span class='line'>  <span class="k">class</span> <span class="nc">RidesController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>
-</span><span class='line'>    <span class="k">def</span> <span class="nf">post</span>
-</span><span class='line'>      <span class="c1"># Hail a time-traveling Delorean:</span>
-</span><span class='line'>      <span class="n">command</span> <span class="o">=</span> <span class="no">HailDelorean</span><span class="o">.</span><span class="n">new</span>
-</span><span class='line'>      <span class="n">command</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="s1">&#39;hailed&#39;</span><span class="p">)</span> <span class="p">{</span> <span class="o">|</span><span class="n">driver</span><span class="o">|</span>
-</span><span class='line'>        <span class="n">render</span> <span class="ss">text</span><span class="p">:</span> <span class="s2">&quot;Hailed you a cab: </span><span class="si">#{</span><span class="n">driver</span><span class="si">}</span><span class="s2"> is arriving!&quot;</span>
-</span><span class='line'>      <span class="p">}</span>
-</span><span class='line'>      <span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="s1">&#39;could_not_hail&#39;</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>        <span class="n">render</span> <span class="ss">text</span><span class="p">:</span> <span class="s2">&quot;Sorry, no dice.&quot;</span>
-</span><span class='line'>      <span class="p">}</span>
-</span><span class='line'>      <span class="n">command</span><span class="o">.</span><span class="n">hail!</span><span class="p">(</span><span class="n">current_user</span><span class="p">)</span>
-</span><span class='line'>    <span class="k">end</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'><span class="k">end</span>
+<figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+</pre></td><td class="code"><pre><code class="ruby"><span class="line"><span class="k">module</span> <span class="nn">Ridesharing</span>
+</span><span class="line">  <span class="k">class</span> <span class="nc">RidesController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>
+</span><span class="line">    <span class="k">def</span> <span class="nf">post</span>
+</span><span class="line">      <span class="c1"># Hail a time-traveling Delorean:</span>
+</span><span class="line">      <span class="n">command</span> <span class="o">=</span> <span class="no">HailDelorean</span><span class="o">.</span><span class="n">new</span>
+</span><span class="line">      <span class="n">command</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="s1">&#39;hailed&#39;</span><span class="p">)</span> <span class="p">{</span> <span class="o">|</span><span class="n">driver</span><span class="o">|</span>
+</span><span class="line">        <span class="n">render</span> <span class="ss">text</span><span class="p">:</span> <span class="s2">&quot;Hailed you a cab: </span><span class="si">#{</span><span class="n">driver</span><span class="si">}</span><span class="s2"> is arriving!&quot;</span>
+</span><span class="line">      <span class="p">}</span>
+</span><span class="line">      <span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="s1">&#39;could_not_hail&#39;</span><span class="p">)</span> <span class="p">{</span>
+</span><span class="line">        <span class="n">render</span> <span class="ss">text</span><span class="p">:</span> <span class="s2">&quot;Sorry, no dice.&quot;</span>
+</span><span class="line">      <span class="p">}</span>
+</span><span class="line">      <span class="n">command</span><span class="o">.</span><span class="n">hail!</span><span class="p">(</span><span class="n">current_user</span><span class="p">)</span>
+</span><span class="line">    <span class="k">end</span>
+</span><span class="line">  <span class="k">end</span>
+</span><span class="line"><span class="k">end</span>
 </span></code></pre></td></tr></table></div></figure>
 
+<p>Note that the <code>HailDelorean</code> class has powers of event subscriptions<br />
+now. Our calling code does not have to concern itself with the<br />
+implementation details of the <code>HailDelorean</code> service - it merely needs<br />
+to register handlers for the two possible outcomes, <code>hailed</code> and<br />
+<code>could_not_hail</code>. Here’s how the service class is implemented:</p>
 
-<p>Note that the <code>HailDelorean</code> class has powers of event subscriptions
-now. Our calling code does not have to concern itself with the
-implementation details of the <code>HailDelorean</code> service &ndash; it merely needs
-to register handlers for the two possible outcomes, <code>hailed</code> and
-<code>could_not_hail</code>. Here&rsquo;s how the service class is implemented:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">module</span> <span class="nn">Ridesharing</span>
-</span><span class='line'>  <span class="k">class</span> <span class="nc">HailDelorean</span>
-</span><span class='line'>    <span class="kp">include</span> <span class="no">Wisper</span><span class="o">::</span><span class="no">Publisher</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="k">def</span> <span class="nf">hail!</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
-</span><span class='line'>      <span class="c1"># broadcast() is a Wisper method to fire an event</span>
-</span><span class='line'>      <span class="n">driver</span> <span class="o">=</span> <span class="n">find_driver</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
-</span><span class='line'>      <span class="k">if</span> <span class="n">driver</span>
-</span><span class='line'>        <span class="n">broadcast</span><span class="p">(</span><span class="s1">&#39;hailed&#39;</span><span class="p">,</span> <span class="n">driver</span><span class="p">)</span>
-</span><span class='line'>      <span class="k">else</span>
-</span><span class='line'>        <span class="n">broadcast</span><span class="p">(</span><span class="s1">&#39;could_not_hail&#39;</span><span class="p">)</span>
-</span><span class='line'>      <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="k">def</span> <span class="nf">find_driver</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
-</span><span class='line'>      <span class="c1"># Here lies slow, complex domain logic</span>
-</span><span class='line'>      <span class="no">DriverRouting</span><span class="o">::</span><span class="no">FindDriver</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
-</span><span class='line'>    <span class="k">end</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'><span class="k">end</span>
+<figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+</pre></td><td class="code"><pre><code class="ruby"><span class="line"><span class="k">module</span> <span class="nn">Ridesharing</span>
+</span><span class="line">  <span class="k">class</span> <span class="nc">HailDelorean</span>
+</span><span class="line">    <span class="kp">include</span> <span class="no">Wisper</span><span class="o">::</span><span class="no">Publisher</span>
+</span><span class="line">
+</span><span class="line">    <span class="k">def</span> <span class="nf">hail!</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
+</span><span class="line">      <span class="c1"># broadcast() is a Wisper method to fire an event</span>
+</span><span class="line">      <span class="n">driver</span> <span class="o">=</span> <span class="n">find_driver</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
+</span><span class="line">      <span class="k">if</span> <span class="n">driver</span>
+</span><span class="line">        <span class="n">broadcast</span><span class="p">(</span><span class="s1">&#39;hailed&#39;</span><span class="p">,</span> <span class="n">driver</span><span class="p">)</span>
+</span><span class="line">      <span class="k">else</span>
+</span><span class="line">        <span class="n">broadcast</span><span class="p">(</span><span class="s1">&#39;could_not_hail&#39;</span><span class="p">)</span>
+</span><span class="line">      <span class="k">end</span>
+</span><span class="line">
+</span><span class="line">    <span class="k">def</span> <span class="nf">find_driver</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
+</span><span class="line">      <span class="c1"># Here lies slow, complex domain logic</span>
+</span><span class="line">      <span class="no">DriverRouting</span><span class="o">::</span><span class="no">FindDriver</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
+</span><span class="line">    <span class="k">end</span>
+</span><span class="line">  <span class="k">end</span>
+</span><span class="line"><span class="k">end</span>
 </span></code></pre></td></tr></table></div></figure>
 
+<h3 id="handling-side-effects-in-subscriber-classes">Handling side effects in subscriber classes</h3>
 
-<h3>Handling side effects in subscriber classes</h3>
-
-<p>Other side-effects can subscribe to the <code>HailDelorean</code> events. Let&rsquo;s say we want to fire an event
+<p>Other side-effects can subscribe to the <code>HailDelorean</code> events. Let’s say we want to fire an event<br />
 to Segment analytics tracking. I can create a plain Ruby object that simply needs to implement a method with the same name as the event.</p>
 
-<p>Let&rsquo;s implement <code>hailed</code> and <code>could_not_hail</code> methods on this subscriber class:</p>
+<p>Let’s implement <code>hailed</code> and <code>could_not_hail</code> methods on this subscriber class:</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">TrackSegmentAnalytics</span>
-</span><span class='line'>  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">hailed</span><span class="p">(</span><span class="n">driver</span><span class="p">)</span>
-</span><span class='line'>    <span class="c1"># fire analytics event to Segment</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">could_not_hail</span>
-</span><span class='line'>    <span class="c1"># fire analytics event to Segment</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'><span class="k">end</span>
+<figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+</pre></td><td class="code"><pre><code class="ruby"><span class="line"><span class="k">class</span> <span class="nc">TrackSegmentAnalytics</span>
+</span><span class="line">  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">hailed</span><span class="p">(</span><span class="n">driver</span><span class="p">)</span>
+</span><span class="line">    <span class="c1"># fire analytics event to Segment</span>
+</span><span class="line">  <span class="k">end</span>
+</span><span class="line">
+</span><span class="line">  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">could_not_hail</span>
+</span><span class="line">    <span class="c1"># fire analytics event to Segment</span>
+</span><span class="line">  <span class="k">end</span>
+</span><span class="line"><span class="k">end</span>
 </span></code></pre></td></tr></table></div></figure>
-
 
 <p>And we hook it up by subscribing it to the command handler:</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">module</span> <span class="nn">Ridesharing</span>
-</span><span class='line'>  <span class="k">class</span> <span class="nc">RidesController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>
-</span><span class='line'>    <span class="k">def</span> <span class="nf">post</span>
-</span><span class='line'>      <span class="c1"># snip</span>
-</span><span class='line'>      <span class="n">command</span> <span class="o">=</span> <span class="no">HailDelorean</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">current_user</span><span class="p">)</span>
-</span><span class='line'>
-</span><span class='line'>      <span class="c1"># register the subscriber to the triggering action</span>
-</span><span class='line'>      <span class="n">command</span><span class="o">.</span><span class="n">subscribe</span><span class="p">(</span><span class="no">TrackSegmentAnalytics</span><span class="p">)</span>
-</span><span class='line'>      <span class="c1"># snip</span>
-</span><span class='line'>    <span class="k">end</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'><span class="k">end</span>
+<figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+</pre></td><td class="code"><pre><code class="ruby"><span class="line"><span class="k">module</span> <span class="nn">Ridesharing</span>
+</span><span class="line">  <span class="k">class</span> <span class="nc">RidesController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>
+</span><span class="line">    <span class="k">def</span> <span class="nf">post</span>
+</span><span class="line">      <span class="c1"># snip</span>
+</span><span class="line">      <span class="n">command</span> <span class="o">=</span> <span class="no">HailDelorean</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">current_user</span><span class="p">)</span>
+</span><span class="line">
+</span><span class="line">      <span class="c1"># register the subscriber to the triggering action</span>
+</span><span class="line">      <span class="n">command</span><span class="o">.</span><span class="n">subscribe</span><span class="p">(</span><span class="no">TrackSegmentAnalytics</span><span class="p">)</span>
+</span><span class="line">      <span class="c1"># snip</span>
+</span><span class="line">    <span class="k">end</span>
+</span><span class="line">  <span class="k">end</span>
+</span><span class="line"><span class="k">end</span>
 </span></code></pre></td></tr></table></div></figure>
 
-
-<p>OK, that was a little awkward, doing all that wiring up in the controller. What if we did the wiring globally,
+<p>OK, that was a little awkward, doing all that wiring up in the controller. What if we did the wiring globally,<br />
 within an app initializer?</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># config/initializers/domain_event_subscriptions.rb</span>
-</span><span class='line'><span class="no">Wisper</span><span class="o">.</span><span class="n">subscribe</span><span class="p">(</span><span class="no">TrackSegmentAnalytics</span><span class="p">,</span> <span class="ss">scope</span><span class="p">:</span> <span class="s2">&quot;HailDelorean&quot;</span><span class="p">)</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1"># alternate form:</span>
-</span><span class='line'><span class="no">HailDelorean</span><span class="o">.</span><span class="n">subscribe</span><span class="p">(</span><span class="no">TrackSegmentAnalytics</span><span class="p">)</span>
+<figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+</pre></td><td class="code"><pre><code class="ruby"><span class="line"><span class="c1"># config/initializers/domain_event_subscriptions.rb</span>
+</span><span class="line"><span class="no">Wisper</span><span class="o">.</span><span class="n">subscribe</span><span class="p">(</span><span class="no">TrackSegmentAnalytics</span><span class="p">,</span> <span class="ss">scope</span><span class="p">:</span> <span class="s2">&quot;HailDelorean&quot;</span><span class="p">)</span>
+</span><span class="line">
+</span><span class="line"><span class="c1"># alternate form:</span>
+</span><span class="line"><span class="no">HailDelorean</span><span class="o">.</span><span class="n">subscribe</span><span class="p">(</span><span class="no">TrackSegmentAnalytics</span><span class="p">)</span>
 </span></code></pre></td></tr></table></div></figure>
-
 
 <p>This registers a global subscriber for all future instances of <code>HailDelorean</code>.</p>
 
-<h2>Example 2: Asynchronous events with subscription handlers and Sidekiq</h2>
+<h2 id="example-2-asynchronous-events-with-subscription-handlers-and-sidekiq">Example 2: Asynchronous events with subscription handlers and Sidekiq</h2>
 
-<p>Here&rsquo;s the real power of Wisper &ndash; we can decouple our application domain responsibilities by modeling
+<p>Here’s the real power of Wisper - we can decouple our application domain responsibilities by modeling<br />
 effects as subscription objects and do them out-of-band of the primary web request thread.</p>
 
-<p>Note that with the <a href="https://github.com/krisleech/wisper-sidekiq"><code>wisper-sidekiq</code></a> gem, all subscriptions
-given with an <code>async: true</code> option flag will automatically execute in an external thread as a Sidekiq job.
-Let&rsquo;s take advantage of that now.</p>
+<p>Note that with the <a href="https://github.com/krisleech/wisper-sidekiq"><code>wisper-sidekiq</code></a> gem, all subscriptions<br />
+given with an <code>async: true</code> option flag will automatically execute in an external thread as a Sidekiq job.<br />
+Let’s take advantage of that now.</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">module</span> <span class="nn">Ridesharing</span>
-</span><span class='line'>  <span class="k">class</span> <span class="nc">RidesController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>
-</span><span class='line'>    <span class="k">def</span> <span class="nf">post</span>
-</span><span class='line'>      <span class="c1"># Hail a time-traveling Delorean:</span>
-</span><span class='line'>      <span class="no">HailDelorean</span><span class="o">.</span><span class="n">hail</span><span class="p">(</span><span class="n">current_user</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
-</span><span class='line'>      <span class="n">render</span> <span class="ss">text</span><span class="p">:</span> <span class="s1">&#39;Hailing a cab, please wait for a response...&#39;</span>
-</span><span class='line'>    <span class="k">end</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">class</span> <span class="nc">HailDelorean</span>
-</span><span class='line'>    <span class="kp">include</span> <span class="no">Wisper</span><span class="o">::</span><span class="no">Broadcaster</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">hail</span><span class="p">(</span><span class="n">passenger_id</span><span class="p">)</span>
-</span><span class='line'>      <span class="n">broadcast</span><span class="p">(</span><span class="ss">:hail</span><span class="p">,</span> <span class="n">passenger_id</span><span class="p">)</span>
-</span><span class='line'>    <span class="k">end</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'><span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">module</span> <span class="nn">DriverRouting</span>
-</span><span class='line'>  <span class="c1"># Note that this class is both a subscriber and a publisher</span>
-</span><span class='line'>  <span class="k">class</span> <span class="nc">FindDriver</span>
-</span><span class='line'>    <span class="kp">include</span> <span class="no">Wisper</span><span class="o">::</span><span class="no">Publisher</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">hail</span><span class="p">(</span><span class="n">passenger_id</span><span class="p">)</span>
-</span><span class='line'>      <span class="c1"># Do slow, complex hairy routefinding/optimization/messaging behind the scenes:</span>
-</span><span class='line'>      <span class="n">driver</span> <span class="o">=</span> <span class="n">find_driver_for</span><span class="p">(</span><span class="n">passenger_id</span><span class="p">)</span>
-</span><span class='line'>
-</span><span class='line'>      <span class="k">if</span> <span class="n">driver</span>
-</span><span class='line'>        <span class="n">broadcast</span><span class="p">(</span><span class="s1">&#39;driver_found&#39;</span><span class="p">,</span> <span class="n">passenger_id</span><span class="p">,</span> <span class="n">driver</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
-</span><span class='line'>      <span class="k">else</span>
-</span><span class='line'>        <span class="n">broadcast</span><span class="p">(</span><span class="s1">&#39;driver_not_found&#39;</span><span class="p">,</span> <span class="n">passenger_id</span><span class="p">)</span>
-</span><span class='line'>      <span class="k">end</span>
-</span><span class='line'>    <span class="k">end</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'><span class="k">end</span>
+<figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+<span class="line-number">24</span>
+<span class="line-number">25</span>
+<span class="line-number">26</span>
+<span class="line-number">27</span>
+<span class="line-number">28</span>
+<span class="line-number">29</span>
+<span class="line-number">30</span>
+<span class="line-number">31</span>
+<span class="line-number">32</span>
+<span class="line-number">33</span>
+<span class="line-number">34</span>
+<span class="line-number">35</span>
+</pre></td><td class="code"><pre><code class="ruby"><span class="line"><span class="k">module</span> <span class="nn">Ridesharing</span>
+</span><span class="line">  <span class="k">class</span> <span class="nc">RidesController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>
+</span><span class="line">    <span class="k">def</span> <span class="nf">post</span>
+</span><span class="line">      <span class="c1"># Hail a time-traveling Delorean:</span>
+</span><span class="line">      <span class="no">HailDelorean</span><span class="o">.</span><span class="n">hail</span><span class="p">(</span><span class="n">current_user</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+</span><span class="line">      <span class="n">render</span> <span class="ss">text</span><span class="p">:</span> <span class="s1">&#39;Hailing a cab, please wait for a response...&#39;</span>
+</span><span class="line">    <span class="k">end</span>
+</span><span class="line">  <span class="k">end</span>
+</span><span class="line">
+</span><span class="line">  <span class="k">class</span> <span class="nc">HailDelorean</span>
+</span><span class="line">    <span class="kp">include</span> <span class="no">Wisper</span><span class="o">::</span><span class="no">Broadcaster</span>
+</span><span class="line">
+</span><span class="line">    <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">hail</span><span class="p">(</span><span class="n">passenger_id</span><span class="p">)</span>
+</span><span class="line">      <span class="n">broadcast</span><span class="p">(</span><span class="ss">:hail</span><span class="p">,</span> <span class="n">passenger_id</span><span class="p">)</span>
+</span><span class="line">    <span class="k">end</span>
+</span><span class="line">  <span class="k">end</span>
+</span><span class="line"><span class="k">end</span>
+</span><span class="line">
+</span><span class="line"><span class="k">module</span> <span class="nn">DriverRouting</span>
+</span><span class="line">  <span class="c1"># Note that this class is both a subscriber and a publisher</span>
+</span><span class="line">  <span class="k">class</span> <span class="nc">FindDriver</span>
+</span><span class="line">    <span class="kp">include</span> <span class="no">Wisper</span><span class="o">::</span><span class="no">Publisher</span>
+</span><span class="line">
+</span><span class="line">    <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">hail</span><span class="p">(</span><span class="n">passenger_id</span><span class="p">)</span>
+</span><span class="line">      <span class="c1"># Do slow, complex hairy routefinding/optimization/messaging behind the scenes:</span>
+</span><span class="line">      <span class="n">driver</span> <span class="o">=</span> <span class="n">find_driver_for</span><span class="p">(</span><span class="n">passenger_id</span><span class="p">)</span>
+</span><span class="line">
+</span><span class="line">      <span class="k">if</span> <span class="n">driver</span>
+</span><span class="line">        <span class="n">broadcast</span><span class="p">(</span><span class="s1">&#39;driver_found&#39;</span><span class="p">,</span> <span class="n">passenger_id</span><span class="p">,</span> <span class="n">driver</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+</span><span class="line">      <span class="k">else</span>
+</span><span class="line">        <span class="n">broadcast</span><span class="p">(</span><span class="s1">&#39;driver_not_found&#39;</span><span class="p">,</span> <span class="n">passenger_id</span><span class="p">)</span>
+</span><span class="line">      <span class="k">end</span>
+</span><span class="line">    <span class="k">end</span>
+</span><span class="line">  <span class="k">end</span>
+</span><span class="line"><span class="k">end</span>
 </span></code></pre></td></tr></table></div></figure>
-
 
 <p>Finally, we add handlers (subscribers) to these domain objects:</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">module</span> <span class="nn">Ridesharing</span>
-</span><span class='line'>  <span class="k">class</span> <span class="nc">NotifyPassengerWithDriverStatus</span>
-</span><span class='line'>    <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">driver_found</span>
-</span><span class='line'>      <span class="c1"># send them a text message :)</span>
-</span><span class='line'>    <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">driver_not_found</span>
-</span><span class='line'>      <span class="c1"># send them a text message :(</span>
-</span><span class='line'>    <span class="k">end</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'><span class="k">end</span>
+<figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+</pre></td><td class="code"><pre><code class="ruby"><span class="line"><span class="k">module</span> <span class="nn">Ridesharing</span>
+</span><span class="line">  <span class="k">class</span> <span class="nc">NotifyPassengerWithDriverStatus</span>
+</span><span class="line">    <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">driver_found</span>
+</span><span class="line">      <span class="c1"># send them a text message :)</span>
+</span><span class="line">    <span class="k">end</span>
+</span><span class="line">
+</span><span class="line">    <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">driver_not_found</span>
+</span><span class="line">      <span class="c1"># send them a text message :(</span>
+</span><span class="line">    <span class="k">end</span>
+</span><span class="line">  <span class="k">end</span>
+</span><span class="line"><span class="k">end</span>
 </span></code></pre></td></tr></table></div></figure>
 
+<p>Now let’s link it together with subscriptions:</p>
 
-<p>Now let&rsquo;s link it together with subscriptions:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># config/initializers/domain_event_subscriptions.rb</span>
-</span><span class='line'><span class="no">Ridesharing</span><span class="o">::</span><span class="no">HailDelorean</span><span class="o">.</span><span class="n">subscribe</span><span class="p">(</span><span class="no">DriverRouting</span><span class="o">::</span><span class="no">FindDriver</span><span class="p">,</span> <span class="ss">async</span><span class="p">:</span> <span class="kp">true</span><span class="p">)</span>
-</span><span class='line'><span class="no">DriverRouting</span><span class="o">::</span><span class="no">FindDriver</span><span class="o">.</span><span class="n">subscribe</span><span class="p">(</span><span class="no">Ridesharing</span><span class="o">::</span><span class="no">NotifyPassengerWithDriverStatus</span><span class="p">,</span> <span class="ss">async</span><span class="p">:</span> <span class="kp">true</span><span class="p">)</span>
-</span><span class='line'><span class="no">Wisper</span><span class="o">.</span><span class="n">subscribe</span><span class="p">(</span><span class="no">AnalyticsListener</span><span class="p">,</span> <span class="ss">scope</span><span class="p">:</span> <span class="s2">&quot;Ridesharing::NotifyPassengerWithDriverStatus&quot;</span><span class="p">,</span> <span class="s2">&quot;DriverRouting::FindDriver&quot;</span><span class="o">]</span><span class="p">,</span> <span class="ss">async</span><span class="p">:</span> <span class="kp">true</span><span class="p">)</span>
+<figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+</pre></td><td class="code"><pre><code class="ruby"><span class="line"><span class="c1"># config/initializers/domain_event_subscriptions.rb</span>
+</span><span class="line"><span class="no">Ridesharing</span><span class="o">::</span><span class="no">HailDelorean</span><span class="o">.</span><span class="n">subscribe</span><span class="p">(</span><span class="no">DriverRouting</span><span class="o">::</span><span class="no">FindDriver</span><span class="p">,</span> <span class="ss">async</span><span class="p">:</span> <span class="kp">true</span><span class="p">)</span>
+</span><span class="line"><span class="no">DriverRouting</span><span class="o">::</span><span class="no">FindDriver</span><span class="o">.</span><span class="n">subscribe</span><span class="p">(</span><span class="no">Ridesharing</span><span class="o">::</span><span class="no">NotifyPassengerWithDriverStatus</span><span class="p">,</span> <span class="ss">async</span><span class="p">:</span> <span class="kp">true</span><span class="p">)</span>
+</span><span class="line"><span class="no">Wisper</span><span class="o">.</span><span class="n">subscribe</span><span class="p">(</span><span class="no">AnalyticsListener</span><span class="p">,</span> <span class="ss">scope</span><span class="p">:</span> <span class="s2">&quot;Ridesharing::NotifyPassengerWithDriverStatus&quot;</span><span class="p">,</span> <span class="s2">&quot;DriverRouting::FindDriver&quot;</span><span class="o">]</span><span class="p">,</span> <span class="ss">async</span><span class="p">:</span> <span class="kp">true</span><span class="p">)</span>
 </span></code></pre></td></tr></table></div></figure>
 
-
-<p>Now our messages between our domains are pulled out of the main request thread, and operate in an asynchronous
+<p>Now our messages between our domains are pulled out of the main request thread, and operate in an asynchronous<br />
 fashion with Sidekiq as the runner.</p>
 
-<p>Code in our domains are kept clean &ndash; note that there are no direct references to the other subdomains within each
-subdomain. Our app more cleanly segregates the responsibilities between each app, heavy workloads are naturally
+<p>Code in our domains are kept clean - note that there are no direct references to the other subdomains within each<br />
+subdomain. Our app more cleanly segregates the responsibilities between each app, heavy workloads are naturally<br />
 balanced as they move to worker threads.</p>
 
-<h2>Caveats: Beware of overbuilding</h2>
+<h2 id="caveats-beware-of-overbuilding">Caveats: Beware of overbuilding</h2>
 
-<p>If you are on a small app, you probably should go with approach #1. The weight of indirection
-can be a cognitive load on development, unless you truly need to build async code in #2. The overhead and
-conceptual complexities of the approach can only be justified with large codebases, or in apps
+<p>If you are on a small app, you probably should go with approach #1. The weight of indirection<br />
+can be a cognitive load on development, unless you truly need to build async code in #2. The overhead and<br />
+conceptual complexities of the approach can only be justified with large codebases, or in apps<br />
 where a domain-centric view (and segregation) of code is present.</p>
 
-<h2>Caveats: Event subscriptions can be a tangled mess</h2>
+<h2 id="caveats-event-subscriptions-can-be-a-tangled-mess">Caveats: Event subscriptions can be a tangled mess</h2>
 
-<p>Note that the act of wiring can quickly fan out into a spidery mess of handlers &ndash; you could even further
-decouple your handlers by modeling a global event bus as a publisher, and having each domain tap into the bus' events
+<p>Note that the act of wiring can quickly fan out into a spidery mess of handlers - you could even further<br />
+decouple your handlers by modeling a global event bus as a publisher, and having each domain tap into the bus’ events<br />
 and figure out how to handle each event on its own.</p>
 
-<h2>Caveats: transactional consistency!</h2>
+<h2 id="caveats-transactional-consistency">Caveats: transactional consistency!</h2>
 
-<p>If you implement this asynchronously, you&rsquo;ll have to think about how to
-deal with transactional consistency. Can you design your data models
-(and database schema) to support independent updates without any
-dependencies? How will you handle
+<p>If you implement this asynchronously, you’ll have to think about how to<br />
+deal with transactional consistency. Can you design your data models<br />
+(and database schema) to support independent updates without any<br />
+dependencies? How will you handle<br />
 the case when one domain action fails and the other completes?</p>
 
-<p>You may have to roll your own two-phase commit here, the specifics of
-which I won&rsquo;t delve into. However, for most of our applications, we may
+<p>You may have to roll your own two-phase commit here, the specifics of<br />
+which I won’t delve into. However, for most of our applications, we may<br />
 want to skip the asynchronous and keep our events synchronous.</p>
 
 			

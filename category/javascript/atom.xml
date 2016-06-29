@@ -4,7 +4,7 @@
   <title><![CDATA[Category: javascript | The Sweet Spot]]></title>
   <link href="http://www.g9labs.com/category/javascript/atom.xml" rel="self"/>
   <link href="http://www.g9labs.com/"/>
-  <updated>2016-06-24T11:31:59-07:00</updated>
+  <updated>2016-06-29T16:33:32-07:00</updated>
   <id>http://www.g9labs.com/</id>
   <author>
     <name><![CDATA[Andrew Hao]]></name>
@@ -18,71 +18,82 @@
     <link href="http://www.g9labs.com/2016/04/08/knex-dot-js-and-bookshelf-dot-js-cheat-sheet/"/>
     <updated>2016-04-08T12:33:00-07:00</updated>
     <id>http://www.g9labs.com/2016/04/08/knex-dot-js-and-bookshelf-dot-js-cheat-sheet</id>
-    <content type="html"><![CDATA[<p>As follows are some code snippets for using <a href="http://knexjs.org/">Knex.js</a> for executing
+    <content type="html"><![CDATA[<p>As follows are some code snippets for using <a href="http://knexjs.org/">Knex.js</a> for executing<br />
 Postgres and PostGIS queries.</p>
 
-<h3>Execute raw SQL in migration</h3>
+<h3 id="execute-raw-sql-in-migration">Execute raw SQL in migration</h3>
 
 <p>I often find this useful for fancy SQL, like creating views.</p>
 
-<p><code>js
-exports.up = function(knex, Promise) {
-  return knex.raw(`YOUR RAW SQL`);
-};
-</code></p>
+<div class="language-js highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n1" name="n1">1</a></span>exports.<span style="color:#06B;font-weight:bold">up</span> = <span style="color:#080;font-weight:bold">function</span>(knex, Promise) {
+<span class="line-numbers"><a href="#n2" name="n2">2</a></span>  <span style="color:#080;font-weight:bold">return</span> knex.raw(<span style="color:#F00;background-color:#FAA">`</span>YOUR RAW SQL<span style="color:#F00;background-color:#FAA">`</span>);
+<span class="line-numbers"><a href="#n3" name="n3">3</a></span>};
+</pre></div>
+</div>
+</div>
 
-<h3>Add a PostGIS Point type to a table in a migration:</h3>
+<h3 id="add-a-postgis-point-type-to-a-table-in-a-migration">Add a PostGIS Point type to a table in a migration:</h3>
 
-<p><code>js
-return knex.schema.table('events', function(table) {
-  table.specificType('point', 'geometry(point, 4326)');
-})
-</code></p>
+<div class="language-js highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n1" name="n1">1</a></span><span style="color:#080;font-weight:bold">return</span> knex.schema.table(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">events</span><span style="color:#710">'</span></span>, <span style="color:#080;font-weight:bold">function</span>(table) {
+<span class="line-numbers"><a href="#n2" name="n2">2</a></span>  table.specificType(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">point</span><span style="color:#710">'</span></span>, <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">geometry(point, 4326)</span><span style="color:#710">'</span></span>);
+<span class="line-numbers"><a href="#n3" name="n3">3</a></span>})
+</pre></div>
+</div>
+</div>
 
-<h3>Add a foreign key to another table.</h3>
+<h3 id="add-a-foreign-key-to-another-table">Add a foreign key to another table.</h3>
 
-<p>```js
-return knex.schema.table(&lsquo;events&rsquo;, function(table) {</p>
+<div class="language-js highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n1" name="n1">1</a></span><span style="color:#080;font-weight:bold">return</span> knex.schema.table(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">events</span><span style="color:#710">'</span></span>, <span style="color:#080;font-weight:bold">function</span>(table) {
+<span class="line-numbers"><a href="#n2" name="n2">2</a></span>        table.integer(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">device_id</span><span style="color:#710">'</span></span>).references(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">id</span><span style="color:#710">'</span></span>).inTable(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">devices</span><span style="color:#710">'</span></span>);
+<span class="line-numbers"><a href="#n3" name="n3">3</a></span>});
+</pre></div>
+</div>
+</div>
 
-<pre><code>table.integer('device_id').references('id').inTable('devices');
-</code></pre>
+<h3 id="add-a-multi-column-unique-index">Add a multi-column unique index</h3>
 
-<p>});
-```</p>
+<div class="language-js highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n1" name="n1">1</a></span><span style="color:#080;font-weight:bold">return</span> knex.schema.table(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">events</span><span style="color:#710">'</span></span>, <span style="color:#080;font-weight:bold">function</span>(table) {
+<span class="line-numbers"><a href="#n2" name="n2">2</a></span>  table.unique([<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">start_time</span><span style="color:#710">'</span></span>, <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">end_time</span><span style="color:#710">'</span></span>, <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">start_location</span><span style="color:#710">'</span></span>, <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">end_location</span><span style="color:#710">'</span></span>, <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">distance_miles</span><span style="color:#710">'</span></span>]);
+<span class="line-numbers"><a href="#n3" name="n3">3</a></span>});
+</pre></div>
+</div>
+</div>
 
-<h3>Add a multi-column unique index</h3>
+<h3 id="find-a-collection">Find a collection</h3>
 
-<p><code>js
-return knex.schema.table('events', function(table) {
-  table.unique(['start_time', 'end_time', 'start_location', 'end_location', 'distance_miles']);
-});
-</code></p>
+<div class="language-js highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n1" name="n1">1</a></span>knex.select(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">*</span><span style="color:#710">'</span></span>)
+<span class="line-numbers"><a href="#n2" name="n2">2</a></span>.from(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">participants</span><span style="color:#710">'</span></span>)
+<span class="line-numbers"><a href="#n3" name="n3">3</a></span>.where({ <span style="color:#606">name</span>: <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">Jason</span><span style="color:#710">'</span></span> })
+<span class="line-numbers"><a href="#n4" name="n4">4</a></span>.andWhere(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">age</span><span style="color:#710">'</span></span>, <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">&gt;=</span><span style="color:#710">'</span></span>, <span style="color:#00D">20</span>)
+</pre></div>
+</div>
+</div>
 
-<h3>Find a collection</h3>
+<h3 id="custom-operations-in-select-clause">Custom operations in SELECT clause</h3>
 
-<p><code>js
-knex.select('*')
-.from('participants')
-.where({ name: 'Jason' })
-.andWhere('age', '&gt;=', 20)
-</code></p>
+<div class="language-js highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n1" name="n1">1</a></span>knex(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">trips</span><span style="color:#710">'</span></span>)
+<span class="line-numbers"><a href="#n2" name="n2">2</a></span>.select(knex.raw(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">miles * passengers as passenger_miles</span><span style="color:#710">'</span></span>))
+<span class="line-numbers"><a href="#n3" name="n3">3</a></span>.select(knex.raw(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">CONCAT('Hello, ', name) as greeting_message</span><span style="color:#710">&quot;</span></span>))
+</pre></div>
+</div>
+</div>
 
-<h3>Custom operations in SELECT clause</h3>
+<h3 id="return-postgis-data-from-a-spatial-column">Return PostGIS data from a spatial column:</h3>
 
-<p><code>js
-knex('trips')
-.select(knex.raw('miles * passengers as passenger_miles'))
-.select(knex.raw("CONCAT('Hello, ', name) as greeting_message"))
-</code></p>
+<p>We use <a href="https://github.com/jfgodoy/knex-postgis">knex-postgis</a> to gain access to PostGIS functions in Postgres. Here, we return a ‘point’ column with <code>ST_AsGeoJSON</code>:</p>
 
-<h3>Return PostGIS data from a spatial column:</h3>
-
-<p>We use <a href="https://github.com/jfgodoy/knex-postgis">knex-postgis</a> to gain access to PostGIS functions in Postgres. Here, we return a &lsquo;point&rsquo; column with <code>ST_AsGeoJSON</code>:</p>
-
-<p><code>js
-const knexPostgis = require('knex-postgis')(knex);
-knex('events').select('*', knexPostgis.asGeoJSON('point'));
-</code></p>
+<div class="language-js highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n1" name="n1">1</a></span>const knexPostgis = require(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">knex-postgis</span><span style="color:#710">'</span></span>)(knex);
+<span class="line-numbers"><a href="#n2" name="n2">2</a></span>knex(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">events</span><span style="color:#710">'</span></span>).select(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">*</span><span style="color:#710">'</span></span>, knexPostgis.asGeoJSON(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">point</span><span style="color:#710">'</span></span>));
+</pre></div>
+</div>
+</div>
 
 <p>See <a href="https://github.com/jfgodoy/knex-postgis">knex-postgis</a> documentation for a list of other PostGIS functions that are supported.</p>
 ]]></content>
@@ -95,73 +106,78 @@ knex('events').select('*', knexPostgis.asGeoJSON('point'));
     <id>http://www.g9labs.com/2015/04/30/building-gpx-stats-through-frp-principles-on-bacon-dot-js</id>
     <content type="html"><![CDATA[<p>With my current fascination with <a href="http://github.com/andrewhao/stressfactor">tracking workouts and location-based-activities</a>, I have been interested in how I might be able to rewrite some of my stats logic with FRP principles.</p>
 
-<h3>What is FRP?</h3>
+<h3 id="what-is-frp">What is FRP?</h3>
 
-<p>FRP, or Functional Reactive Programming, is often defined as &ldquo;functional programming over values that change over time&rdquo;. It uses functional composition for streams of data that may appear in an infinite stream of data for some far indeterminate future &ndash; these types of use cases are served well by FRP which <a href="http://en.wikipedia.org/wiki/Functional_reactive_programming">&ldquo;(simplifies) these problems by explicitly modeling time&rdquo;</a>.</p>
+<p>FRP, or Functional Reactive Programming, is often defined as “functional programming over values that change over time”. It uses functional composition for streams of data that may appear in an infinite stream of data for some far indeterminate future - these types of use cases are served well by FRP which <a href="http://en.wikipedia.org/wiki/Functional_reactive_programming">“(simplifies) these problems by explicitly modeling time”</a>.</p>
 
-<h3>GPS &ndash; your location, varied over time.</h3>
+<h3 id="gps---your-location-varied-over-time">GPS - your location, varied over time.</h3>
 
-<p>A great application of this would be a workout. Let&rsquo;s say I wanted to build an app that received realtime updates on a person&rsquo;s position. Say the app was a Node server that received this JSON blob from a web API as a location update:</p>
+<p>A great application of this would be a workout. Let’s say I wanted to build an app that received realtime updates on a person’s position. Say the app was a Node server that received this JSON blob from a web API as a location update:</p>
 
-<p><code>json
-{ 'lat': 29.192414,
-  'lon': 148.113241,
-  'ele': 122.1,
-  'time': '2015-04-18T13:54:56Z' }
-</code></p>
+<div class="language-json highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n1" name="n1">1</a></span>{ <span style="color:#F00;background-color:#FAA">'</span><span style="color:#F00;background-color:#FAA">l</span><span style="color:#F00;background-color:#FAA">a</span><span style="color:#F00;background-color:#FAA">t</span><span style="color:#F00;background-color:#FAA">'</span>: <span style="color:#60E">29.192414</span>,
+<span class="line-numbers"><a href="#n2" name="n2">2</a></span>  <span style="color:#F00;background-color:#FAA">'</span><span style="color:#F00;background-color:#FAA">l</span><span style="color:#F00;background-color:#FAA">o</span><span style="color:#F00;background-color:#FAA">n</span><span style="color:#F00;background-color:#FAA">'</span>: <span style="color:#60E">148.113241</span>,
+<span class="line-numbers"><a href="#n3" name="n3">3</a></span>  <span style="color:#F00;background-color:#FAA">'</span><span style="color:#F00;background-color:#FAA">e</span><span style="color:#F00;background-color:#FAA">l</span><span style="color:#F00;background-color:#FAA">e</span><span style="color:#F00;background-color:#FAA">'</span>: <span style="color:#60E">122.1</span>,
+<span class="line-numbers"><a href="#n4" name="n4">4</a></span>  <span style="color:#F00;background-color:#FAA">'</span><span style="color:#F00;background-color:#FAA">t</span><span style="color:#F00;background-color:#FAA">i</span><span style="color:#F00;background-color:#FAA">m</span><span style="color:#F00;background-color:#FAA">e</span><span style="color:#F00;background-color:#FAA">'</span>: <span style="color:#F00;background-color:#FAA">'</span><span style="color:#00D">2015</span><span style="color:#00D">-0</span><span style="color:#00D">4</span><span style="color:#00D">-18</span><span style="color:#F00;background-color:#FAA">T</span><span style="color:#00D">13</span>:<span style="color:#00D">54</span>:<span style="color:#00D">56</span><span style="color:#F00;background-color:#FAA">Z</span><span style="color:#F00;background-color:#FAA">'</span> }
+</pre></div>
+</div>
+</div>
 
 <p>Say that some time later, the API receives this JSON blob:</p>
 
-<p><code>json
-{ 'lat': 29.192424,
-  'lon': 148.113251,
-  'ele': 123.1,
-  'time': '2015-04-18T13:55:26Z' }
-</code></p>
+<div class="language-json highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n1" name="n1">1</a></span>{ <span style="color:#F00;background-color:#FAA">'</span><span style="color:#F00;background-color:#FAA">l</span><span style="color:#F00;background-color:#FAA">a</span><span style="color:#F00;background-color:#FAA">t</span><span style="color:#F00;background-color:#FAA">'</span>: <span style="color:#60E">29.192424</span>,
+<span class="line-numbers"><a href="#n2" name="n2">2</a></span>  <span style="color:#F00;background-color:#FAA">'</span><span style="color:#F00;background-color:#FAA">l</span><span style="color:#F00;background-color:#FAA">o</span><span style="color:#F00;background-color:#FAA">n</span><span style="color:#F00;background-color:#FAA">'</span>: <span style="color:#60E">148.113251</span>,
+<span class="line-numbers"><a href="#n3" name="n3">3</a></span>  <span style="color:#F00;background-color:#FAA">'</span><span style="color:#F00;background-color:#FAA">e</span><span style="color:#F00;background-color:#FAA">l</span><span style="color:#F00;background-color:#FAA">e</span><span style="color:#F00;background-color:#FAA">'</span>: <span style="color:#60E">123.1</span>,
+<span class="line-numbers"><a href="#n4" name="n4">4</a></span>  <span style="color:#F00;background-color:#FAA">'</span><span style="color:#F00;background-color:#FAA">t</span><span style="color:#F00;background-color:#FAA">i</span><span style="color:#F00;background-color:#FAA">m</span><span style="color:#F00;background-color:#FAA">e</span><span style="color:#F00;background-color:#FAA">'</span>: <span style="color:#F00;background-color:#FAA">'</span><span style="color:#00D">2015</span><span style="color:#00D">-0</span><span style="color:#00D">4</span><span style="color:#00D">-18</span><span style="color:#F00;background-color:#FAA">T</span><span style="color:#00D">13</span>:<span style="color:#00D">55</span>:<span style="color:#00D">26</span><span style="color:#F00;background-color:#FAA">Z</span><span style="color:#F00;background-color:#FAA">'</span> }
+</pre></div>
+</div>
+</div>
 
 <p>So we have these data points, that the user has moved <code>+0.00001</code> latitude points and <code>+0.00001</code> longitude points, climbing a total of <code>+1.0</code> meters, over a period of <code>30</code> seconds.</p>
 
-<h4>Exercise: Get my instantaneous velocity</h4>
+<h4 id="exercise-get-my-instantaneous-velocity">Exercise: Get my instantaneous velocity</h4>
 
 <p>If we performed this imperatively, we would write it something like this:</p>
 
-<p><code>javascript
-var locations = [{ /*json*/ }, { /*json*/ } /*, ...*/];
-var last = locations[locations.length-1];
-var secondToLast = locations[locations.length-2];
-var timeDelta = last.time - secondToLast.time;
-var distanceDelta = getDistance(last.lon, last.lat, secondToLast.lon, secondToLast.lat);
-var velocity = distanceDelta / timeDelta;
-console.log(velocity);
-</code></p>
+<div class="language-javascript highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n1" name="n1">1</a></span><span style="color:#080;font-weight:bold">var</span> locations = [{ <span style="color:#777">/*json*/</span> }, { <span style="color:#777">/*json*/</span> } <span style="color:#777">/*, ...*/</span>];
+<span class="line-numbers"><a href="#n2" name="n2">2</a></span><span style="color:#080;font-weight:bold">var</span> last = locations[locations.length-<span style="color:#00D">1</span>];
+<span class="line-numbers"><a href="#n3" name="n3">3</a></span><span style="color:#080;font-weight:bold">var</span> secondToLast = locations[locations.length-<span style="color:#00D">2</span>];
+<span class="line-numbers"><a href="#n4" name="n4">4</a></span><span style="color:#080;font-weight:bold">var</span> timeDelta = last.time - secondToLast.time;
+<span class="line-numbers"><a href="#n5" name="n5">5</a></span><span style="color:#080;font-weight:bold">var</span> distanceDelta = getDistance(last.lon, last.lat, secondToLast.lon, secondToLast.lat);
+<span class="line-numbers"><a href="#n6" name="n6">6</a></span><span style="color:#080;font-weight:bold">var</span> velocity = distanceDelta / timeDelta;
+<span class="line-numbers"><a href="#n7" name="n7">7</a></span>console.log(velocity);
+</pre></div>
+</div>
+</div>
 
 <p>With FRP, it might look more like this:</p>
 
-<p>```javascript
-var locationStream = [{ /<em>json</em>/ }, { /<em>json</em>/ } /<em>, &hellip;some JSON objects that might appear in the future </em>/];
-locationStream.slidingWindow(2)</p>
+<div class="language-javascript highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"> <a href="#n1" name="n1">1</a></span><span style="color:#080;font-weight:bold">var</span> locationStream = [{ <span style="color:#777">/*json*/</span> }, { <span style="color:#777">/*json*/</span> } <span style="color:#777">/*, ...some JSON objects that might appear in the future */</span>];
+<span class="line-numbers"> <a href="#n2" name="n2">2</a></span>locationStream.slidingWindow(<span style="color:#00D">2</span>)
+<span class="line-numbers"> <a href="#n3" name="n3">3</a></span>              .map(<span style="color:#080;font-weight:bold">function</span>(pairs) {
+<span class="line-numbers"> <a href="#n4" name="n4">4</a></span>                <span style="color:#080;font-weight:bold">var</span> timeDelta = pairs[<span style="color:#00D">1</span>].time - pairs[<span style="color:#00D">0</span>].time;
+<span class="line-numbers"> <a href="#n5" name="n5">5</a></span>                <span style="color:#080;font-weight:bold">var</span> distanceDelta = getDistance(pairs[<span style="color:#00D">1</span>].lon, pairs[<span style="color:#00D">1</span>].lat, pairs[<span style="color:#00D">0</span>].lon, pairs[<span style="color:#00D">0</span>].lat);
+<span class="line-numbers"> <a href="#n6" name="n6">6</a></span>                <span style="color:#080;font-weight:bold">return</span> distanceDelta / timeDelta
+<span class="line-numbers"> <a href="#n7" name="n7">7</a></span>              })
+<span class="line-numbers"> <a href="#n8" name="n8">8</a></span>              .onValue(<span style="color:#080;font-weight:bold">function</span>(velocity) {
+<span class="line-numbers"> <a href="#n9" name="n9">9</a></span>                console.log(velocity);
+<span class="line-numbers"><strong><a href="#n10" name="n10">10</a></strong></span>              });
+</pre></div>
+</div>
+</div>
 
-<pre><code>          .map(function(pairs) {
-            var timeDelta = pairs[1].time - pairs[0].time;
-            var distanceDelta = getDistance(pairs[1].lon, pairs[1].lat, pairs[0].lon, pairs[0].lat);
-            return distanceDelta / timeDelta
-          })
-          .onValue(function(velocity) {
-            console.log(velocity);
-          });
-</code></pre>
+<p>There is a key difference that is not easily demonstrated here - that the former imperative example requires that all JSON arrays be materialized at once - via db query, in-memory store, etc. It doesn’t account for change in time.</p>
 
-<p>```</p>
+<p>However, the latter functional example accounts for changing values of time as they appear over the stream - as soon as a new value shows up in the stream, the velocity is changed instantly.</p>
 
-<p>There is a key difference that is not easily demonstrated here &ndash; that the former imperative example requires that all JSON arrays be materialized at once &ndash; via db query, in-memory store, etc. It doesn&rsquo;t account for change in time.</p>
-
-<p>However, the latter functional example accounts for changing values of time as they appear over the stream &ndash; as soon as a new value shows up in the stream, the velocity is changed instantly.</p>
-
-<h3>Some more location-based experiments: rxlocation</h3>
+<h3 id="some-more-location-based-experiments-rxlocation">Some more location-based experiments: rxlocation</h3>
 
 <p>I wrote up a library to parse various facts from a changing stream of GPS events, from instantaneous velocity, average velocity, moving/stopped status, etc.</p>
 
-<p>I investigated different reactive frameworks, mainly <a href="https://github.com/Reactive-Extensions/RxJS/">RxJS</a> and <a href="https://github.com/baconjs/bacon.js/">Bacon.js</a>. My takeaways were that RxJS does everything and the kitchen sink, but I got lost trying to reconcile Node streams with RxJS cold streams. Bacon.js just seemed to work for me, out of the box. I&rsquo;m still learning, so I hope to have a better understanding of the core issues here.</p>
+<p>I investigated different reactive frameworks, mainly <a href="https://github.com/Reactive-Extensions/RxJS/">RxJS</a> and <a href="https://github.com/baconjs/bacon.js/">Bacon.js</a>. My takeaways were that RxJS does everything and the kitchen sink, but I got lost trying to reconcile Node streams with RxJS cold streams. Bacon.js just seemed to work for me, out of the box. I’m still learning, so I hope to have a better understanding of the core issues here.</p>
 
 <p>You can check it out here: <a href="https://github.com/andrewhao/rxlocation">rxlocation</a>.</p>
 ]]></content>
@@ -172,17 +188,17 @@ locationStream.slidingWindow(2)</p>
     <link href="http://www.g9labs.com/2011/10/02/mmtss-a-collaborative-loop-station/"/>
     <updated>2011-10-02T03:53:45-07:00</updated>
     <id>http://www.g9labs.com/2011/10/02/mmtss-a-collaborative-loop-station</id>
-    <content type="html"><![CDATA[<h2>mmtss is a loop station built for live performances.</h2>
+    <content type="html"><![CDATA[<h2 id="mmtss-is-a-loop-station-built-for-live-performances">mmtss is a loop station built for live performances.</h2>
 
-<p>Let&rsquo;s make music together! This project simplifies a traditional loop tracking station and is designed for interactive collaborative music performances.</p>
+<p>Let’s make music together! This project simplifies a traditional loop tracking station and is designed for interactive collaborative music performances.</p>
 
-<p>The idea: Everybody adds or modifies one &ldquo;part&rdquo; of a 32-bar loop. The user gets to play an instrument over the existing mix and record the 32-bar phrase when she or he is ready. Once the person is finished, the project selects another instrument at random for the next viewer to record.</p>
+<p>The idea: Everybody adds or modifies one “part” of a 32-bar loop. The user gets to play an instrument over the existing mix and record the 32-bar phrase when she or he is ready. Once the person is finished, the project selects another instrument at random for the next viewer to record.</p>
 
-<p>It&rsquo;s an Ableton Live controller serving a Webkit view, backed by node.js on the backend and socket.io + RaphaelJS on the front. Communication is done through a LiveOSC Live plugin via sockets.</p>
+<p>It’s an Ableton Live controller serving a Webkit view, backed by node.js on the backend and socket.io + RaphaelJS on the front. Communication is done through a LiveOSC Live plugin via sockets.</p>
 
-<p>Displayed at the Regeneration &ldquo;We Collaborate&rdquo; art show in Oakland, CA. 9/24/2011.</p>
+<p>Displayed at the Regeneration “We Collaborate” art show in Oakland, CA. 9/24/2011.</p>
 
-<h3>Screenshots</h3>
+<h3 id="screenshots">Screenshots</h3>
 
 <p><img src="https://a248.e.akamai.net/assets.github.com/img/64abaefb0d10744dda42f362b6cd991522a88da4/687474703a2f2f6661726d372e7374617469632e666c69636b722e636f6d2f363136392f363138383336363537375f376261343864333864315f7a2e6a7067" alt="Practice mode" /></p>
 
@@ -190,69 +206,90 @@ locationStream.slidingWindow(2)</p>
 
 <p><img src="https://a248.e.akamai.net/assets.github.com/img/3f0c633b9b8d9d35970efe73f84c0f67bf68c6a8/687474703a2f2f6661726d372e7374617469632e666c69636b722e636f6d2f363132312f363138383838363131345f396436643531393937325f7a2e6a7067" alt="Cued mode" /></p>
 
-<p>Pressing &ldquo;record&rdquo; puts the user in a wait state. They are prompted to begin recording when all the black boxes count down and disappear.</p>
+<p>Pressing “record” puts the user in a wait state. They are prompted to begin recording when all the black boxes count down and disappear.</p>
 
 <p><img src="https://a248.e.akamai.net/assets.github.com/img/650dc62a52d8ca6441eff57e697307325390caaa/687474703a2f2f6661726d372e7374617469632e666c69636b722e636f6d2f363137372f363138383336373135315f636135623738323733355f7a2e6a7067" alt="Record mode" /></p>
 
 <p>mmtss in record mode.</p>
 
-<p>More screenshots: <a href="http://www.flickr.com/photos/andrewhao/sets/72157627640840853/">http://www.flickr.com/photos/andrewhao/sets/72157627640840853/</a></p>
+<p>More screenshots: http://www.flickr.com/photos/andrewhao/sets/72157627640840853/</p>
 
-<h3>Source code</h3>
+<h3 id="source-code">Source code</h3>
 
-<p>Github: <a href="http://www.github.com/andrewhao/mmtss.">http://www.github.com/andrewhao/mmtss.</a></p>
+<p>Github: http://www.github.com/andrewhao/mmtss.</p>
 
 <p>MIT/GPL-sourced for your coding pleasure.</p>
 
-<h3>Installation</h3>
+<h3 id="installation">Installation</h3>
 
 <ul>
-<li><p>Make sure you have npm installed: <a href="http://www.npmjs.org/">http://www.npmjs.org</a></p></li>
-<li><p>Copy <code>lib/LiveOSC</code> into <code>/Applications/Live x.y.z OS X/Live.app/Contents/App-Resources/MIDI\ Remote\ Scripts/</code> folder</p></li>
-<li><p>Set it as your MIDI remote in the Ableton Live Preferences pane, in the &ldquo;MIDI Remote&rdquo; tab.</p></li>
+  <li>
+    <p>Make sure you have npm installed: <a href="http://www.npmjs.org/">http://www.npmjs.org</a></p>
+  </li>
+  <li>
+    <p>Copy <code>lib/LiveOSC</code> into <code>/Applications/Live x.y.z OS X/Live.app/Contents/App-Resources/MIDI\ Remote\ Scripts/</code> folder</p>
+  </li>
+  <li>
+    <p>Set it as your MIDI remote in the Ableton Live Preferences pane, in the “MIDI Remote” tab.</p>
+  </li>
 </ul>
 
-
-<h3>Running it</h3>
+<h3 id="running-it">Running it</h3>
 
 <ul>
-<li><p>Open <code>Mmtss_0.als</code> as a sample Live project.</p></li>
-<li><p>Install all project dependencies with <code>npm install</code> from the project root.</p></li>
-<li><p>Start the Node server with <code>node app.js</code> from the root directory.</p></li>
-<li><p>Open a Web browser and visit <code>localhost:3000</code></p></li>
+  <li>
+    <p>Open <code>Mmtss_0.als</code> as a sample Live project.</p>
+  </li>
+  <li>
+    <p>Install all project dependencies with <code>npm install</code> from the project root.</p>
+  </li>
+  <li>
+    <p>Start the Node server with <code>node app.js</code> from the root directory.</p>
+  </li>
+  <li>
+    <p>Open a Web browser and visit <code>localhost:3000</code></p>
+  </li>
 </ul>
 
-
-<h3>Modifying the sample project</h3>
+<h3 id="modifying-the-sample-project">Modifying the sample project</h3>
 
 <p>You can modify this project to suit your own needs. Note that there are two sets of tracks; instrument (MIDI input) tracks and loop tracks that actually store clips.</p>
 
 <p>For <code>n</code> tracks, you can add or remove your own instruments. Just make sure that instrument at track <code>x</code> corresponds to track <code>x</code> + <code>n</code>.</p>
 
-<h3>Credits</h3>
+<h3 id="credits">Credits</h3>
 
 <ul>
-<li><p>Design and architectural inspiration taken from <a href="http://github.com/vnoise/vtouch">vtouch</a>, a HTML5/Node/Canvas Ableton controller.</p></li>
-<li><p>Original LiveOSC source is found at: <a href="http://monome.q3f.org/browser/trunk/LiveOSC">http://monome.q3f.org/browser/trunk/LiveOSC</a>. We use a different fork of the project at:<a href="http://github.com/vnoise/vtouch">http://github.com/vnoise/vtouch</a>.</p></li>
-<li><p>Super sweet CSS3 rocker widgets courtesy of <a href="http://www.simurai.com/">Simurai</a>: <a href="http://lab.simurai.com/css/umbrui/">UmbrUI</a></p></li>
+  <li>
+    <p>Design and architectural inspiration taken from <a href="http://github.com/vnoise/vtouch">vtouch</a>, a HTML5/Node/Canvas Ableton controller.</p>
+  </li>
+  <li>
+    <p>Original LiveOSC source is found at: <a href="http://monome.q3f.org/browser/trunk/LiveOSC">http://monome.q3f.org/browser/trunk/LiveOSC</a>. We use a different fork of the project at:<a href="http://github.com/vnoise/vtouch">http://github.com/vnoise/vtouch</a>.</p>
+  </li>
+  <li>
+    <p>Super sweet CSS3 rocker widgets courtesy of <a href="http://www.simurai.com/">Simurai</a>: <a href="http://lab.simurai.com/css/umbrui/">UmbrUI</a></p>
+  </li>
 </ul>
 
-
-<h3>License</h3>
+<h3 id="license">License</h3>
 
 <p><a href="http://www.opensource.org/licenses/mit-license.php">MIT</a> and <a href="http://www.gnu.org/copyleft/gpl.html">GPLv3</a> licensed. Go for it.</p>
 
 <p>You will, however, need to get a license for <a href="http://www.ableton.com/live">Ableton Live</a> yourself.</p>
 
-<h3>The handsome collaborators</h3>
+<h3 id="the-handsome-collaborators">The handsome collaborators</h3>
 
 <ul>
-<li><p>Andrew Hao: <a href="http://www.g9labs.com/">http://www.g9labs.com</a></p></li>
-<li><p>David Luoh: <a href="http://www.inkproj.com/">http://www.inkproj.com</a></p></li>
+  <li>
+    <p>Andrew Hao: <a href="http://www.g9labs.com/">http://www.g9labs.com</a></p>
+  </li>
+  <li>
+    <p>David Luoh: <a href="http://www.inkproj.com/">http://www.inkproj.com</a></p>
+  </li>
 </ul>
 
+<p>###</p>
 
-<h3></h3>
 ]]></content>
   </entry>
   
@@ -265,7 +302,7 @@ locationStream.slidingWindow(2)</p>
 
 <p><a href="http://www.flickr.com/photos/andrewhao/5885860254/"><img src="http://farm7.static.flickr.com/6053/5885860254_a2aa7f7895.jpg" alt="Interview View" /></a></p>
 
-<p>Some UI work I did for a stealth startup in early &lsquo;11. Responsible for look &amp; feel and frontend chat interactions. jQuery/UI communicating to a CakePHP/nodejs backend.</p>
+<p>Some UI work I did for a stealth startup in early ‘11. Responsible for look &amp; feel and frontend chat interactions. jQuery/UI communicating to a CakePHP/nodejs backend.</p>
 
 <p>We developed this prototype with <a href="http://www.wisdom.weizmann.ac.il/~dharel/SCANNED.PAPERS/Statecharts.pdf">statecharts</a>, a concept commonly found in event-driven programming and with which I first learned from <a href="http://frozencanuck.wordpress.com/2011/03/09/sproutcore-statecharts-vs-controllers/">Sproutcore</a>. I found it really helped map out all the complex user interactions we had to deal with on the page.</p>
 
@@ -278,7 +315,7 @@ locationStream.slidingWindow(2)</p>
     <link href="http://www.g9labs.com/2010/12/01/aristo-the-shiniest-jquery-ui-theme-of-them-all/"/>
     <updated>2010-12-01T09:54:40-08:00</updated>
     <id>http://www.g9labs.com/2010/12/01/aristo-the-shiniest-jquery-ui-theme-of-them-all</id>
-    <content type="html"><![CDATA[<p>Let&rsquo;s face it: <a href="http://jqueryui.com/themeroller/">jQuery UI skins</a> suck. They&rsquo;re flat, they&rsquo;re boring, they don&rsquo;t pop.</p>
+    <content type="html"><![CDATA[<p>Let’s face it: <a href="http://jqueryui.com/themeroller/">jQuery UI skins</a> suck. They’re flat, they’re boring, they don’t pop.</p>
 
 <p>Enter <a href="http://taitems.tumblr.com/post/482577430/introducing-aristo-a-jquery-ui-theme">Aristo</a>, a jQuery UI port of the <a href="http://cappuccino.org/">Cappuccino Javascript framework</a> theme.</p>
 

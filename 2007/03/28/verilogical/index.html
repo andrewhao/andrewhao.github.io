@@ -70,26 +70,32 @@
 		<div class="content">
 			<p>Oftentimes in <a href="http://en.wikipedia.org/wiki/Verilog">Verilog</a> code, we build testbenches (test fixtures). A common thing to do is to instantiate a module and plug in wires of the same names.</p>
 
-<p>Now a common hack is to copy and paste the module declaration line (the &ldquo;prototype,&rdquo; if you will). The prototype looks like this:</p>
+<p>Now a common hack is to copy and paste the module declaration line (the “prototype,” if you will). The prototype looks like this:</p>
 
-<blockquote><p>module    Foo(    bar,<br></br>       baz,<br></br>       &hellip;<br></br>    );  <br></br></p></blockquote>
+<blockquote>
+  <p>module 	Foo(	bar,<br />&lt;/br&gt;		baz,<br />&lt;/br&gt;		…<br />&lt;/br&gt;	);	<br />&lt;/br&gt;</p>
+</blockquote>
 
 <p>The HDL synthesizer can correctly wire inputs, regardless of instantiated order, by surrounding the names of the local wires with the input names as declared in the prototype in a format such as:</p>
 
-<blockquote><p>Foo foo_instance (    .bar(bar),<br></br>         .baz(baz),<br></br>         &hellip;<br></br>        );<br></br></p></blockquote>
+<blockquote>
+  <p>Foo foo_instance (	.bar(bar),<br />&lt;/br&gt;			.baz(baz),<br />&lt;/br&gt;			…<br />&lt;/br&gt;		);<br />&lt;/br&gt;</p>
+</blockquote>
 
 <p>So to do so is a rather painful matter of adding a period before the input name, copy and pasting the input name and pasting it after the name, bracketed by parentheses.</p>
 
-<p>But what do you do if your module has thirty inputs? Our previous solution was to surrender our wrists to inevitable Repetitive Stress Injuries. Today, I realized that I should have used a freakin' elementary <a href="http://en.wikipedia.org/wiki/Regular_expression">regular expression</a>.</p>
+<p>But what do you do if your module has thirty inputs? Our previous solution was to surrender our wrists to inevitable Repetitive Stress Injuries. Today, I realized that I should have used a freakin’ elementary <a href="http://en.wikipedia.org/wiki/Regular_expression">regular expression</a>.</p>
 
-<blockquote><p>Search:       (.*),<br></br>Replace:  .$1($1),<br></br></p></blockquote>
+<blockquote>
+  <p>Search:		(.*),<br />&lt;/br&gt;Replace:	.$1($1),<br />&lt;/br&gt;</p>
+</blockquote>
 
-<p>Wah-lah! I&rsquo;m kicking myself for not thinking of this earlier. And it has taken me 10 minutes to tell you how I saved forty-five seconds and my poor wrists. Anything to avoid more work (shh, don&rsquo;t tell Alex) :)</p>
+<p>Wah-lah! I’m kicking myself for not thinking of this earlier. And it has taken me 10 minutes to tell you how I saved forty-five seconds and my poor wrists. Anything to avoid more work (shh, don’t tell Alex) :)</p>
 
-<p><a href="http://www.xanga.com/Amazon/Click.aspx?asin=B00004XONN&amp;user=378399"><img src="http://ec1.images-amazon.com/images/P/B00004XONN.01._SCTHUMBZZZ_.jpg" alt="" /></a>
-<strong>Currently Listening</strong><br/>
-<a href="http://www.xanga.com/Amazon/Click.aspx?asin=B00004XONN&amp;user=378399"><strong>Kid A</strong></a><br/>
-By Radiohead<br/>
+<p><a href="http://www.xanga.com/Amazon/Click.aspx?asin=B00004XONN&amp;user=378399"><img src="http://ec1.images-amazon.com/images/P/B00004XONN.01._SCTHUMBZZZ_.jpg" alt="" /></a><br />
+<strong>Currently Listening</strong>  <br />
+<a href="http://www.xanga.com/Amazon/Click.aspx?asin=B00004XONN&amp;user=378399"><strong>Kid A</strong></a>  <br />
+By Radiohead  <br />
 <a href="http://www.xanga.com/Amazon/Click.aspx?asin=B00004XONN&amp;user=378399&amp;related=1">see related</a></p>
 
 			

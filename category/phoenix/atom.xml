@@ -1,0 +1,360 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: phoenix | The Sweet Spot]]></title>
+  <link href="http://www.g9labs.com/category/phoenix/atom.xml" rel="self"/>
+  <link href="http://www.g9labs.com/"/>
+  <updated>2016-06-29T16:33:32-07:00</updated>
+  <id>http://www.g9labs.com/</id>
+  <author>
+    <name><![CDATA[Andrew Hao]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Rails, meet Phoenix: Migrating to Phoenix with Rails session sharing]]></title>
+    <link href="http://www.g9labs.com/2016/06/24/migrating-to-phoenix-with-rails-session-sharing/"/>
+    <updated>2016-06-24T13:31:06-07:00</updated>
+    <id>http://www.g9labs.com/2016/06/24/migrating-to-phoenix-with-rails-session-sharing</id>
+    <content type="html"><![CDATA[<p>You’ve resolved to build your company’s Next Big Thing in Phoenix and Elixir. That’s great! You’re facing a problem though - all user authentication and access concerns are performed on your Rails system, and the work to reimplement this in Phoenix is significant.</p>
+
+<p>Fortunately for you, there is a great Phoenix plug to share session data between Rails and Phoenix. If you pull this off, you’ll be able to build your new API on your Phoenix app, all while letting Rails handle user authentication and session management.</p>
+
+<h3 id="before-we-begin">Before we begin</h3>
+<p>In this scenario, you want to build out a new API in Phoenix that is consumed by your frontend single-page application, whose sessions are hosted on Rails. We’ll call the Rails app <code>rails_app</code> and your new Phoenix app <code>phoenix_app</code>.</p>
+
+<p>Additionally, each app will use a different subdomain. The Rails app will be deployed at the <code>www.myapp.com</code> subdomain. The Phoenix app will be deployed at the <code>api.myapp.com</code> subdomain.</p>
+
+<p>We are going to take <a href="https://github.com/cconstantin">Chris Constantin</a>’s excellent <a href="https://github.com/cconstantin/plug_rails_cookie_session_store"><code>PlugRailsCookieSessionStore</code></a> plug and integrate it into our Phoenix project. Both apps will be configured with identical cookie domains, encryption salts, signing salts, and security tokens.</p>
+
+<p>In the examples that follow, I’ll be using the latest versions of each framework at the time of writing, Rails 4.2 and Phoenix 1.2.</p>
+
+<h3 id="cookie-based-session-storage">Cookie-based session storage</h3>
+
+<p>Our session data is stored on the client in a secure, encrypted, validated cookie. We won’t cover the basics of cookies here, but <a href="http://www.justinweiss.com/articles/how-rails-sessions-work/">you can read more about them here</a>.</p>
+
+<p>Our approach will only work if your current Rails system utilizes cookie-based sessions. We will not cover the use case with a database-backed session store in SQL, Redis, or Memcache.</p>
+
+<h3 id="step-1-configure-rails-accordingly">Step 1: Configure Rails accordingly</h3>
+
+<h4 id="configure-the-cookie-store">Configure the cookie store</h4>
+
+<p>Let’s set up your Rails app to use a JSON cookie storage format:</p>
+
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"> <a href="#n1" name="n1">1</a></span><span style="color:#777"># config/initializer/session_store.rb</span>
+<span class="line-numbers"> <a href="#n2" name="n2">2</a></span>
+<span class="line-numbers"> <a href="#n3" name="n3">3</a></span><span style="color:#777"># Use cookie session storage in JSON format. Here, we scope the cookie to the root domain.</span>
+<span class="line-numbers"> <a href="#n4" name="n4">4</a></span><span style="color:#036;font-weight:bold">Rails</span>.application.config.session_store <span style="color:#A60">:cookie_store</span>, <span style="color:#606">key</span>: <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">_rails_app_session</span><span style="color:#710">'</span></span>, <span style="color:#606">domain</span>: <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">.</span><span style="background-color:hsla(0,0%,0%,0.07);color:black"><span style="font-weight:bold;color:#666">#{</span><span style="color:#069">ENV</span>[<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">DOMAIN</span><span style="color:#710">'</span></span>]<span style="font-weight:bold;color:#666">}</span></span><span style="color:#710">&quot;</span></span>
+<span class="line-numbers"> <a href="#n5" name="n5">5</a></span><span style="color:#036;font-weight:bold">Rails</span>.application.config.action_dispatch.cookies_serializer = <span style="color:#A60">:json</span>
+<span class="line-numbers"> <a href="#n6" name="n6">6</a></span>
+<span class="line-numbers"> <a href="#n7" name="n7">7</a></span><span style="color:#777"># These salts are optional, but it doesn't hurt to explicitly configure them the same between the two apps.</span>
+<span class="line-numbers"> <a href="#n8" name="n8">8</a></span><span style="color:#036;font-weight:bold">Rails</span>.application.config.action_dispatch.encrypted_cookie_salt = <span style="color:#069">ENV</span>[<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">SESSION_ENCRYPTED_COOKIE_SALT</span><span style="color:#710">'</span></span>]
+<span class="line-numbers"> <a href="#n9" name="n9">9</a></span><span style="color:#036;font-weight:bold">Rails</span>.application.config.action_dispatch.encrypted_signed_cookie_salt = <span style="color:#069">ENV</span>[<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">SESSION_ENCRYPTED_SIGNED_COOKIE_SALT</span><span style="color:#710">'</span></span>]
+<span class="line-numbers"><strong><a href="#n10" name="n10">10</a></strong></span>
+</pre></div>
+</div>
+</div>
+
+<p>Your app may not be configured with a <code>SESSION_ENCRYPTED_COOKIE_SALT</code> and <code>SESSION_ENCRYPTED_SIGNED_COOKIE_SALT</code>. You may generate a pair with any random values.</p>
+
+<p><a href="http://nipperlabs.com/rails-secretkeybase">Some speculate</a> that Rails does not require the two salts by default because the <code>SECRET_KEY_BASE</code> is sufficiently long enough to not require a salt. In our example, we choose to supply them anyways to be explicit.</p>
+
+<p>Another important value to note here is that we have chosen a key for our session cookie - <code>_rails_app_session</code>. This value will be the shared cookie key for both apps.</p>
+
+<h3 id="step-2-configure-the-plug-for-phoenix">Step 2: Configure the plug for Phoenix</h3>
+
+<p>Turning our attention to our Phoenix app, in the <code>mix.exs</code> file, add the library dependency:</p>
+
+<div class="language-elixir highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n1" name="n1">1</a></span># mix.exs
+<span class="line-numbers"><a href="#n2" name="n2">2</a></span>defmodule PhoenixApp
+<span class="line-numbers"><a href="#n3" name="n3">3</a></span>  defp deps do
+<span class="line-numbers"><a href="#n4" name="n4">4</a></span>    # snip
+<span class="line-numbers"><a href="#n5" name="n5">5</a></span>    {:plug_rails_cookie_session_store, &quot;~&gt; 0.1&quot;},
+<span class="line-numbers"><a href="#n6" name="n6">6</a></span>    # snip
+<span class="line-numbers"><a href="#n7" name="n7">7</a></span>  end
+<span class="line-numbers"><a href="#n8" name="n8">8</a></span>end
+</pre></div>
+</div>
+</div>
+
+<p>Then run <code>mix deps.get</code> to fetch the new library.</p>
+
+<p>Now in your <code>web/phoenix_app/endpoint.ex</code> file, remove the configuration for the existing session store and add the configuration for the Rails session store.</p>
+
+<div class="language-elixir highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"> <a href="#n1" name="n1">1</a></span># lib/phoenix_app/endpoint.ex
+<span class="line-numbers"> <a href="#n2" name="n2">2</a></span>defmodule PhoenixApp.Endpoint do
+<span class="line-numbers"> <a href="#n3" name="n3">3</a></span>  plug Plug.Session,
+<span class="line-numbers"> <a href="#n4" name="n4">4</a></span>    # Remove the original cookie store that comes with Phoenix, out of the box.
+<span class="line-numbers"> <a href="#n5" name="n5">5</a></span>    # store: :cookie,
+<span class="line-numbers"> <a href="#n6" name="n6">6</a></span>    # key: &quot;_phoenix_app_key&quot;,
+<span class="line-numbers"> <a href="#n7" name="n7">7</a></span>    # signing_salt: &quot;M8emDP0h&quot;
+<span class="line-numbers"> <a href="#n8" name="n8">8</a></span>    store: PlugRailsCookieSessionStore,
+<span class="line-numbers"> <a href="#n9" name="n9">9</a></span>    # Decide on a shared key for your cookie. Oftentimes, this should
+<span class="line-numbers"><strong><a href="#n10" name="n10">10</a></strong></span>    # mirror your Rails app session key
+<span class="line-numbers"><a href="#n11" name="n11">11</a></span>    key: &quot;_rails_app_session&quot;,
+<span class="line-numbers"><a href="#n12" name="n12">12</a></span>    secure: true,
+<span class="line-numbers"><a href="#n13" name="n13">13</a></span>    encrypt: true,
+<span class="line-numbers"><a href="#n14" name="n14">14</a></span>    # Specifies the matching rules on the hostname that this cookie will be valid for
+<span class="line-numbers"><a href="#n15" name="n15">15</a></span>    domain: &quot;.#{System.get_env(&quot;DOMAIN&quot;)}&quot;,
+<span class="line-numbers"><a href="#n16" name="n16">16</a></span>    signing_salt: System.get_env(&quot;SESSION_ENCRYPTED_SIGNED_COOKIE_SALT&quot;),
+<span class="line-numbers"><a href="#n17" name="n17">17</a></span>    encryption_salt: System.get_env(&quot;SESSION_ENCRYPTED_COOKIE_SALT&quot;),
+<span class="line-numbers"><a href="#n18" name="n18">18</a></span>    key_iterations: 1000,
+<span class="line-numbers"><a href="#n19" name="n19">19</a></span>    key_length: 64,
+<span class="line-numbers"><strong><a href="#n20" name="n20">20</a></strong></span>    key_digest: :sha,
+<span class="line-numbers"><a href="#n21" name="n21">21</a></span>    # Specify a JSON serializer to use on the session
+<span class="line-numbers"><a href="#n22" name="n22">22</a></span>    serializer: Poison
+<span class="line-numbers"><a href="#n23" name="n23">23</a></span>end
+<span class="line-numbers"><a href="#n24" name="n24">24</a></span>
+</pre></div>
+</div>
+</div>
+
+<p>We set a <code>DOMAIN</code> environment variable with the value<br />
+<code>myapp.com</code>. The goal is for these two apps to be able to be deployed at any subdomain that ends in <code>myapp.com</code>, and still be able to share the cookie.</p>
+
+<p>The <code>secure</code> flag configures the app to send a secure cookie, which only is served over SSL HTTPS connections. It is highly recommended for your site; if you haven’t upgraded to SSL, you should do so now!</p>
+
+<p>Our cookies are signed such that their origins are guaranteed to have been computed from our app(s). This is done for free with Rails (and Phoenix’s) session libraries. The signature is derived from the <code>secret_key_base</code> and <code>signing_salt</code>.</p>
+
+<p>The <code>encrypt</code> flag encrypts the contents of the cookie’s value with an encryption key derived from <code>secret_key_base</code> and <code>encryption_salt</code>. This should always be set to <code>true</code>.</p>
+
+<p><code>key_iterations</code>, <code>key_length</code> and <code>key_digest</code> are configurations that dictate how the signing and encryption keys are derived. These are <a href="https://github.com/rails/rails/blob/4-2-stable/railties/lib/rails/application.rb">configured to match Rails’ defaults</a> (see also: <a href="https://github.com/rails/rails/blob/4-2-stable/activesupport/lib/active_support/key_generator.rb">defaults</a>). Unless your Rails app has custom configurations for these values, you should leave them be.</p>
+
+<h3 id="step-3-configure-both-apps-to-read-from-the-new-environment-variables">Step 3: Configure both apps to read from the new environment variables</h3>
+
+<p>Be sure your development and production versions of your app are configured with identical values for <code>DOMAIN</code>, <code>SESSION_ENCRYPTED_COOKIE_SALT</code> and <code>SESSION_ENCRYPTED_SIGNED_COOKIE_SALT</code>. You’ll want to make sure your production apps store identical key-value pairs.</p>
+
+<h3 id="step-4-change-phoenix-controllers-to-verify-sessions-based-on-session-data">Step 4: Change Phoenix controllers to verify sessions based on session data.</h3>
+
+<p>Now when the Phoenix app receives incoming requests, it can simply look up user session data in the session cookie to determine whether the user is logged in, and who that user is.</p>
+
+<p>In this example, our Rails app implements user auth with Devise and Warden. We know that Warden stores the user ID and a segment of the password hash in the <code>warden.user.user.key</code> session variable.</p>
+
+<p>Here’s what the raw session data looks like when the <code>PlugRailsCookieSessionStore</code> extracts it from the cookie:</p>
+
+<div class="language-elixir highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n1" name="n1">1</a></span>%{&quot;_csrf_token&quot; =&gt; &quot;ELeSt4MBUINKi0STEBpslw3UevGZuVLUx5zGVP5NlQU=&quot;,
+<span class="line-numbers"><a href="#n2" name="n2">2</a></span>  &quot;session_id&quot; =&gt; &quot;17ec9b696fe76ba4a777d625e57f3521&quot;,
+<span class="line-numbers"><a href="#n3" name="n3">3</a></span>  &quot;warden.user.user.key&quot; =&gt; [[2], &quot;$2a$10$R/3NKl9KQViQxY8eoMCIp.&quot;]}
+</pre></div>
+</div>
+</div>
+
+<div class="language-elixir highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"> <a href="#n1" name="n1">1</a></span>defmodule PhoenixApp.SomeApiResourceController do
+<span class="line-numbers"> <a href="#n2" name="n2">2</a></span>  use PhoenixApp.Web, :controller
+<span class="line-numbers"> <a href="#n3" name="n3">3</a></span>
+<span class="line-numbers"> <a href="#n4" name="n4">4</a></span>  def index(conn, _params) do
+<span class="line-numbers"> <a href="#n5" name="n5">5</a></span>    {:ok, user_id} = load_user(conn)
+<span class="line-numbers"> <a href="#n6" name="n6">6</a></span>
+<span class="line-numbers"> <a href="#n7" name="n7">7</a></span>    conn
+<span class="line-numbers"> <a href="#n8" name="n8">8</a></span>    |&gt; assign(:user_id, user_id)
+<span class="line-numbers"> <a href="#n9" name="n9">9</a></span>    |&gt; render(&quot;index.html&quot;)
+<span class="line-numbers"><strong><a href="#n10" name="n10">10</a></strong></span>  end
+<span class="line-numbers"><a href="#n11" name="n11">11</a></span>
+<span class="line-numbers"><a href="#n12" name="n12">12</a></span>  plug :verify_session
+<span class="line-numbers"><a href="#n13" name="n13">13</a></span>
+<span class="line-numbers"><a href="#n14" name="n14">14</a></span>  # If we've found a user, then allow the request to continue.
+<span class="line-numbers"><a href="#n15" name="n15">15</a></span>  # Otherwise, halt the request and return a 401
+<span class="line-numbers"><a href="#n16" name="n16">16</a></span>  defp verify_session(conn, _) do
+<span class="line-numbers"><a href="#n17" name="n17">17</a></span>    case load_user(conn) do
+<span class="line-numbers"><a href="#n18" name="n18">18</a></span>      {:ok, user_id} -&gt; conn
+<span class="line-numbers"><a href="#n19" name="n19">19</a></span>      {:error, _} -&gt; conn |&gt; send_resp(401, &quot;Unauthorized&quot;) |&gt; halt
+<span class="line-numbers"><strong><a href="#n20" name="n20">20</a></strong></span>    end
+<span class="line-numbers"><a href="#n21" name="n21">21</a></span>  end
+<span class="line-numbers"><a href="#n22" name="n22">22</a></span>
+<span class="line-numbers"><a href="#n23" name="n23">23</a></span>  defp load_user(conn) do
+<span class="line-numbers"><a href="#n24" name="n24">24</a></span>    # =&gt; The Warden user storage scheme: [user_id, password_hash_truncated]
+<span class="line-numbers"><a href="#n25" name="n25">25</a></span>    # [[1], &quot;$2a$10$vnx35UTTJQURfqbM6srv3e&quot;]
+<span class="line-numbers"><a href="#n26" name="n26">26</a></span>    warden_key = conn |&gt; get_session(&quot;warden.user.user.key&quot;)
+<span class="line-numbers"><a href="#n27" name="n27">27</a></span>
+<span class="line-numbers"><a href="#n28" name="n28">28</a></span>    case warden_key do
+<span class="line-numbers"><a href="#n29" name="n29">29</a></span>      [[user_id], _] -&gt; {:ok, user_id}
+<span class="line-numbers"><strong><a href="#n30" name="n30">30</a></strong></span>      _ -&gt; {:error, :not_found}
+<span class="line-numbers"><a href="#n31" name="n31">31</a></span>    end
+<span class="line-numbers"><a href="#n32" name="n32">32</a></span>  end
+<span class="line-numbers"><a href="#n33" name="n33">33</a></span>end
+</pre></div>
+</div>
+</div>
+
+<p>A very naive plug implementation simply renders a 401 if the session key is not found in the session, otherwise it allows the request through.</p>
+
+<h3 id="step-5-move-session-concerns-into-its-own-module">Step 5: Move session concerns into its own module</h3>
+
+<p>Let’s move session concerns around session parsing out of the controller into its own <code>Session</code> module. Additionally, we include two helpers, <code>current_user/1</code> and <code>logged_in?/1</code>.</p>
+
+<div class="language-elixir highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"> <a href="#n1" name="n1">1</a></span># web/models/session.ex
+<span class="line-numbers"> <a href="#n2" name="n2">2</a></span>defmodule PhoenixApp.Session do
+<span class="line-numbers"> <a href="#n3" name="n3">3</a></span>  use PhoenixApp.Web, :controller
+<span class="line-numbers"> <a href="#n4" name="n4">4</a></span>  def current_user(conn) do
+<span class="line-numbers"> <a href="#n5" name="n5">5</a></span>    # Our app's concept of a User is merely whatever is stored in the
+<span class="line-numbers"> <a href="#n6" name="n6">6</a></span>    # Session key. In the future, we could then use this as the delegation
+<span class="line-numbers"> <a href="#n7" name="n7">7</a></span>    # point to fetch more details about the user from a backend store.
+<span class="line-numbers"> <a href="#n8" name="n8">8</a></span>    case load_user(conn) do
+<span class="line-numbers"> <a href="#n9" name="n9">9</a></span>      {:ok, user_id} -&gt; user_id
+<span class="line-numbers"><strong><a href="#n10" name="n10">10</a></strong></span>      {:error, :not_found} -&gt; nil
+<span class="line-numbers"><a href="#n11" name="n11">11</a></span>    end
+<span class="line-numbers"><a href="#n12" name="n12">12</a></span>  end
+<span class="line-numbers"><a href="#n13" name="n13">13</a></span>
+<span class="line-numbers"><a href="#n14" name="n14">14</a></span>  def logged_in?(conn) do
+<span class="line-numbers"><a href="#n15" name="n15">15</a></span>    !!current_user(conn)
+<span class="line-numbers"><a href="#n16" name="n16">16</a></span>  end
+<span class="line-numbers"><a href="#n17" name="n17">17</a></span>
+<span class="line-numbers"><a href="#n18" name="n18">18</a></span>  def load_user(conn) do
+<span class="line-numbers"><a href="#n19" name="n19">19</a></span>    # =&gt; The Warden user storage scheme: [user_id, password_hash_truncated]
+<span class="line-numbers"><strong><a href="#n20" name="n20">20</a></strong></span>    # [[1], &quot;$2a$10$vnx35UTTJQURfqbM6srv3e&quot;]
+<span class="line-numbers"><a href="#n21" name="n21">21</a></span>    warden_key = conn |&gt; get_session(&quot;warden.user.user.key&quot;)
+<span class="line-numbers"><a href="#n22" name="n22">22</a></span>
+<span class="line-numbers"><a href="#n23" name="n23">23</a></span>    case warden_key do
+<span class="line-numbers"><a href="#n24" name="n24">24</a></span>      [[user_id], _] -&gt; {:ok, user_id}
+<span class="line-numbers"><a href="#n25" name="n25">25</a></span>      _ -&gt; {:error, :not_found}
+<span class="line-numbers"><a href="#n26" name="n26">26</a></span>    end
+<span class="line-numbers"><a href="#n27" name="n27">27</a></span>  end
+<span class="line-numbers"><a href="#n28" name="n28">28</a></span>end
+</pre></div>
+</div>
+</div>
+
+<p>This leaves the controller looking skinnier, implementing only the Plug. Extracted methods are delegated to the new <code>Session</code> module.</p>
+
+<div class="language-elixir highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"> <a href="#n1" name="n1">1</a></span>defmodule PhoenixApp.SomeApiResourceController do
+<span class="line-numbers"> <a href="#n2" name="n2">2</a></span>  use PhoenixApp.Web, :controller
+<span class="line-numbers"> <a href="#n3" name="n3">3</a></span>  alias PhoenixApp.Session
+<span class="line-numbers"> <a href="#n4" name="n4">4</a></span>
+<span class="line-numbers"> <a href="#n5" name="n5">5</a></span>  def index(conn, _params) do
+<span class="line-numbers"> <a href="#n6" name="n6">6</a></span>    IO.inspect conn.private.plug_session
+<span class="line-numbers"> <a href="#n7" name="n7">7</a></span>    user_id = Session.current_user(conn)
+<span class="line-numbers"> <a href="#n8" name="n8">8</a></span>
+<span class="line-numbers"> <a href="#n9" name="n9">9</a></span>    conn
+<span class="line-numbers"><strong><a href="#n10" name="n10">10</a></strong></span>    |&gt; assign(:user_id, user_id)
+<span class="line-numbers"><a href="#n11" name="n11">11</a></span>    |&gt; render(&quot;index.html&quot;)
+<span class="line-numbers"><a href="#n12" name="n12">12</a></span>  end
+<span class="line-numbers"><a href="#n13" name="n13">13</a></span>
+<span class="line-numbers"><a href="#n14" name="n14">14</a></span>  plug :verify_session
+<span class="line-numbers"><a href="#n15" name="n15">15</a></span>
+<span class="line-numbers"><a href="#n16" name="n16">16</a></span>  # Future refinements could extract this into its own Plug file.
+<span class="line-numbers"><a href="#n17" name="n17">17</a></span>  defp verify_session(conn, _) do
+<span class="line-numbers"><a href="#n18" name="n18">18</a></span>    case Session.logged_in?(conn) do
+<span class="line-numbers"><a href="#n19" name="n19">19</a></span>      false -&gt; conn |&gt; send_resp(401, &quot;Unauthorized&quot;) |&gt; halt
+<span class="line-numbers"><strong><a href="#n20" name="n20">20</a></strong></span>      _ -&gt; conn
+<span class="line-numbers"><a href="#n21" name="n21">21</a></span>    end
+<span class="line-numbers"><a href="#n22" name="n22">22</a></span>  end
+<span class="line-numbers"><a href="#n23" name="n23">23</a></span>end
+</pre></div>
+</div>
+</div>
+
+<p>Finally, we implement some nice helpers for your APIs:</p>
+
+<div class="language-elixir highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n1" name="n1">1</a></span># web/web.ex
+<span class="line-numbers"><a href="#n2" name="n2">2</a></span>
+<span class="line-numbers"><a href="#n3" name="n3">3</a></span>def view do
+<span class="line-numbers"><a href="#n4" name="n4">4</a></span>  quote do
+<span class="line-numbers"><a href="#n5" name="n5">5</a></span>    # snip
+<span class="line-numbers"><a href="#n6" name="n6">6</a></span>    import PhoenixApp.Session
+<span class="line-numbers"><a href="#n7" name="n7">7</a></span>  end
+<span class="line-numbers"><a href="#n8" name="n8">8</a></span>end
+</pre></div>
+</div>
+</div>
+
+<p>This gives you the ability to call <code>logged_in?(@conn)</code> and <code>current_user(@conn)</code> from within your views, should you desire to.</p>
+
+<h3 id="step-6-fetching-additional-information-from-the-backend">Step 6: Fetching additional information from the backend</h3>
+
+<p>Let’s enhance our <code>Session</code> module with the capability to fetch additional information from another resource.</p>
+
+<p>In this case, we’ll model a call an external User API to fetch extended data about the User, potentially with some sensitive information (that’s why we didn’t want to serialize it into the session).</p>
+
+<div class="language-elixir highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"> <a href="#n1" name="n1">1</a></span># web/models/user.ex
+<span class="line-numbers"> <a href="#n2" name="n2">2</a></span>defmodule PhoenixApp.User do
+<span class="line-numbers"> <a href="#n3" name="n3">3</a></span>  # Gets some user identity information like email, avatar image.
+<span class="line-numbers"> <a href="#n4" name="n4">4</a></span>  # For this example, we'll use a random user generator.
+<span class="line-numbers"> <a href="#n5" name="n5">5</a></span>  #
+<span class="line-numbers"> <a href="#n6" name="n6">6</a></span>  # This example hits an API, but this could just as easily be something that hits
+<span class="line-numbers"> <a href="#n7" name="n7">7</a></span>  # the database, or Redis, or some cache.
+<span class="line-numbers"> <a href="#n8" name="n8">8</a></span>  def fetch(user_id) do
+<span class="line-numbers"> <a href="#n9" name="n9">9</a></span>    %{ body: body } = HTTPotion.get(&quot;https://randomuser.me/api?seed=#{user_id}&quot;)
+<span class="line-numbers"><strong><a href="#n10" name="n10">10</a></strong></span>    [result | _ ] = body |&gt; Poison.decode! |&gt; Map.get(&quot;results&quot;)
+<span class="line-numbers"><a href="#n11" name="n11">11</a></span>    result
+<span class="line-numbers"><a href="#n12" name="n12">12</a></span>  end
+<span class="line-numbers"><a href="#n13" name="n13">13</a></span>end
+</pre></div>
+</div>
+</div>
+
+<p>Now our <code>Session</code> can be extended to return the proper <code>User</code>, which may provide more utility to us as we implement our Phoenix feature.</p>
+
+<div class="language-elixir highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"> <a href="#n1" name="n1">1</a></span>defmodule PhoenixApp.Session do
+<span class="line-numbers"> <a href="#n2" name="n2">2</a></span>  use PhoenixApp.Web, :controller
+<span class="line-numbers"> <a href="#n3" name="n3">3</a></span>  alias PhoenixApp.User
+<span class="line-numbers"> <a href="#n4" name="n4">4</a></span>
+<span class="line-numbers"> <a href="#n5" name="n5">5</a></span>  def current_user(conn) do
+<span class="line-numbers"> <a href="#n6" name="n6">6</a></span>    case load_user(conn) do
+<span class="line-numbers"> <a href="#n7" name="n7">7</a></span>      # Changed current_user/1 to now return a User or a nil.
+<span class="line-numbers"> <a href="#n8" name="n8">8</a></span>      {:ok, user_id} -&gt; user_id |&gt; User.fetch
+<span class="line-numbers"> <a href="#n9" name="n9">9</a></span>      {:error, :not_found} -&gt; nil
+<span class="line-numbers"><strong><a href="#n10" name="n10">10</a></strong></span>    end
+<span class="line-numbers"><a href="#n11" name="n11">11</a></span>  end
+<span class="line-numbers"><a href="#n12" name="n12">12</a></span>
+<span class="line-numbers"><a href="#n13" name="n13">13</a></span>  # snip
+<span class="line-numbers"><a href="#n14" name="n14">14</a></span>end
+</pre></div>
+</div>
+</div>
+
+<h4 id="heres-the-two-apps-in-action">Here’s the two apps in action:</h4>
+
+<p><img src="http://i.imgur.com/Vu72x7C.gif" alt="Flipping between the two apps, logged in and out." /></p>
+
+<h3 id="heroku-deployment-gotchas">Heroku deployment gotchas</h3>
+
+<p>If you are deploying this to Heroku with the popular <a href="git@github.com:HashNuke/heroku-buildpack-elixir.git">Heroku Elixir buildpack</a>, please be aware that adding or changing environment variables that are required at build time require that the new environment variables outlined here are added to your <code>elixir_buildpack.config</code> file in your repository.</p>
+
+<div class="language-elixir highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n1" name="n1">1</a></span># elixir_buildpack.config
+<span class="line-numbers"><a href="#n2" name="n2">2</a></span>config_vars_to_export=(SECRET_KEY_BASE SESSION_ENCRYPTED_COOKIE_SALT SESSION_ENCRYPTED_SIGNED_COOKIE_SALT DOMAIN)
+</pre></div>
+</div>
+</div>
+
+<h3 id="caveats-and-considerations">Caveats and considerations</h3>
+
+<h4 id="csrf-incompatibilites">CSRF incompatibilites</h4>
+
+<p>At the time of this writing, Phoenix and Rails overwrite each others’ session CSRF tokens with incompatible token schemes. This means that you are not able to make remote POST or PUT requests across the apps with CSRF protection turned on. Our current approach will work best with a read-only API, at the moment.</p>
+
+<h4 id="be-judicious-about-what-you-store-in-a-cookie">Be judicious about what you store in a cookie</h4>
+
+<p>Cookies themselves have their own strengths and drawbacks. We should note that you should be judicious about the amount of <a href="http://guides.rubyonrails.org/security.html#replay-attacks-for-cookiestore-sessions">data you store in a session</a> (hint: only the bare minimum, and nothing sensitive).</p>
+
+<p>The OWASP guidelines also provide some <a href="https://www.owasp.org/index.php/Session_Management_Cheat_Sheet">general security practices around cookie session storage</a>.</p>
+
+<h4 id="moving-beyond-session-sharing">Moving beyond session sharing</h4>
+
+<p>Even though this scheme may work in the short run, coupling our apps at this level in the long run will result in headaches as the apps are coupled to intricate session implementation details. If, in the long run, you wanted to continue scaling out your Phoenix app ecosystem, you may want to look into the following authentication patterns, both of which move your system toward a microservices architecture.</p>
+
+<p>1) Develop an <a href="http://microservices.io/patterns/apigateway.html">API gateway</a> whose purpose is to be the browser’s buffer to your internal service architecture. This one gateway is responsible for identity access and control, decrypting session data and proxying requests to an umbrella of internal services (which may be Rails or Phoenix). Internal services may receive user identities in unencrypted form.</p>
+
+<p>2) Consider implementing a <a href="https://jwt.io/">JWT token implementation</a> across your apps, in which <a href="https://auth0.com/blog/2014/01/07/angularjs-authentication-with-cookies-vs-token/">all session and authorization claims are stored in the token itself, and encrypted in the client and server.</a>. This scheme may still rely on cookies (you may store the token in a cookie, or pass it around in an HTTP header). The benefits of this scheme is the ability for your app(s) to manage identity and authentication claims on their own without having to verify against a third party. Drawbacks of this scheme are <a href="http://blog.prevoty.com/does-jwt-put-your-web-app-at-risk">the difficulty around revoking or expiring sessions</a>.</p>
+
+<p>Each of these approaches is not without overhead and complexity; be sure to do your homework before your proceed.</p>
+
+<h3 id="conclusion">Conclusion</h3>
+
+<p>That’s it! I hope I’ve illustrated a quick and easy way to get a working Phoenix app sharing sessions with Rails app(s), should you decide to prototype one in your existing system. I’ve also pushed up a <a href="https://github.com/andrewhao/sample-rails-phoenix-shared-sessions/">sample app if you want to cross-reference the code</a>. Good luck!</p>
+]]></content>
+  </entry>
+  
+</feed>

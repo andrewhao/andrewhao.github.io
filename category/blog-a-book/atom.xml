@@ -4,7 +4,7 @@
   <title><![CDATA[Category: blog a book | The Sweet Spot]]></title>
   <link href="http://www.g9labs.com/category/blog-a-book/atom.xml" rel="self"/>
   <link href="http://www.g9labs.com/"/>
-  <updated>2016-06-24T11:31:59-07:00</updated>
+  <updated>2016-06-29T16:33:32-07:00</updated>
   <id>http://www.g9labs.com/</id>
   <author>
     <name><![CDATA[Andrew Hao]]></name>
@@ -18,165 +18,155 @@
     <link href="http://www.g9labs.com/2014/02/02/blogging-through-implementing-domain-driven-design/"/>
     <updated>2014-02-02T11:31:00-08:00</updated>
     <id>http://www.g9labs.com/2014/02/02/blogging-through-implementing-domain-driven-design</id>
-    <content type="html"><![CDATA[<p>In recent conversations with coworkers, the topic of Domain-Driven Design has
-arisen on more than a few occasions in design and architecture meetings.
-&ldquo;Have you read it?&rdquo; a coworker asked, &ldquo;I think it&rsquo;d help us a lot.&rdquo;</p>
+    <content type="html"><![CDATA[<p>In recent conversations with coworkers, the topic of Domain-Driven Design has<br />
+arisen on more than a few occasions in design and architecture meetings.<br />
+“Have you read it?” a coworker asked, “I think it’d help us a lot.”</p>
 
-<p>I&rsquo;ve gotten my hands on a copy of <a href="http://www.amazon.com/Implementing-Domain-Driven-Design-Vaughn-Vernon/dp/0321834577">Implementing Domain-Driven Design</a>
-by <a href="https://vaughnvernon.co/">Vaughn Vernon</a>, which is a more pragmatic
+<p>I’ve gotten my hands on a copy of <a href="http://www.amazon.com/Implementing-Domain-Driven-Design-Vaughn-Vernon/dp/0321834577">Implementing Domain-Driven Design</a><br />
+by <a href="https://vaughnvernon.co/">Vaughn Vernon</a>, which is a more pragmatic<br />
 approach to DDD than the original <a href="http://www.amazon.com/Domain-Driven-Design-Tackling-Complexity-Software/dp/0321125215/ref=pd_bxgy_b_text_y">Domain-Driven Design</a> book by Eric Evans.</p>
 
-<p>My desire is to share my outlines of the book chapter-by-chapter,
+<p>My desire is to share my outlines of the book chapter-by-chapter,<br />
 hopefully once a week.</p>
 
-<h2>Chapter 1: Getting Started with DDD</h2>
+<h2 id="chapter-1-getting-started-with-ddd">Chapter 1: Getting Started with DDD</h2>
 
-<h3>Can I DDD?</h3>
-
+<h3 id="can-i-ddd">Can I DDD?</h3>
 <ul>
-<li>DDD helps us design software models where &ldquo;our design is exactly how
-the software works&rdquo; (1).</li>
-<li>DDD isn&rsquo;t a technology, it&rsquo;s a set of principles that involve
-discussion, listening, and business value so you can <em>centralize
+  <li>DDD helps us design software models where “our design is exactly how<br />
+the software works” (1).</li>
+  <li>DDD isn’t a technology, it’s a set of principles that involve<br />
+discussion, listening, and business value so you can <em>centralize<br />
 knowledge</em>.</li>
-<li>The main principle here is that we must &ldquo;understand the business in
-which our software works&rdquo; (3). This means we learn from domain experts
+  <li>The main principle here is that we must “understand the business in<br />
+which our software works” (3). This means we learn from domain experts<br />
 in our field.</li>
-<li>What is a domain model? an object model where objects have
+  <li>What is a domain model? an object model where objects have<br />
 data/persistence concerns with an accurate business meaning.</li>
 </ul>
 
-
-<h3>Why You Should Do DDD</h3>
+<h3 id="why-you-should-do-ddd">Why You Should Do DDD</h3>
 
 <ul>
-<li>Domain experts and devs on same playing field, cooperation required as
+  <li>Domain experts and devs on same playing field, cooperation required as<br />
 one team. (Agile teams, anyone?)</li>
-<li>The business can learn more about itself through the questions asked
+  <li>The business can learn more about itself through the questions asked<br />
 about itself.</li>
-<li>Knowledge is centralized.</li>
-<li>Zero translations between domain experts and software devs and
+  <li>Knowledge is centralized.</li>
+  <li>Zero translations between domain experts and software devs and<br />
 software.</li>
-<li>&ldquo;The design is the code, and code is the design.&rdquo; (7)</li>
-<li>It is not without up-front cost</li>
+  <li>“The design is the code, and code is the design.” (7)</li>
+  <li>It is not without up-front cost</li>
 </ul>
 
-
-<h4>The problem</h4>
+<h4 id="the-problem">The problem</h4>
 
 <ul>
-<li>The schism between business domain experts and software developers
+  <li>The schism between business domain experts and software developers<br />
 puts your project (and your business) at a risk.</li>
-<li>The more time passes, the greater the divide grows.</li>
+  <li>The more time passes, the greater the divide grows.</li>
 </ul>
 
-
-<h4>Solution</h4>
+<h4 id="solution">Solution</h4>
 
 <ul>
-<li>DDD brings domain experts and software developers together to develop
+  <li>DDD brings domain experts and software developers together to develop<br />
 software that reflects the business domain mental model.</li>
-<li>Oftentimes this requires that they jointly develop a &ldquo;Ubiquitous
-Language&rdquo; &ndash; a shared vocabulary and set of concepts that are jointly
+  <li>Oftentimes this requires that they jointly develop a “Ubiquitous<br />
+Language” - a shared vocabulary and set of concepts that are jointly<br />
 spoken by everybody.</li>
-<li>DDD produces software that is better designed &amp; architected &ndash;> better testable &ndash;>
+  <li>DDD produces software that is better designed &amp; architected -&gt; better testable -&gt;<br />
 clearer code.</li>
-<li>Take heed: DDD should only be used to simplify your domain. If the net
-cost of implementing DDD is only going to add complexity, then you
+  <li>Take heed: DDD should only be used to simplify your domain. If the net<br />
+cost of implementing DDD is only going to add complexity, then you<br />
 should stay away.</li>
 </ul>
 
-
-<h4>Domain model health</h4>
-
+<h4 id="domain-model-health">Domain model health</h4>
 <ul>
-<li>As time passes, our domain models can become
-<a href="http://www.martinfowler.com/bliki/AnemicDomainModel.html">anemic</a>,
-and lose their expressive capabilities and clean boundaries. This can
+  <li>As time passes, our domain models can become<br />
+<a href="http://www.martinfowler.com/bliki/AnemicDomainModel.html">anemic</a>,<br />
+and lose their expressive capabilities and clean boundaries. This can<br />
 lead to spaghetti code and a violation of object responsibilities.</li>
-<li>Why do anemic domain models hurt us? They claim to be well-formed
-models but they hide a badly designed system that is still unfocused
-in what it does. (Andrew: I&rsquo;ve seen a lot of Service objects that
-claim to be services but really are long scripts to get things done.
-There might be a cost of designing the Service interface, but inside
+  <li>Why do anemic domain models hurt us? They claim to be well-formed<br />
+models but they hide a badly designed system that is still unfocused<br />
+in what it does. (Andrew: I’ve seen a lot of Service objects that<br />
+claim to be services but really are long scripts to get things done.<br />
+There might be a cost of designing the Service interface, but inside<br />
 things are just as messy as before we got there.)</li>
-<li>Seems like Vernon is blaming the influence of IDEs for Visual Basic as
-they influenced Java libraries &mdash; too many explicit getters and
+  <li>Seems like Vernon is blaming the influence of IDEs for Visual Basic as<br />
+they influenced Java libraries – too many explicit getters and<br />
 setters.</li>
-<li>Vernon throws up some code samples comparing two different code
-samples &mdash; one with an anemic model that looks like a long string of
-commands and another with descriptive method names. He makes the case
+  <li>Vernon throws up some code samples comparing two different code<br />
+samples – one with an anemic model that looks like a long string of<br />
+commands and another with descriptive method names. He makes the case<br />
 that simply reading the code is documentation of the domain itself.</li>
 </ul>
 
-
-<h4>How to do DDD</h4>
+<h4 id="how-to-do-ddd">How to do DDD</h4>
 
 <ul>
-<li>Have a <a href="http://martinfowler.com/bliki/UbiquitousLanguage.html"><em>Ubiquitous Language</em></a>
-where the team of domain experts share the language together, from
+  <li>Have a <a href="http://martinfowler.com/bliki/UbiquitousLanguage.html"><em>Ubiquitous Language</em></a><br />
+where the team of domain experts share the language together, from<br />
 domain experts to programmers.</li>
-<li><p>Steps to coming up with a language:</p>
+  <li>
+    <p>Steps to coming up with a language:</p>
 
-<ol>
-<li>Draw out the domain and label it.</li>
-<li>Make a glossary of terms and definitions.</li>
-<li>Have the team review the language document.</li>
-</ol>
-</li>
-<li><p>Note that a Ubiquitous Language is specific to the context it is
-implemented in. In other words, there is one Ubiquitous Language per
-Bounded Context.</p></li>
+    <ol>
+      <li>Draw out the domain and label it.</li>
+      <li>Make a glossary of terms and definitions.</li>
+      <li>Have the team review the language document.</li>
+    </ol>
+  </li>
+  <li>Note that a Ubiquitous Language is specific to the context it is<br />
+implemented in. In other words, there is one Ubiquitous Language per<br />
+Bounded Context.</li>
 </ul>
 
-
-<h3>Business value of DDD</h3>
+<h3 id="business-value-of-ddd">Business value of DDD</h3>
 
 <ol>
-<li>The organization gains a useful model of its domain</li>
-<li>The precise definition of the business is developed</li>
-<li>Domain experts contribute to software design.</li>
-<li>A better user experience is gained.</li>
-<li>Clean boundaries for models keep them pure.</li>
-<li>Enterprise architecture is better designed.</li>
-<li>Continuous modeling is used &mdash; the working software we produce is the
+  <li>The organization gains a useful model of its domain</li>
+  <li>The precise definition of the business is developed</li>
+  <li>Domain experts contribute to software design.</li>
+  <li>A better user experience is gained.</li>
+  <li>Clean boundaries for models keep them pure.</li>
+  <li>Enterprise architecture is better designed.</li>
+  <li>Continuous modeling is used – the working software we produce is the<br />
 model we worked so hard to create.</li>
-<li>New tools and patterns are used.</li>
+  <li>New tools and patterns are used.</li>
 </ol>
 
-
-<h4>Challenges</h4>
+<h4 id="challenges">Challenges</h4>
 
 <ul>
-<li>The time and effort required to think about the busines domain,
+  <li>The time and effort required to think about the busines domain,<br />
 research concepts, and converse with domain experts.</li>
-<li>It may be hard to get a domain expert involved due to their
+  <li>It may be hard to get a domain expert involved due to their<br />
 availability.</li>
-<li>There is a lot of thought required to clarify pure models and do
+  <li>There is a lot of thought required to clarify pure models and do<br />
 domain modeling.</li>
 </ul>
 
-
-<h4>Tactical modeling</h4>
+<h4 id="tactical-modeling">Tactical modeling</h4>
 
 <ul>
-<li>The <em>Core Domain</em> is the part of your application that has key and
-important business value &mdash; and may require high thought and attention
+  <li>The <em>Core Domain</em> is the part of your application that has key and<br />
+important business value – and may require high thought and attention<br />
 to design.</li>
-<li>Sometimes DDD may not be the right fit for you &mdash; if you have a lot of
-experienced developers who are very comfortable with domain modeling,
+  <li>Sometimes DDD may not be the right fit for you – if you have a lot of<br />
+experienced developers who are very comfortable with domain modeling,<br />
 you may be better off trusting their opinion.</li>
 </ul>
 
-
-<h4>DDD is not heavy.</h4>
+<h4 id="ddd-is-not-heavy">DDD is not heavy.</h4>
 
 <ul>
-<li>It fits into any Agile or XP framework. It leans into TDD, eg: you use
-TDD to develop a new domain model that describes how it interacts with
+  <li>It fits into any Agile or XP framework. It leans into TDD, eg: you use<br />
+TDD to develop a new domain model that describes how it interacts with<br />
 other existing models. You go through the red-green-refactor cycle.</li>
-<li>DDD promotes lightweight development. As domain experts read the code, they
-are able to provide in-flight feedback to the development of the
+  <li>DDD promotes lightweight development. As domain experts read the code, they<br />
+are able to provide in-flight feedback to the development of the<br />
 system.</li>
 </ul>
 

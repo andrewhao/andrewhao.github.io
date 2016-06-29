@@ -4,7 +4,7 @@
   <title><![CDATA[Category: reactive programming | The Sweet Spot]]></title>
   <link href="http://www.g9labs.com/category/reactive-programming/atom.xml" rel="self"/>
   <link href="http://www.g9labs.com/"/>
-  <updated>2016-06-24T11:31:59-07:00</updated>
+  <updated>2016-06-29T16:33:32-07:00</updated>
   <id>http://www.g9labs.com/</id>
   <author>
     <name><![CDATA[Andrew Hao]]></name>
@@ -18,66 +18,68 @@
     <link href="http://www.g9labs.com/2016/03/21/lossless-rate-limiting-with-rxjs/"/>
     <updated>2016-03-21T13:09:00-07:00</updated>
     <id>http://www.g9labs.com/2016/03/21/lossless-rate-limiting-with-rxjs</id>
-    <content type="html"><![CDATA[<p>Much of RxJS involves working with
-<a href="http://reactivex.io/documentation/operators/backpressure.html">backpressure</a> &ndash; how to reconcile
-streams that emit/process data at different rates, without overloading
-the system. Much of that model is built with lossy handling in mind &ndash; it
-makes sense that when your system is under duress, that you design your
-streams to degrade gracefully (e.g. drop certain events, or rate limit
+    <content type="html"><![CDATA[<p>Much of RxJS involves working with<br />
+<a href="http://reactivex.io/documentation/operators/backpressure.html">backpressure</a> - how to reconcile<br />
+streams that emit/process data at different rates, without overloading<br />
+the system. Much of that model is built with lossy handling in mind - it<br />
+makes sense that when your system is under duress, that you design your<br />
+streams to degrade gracefully (e.g. drop certain events, or rate limit<br />
 them by chunking into windows, etc).</p>
 
-<p>However, there are times when it is appropriate to have a lossless
-approach to backpressure &ndash; e.g., to store every chunk of data that comes
-through a stream in memory, and not drop things. These use cases may
+<p>However, there are times when it is appropriate to have a lossless<br />
+approach to backpressure - e.g., to store every chunk of data that comes<br />
+through a stream in memory, and not drop things. These use cases may<br />
 come about when:</p>
 
 <ul>
-<li>You have a short-lived, or bounded set of data you know will come over
-the pipe. You understand the bounds of the data that will ever come over
+  <li>You have a short-lived, or bounded set of data you know will come over<br />
+the pipe. You understand the bounds of the data that will ever come over<br />
 the pipe.</li>
-<li>You have a processing script you want to run, which is not part of a
+  <li>You have a processing script you want to run, which is not part of a<br />
 large system.</li>
-<li>You have a honkin' large system that can handle the load.</li>
+  <li>You have a honkin’ large system that can handle the load.</li>
 </ul>
 
-
-<p>In my case, I had a script that called the Google Geocoding API for a
-set of GPS coordinates. Now for a set of several hundred coordinates, I
-would end up calling the API several hundred times all at once with this
+<p>In my case, I had a script that called the Google Geocoding API for a<br />
+set of GPS coordinates. Now for a set of several hundred coordinates, I<br />
+would end up calling the API several hundred times all at once with this<br />
 naive implementation:</p>
 
-<p><code>javascript
-// address$: [ "1234 Widget Way, Promiseland, WV" ] -- [...] -- [...]
-const geocoded$ = addresses$
-.flatMap(address =&gt; Rx.Observable.fromPromise(callGoogleGeocodingService(address)))
-// geocoded$: [ { latitude: 89.99, longitude: 90.00, ... } ] -- [...] -- [...]
-</code></p>
+<div class="language-javascript highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n1" name="n1">1</a></span><span style="color:#777">// address$: [ &quot;1234 Widget Way, Promiseland, WV&quot; ] -- [...] -- [...]</span>
+<span class="line-numbers"><a href="#n2" name="n2">2</a></span>const <span style="color:#369;font-weight:bold">geocoded$</span> = <span style="color:#369;font-weight:bold">addresses$</span>
+<span class="line-numbers"><a href="#n3" name="n3">3</a></span>.flatMap(address =&gt; Rx.Observable.fromPromise(callGoogleGeocodingService(address)))
+<span class="line-numbers"><a href="#n4" name="n4">4</a></span><span style="color:#777">// geocoded$: [ { latitude: 89.99, longitude: 90.00, ... } ] -- [...] -- [...]</span>
+</pre></div>
+</div>
+</div>
 
-<p>I searched all over for a lossless throttling mechanism, but all I could
-find was references to RxJS&rsquo;s lossy <a href="">throttle</a> behavior.</p>
+<p>I searched all over for a lossless throttling mechanism, but all I could<br />
+find was references to RxJS’s lossy <a href="">throttle</a> behavior.</p>
 
-<p>Other frameworks, like <a href="https://github.com/baconjs/bacon.js/#observable-bufferingthrottle">Bacon.js&rsquo;s bufferingThrottle()</a> and <a href="http://highlandjs.org/#ratelimit">Highland.js ratelimit()</a> seemed attractive. Where was RxJS&rsquo;s equivalent?</p>
+<p>Other frameworks, like <a href="https://github.com/baconjs/bacon.js/#observable-bufferingthrottle">Bacon.js’s bufferingThrottle()</a> and <a href="http://highlandjs.org/#ratelimit">Highland.js ratelimit()</a> seemed attractive. Where was RxJS’s equivalent?</p>
 
-<p>Thanks to a <a href="http://stackoverflow.com/questions/34955842/rate-limiting-http-calls-made-by-rxjs">helpful StackOverflow post</a>,
-I found the answer: the use of
-<a href="https://github.com/Reactive-Extensions/RxJS/blob/master/doc/api/core/operators/concatmap.md">concatMap()</a>
-and
-<a href="https://github.com/Reactive-Extensions/RxJS/blob/master/doc/api/core/operators/delay.md">delay()</a>
+<p>Thanks to a <a href="http://stackoverflow.com/questions/34955842/rate-limiting-http-calls-made-by-rxjs">helpful StackOverflow post</a>,<br />
+I found the answer: the use of<br />
+<a href="https://github.com/Reactive-Extensions/RxJS/blob/master/doc/api/core/operators/concatmap.md">concatMap()</a><br />
+and<br />
+<a href="https://github.com/Reactive-Extensions/RxJS/blob/master/doc/api/core/operators/delay.md">delay()</a><br />
 forces the incoming stream to execute serially over artificial time delayed streams.</p>
 
-<p><code>javascript
-const geocoded$ = addresses$
-.concatMap(address =&gt; Rx.Observable.just(address).delay(TIME_INTERVAL))
-.flatMap(address =&gt; Rx.Observable.fromPromise(callGoogleGeocodingService(address)))
-</code></p>
+<div class="language-javascript highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n1" name="n1">1</a></span>const <span style="color:#369;font-weight:bold">geocoded$</span> = <span style="color:#369;font-weight:bold">addresses$</span>
+<span class="line-numbers"><a href="#n2" name="n2">2</a></span>.concatMap(address =&gt; Rx.Observable.just(address).delay(TIME_INTERVAL))
+<span class="line-numbers"><a href="#n3" name="n3">3</a></span>.flatMap(address =&gt; Rx.Observable.fromPromise(callGoogleGeocodingService(address)))
+</pre></div>
+</div>
+</div>
 
 <p>Thanks to:</p>
 
 <ul>
-<li><a href="http://stackoverflow.com/questions/34955842/rate-limiting-http-calls-made-by-rxjs">http://stackoverflow.com/questions/34955842/rate-limiting-http-calls-made-by-rxjs</a></li>
-<li><a href="http://stackoverflow.com/questions/30876361/rxjs-rate-limit-requests-per-second-and-concurrency?rq=1">http://stackoverflow.com/questions/30876361/rxjs-rate-limit-requests-per-second-and-concurrency?rq=1</a></li>
+  <li>http://stackoverflow.com/questions/34955842/rate-limiting-http-calls-made-by-rxjs</li>
+  <li>http://stackoverflow.com/questions/30876361/rxjs-rate-limit-requests-per-second-and-concurrency?rq=1</li>
 </ul>
-
 ]]></content>
   </entry>
   

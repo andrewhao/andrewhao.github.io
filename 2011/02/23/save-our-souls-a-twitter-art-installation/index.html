@@ -68,43 +68,65 @@
 		<time>23 February 2011</time>
 	</header>
 		<div class="content">
-			<p>Here&rsquo;s how the installation looked on the day of the art show.</p>
+			<p>Here’s how the installation looked on the day of the art show.</p>
 
-<p>[caption id=&ldquo;&rdquo; align=&ldquo;alignnone&rdquo; width=&ldquo;333&rdquo; caption=&ldquo;We mounted the installation on the inside of the Regeneration cafe. The Arduino lies behind the Macbook behind the monitor.&rdquo;]<a href="http://www.flickr.com/photos/andrewhao/5467033003/"><img src="http://farm6.static.flickr.com/5180/5467033003_c1c14c5dc0.jpg" alt="Installation" /></a>[/caption]</p>
+<p>[caption id=”” align=”alignnone” width=”333” caption=”We mounted the installation on the inside of the Regeneration cafe. The Arduino lies behind the Macbook behind the monitor.”]<a href="http://www.flickr.com/photos/andrewhao/5467033003/"><img src="http://farm6.static.flickr.com/5180/5467033003_c1c14c5dc0.jpg" alt="Installation" /></a>[/caption]</p>
 
-<p>[caption id=&ldquo;&rdquo; align=&ldquo;alignnone&rdquo; width=&ldquo;333&rdquo; caption=&ldquo;The LEDs are mounted on breadboards suspended on fishing wire, binder clips, rubber bands, chopsticks, and a prayer.&rdquo;]<a href="http://www.flickr.com/photos/andrewhao/5471602272/"><img src="http://farm6.static.flickr.com/5296/5471602272_85203b475e.jpg" alt="Mounted LED array" /></a>[/caption]</p>
+<p>[caption id=”” align=”alignnone” width=”333” caption=”The LEDs are mounted on breadboards suspended on fishing wire, binder clips, rubber bands, chopsticks, and a prayer.”]<a href="http://www.flickr.com/photos/andrewhao/5471602272/"><img src="http://farm6.static.flickr.com/5296/5471602272_85203b475e.jpg" alt="Mounted LED array" /></a>[/caption]</p>
 
-<p>[caption id=&ldquo;&rdquo; align=&ldquo;alignnone&rdquo; width=&ldquo;333&rdquo; caption=&ldquo;Finished it just in time.&rdquo;]<a href="http://www.flickr.com/photos/andrewhao/5471598060/"><img src="http://farm6.static.flickr.com/5057/5471598060_f1bb64a83f.jpg" alt="In action" /></a>[/caption]</p>
+<p>[caption id=”” align=”alignnone” width=”333” caption=”Finished it just in time.”]<a href="http://www.flickr.com/photos/andrewhao/5471598060/"><img src="http://farm6.static.flickr.com/5057/5471598060_f1bb64a83f.jpg" alt="In action" /></a>[/caption]</p>
 
-<p><a href="http://vimeo.com/20267056">Save our souls &ndash; Twitter art installation</a> from <a href="http://vimeo.com/user807863">Andrew Hao</a> on <a href="http://vimeo.com">Vimeo</a>.</p>
+<p><a href="http://vimeo.com/20267056">Save our souls - Twitter art installation</a> from <a href="http://vimeo.com/user807863">Andrew Hao</a> on <a href="http://vimeo.com">Vimeo</a>.</p>
 
-<blockquote><p>What are people saying about the ashes in the world today? This installation visualizes a live Twitter stream on heartache, injustice, loss, and our city and matches them up with the redemptive promises of Isaiah.</p></blockquote>
+<blockquote>
 
-<p>Life is difficult, and redemption is something we all long for. What changes do you hope for in your life or in the world? Send a response from your Twitter account to @sos_61 and watch the installation react. If you&rsquo;d like to be kept anonymous, send your response in a DM to @sos_61.</p>
+  <p>What are people saying about the ashes in the world today? This installation visualizes a live Twitter stream on heartache, injustice, loss, and our city and matches them up with the redemptive promises of Isaiah.</p>
+</blockquote>
 
-<p>&ldquo;I hope for <strong><strong>&rdquo;
-&ldquo;I wish that </strong></strong>&rdquo;
-&ldquo;I want to see ____&rdquo;</p>
+<p>Life is difficult, and redemption is something we all long for. What changes do you hope for in your life or in the world? Send a response from your Twitter account to @sos_61 and watch the installation react. If you’d like to be kept anonymous, send your response in a DM to @sos_61.</p>
 
-<h3>A few notes</h3>
+<p>“I hope for <strong>__”<br />
+“I wish that __</strong>”<br />
+“I want to see <em>__</em>”</p>
+
+<h3 id="a-few-notes">A few notes</h3>
 
 <ul>
-<li><p>Web interface is a fullscreen Google Chrome window. <a href="http://socket.io/">socket.io</a> is the Websocket interface to the <a href="http://nodejs.org">node.js</a> backend. The slide transition is animated via a CSS3 animation, and the red overlay is a simple SVG shape plotted with the help of <a href="http://raphaeljs.com">RaphaëlJS</a>.</p></li>
-<li><p>The Twitter backend is a collection of four self-updating Twitter searches, one for heartache (&ldquo;i feel lonely, sad, depressed&rdquo;), injustice (&ldquo;violence, war, oppression, justice&rdquo;), death (&ldquo;rest in peace, passed away&rdquo;), and Oakland (&ldquo;oakland&rdquo;). A blacklist filters out undesirable tweet keywords (&ldquo;justin bieber&rdquo;).</p></li>
-<li><p>Additionally, the backend connects to Twitter via the <a href="http://dev.twitter.com/pages/streaming_api">Streaming API</a> and displays a special animation for users who reply via tweet to the <a href="http://www.twitter.com/sos_61">@sos_61</a> account.</p></li>
-<li><p>The installation picks a tweet to display and pulses the LED array corresponding to the right tweet.</p></li>
-<li><p>Communication to the Arduino happens via a python script over the Firmata protocol, using the <a href="https://github.com/lupeke/python-firmata">python-firmata</a> library. The nodejs server signals the script over a socket connection which will run the pulse animation on the correct pin.</p></li>
-<li><p>I printed the graphic on an oversize printer with the good folks at <a href="http://alamedacopy.com">Alameda Copy</a>. Friendly service, fast turnaround, very reasonable prices. Ask for Joe.</p></li>
+  <li>
+    <p>Web interface is a fullscreen Google Chrome window. <a href="http://socket.io/">socket.io</a> is the Websocket interface to the <a href="http://nodejs.org">node.js</a> backend. The slide transition is animated via a CSS3 animation, and the red overlay is a simple SVG shape plotted with the help of <a href="http://raphaeljs.com">RaphaëlJS</a>.</p>
+  </li>
+  <li>
+    <p>The Twitter backend is a collection of four self-updating Twitter searches, one for heartache (“i feel lonely, sad, depressed”), injustice (“violence, war, oppression, justice”), death (“rest in peace, passed away”), and Oakland (“oakland”). A blacklist filters out undesirable tweet keywords (“justin bieber”).</p>
+  </li>
+  <li>
+    <p>Additionally, the backend connects to Twitter via the <a href="http://dev.twitter.com/pages/streaming_api">Streaming API</a> and displays a special animation for users who reply via tweet to the <a href="http://www.twitter.com/sos_61">@sos_61</a> account.</p>
+  </li>
+  <li>
+    <p>The installation picks a tweet to display and pulses the LED array corresponding to the right tweet.</p>
+  </li>
+  <li>
+    <p>Communication to the Arduino happens via a python script over the Firmata protocol, using the <a href="https://github.com/lupeke/python-firmata">python-firmata</a> library. The nodejs server signals the script over a socket connection which will run the pulse animation on the correct pin.</p>
+  </li>
+  <li>
+    <p>I printed the graphic on an oversize printer with the good folks at <a href="http://alamedacopy.com">Alameda Copy</a>. Friendly service, fast turnaround, very reasonable prices. Ask for Joe.</p>
+  </li>
 </ul>
 
-
-<h3>Links</h3>
+<h3 id="links">Links</h3>
 
 <ul>
-<li><p><a href="http://www.github.com/andrewhao/isaiah-61-project">Source code on github.</a></p></li>
-<li><p><a href="http://www.flickr.com/photos/andrewhao/sets/72157626107989740/">Flickr photos from the art show.</a></p></li>
-<li><p><a href="http://www.flickr.com/photos/andrewhao/sets/72157625956085386/">Photos of the creation process.</a></p></li>
-<li><p>Other posts on the process: <a href="http://www.g9labs.com/2011/02/01/the-making-of-sos-intro/">[1]</a>, <a href="http://www.g9labs.com/2011/02/11/update/">[2]</a>, <a href="http://www.g9labs.com/2011/02/12/currently-frustrated/">[3]</a>, <a href="http://www.g9labs.com/2011/02/15/arduino-and-python-firmata/">[4]</a></p></li>
+  <li>
+    <p><a href="http://www.github.com/andrewhao/isaiah-61-project">Source code on github.</a></p>
+  </li>
+  <li>
+    <p><a href="http://www.flickr.com/photos/andrewhao/sets/72157626107989740/">Flickr photos from the art show.</a></p>
+  </li>
+  <li>
+    <p><a href="http://www.flickr.com/photos/andrewhao/sets/72157625956085386/">Photos of the creation process.</a></p>
+  </li>
+  <li>
+    <p>Other posts on the process: <a href="http://www.g9labs.com/2011/02/01/the-making-of-sos-intro/">[1]</a>, <a href="http://www.g9labs.com/2011/02/11/update/">[2]</a>, <a href="http://www.g9labs.com/2011/02/12/currently-frustrated/">[3]</a>, <a href="http://www.g9labs.com/2011/02/15/arduino-and-python-firmata/">[4]</a></p>
+  </li>
 </ul>
 
 

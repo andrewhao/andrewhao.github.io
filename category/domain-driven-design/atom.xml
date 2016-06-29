@@ -4,7 +4,7 @@
   <title><![CDATA[Category: domain-driven design | The Sweet Spot]]></title>
   <link href="http://www.g9labs.com/category/domain-driven-design/atom.xml" rel="self"/>
   <link href="http://www.g9labs.com/"/>
-  <updated>2016-06-24T11:31:59-07:00</updated>
+  <updated>2016-06-29T16:33:32-07:00</updated>
   <id>http://www.g9labs.com/</id>
   <author>
     <name><![CDATA[Andrew Hao]]></name>
@@ -18,270 +18,254 @@
     <link href="http://www.g9labs.com/2016/06/23/rails-pub-slash-sub-with-wisper-and-sidekiq/"/>
     <updated>2016-06-23T11:44:00-07:00</updated>
     <id>http://www.g9labs.com/2016/06/23/rails-pub-slash-sub-with-wisper-and-sidekiq</id>
-    <content type="html"><![CDATA[<p>One common pattern in Domain-Driven Design is the use of
-publish/subscribe messaging to communicate between domains. When
-<a href="http://martinfowler.com/eaaDev/DomainEvent.html">Domain Events</a> are created from within a domain, other domains are
-able to subscribe to these events and take action within their own
+    <content type="html"><![CDATA[<p>One common pattern in Domain-Driven Design is the use of<br />
+publish/subscribe messaging to communicate between domains. When<br />
+<a href="http://martinfowler.com/eaaDev/DomainEvent.html">Domain Events</a> are created from within a domain, other domains are<br />
+able to subscribe to these events and take action within their own<br />
 domains, respectively.</p>
 
-<p>This is not a common pattern in Rails, particularly because of Ruby&rsquo;s
-lack of language support for functional programming paradigms that exist
-in other languages. However, with a nifty framework and the help of
+<p>This is not a common pattern in Rails, particularly because of Ruby’s<br />
+lack of language support for functional programming paradigms that exist<br />
+in other languages. However, with a nifty framework and the help of<br />
 Sidekiq, we can get just a little bit closer.</p>
 
-<h3>What is a Domain Event?</h3>
+<h3 id="what-is-a-domain-event">What is a Domain Event?</h3>
 
-<p>A domain event is a recorded property in the system that tracks an
-action that the system performs, and the factors/properties that lead to
+<p>A domain event is a recorded property in the system that tracks an<br />
+action that the system performs, and the factors/properties that lead to<br />
 its creation.</p>
 
-<p>In the following examples, we are going to use the <a href="https://github.com/krisleech/wisper">Wisper</a> gem to
+<p>In the following examples, we are going to use the <a href="https://github.com/krisleech/wisper">Wisper</a> gem to<br />
 implement domain events in our sample <a href="http://github.com/andrewhao/delorean">Delorean</a> app.</p>
 
-<p>Imagine that we are writing an endpoint that our users will hit,
-indicating that they want to hail a time-traveling cab. Now the logic to
-hail a cab is rather complicated and lives in an entirely different area
-of the codebase, perhaps even in another application. How should we call
+<p>Imagine that we are writing an endpoint that our users will hit,<br />
+indicating that they want to hail a time-traveling cab. Now the logic to<br />
+hail a cab is rather complicated and lives in an entirely different area<br />
+of the codebase, perhaps even in another application. How should we call<br />
 the other code and ensure that our code is cleanly decoupled?</p>
 
-<p>With our Domain-Driven powers, we&rsquo;ve been smart enough to segregate our code into different
-subdomains and bounded contexts,
+<p>With our Domain-Driven powers, we’ve been smart enough to segregate our code into different<br />
+subdomains and bounded contexts,<br />
 denoted by these two Ruby modules <code>Ridesharing</code> and <code>DriverRouting</code>.</p>
 
-<h2>Example 1: In-process pub-sub event modeling, with a service object.</h2>
+<h2 id="example-1-in-process-pub-sub-event-modeling-with-a-service-object">Example 1: In-process pub-sub event modeling, with a service object.</h2>
 
-<p>A simple way to use Wisper is to use it to implement your service
+<p>A simple way to use Wisper is to use it to implement your service<br />
 objects with Wisper, calling the service from the controller.</p>
 
-<p>```ruby
-module Ridesharing
-  class RidesController &lt; ApplicationController</p>
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"> <a href="#n1" name="n1">1</a></span><span style="color:#080;font-weight:bold">module</span> <span style="color:#B06;font-weight:bold">Ridesharing</span>
+<span class="line-numbers"> <a href="#n2" name="n2">2</a></span>  <span style="color:#080;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">RidesController</span> &lt; <span style="color:#036;font-weight:bold">ApplicationController</span>
+<span class="line-numbers"> <a href="#n3" name="n3">3</a></span>    <span style="color:#080;font-weight:bold">def</span> <span style="color:#06B;font-weight:bold">post</span>
+<span class="line-numbers"> <a href="#n4" name="n4">4</a></span>      <span style="color:#777"># Hail a time-traveling Delorean:</span>
+<span class="line-numbers"> <a href="#n5" name="n5">5</a></span>      command = <span style="color:#036;font-weight:bold">HailDelorean</span>.new
+<span class="line-numbers"> <a href="#n6" name="n6">6</a></span>      command.on(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">hailed</span><span style="color:#710">'</span></span>) { |driver|
+<span class="line-numbers"> <a href="#n7" name="n7">7</a></span>        render <span style="color:#606">text</span>: <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">Hailed you a cab: </span><span style="background-color:hsla(0,0%,0%,0.07);color:black"><span style="font-weight:bold;color:#666">#{</span>driver<span style="font-weight:bold;color:#666">}</span></span><span style="color:#D20"> is arriving!</span><span style="color:#710">&quot;</span></span>
+<span class="line-numbers"> <a href="#n8" name="n8">8</a></span>      }
+<span class="line-numbers"> <a href="#n9" name="n9">9</a></span>      .on(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">could_not_hail</span><span style="color:#710">'</span></span>) {
+<span class="line-numbers"><strong><a href="#n10" name="n10">10</a></strong></span>        render <span style="color:#606">text</span>: <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">Sorry, no dice.</span><span style="color:#710">&quot;</span></span>
+<span class="line-numbers"><a href="#n11" name="n11">11</a></span>      }
+<span class="line-numbers"><a href="#n12" name="n12">12</a></span>      command.hail!(current_user)
+<span class="line-numbers"><a href="#n13" name="n13">13</a></span>    <span style="color:#080;font-weight:bold">end</span>
+<span class="line-numbers"><a href="#n14" name="n14">14</a></span>  <span style="color:#080;font-weight:bold">end</span>
+<span class="line-numbers"><a href="#n15" name="n15">15</a></span><span style="color:#080;font-weight:bold">end</span>
+</pre></div>
+</div>
+</div>
 
-<pre><code>def post
-  # Hail a time-traveling Delorean:
-  command = HailDelorean.new
-  command.on('hailed') { |driver|
-    render text: "Hailed you a cab: #{driver} is arriving!"
-  }
-  .on('could_not_hail') {
-    render text: "Sorry, no dice."
-  }
-  command.hail!(current_user)
-end
-</code></pre>
+<p>Note that the <code>HailDelorean</code> class has powers of event subscriptions<br />
+now. Our calling code does not have to concern itself with the<br />
+implementation details of the <code>HailDelorean</code> service - it merely needs<br />
+to register handlers for the two possible outcomes, <code>hailed</code> and<br />
+<code>could_not_hail</code>. Here’s how the service class is implemented:</p>
 
-<p>  end
-end
-```</p>
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"> <a href="#n1" name="n1">1</a></span><span style="color:#080;font-weight:bold">module</span> <span style="color:#B06;font-weight:bold">Ridesharing</span>
+<span class="line-numbers"> <a href="#n2" name="n2">2</a></span>  <span style="color:#080;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">HailDelorean</span>
+<span class="line-numbers"> <a href="#n3" name="n3">3</a></span>    include <span style="color:#036;font-weight:bold">Wisper</span>::<span style="color:#036;font-weight:bold">Publisher</span>
+<span class="line-numbers"> <a href="#n4" name="n4">4</a></span>
+<span class="line-numbers"> <a href="#n5" name="n5">5</a></span>    <span style="color:#080;font-weight:bold">def</span> <span style="color:#06B;font-weight:bold">hail!</span>(user)
+<span class="line-numbers"> <a href="#n6" name="n6">6</a></span>      <span style="color:#777"># broadcast() is a Wisper method to fire an event</span>
+<span class="line-numbers"> <a href="#n7" name="n7">7</a></span>      driver = find_driver(user)
+<span class="line-numbers"> <a href="#n8" name="n8">8</a></span>      <span style="color:#080;font-weight:bold">if</span> driver
+<span class="line-numbers"> <a href="#n9" name="n9">9</a></span>        broadcast(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">hailed</span><span style="color:#710">'</span></span>, driver)
+<span class="line-numbers"><strong><a href="#n10" name="n10">10</a></strong></span>      <span style="color:#080;font-weight:bold">else</span>
+<span class="line-numbers"><a href="#n11" name="n11">11</a></span>        broadcast(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">could_not_hail</span><span style="color:#710">'</span></span>)
+<span class="line-numbers"><a href="#n12" name="n12">12</a></span>      <span style="color:#080;font-weight:bold">end</span>
+<span class="line-numbers"><a href="#n13" name="n13">13</a></span>
+<span class="line-numbers"><a href="#n14" name="n14">14</a></span>    <span style="color:#080;font-weight:bold">def</span> <span style="color:#06B;font-weight:bold">find_driver</span>(user)
+<span class="line-numbers"><a href="#n15" name="n15">15</a></span>      <span style="color:#777"># Here lies slow, complex domain logic</span>
+<span class="line-numbers"><a href="#n16" name="n16">16</a></span>      <span style="color:#036;font-weight:bold">DriverRouting</span>::<span style="color:#036;font-weight:bold">FindDriver</span>.new(user)
+<span class="line-numbers"><a href="#n17" name="n17">17</a></span>    <span style="color:#080;font-weight:bold">end</span>
+<span class="line-numbers"><a href="#n18" name="n18">18</a></span>  <span style="color:#080;font-weight:bold">end</span>
+<span class="line-numbers"><a href="#n19" name="n19">19</a></span><span style="color:#080;font-weight:bold">end</span>
+</pre></div>
+</div>
+</div>
 
-<p>Note that the <code>HailDelorean</code> class has powers of event subscriptions
-now. Our calling code does not have to concern itself with the
-implementation details of the <code>HailDelorean</code> service &ndash; it merely needs
-to register handlers for the two possible outcomes, <code>hailed</code> and
-<code>could_not_hail</code>. Here&rsquo;s how the service class is implemented:</p>
+<h3 id="handling-side-effects-in-subscriber-classes">Handling side effects in subscriber classes</h3>
 
-<p>```ruby
-module Ridesharing
-  class HailDelorean</p>
-
-<pre><code>include Wisper::Publisher
-
-def hail!(user)
-  # broadcast() is a Wisper method to fire an event
-  driver = find_driver(user)
-  if driver
-    broadcast('hailed', driver)
-  else
-    broadcast('could_not_hail')
-  end
-
-def find_driver(user)
-  # Here lies slow, complex domain logic
-  DriverRouting::FindDriver.new(user)
-end
-</code></pre>
-
-<p>  end
-end
-```</p>
-
-<h3>Handling side effects in subscriber classes</h3>
-
-<p>Other side-effects can subscribe to the <code>HailDelorean</code> events. Let&rsquo;s say we want to fire an event
+<p>Other side-effects can subscribe to the <code>HailDelorean</code> events. Let’s say we want to fire an event<br />
 to Segment analytics tracking. I can create a plain Ruby object that simply needs to implement a method with the same name as the event.</p>
 
-<p>Let&rsquo;s implement <code>hailed</code> and <code>could_not_hail</code> methods on this subscriber class:</p>
+<p>Let’s implement <code>hailed</code> and <code>could_not_hail</code> methods on this subscriber class:</p>
 
-<p>```ruby
-class TrackSegmentAnalytics
-  def self.hailed(driver)</p>
-
-<pre><code># fire analytics event to Segment
-</code></pre>
-
-<p>  end</p>
-
-<p>  def self.could_not_hail</p>
-
-<pre><code># fire analytics event to Segment
-</code></pre>
-
-<p>  end
-end
-```</p>
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"> <a href="#n1" name="n1">1</a></span><span style="color:#080;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">TrackSegmentAnalytics</span>
+<span class="line-numbers"> <a href="#n2" name="n2">2</a></span>  <span style="color:#080;font-weight:bold">def</span> <span style="color:#069">self</span>.<span style="color:#06B;font-weight:bold">hailed</span>(driver)
+<span class="line-numbers"> <a href="#n3" name="n3">3</a></span>    <span style="color:#777"># fire analytics event to Segment</span>
+<span class="line-numbers"> <a href="#n4" name="n4">4</a></span>  <span style="color:#080;font-weight:bold">end</span>
+<span class="line-numbers"> <a href="#n5" name="n5">5</a></span>
+<span class="line-numbers"> <a href="#n6" name="n6">6</a></span>  <span style="color:#080;font-weight:bold">def</span> <span style="color:#069">self</span>.<span style="color:#06B;font-weight:bold">could_not_hail</span>
+<span class="line-numbers"> <a href="#n7" name="n7">7</a></span>    <span style="color:#777"># fire analytics event to Segment</span>
+<span class="line-numbers"> <a href="#n8" name="n8">8</a></span>  <span style="color:#080;font-weight:bold">end</span>
+<span class="line-numbers"> <a href="#n9" name="n9">9</a></span><span style="color:#080;font-weight:bold">end</span>
+</pre></div>
+</div>
+</div>
 
 <p>And we hook it up by subscribing it to the command handler:</p>
 
-<p>```ruby
-module Ridesharing
-  class RidesController &lt; ApplicationController</p>
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"> <a href="#n1" name="n1">1</a></span><span style="color:#080;font-weight:bold">module</span> <span style="color:#B06;font-weight:bold">Ridesharing</span>
+<span class="line-numbers"> <a href="#n2" name="n2">2</a></span>  <span style="color:#080;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">RidesController</span> &lt; <span style="color:#036;font-weight:bold">ApplicationController</span>
+<span class="line-numbers"> <a href="#n3" name="n3">3</a></span>    <span style="color:#080;font-weight:bold">def</span> <span style="color:#06B;font-weight:bold">post</span>
+<span class="line-numbers"> <a href="#n4" name="n4">4</a></span>      <span style="color:#777"># snip</span>
+<span class="line-numbers"> <a href="#n5" name="n5">5</a></span>      command = <span style="color:#036;font-weight:bold">HailDelorean</span>.new(current_user)
+<span class="line-numbers"> <a href="#n6" name="n6">6</a></span>
+<span class="line-numbers"> <a href="#n7" name="n7">7</a></span>      <span style="color:#777"># register the subscriber to the triggering action</span>
+<span class="line-numbers"> <a href="#n8" name="n8">8</a></span>      command.subscribe(<span style="color:#036;font-weight:bold">TrackSegmentAnalytics</span>)
+<span class="line-numbers"> <a href="#n9" name="n9">9</a></span>      <span style="color:#777"># snip</span>
+<span class="line-numbers"><strong><a href="#n10" name="n10">10</a></strong></span>    <span style="color:#080;font-weight:bold">end</span>
+<span class="line-numbers"><a href="#n11" name="n11">11</a></span>  <span style="color:#080;font-weight:bold">end</span>
+<span class="line-numbers"><a href="#n12" name="n12">12</a></span><span style="color:#080;font-weight:bold">end</span>
+</pre></div>
+</div>
+</div>
 
-<pre><code>def post
-  # snip
-  command = HailDelorean.new(current_user)
-
-  # register the subscriber to the triggering action
-  command.subscribe(TrackSegmentAnalytics)
-  # snip
-end
-</code></pre>
-
-<p>  end
-end
-```</p>
-
-<p>OK, that was a little awkward, doing all that wiring up in the controller. What if we did the wiring globally,
+<p>OK, that was a little awkward, doing all that wiring up in the controller. What if we did the wiring globally,<br />
 within an app initializer?</p>
 
-<p>```ruby</p>
-
-<h1>config/initializers/domain_event_subscriptions.rb</h1>
-
-<p>Wisper.subscribe(TrackSegmentAnalytics, scope: &ldquo;HailDelorean&rdquo;)</p>
-
-<h1>alternate form:</h1>
-
-<p>HailDelorean.subscribe(TrackSegmentAnalytics)
-```</p>
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n1" name="n1">1</a></span><span style="color:#777"># config/initializers/domain_event_subscriptions.rb</span>
+<span class="line-numbers"><a href="#n2" name="n2">2</a></span><span style="color:#036;font-weight:bold">Wisper</span>.subscribe(<span style="color:#036;font-weight:bold">TrackSegmentAnalytics</span>, <span style="color:#606">scope</span>: <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">HailDelorean</span><span style="color:#710">&quot;</span></span>)
+<span class="line-numbers"><a href="#n3" name="n3">3</a></span>
+<span class="line-numbers"><a href="#n4" name="n4">4</a></span><span style="color:#777"># alternate form:</span>
+<span class="line-numbers"><a href="#n5" name="n5">5</a></span><span style="color:#036;font-weight:bold">HailDelorean</span>.subscribe(<span style="color:#036;font-weight:bold">TrackSegmentAnalytics</span>)
+</pre></div>
+</div>
+</div>
 
 <p>This registers a global subscriber for all future instances of <code>HailDelorean</code>.</p>
 
-<h2>Example 2: Asynchronous events with subscription handlers and Sidekiq</h2>
+<h2 id="example-2-asynchronous-events-with-subscription-handlers-and-sidekiq">Example 2: Asynchronous events with subscription handlers and Sidekiq</h2>
 
-<p>Here&rsquo;s the real power of Wisper &ndash; we can decouple our application domain responsibilities by modeling
+<p>Here’s the real power of Wisper - we can decouple our application domain responsibilities by modeling<br />
 effects as subscription objects and do them out-of-band of the primary web request thread.</p>
 
-<p>Note that with the <a href="https://github.com/krisleech/wisper-sidekiq"><code>wisper-sidekiq</code></a> gem, all subscriptions
-given with an <code>async: true</code> option flag will automatically execute in an external thread as a Sidekiq job.
-Let&rsquo;s take advantage of that now.</p>
+<p>Note that with the <a href="https://github.com/krisleech/wisper-sidekiq"><code>wisper-sidekiq</code></a> gem, all subscriptions<br />
+given with an <code>async: true</code> option flag will automatically execute in an external thread as a Sidekiq job.<br />
+Let’s take advantage of that now.</p>
 
-<p>```ruby
-module Ridesharing
-  class RidesController &lt; ApplicationController</p>
-
-<pre><code>def post
-  # Hail a time-traveling Delorean:
-  HailDelorean.hail(current_user.id)
-  render text: 'Hailing a cab, please wait for a response...'
-end
-</code></pre>
-
-<p>  end</p>
-
-<p>  class HailDelorean</p>
-
-<pre><code>include Wisper::Broadcaster
-
-def self.hail(passenger_id)
-  broadcast(:hail, passenger_id)
-end
-</code></pre>
-
-<p>  end
-end</p>
-
-<p>module DriverRouting
-  # Note that this class is both a subscriber and a publisher
-  class FindDriver</p>
-
-<pre><code>include Wisper::Publisher
-
-def self.hail(passenger_id)
-  # Do slow, complex hairy routefinding/optimization/messaging behind the scenes:
-  driver = find_driver_for(passenger_id)
-
-  if driver
-    broadcast('driver_found', passenger_id, driver.id)
-  else
-    broadcast('driver_not_found', passenger_id)
-  end
-end
-</code></pre>
-
-<p>  end
-end
-```</p>
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"> <a href="#n1" name="n1">1</a></span><span style="color:#080;font-weight:bold">module</span> <span style="color:#B06;font-weight:bold">Ridesharing</span>
+<span class="line-numbers"> <a href="#n2" name="n2">2</a></span>  <span style="color:#080;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">RidesController</span> &lt; <span style="color:#036;font-weight:bold">ApplicationController</span>
+<span class="line-numbers"> <a href="#n3" name="n3">3</a></span>    <span style="color:#080;font-weight:bold">def</span> <span style="color:#06B;font-weight:bold">post</span>
+<span class="line-numbers"> <a href="#n4" name="n4">4</a></span>      <span style="color:#777"># Hail a time-traveling Delorean:</span>
+<span class="line-numbers"> <a href="#n5" name="n5">5</a></span>      <span style="color:#036;font-weight:bold">HailDelorean</span>.hail(current_user.id)
+<span class="line-numbers"> <a href="#n6" name="n6">6</a></span>      render <span style="color:#606">text</span>: <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">Hailing a cab, please wait for a response...</span><span style="color:#710">'</span></span>
+<span class="line-numbers"> <a href="#n7" name="n7">7</a></span>    <span style="color:#080;font-weight:bold">end</span>
+<span class="line-numbers"> <a href="#n8" name="n8">8</a></span>  <span style="color:#080;font-weight:bold">end</span>
+<span class="line-numbers"> <a href="#n9" name="n9">9</a></span>
+<span class="line-numbers"><strong><a href="#n10" name="n10">10</a></strong></span>  <span style="color:#080;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">HailDelorean</span>
+<span class="line-numbers"><a href="#n11" name="n11">11</a></span>    include <span style="color:#036;font-weight:bold">Wisper</span>::<span style="color:#036;font-weight:bold">Broadcaster</span>
+<span class="line-numbers"><a href="#n12" name="n12">12</a></span>
+<span class="line-numbers"><a href="#n13" name="n13">13</a></span>    <span style="color:#080;font-weight:bold">def</span> <span style="color:#069">self</span>.<span style="color:#06B;font-weight:bold">hail</span>(passenger_id)
+<span class="line-numbers"><a href="#n14" name="n14">14</a></span>      broadcast(<span style="color:#A60">:hail</span>, passenger_id)
+<span class="line-numbers"><a href="#n15" name="n15">15</a></span>    <span style="color:#080;font-weight:bold">end</span>
+<span class="line-numbers"><a href="#n16" name="n16">16</a></span>  <span style="color:#080;font-weight:bold">end</span>
+<span class="line-numbers"><a href="#n17" name="n17">17</a></span><span style="color:#080;font-weight:bold">end</span>
+<span class="line-numbers"><a href="#n18" name="n18">18</a></span>
+<span class="line-numbers"><a href="#n19" name="n19">19</a></span><span style="color:#080;font-weight:bold">module</span> <span style="color:#B06;font-weight:bold">DriverRouting</span>
+<span class="line-numbers"><strong><a href="#n20" name="n20">20</a></strong></span>  <span style="color:#777"># Note that this class is both a subscriber and a publisher</span>
+<span class="line-numbers"><a href="#n21" name="n21">21</a></span>  <span style="color:#080;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">FindDriver</span>
+<span class="line-numbers"><a href="#n22" name="n22">22</a></span>    include <span style="color:#036;font-weight:bold">Wisper</span>::<span style="color:#036;font-weight:bold">Publisher</span>
+<span class="line-numbers"><a href="#n23" name="n23">23</a></span>
+<span class="line-numbers"><a href="#n24" name="n24">24</a></span>    <span style="color:#080;font-weight:bold">def</span> <span style="color:#069">self</span>.<span style="color:#06B;font-weight:bold">hail</span>(passenger_id)
+<span class="line-numbers"><a href="#n25" name="n25">25</a></span>      <span style="color:#777"># Do slow, complex hairy routefinding/optimization/messaging behind the scenes:</span>
+<span class="line-numbers"><a href="#n26" name="n26">26</a></span>      driver = find_driver_for(passenger_id)
+<span class="line-numbers"><a href="#n27" name="n27">27</a></span>
+<span class="line-numbers"><a href="#n28" name="n28">28</a></span>      <span style="color:#080;font-weight:bold">if</span> driver
+<span class="line-numbers"><a href="#n29" name="n29">29</a></span>        broadcast(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">driver_found</span><span style="color:#710">'</span></span>, passenger_id, driver.id)
+<span class="line-numbers"><strong><a href="#n30" name="n30">30</a></strong></span>      <span style="color:#080;font-weight:bold">else</span>
+<span class="line-numbers"><a href="#n31" name="n31">31</a></span>        broadcast(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">driver_not_found</span><span style="color:#710">'</span></span>, passenger_id)
+<span class="line-numbers"><a href="#n32" name="n32">32</a></span>      <span style="color:#080;font-weight:bold">end</span>
+<span class="line-numbers"><a href="#n33" name="n33">33</a></span>    <span style="color:#080;font-weight:bold">end</span>
+<span class="line-numbers"><a href="#n34" name="n34">34</a></span>  <span style="color:#080;font-weight:bold">end</span>
+<span class="line-numbers"><a href="#n35" name="n35">35</a></span><span style="color:#080;font-weight:bold">end</span>
+</pre></div>
+</div>
+</div>
 
 <p>Finally, we add handlers (subscribers) to these domain objects:</p>
 
-<p>```ruby
-module Ridesharing
-  class NotifyPassengerWithDriverStatus</p>
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"> <a href="#n1" name="n1">1</a></span><span style="color:#080;font-weight:bold">module</span> <span style="color:#B06;font-weight:bold">Ridesharing</span>
+<span class="line-numbers"> <a href="#n2" name="n2">2</a></span>  <span style="color:#080;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">NotifyPassengerWithDriverStatus</span>
+<span class="line-numbers"> <a href="#n3" name="n3">3</a></span>    <span style="color:#080;font-weight:bold">def</span> <span style="color:#069">self</span>.<span style="color:#06B;font-weight:bold">driver_found</span>
+<span class="line-numbers"> <a href="#n4" name="n4">4</a></span>      <span style="color:#777"># send them a text message :)</span>
+<span class="line-numbers"> <a href="#n5" name="n5">5</a></span>    <span style="color:#080;font-weight:bold">end</span>
+<span class="line-numbers"> <a href="#n6" name="n6">6</a></span>
+<span class="line-numbers"> <a href="#n7" name="n7">7</a></span>    <span style="color:#080;font-weight:bold">def</span> <span style="color:#069">self</span>.<span style="color:#06B;font-weight:bold">driver_not_found</span>
+<span class="line-numbers"> <a href="#n8" name="n8">8</a></span>      <span style="color:#777"># send them a text message :(</span>
+<span class="line-numbers"> <a href="#n9" name="n9">9</a></span>    <span style="color:#080;font-weight:bold">end</span>
+<span class="line-numbers"><strong><a href="#n10" name="n10">10</a></strong></span>  <span style="color:#080;font-weight:bold">end</span>
+<span class="line-numbers"><a href="#n11" name="n11">11</a></span><span style="color:#080;font-weight:bold">end</span>
+</pre></div>
+</div>
+</div>
 
-<pre><code>def self.driver_found
-  # send them a text message :)
-end
+<p>Now let’s link it together with subscriptions:</p>
 
-def self.driver_not_found
-  # send them a text message :(
-end
-</code></pre>
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n1" name="n1">1</a></span><span style="color:#777"># config/initializers/domain_event_subscriptions.rb</span>
+<span class="line-numbers"><a href="#n2" name="n2">2</a></span><span style="color:#036;font-weight:bold">Ridesharing</span>::<span style="color:#036;font-weight:bold">HailDelorean</span>.subscribe(<span style="color:#036;font-weight:bold">DriverRouting</span>::<span style="color:#036;font-weight:bold">FindDriver</span>, <span style="color:#606">async</span>: <span style="color:#069">true</span>)
+<span class="line-numbers"><a href="#n3" name="n3">3</a></span><span style="color:#036;font-weight:bold">DriverRouting</span>::<span style="color:#036;font-weight:bold">FindDriver</span>.subscribe(<span style="color:#036;font-weight:bold">Ridesharing</span>::<span style="color:#036;font-weight:bold">NotifyPassengerWithDriverStatus</span>, <span style="color:#606">async</span>: <span style="color:#069">true</span>)
+<span class="line-numbers"><a href="#n4" name="n4">4</a></span><span style="color:#036;font-weight:bold">Wisper</span>.subscribe(<span style="color:#036;font-weight:bold">AnalyticsListener</span>, <span style="color:#606">scope</span>: <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">Ridesharing::NotifyPassengerWithDriverStatus</span><span style="color:#710">&quot;</span></span>, <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">DriverRouting::FindDriver</span><span style="color:#710">&quot;</span></span>], <span style="color:#606">async</span>: <span style="color:#069">true</span>)
+</pre></div>
+</div>
+</div>
 
-<p>  end
-end
-```</p>
-
-<p>Now let&rsquo;s link it together with subscriptions:</p>
-
-<p>```ruby</p>
-
-<h1>config/initializers/domain_event_subscriptions.rb</h1>
-
-<p>Ridesharing::HailDelorean.subscribe(DriverRouting::FindDriver, async: true)
-DriverRouting::FindDriver.subscribe(Ridesharing::NotifyPassengerWithDriverStatus, async: true)
-Wisper.subscribe(AnalyticsListener, scope: &ldquo;Ridesharing::NotifyPassengerWithDriverStatus&rdquo;, &ldquo;DriverRouting::FindDriver&rdquo;], async: true)
-```</p>
-
-<p>Now our messages between our domains are pulled out of the main request thread, and operate in an asynchronous
+<p>Now our messages between our domains are pulled out of the main request thread, and operate in an asynchronous<br />
 fashion with Sidekiq as the runner.</p>
 
-<p>Code in our domains are kept clean &ndash; note that there are no direct references to the other subdomains within each
-subdomain. Our app more cleanly segregates the responsibilities between each app, heavy workloads are naturally
+<p>Code in our domains are kept clean - note that there are no direct references to the other subdomains within each<br />
+subdomain. Our app more cleanly segregates the responsibilities between each app, heavy workloads are naturally<br />
 balanced as they move to worker threads.</p>
 
-<h2>Caveats: Beware of overbuilding</h2>
+<h2 id="caveats-beware-of-overbuilding">Caveats: Beware of overbuilding</h2>
 
-<p>If you are on a small app, you probably should go with approach #1. The weight of indirection
-can be a cognitive load on development, unless you truly need to build async code in #2. The overhead and
-conceptual complexities of the approach can only be justified with large codebases, or in apps
+<p>If you are on a small app, you probably should go with approach #1. The weight of indirection<br />
+can be a cognitive load on development, unless you truly need to build async code in #2. The overhead and<br />
+conceptual complexities of the approach can only be justified with large codebases, or in apps<br />
 where a domain-centric view (and segregation) of code is present.</p>
 
-<h2>Caveats: Event subscriptions can be a tangled mess</h2>
+<h2 id="caveats-event-subscriptions-can-be-a-tangled-mess">Caveats: Event subscriptions can be a tangled mess</h2>
 
-<p>Note that the act of wiring can quickly fan out into a spidery mess of handlers &ndash; you could even further
-decouple your handlers by modeling a global event bus as a publisher, and having each domain tap into the bus' events
+<p>Note that the act of wiring can quickly fan out into a spidery mess of handlers - you could even further<br />
+decouple your handlers by modeling a global event bus as a publisher, and having each domain tap into the bus’ events<br />
 and figure out how to handle each event on its own.</p>
 
-<h2>Caveats: transactional consistency!</h2>
+<h2 id="caveats-transactional-consistency">Caveats: transactional consistency!</h2>
 
-<p>If you implement this asynchronously, you&rsquo;ll have to think about how to
-deal with transactional consistency. Can you design your data models
-(and database schema) to support independent updates without any
-dependencies? How will you handle
+<p>If you implement this asynchronously, you’ll have to think about how to<br />
+deal with transactional consistency. Can you design your data models<br />
+(and database schema) to support independent updates without any<br />
+dependencies? How will you handle<br />
 the case when one domain action fails and the other completes?</p>
 
-<p>You may have to roll your own two-phase commit here, the specifics of
-which I won&rsquo;t delve into. However, for most of our applications, we may
+<p>You may have to roll your own two-phase commit here, the specifics of<br />
+which I won’t delve into. However, for most of our applications, we may<br />
 want to skip the asynchronous and keep our events synchronous.</p>
 ]]></content>
   </entry>
@@ -291,334 +275,352 @@ want to skip the asynchronous and keep our events synchronous.</p>
     <link href="http://www.g9labs.com/2016/04/18/the-joy-of-naming-with-the-powers-of-domain-driven-design/"/>
     <updated>2016-04-18T17:14:00-07:00</updated>
     <id>http://www.g9labs.com/2016/04/18/the-joy-of-naming-with-the-powers-of-domain-driven-design</id>
-    <content type="html"><![CDATA[<p>I want to discuss a topic near and dear to my heart, and what I believe
-is at the crux of effective software design. It&rsquo;s not a new functional language,
-it&rsquo;s not a fancy new framework, a how-to guide to do microservices, nor a quantum leap in the field of machine learning.</p>
+    <content type="html"><![CDATA[<p>I want to discuss a topic near and dear to my heart, and what I believe<br />
+is at the crux of effective software design. It’s not a new functional language,<br />
+it’s not a fancy new framework, a how-to guide to do microservices, nor a quantum leap in the field of machine learning.</p>
 
-<p>It&rsquo;s much simpler.</p>
+<p>It’s much simpler.</p>
 
-<p>It&rsquo;s about names.</p>
+<p>It’s about names.</p>
 
 <p><img src="http://3.bp.blogspot.com/_rL73HKlqbH0/TKhVHMbs2oI/AAAAAAAABEc/DiPbblM0R44/s1600/sistine-chapel-michelangelo-paintings-6.jpg" alt="In the beginning..." /></p>
 
-<p><em>Names define us</em>. They define concepts. They imbue a concept with shared understanding. They&rsquo;re language concepts, but more than that, they&rsquo;re units of meaning.</p>
+<p><em>Names define us</em>. They define concepts. They imbue a concept with shared understanding. They’re language concepts, but more than that, they’re units of meaning.</p>
 
-<p>Software development is a fundamentally human endeavour. No amount of technical computing breakthroughs will change the fact that software development is still the arduous task of getting a team together full of humans from a kaleidescope of different cultural, linguistic backgrounds &ndash; then throwing them together to build an arbitrarily complex product in a rapidly-shifting competitive landscape.</p>
+<p>Software development is a fundamentally human endeavour. No amount of technical computing breakthroughs will change the fact that software development is still the arduous task of getting a team together full of humans from a kaleidescope of different cultural, linguistic backgrounds - then throwing them together to build an arbitrarily complex product in a rapidly-shifting competitive landscape.</p>
 
 <p>Not only that, the thing to build is chock-full of systems that interact with other systems of unbounded complexity. Additionally, once your software system is out in the wild, you need to make sure that it was the right thing to build. Is the product you built correctly tuned to your market? Is it generating sufficient revenue?</p>
 
-<p>The landscape is littered with software projects that began ambitiously, but got lost in a towering mess of fragile code. It&rsquo;s no wonder that developing reliable, successful software is more art than science.</p>
+<p>The landscape is littered with software projects that began ambitiously, but got lost in a towering mess of fragile code. It’s no wonder that developing reliable, successful software is more art than science.</p>
 
-<h3>Crossing our linguistic wires</h3>
+<h3 id="crossing-our-linguistic-wires">Crossing our linguistic wires</h3>
 
-<p>Let&rsquo;s rewind back to a scene from a typical day in the life of your software development team. Think back to the last time you discussed a story with your product owner, how did it unfold?</p>
+<p>Let’s rewind back to a scene from a typical day in the life of your software development team. Think back to the last time you discussed a story with your product owner, how did it unfold?</p>
 
-<p>Let&rsquo;s imagine a scene at Delorean, the Uber for time travel, where you work:</p>
+<p>Let’s imagine a scene at Delorean, the Uber for time travel, where you work. Your team is responsible for writing software systems that calculate the payment processing for your users who are hailing rides from your company’s time-traveling ridesharing service.</p>
 
-<blockquote><p>PO: Our next big project is to update our driver app to show rider locations on the timeline map.</p>
+<blockquote>
+  <p>PO: Our next big project is to update our driver app to show rider locations on the timeline map.</p>
+</blockquote>
 
-<p>You: And when do these riders show up on the timeline map?</p>
+<blockquote>
+  <p>You: And when do these riders show up on the timeline map?</p>
+</blockquote>
 
-<p>PO: When the driver turns on the app and signals that she&rsquo;s driving.</p>
+<blockquote>
+  <p>PO: When the driver turns on the app and signals that she’s driving.</p>
+</blockquote>
 
-<p>You: OK, so that means when the app boots up and the DriverStatus service receives a POST we&rsquo;ll need to simultaneously fetch references from the HailingUser service based on time locality.</p>
+<blockquote>
+  <p>You: OK, so that means when the app boots up and the DriverStatus service receives a POST we’ll need to simultaneously fetch references from the HailingUser service based on time locality.</p>
+</blockquote>
 
-<p>PO: Um&hellip; I guess so?</p></blockquote>
+<blockquote>
+  <p>PO: Um… I guess so?</p>
+</blockquote>
 
 <p>Or how about your last iteration planning meeting, where you discussed the intricacies of a specific story?</p>
 
-<blockquote><p>PO: In this story, we&rsquo;re going to add a coupon box to the checkout flow.</p>
+<blockquote>
+  <p>PO: In this story, we’re going to add a coupon box to the checkout flow.</p>
+</blockquote>
 
-<p>You: [Thinking out loud] Hm&hellip; would that mean we add a <code>/coupon</code> route to the checkout API?</p>
+<blockquote>
+  <p>You: [Thinking out loud] Hm… would that mean we add a <code>/coupon</code> route to the checkout API?</p>
+</blockquote>
 
-<p>Teammate: Wait &ndash; I think we call them <code>Discounts</code> in the backend. And the checkout flow is technically part of the <code>RideCommerce</code> service.</p>
+<blockquote>
+  <p>Teammate: Wait - I think we call them <code>Discounts</code> in the backend. And the checkout flow is technically part of the <code>RideCommerce</code> service.</p>
+</blockquote>
 
-<p>You: Right &ndash; I mean let&rsquo;s call the route <code>/coupon</code> but it&rsquo;ll create a <code>Discount</code> object. And in this story,    let&rsquo;s just remember that the checkout API really refers to the <code>RideCommerce</code> service.</p>
+<blockquote>
+  <p>You: Right - I mean let’s call the route <code>/coupon</code> but it’ll create a <code>Discount</code> object. And in this story,    let’s just remember that the checkout API really refers to the <code>RideCommerce</code> service.</p>
+</blockquote>
 
-<p>PO: I&rsquo;ll add a note to the story.</p></blockquote>
+<blockquote>
+  <p>PO: I’ll add a note to the story.</p>
+</blockquote>
 
-<p>The implementing engineer, of course, doesn&rsquo;t read the note in the story (who has time to, anyways?). In the course of implementation, he gets tripped up in semantics and spends the better part of a half day re-implementing the <code>Checkout</code> flow as an entirely new service, before realizing his mistake in code review and backing out his changes.</p>
+<p>The implementing engineer, of course, doesn’t read the note in the story (who has time to, anyways?). In the course of implementation, he gets tripped up in semantics and spends the better part of a half day re-implementing the <code>Checkout</code> flow as an entirely new service, before realizing his mistake in code review and backing out his changes.</p>
 
-<p>Months later, a new colleague is tasked to fix the link in the checkout flow, but files an incomplete fix because she was not aware of the fact that <code>Coupons</code> actually had mappings back to <code>Discounts</code>. The bug makes its way to production, where it subtly lies dormant until a most inopportune time&hellip;</p>
+<p>Months later, a new colleague is tasked to fix the link in the checkout flow, but files an incomplete fix because she was not aware of the fact that <code>Coupons</code> actually had mappings back to <code>Discounts</code>. The bug makes its way to production, where it subtly lies dormant until a most inopportune time…</p>
 
-<h3>A better, Domain-Driven way</h3>
+<h3 id="a-better-domain-driven-way">A better, Domain-Driven way</h3>
 
-<p>In Eric Evans' book <a href="http://www.amazon.com/Domain-Driven-Design-Tackling-Complexity-Software/dp/0321125215"><strong>Domain-Driven Design</strong></a>, he describes the concept of a <a href="http://martinfowler.com/bliki/UbiquitousLanguage.html">Ubiquitous Language</a> &ndash; a shared, common vocabulary that the entire team shares when discussing software.</p>
+<p>In Eric Evans’ book <a href="http://www.amazon.com/Domain-Driven-Design-Tackling-Complexity-Software/dp/0321125215"><strong>Domain-Driven Design</strong></a>, he describes the concept of a <a href="http://martinfowler.com/bliki/UbiquitousLanguage.html">Ubiquitous Language</a> - a shared, common vocabulary that the entire team shares when discussing software.</p>
 
-<p>When we say the &ldquo;entire team&rdquo;, we mean the combined team of designers, developers, the product owner and any other domain experts that might be at hand.</p>
+<p>When we say the “entire team”, we mean the combined team of designers, developers, the product owner and any other domain experts that might be at hand.</p>
 
 <p>Your product owner may be your domain expert (and typically is). However, you may have other domain experts such as:</p>
 
 <ul>
-<li>Any team that builds reporting or analytics off of your software.</li>
-<li>Upstream data providers</li>
-<li>Anybody further up the reporting chain whose purview includes the software you&rsquo;re building, or its effects. Think: the Director of Finance, the COO, the head of Customer Support.</li>
-<li>The users of your software</li>
+  <li>Any team that builds reporting or analytics off of your software.</li>
+  <li>Upstream data providers</li>
+  <li>Anybody further up the reporting chain whose purview includes the software you’re building, or its effects. Think: the Director of Finance, the COO, the head of Customer Support.</li>
+  <li>The users of your software</li>
 </ul>
 
+<p>Side note: in XP, each team has an “onsite customer” - this is your domain expert!</p>
 
-<p>Side note: in XP, each team has an &ldquo;onsite customer&rdquo; &ndash; this is your domain expert!</p>
+<h4 id="developing-a-ubiquitous-language-with-a-glossary">Developing a Ubiquitous Language with a Glossary</h4>
 
-<h4>Developing a Ubiquitous Language with a Glossary</h4>
+<p>Try this: keep a living document of all the terminology your team uses - along with all its definitions. This <strong>Glossary</strong> is exactly what it sounds - a list of terms and their definitions.</p>
 
-<p>Try this: keep a living document of all the terminology your team uses &ndash; along with all its definitions. This <strong>Glossary</strong> is exactly what it sounds &ndash; a list of terms and their definitions.</p>
+<blockquote>
+  <h2 id="delorean-team-glossary">Delorean Team Glossary</h2>
 
-<blockquote><h2>Delorean Team Glossary</h2>
-
-<ul>
-<li><strong>Coupon</strong>: an applied discount to a BookingAmount. A coupon may take the form of a Fixed or a Percentage amount.
-
-<ul>
-<li><strong>Fixed-type</strong>: A coupon that applies a fixed amount of money &ndash; e.g. a $30 USD discount.</li>
-<li><strong>Percentage-type</strong>: A coupon that applies a percentage savings off the total BookingAmount.</li>
-</ul>
-</li>
-<li><strong>Driver</strong>: An employed driver who drives within the system, picking up passengers and driving Trips for payment.</li>
-<li><strong>Trip</strong>: An itinerary of passenger pick-up and drop-off location and times.</li>
-<li><strong>Rider</strong>: The passenger that books the trip and is transported by the <em>Driver</em>.</li>
-<li><strong>Booking</strong>: A reservation for a Trip, as booked by the <em>Rider</em>.</li>
-<li><strong>BookingAmount</strong>: The monetary amount of the Trip, accounting for the trip cost, surge pricing, coupons and taxes.</li>
-<li><strong>Routing Engine:</strong> The software system that maps out the driving directions for a driver.</li>
-<li><strong>Payment</strong>: A record of how a user paid.</li>
-<li><strong>Charge</strong>: A financial transaction for a specific dollar amount, for a specific charge method to an institution.</li>
-<li><strong>Checkout</strong>: A workflow in which a <em>Payment</em> is made for a <em>Booking</em>.</li>
-</ul>
+  <ul>
+    <li><strong>Coupon</strong>: an applied discount to a BookingAmount. A coupon may take the form of a Fixed or a Percentage amount.
+      <ul>
+        <li><strong>Fixed-type</strong>: A coupon that applies a fixed amount of money - e.g. a $30 USD discount.</li>
+        <li><strong>Percentage-type</strong>: A coupon that applies a percentage savings off the total BookingAmount.</li>
+      </ul>
+    </li>
+    <li><strong>Driver</strong>: An employed driver who drives within the system, picking up passengers and driving Trips for payment.</li>
+    <li><strong>Trip</strong>: An itinerary of passenger pick-up and drop-off location and times.</li>
+    <li><strong>Rider</strong>: The passenger that books the trip and is transported by the <em>Driver</em>.</li>
+    <li><strong>Booking</strong>: A reservation for a Trip, as booked by the <em>Rider</em>.</li>
+    <li><strong>BookingAmount</strong>: The monetary amount of the Trip, accounting for the trip cost, surge pricing, coupons and taxes.</li>
+    <li><strong>Routing Engine:</strong> The software system that maps out the driving directions for a driver.</li>
+    <li><strong>Payment</strong>: A record of how a user paid.</li>
+    <li><strong>Charge</strong>: A financial transaction for a specific dollar amount, for a specific charge method to an institution.</li>
+    <li><strong>Checkout</strong>: A workflow in which a <em>Payment</em> is made for a <em>Booking</em>.</li>
+  </ul>
 </blockquote>
 
 <p>From now on, use only the term definitions listed here in your stories. Be explicit about how you use your language!</p>
 
-<p>I&rsquo;ve been on many projects where the sloppy usage of a term from project inception led to the usage of that term in the code &ndash; codifying that messy, slippery term throughout the life of the project.</p>
+<p>I’ve been on many projects where the sloppy usage of a term from project inception led to the usage of that term in the code - codifying that messy, slippery term throughout the life of the project.</p>
 
 <p>Which leads us to our next point:</p>
 
-<h4>Refactoring your team to use the right terms</h4>
+<h4 id="refactoring-your-team-to-use-the-right-terms">Refactoring your team to use the right terms</h4>
 
-<p>Your <strong>Glossary</strong> is a living document. It is meant to be living &ndash; either on a continually-updated Google Doc or a wiki page. It should be visible for all to see &ndash; you should print it out and post it on the walls!</p>
+<p>Your <strong>Glossary</strong> is a living document. It is meant to be living - either on a continually-updated Google Doc or a wiki page. It should be visible for all to see - you should print it out and post it on the walls!</p>
 
 <p>Meanwhile, in a planning meeting:</p>
 
-<blockquote><p>You: So when a user logs into the app and broadcasts that they&rsquo;re ready to drive&hellip;</p>
+<blockquote>
+  <p>You: So when a user logs into the app and broadcasts that they’re ready to drive…</p>
+</blockquote>
 
-<p>PO: You mean <em>Driver</em>. When a <em>Driver</em> logs in.</p>
+<blockquote>
+  <p>PO: You mean <em>Driver</em>. When a <em>Driver</em> logs in.</p>
+</blockquote>
 
-<p>You: Right. Good catch.</p></blockquote>
+<blockquote>
+  <p>You: Right. Good catch.</p>
+</blockquote>
 
 <p>It seems a little silly (after all, you both know only Drivers use the broadcast feature of the app), but the laser focus on using the right words means that your team is always on the same page when talking about things.</p>
 
 <p>Later that afternoon, your teammate taps you on the shoulder:</p>
 
-<blockquote><p>Teammate: I&rsquo;m about to implement the Coupon story. I suggest we rename the <code>Discount</code> class to <code>Coupon</code>.</p>
+<blockquote>
+  <p>Teammate: I’m about to implement the Coupon story. I suggest we rename the <code>Discount</code> class to <code>Coupon</code>.</p>
+</blockquote>
 
-<p>You: Great idea. That way, we aren&rsquo;t tripped up by the naming mismatches in the future.</p>
+<blockquote>
+  <p>You: Great idea. That way, we aren’t tripped up by the naming mismatches in the future.</p>
+</blockquote>
 
-<p>Teammate: I do have a question about the coupon, though. Do you think it&rsquo;s <em>applied</em> to the <strong>BookingAmount</strong>, or is it <em>added</em>?</p>
+<blockquote>
+  <p>Teammate: I do have a question about the coupon, though. Do you think it’s <em>applied</em> to the <strong>BookingAmount</strong>, or is it <em>added</em>?</p>
+</blockquote>
 
-<p>PO: [Overhearing conversation] You had it right. It&rsquo;s <em>applied</em>.</p></blockquote>
+<blockquote>
+  <p>PO: [Overhearing conversation] You had it right. It’s <em>applied</em>.</p>
+</blockquote>
 
 <p>You and your teammate then go and update the glossary, scribbling an addendum on the wall (or updating your wiki):</p>
 
-<p><code>
-- **Coupon**: ... Coupons may be *applied* to BookingAmounts to discount the total cost of the booking.
-</code></p>
+<blockquote>
+  <h2 id="delorean-team-glossary-1">Delorean Team Glossary</h2>
+  <ul>
+    <li><strong>Coupon</strong>: … Coupons may be <em>applied</em> to BookingAmounts to discount the total cost of the booking.</li>
+  </ul>
+</blockquote>
 
-<h4>Refactoring your code to use the right terms</h4>
+<h4 id="refactoring-your-code-to-use-the-right-terms">Refactoring your code to use the right terms</h4>
 
-<p>Your teammate and you then walk over to her desk; as a pair you proceed to refactor the existing account code. We&rsquo;ll use Ruby for the sake of this example.</p>
+<p>Your teammate and you then walk over to her desk; as a pair you proceed to refactor the existing account code. We’ll use Ruby for the sake of this example.</p>
 
 <p>In the beginning, the code looks like this:</p>
 
-<p>```ruby
-class Checkout
-  def initialize(booking_amount, discount)</p>
-
-<pre><code>@booking_amount = booking_amount
-@discount = discount
-</code></pre>
-
-<p>  end</p>
-
-<p>  def total</p>
-
-<pre><code>@booking_amount.total - @discount.calculate_amount_for(booking_amount: booking_amount)
-</code></pre>
-
-<p>  end
-end</p>
-
-<p>class Discount
-  STRATEGY_FIXED = &lsquo;STRATEGY_FIXED&rsquo;
-  STRATEGY_PERCENTAGE = &lsquo;STRATEGY_PERCENTAGE&rsquo;</p>
-
-<p>  def initialize(amount, strategy)</p>
-
-<pre><code>@amount = amount
-@strategy = strategy
-</code></pre>
-
-<p>  end</p>
-
-<p>  def calculate_amount_for(booking_amount:)</p>
-
-<pre><code># Implementation...
-</code></pre>
-
-<p>  end
-end
-```</p>
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"> <a href="#n1" name="n1">1</a></span><span style="color:#080;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">Checkout</span>
+<span class="line-numbers"> <a href="#n2" name="n2">2</a></span>  <span style="color:#080;font-weight:bold">def</span> <span style="color:#06B;font-weight:bold">initialize</span>(booking_amount, discount)
+<span class="line-numbers"> <a href="#n3" name="n3">3</a></span>    <span style="color:#33B">@booking_amount</span> = booking_amount
+<span class="line-numbers"> <a href="#n4" name="n4">4</a></span>    <span style="color:#33B">@discount</span> = discount
+<span class="line-numbers"> <a href="#n5" name="n5">5</a></span>  <span style="color:#080;font-weight:bold">end</span>
+<span class="line-numbers"> <a href="#n6" name="n6">6</a></span>
+<span class="line-numbers"> <a href="#n7" name="n7">7</a></span>  <span style="color:#080;font-weight:bold">def</span> <span style="color:#06B;font-weight:bold">total</span>
+<span class="line-numbers"> <a href="#n8" name="n8">8</a></span>    <span style="color:#33B">@booking_amount</span>.total - <span style="color:#33B">@discount</span>.calculate_amount_for(<span style="color:#606">booking_amount</span>: booking_amount)
+<span class="line-numbers"> <a href="#n9" name="n9">9</a></span>  <span style="color:#080;font-weight:bold">end</span>
+<span class="line-numbers"><strong><a href="#n10" name="n10">10</a></strong></span><span style="color:#080;font-weight:bold">end</span>
+<span class="line-numbers"><a href="#n11" name="n11">11</a></span>
+<span class="line-numbers"><a href="#n12" name="n12">12</a></span><span style="color:#080;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">Discount</span>
+<span class="line-numbers"><a href="#n13" name="n13">13</a></span>  <span style="color:#036;font-weight:bold">STRATEGY_FIXED</span> = <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">STRATEGY_FIXED</span><span style="color:#710">'</span></span>
+<span class="line-numbers"><a href="#n14" name="n14">14</a></span>  <span style="color:#036;font-weight:bold">STRATEGY_PERCENTAGE</span> = <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">STRATEGY_PERCENTAGE</span><span style="color:#710">'</span></span>
+<span class="line-numbers"><a href="#n15" name="n15">15</a></span>
+<span class="line-numbers"><a href="#n16" name="n16">16</a></span>  <span style="color:#080;font-weight:bold">def</span> <span style="color:#06B;font-weight:bold">initialize</span>(amount, strategy)
+<span class="line-numbers"><a href="#n17" name="n17">17</a></span>    <span style="color:#33B">@amount</span> = amount
+<span class="line-numbers"><a href="#n18" name="n18">18</a></span>    <span style="color:#33B">@strategy</span> = strategy
+<span class="line-numbers"><a href="#n19" name="n19">19</a></span>  <span style="color:#080;font-weight:bold">end</span>
+<span class="line-numbers"><strong><a href="#n20" name="n20">20</a></strong></span>
+<span class="line-numbers"><a href="#n21" name="n21">21</a></span>  <span style="color:#080;font-weight:bold">def</span> <span style="color:#06B;font-weight:bold">calculate_amount_for</span>(<span style="color:#606">booking_amount</span>:)
+<span class="line-numbers"><a href="#n22" name="n22">22</a></span>    <span style="color:#777"># Implementation...</span>
+<span class="line-numbers"><a href="#n23" name="n23">23</a></span>  <span style="color:#080;font-weight:bold">end</span>
+<span class="line-numbers"><a href="#n24" name="n24">24</a></span><span style="color:#080;font-weight:bold">end</span>
+</pre></div>
+</div>
+</div>
 
 <p>You take a first pass and rename the <code>Discount</code> class to <code>Coupon</code>.</p>
 
-<p>```ruby
-class Coupon
-  STRATEGY_FIXED = &lsquo;STRATEGY_FIXED&rsquo;
-  STRATEGY_PERCENTAGE = &lsquo;STRATEGY_PERCENTAGE&rsquo;</p>
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"> <a href="#n1" name="n1">1</a></span><span style="color:#080;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">Coupon</span>
+<span class="line-numbers"> <a href="#n2" name="n2">2</a></span>  <span style="color:#036;font-weight:bold">STRATEGY_FIXED</span> = <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">STRATEGY_FIXED</span><span style="color:#710">'</span></span>
+<span class="line-numbers"> <a href="#n3" name="n3">3</a></span>  <span style="color:#036;font-weight:bold">STRATEGY_PERCENTAGE</span> = <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">STRATEGY_PERCENTAGE</span><span style="color:#710">'</span></span>
+<span class="line-numbers"> <a href="#n4" name="n4">4</a></span>
+<span class="line-numbers"> <a href="#n5" name="n5">5</a></span>  <span style="color:#080;font-weight:bold">def</span> <span style="color:#06B;font-weight:bold">initialize</span>(amount, strategy)
+<span class="line-numbers"> <a href="#n6" name="n6">6</a></span>    <span style="color:#33B">@amount</span> = amount
+<span class="line-numbers"> <a href="#n7" name="n7">7</a></span>    <span style="color:#33B">@strategy</span> = strategy
+<span class="line-numbers"> <a href="#n8" name="n8">8</a></span>  <span style="color:#080;font-weight:bold">end</span>
+<span class="line-numbers"> <a href="#n9" name="n9">9</a></span>
+<span class="line-numbers"><strong><a href="#n10" name="n10">10</a></strong></span>  <span style="color:#080;font-weight:bold">def</span> <span style="color:#06B;font-weight:bold">calculate_amount_for</span>(<span style="color:#606">booking_amount</span>:)
+<span class="line-numbers"><a href="#n11" name="n11">11</a></span>    <span style="color:#777"># Implementation...</span>
+<span class="line-numbers"><a href="#n12" name="n12">12</a></span>  <span style="color:#080;font-weight:bold">end</span>
+<span class="line-numbers"><a href="#n13" name="n13">13</a></span><span style="color:#080;font-weight:bold">end</span>
+</pre></div>
+</div>
+</div>
 
-<p>  def initialize(amount, strategy)</p>
+<p>Now there’s something funny here - your domain language suggests that a <strong>Coupon</strong> is <em>applied to</em> a <strong>BookingAmount</strong>. You pause, because the code reads the opposite - “A Coupon calculates its amount for a BookingAmount”.</p>
 
-<pre><code>@amount = amount
-@strategy = strategy
-</code></pre>
+<blockquote>
+  <p>You: How about we also refactor the <code>calculate_amount_for</code> method to reflect the language a little better?</p>
+</blockquote>
 
-<p>  end</p>
-
-<p>  def calculate_amount_for(booking_amount:)</p>
-
-<pre><code># Implementation...
-</code></pre>
-
-<p>  end
-end
-```</p>
-
-<p>Now there&rsquo;s something funny here &ndash; your domain language suggests that a <strong>Coupon</strong> is <em>applied to</em> a <strong>BookingAmount</strong>. You pause, because the code reads the opposite &ndash; &ldquo;A Coupon calculates its amount for a BookingAmount&rdquo;.</p>
-
-<blockquote><p>You: How about we also refactor the <code>calculate_amount_for</code> method to reflect the language a little better?</p>
-
-<p>Teammate: Yeah. It sounds like the action occurs the other way &ndash; the BookingAmount is responsible for applying a Coupon to itself.</p></blockquote>
+<blockquote>
+  <p>Teammate: Yeah. It sounds like the action occurs the other way - the BookingAmount is responsible for applying a Coupon to itself.</p>
+</blockquote>
 
 <p>In your next refactoring pass, you move the <code>calculate_amount_for</code> method into the <code>BookingAmount</code>, calling it <code>applied_discount_total</code>:</p>
 
-<p>```ruby
-class BookingAmount
-  # implementation details&hellip;</p>
-
-<p>  def applied_coupon_amount(coupon:)</p>
-
-<pre><code># Implementation...
-</code></pre>
-
-<p>  end
-end
-```</p>
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n1" name="n1">1</a></span><span style="color:#080;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">BookingAmount</span>
+<span class="line-numbers"><a href="#n2" name="n2">2</a></span>  <span style="color:#777"># implementation details...</span>
+<span class="line-numbers"><a href="#n3" name="n3">3</a></span>
+<span class="line-numbers"><a href="#n4" name="n4">4</a></span>  <span style="color:#080;font-weight:bold">def</span> <span style="color:#06B;font-weight:bold">applied_coupon_amount</span>(<span style="color:#606">coupon</span>:)
+<span class="line-numbers"><a href="#n5" name="n5">5</a></span>    <span style="color:#777"># Implementation...</span>
+<span class="line-numbers"><a href="#n6" name="n6">6</a></span>  <span style="color:#080;font-weight:bold">end</span>
+<span class="line-numbers"><a href="#n7" name="n7">7</a></span><span style="color:#080;font-weight:bold">end</span>
+</pre></div>
+</div>
+</div>
 
 <p>Finally, you change your <code>Checkout</code> implementation to match:</p>
 
-<p>```ruby
-class Checkout
-  def initialize(booking_amount, coupon)</p>
-
-<pre><code>@booking_amount = booking_amount
-@coupon = coupon
-</code></pre>
-
-<p>  end</p>
-
-<p>  def total_amount</p>
-
-<pre><code>@booking_amount.price - @booking_amount.applied_coupon_amount(coupon: @coupon)
-</code></pre>
-
-<p>  end
-end
-```</p>
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"> <a href="#n1" name="n1">1</a></span><span style="color:#080;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">Checkout</span>
+<span class="line-numbers"> <a href="#n2" name="n2">2</a></span>  <span style="color:#080;font-weight:bold">def</span> <span style="color:#06B;font-weight:bold">initialize</span>(booking_amount, coupon)
+<span class="line-numbers"> <a href="#n3" name="n3">3</a></span>    <span style="color:#33B">@booking_amount</span> = booking_amount
+<span class="line-numbers"> <a href="#n4" name="n4">4</a></span>    <span style="color:#33B">@coupon</span> = coupon
+<span class="line-numbers"> <a href="#n5" name="n5">5</a></span>  <span style="color:#080;font-weight:bold">end</span>
+<span class="line-numbers"> <a href="#n6" name="n6">6</a></span>
+<span class="line-numbers"> <a href="#n7" name="n7">7</a></span>  <span style="color:#080;font-weight:bold">def</span> <span style="color:#06B;font-weight:bold">total_amount</span>
+<span class="line-numbers"> <a href="#n8" name="n8">8</a></span>    <span style="color:#33B">@booking_amount</span>.price - <span style="color:#33B">@booking_amount</span>.applied_coupon_amount(<span style="color:#606">coupon</span>: <span style="color:#33B">@coupon</span>)
+<span class="line-numbers"> <a href="#n9" name="n9">9</a></span>  <span style="color:#080;font-weight:bold">end</span>
+<span class="line-numbers"><strong><a href="#n10" name="n10">10</a></strong></span><span style="color:#080;font-weight:bold">end</span>
+</pre></div>
+</div>
+</div>
 
 <p>When you read the implementation in plain English, it reads:</p>
 
-<blockquote><p>The checkout&rsquo;s total amount is calculated by subtracting the booking amount&rsquo;s applied coupon amount from the booking amount price.</p></blockquote>
+<blockquote>
+  <p>The checkout’s total amount is calculated by subtracting the booking amount’s applied coupon amount from the booking amount price.</p>
+</blockquote>
 
 <p>Phew! Designing a strong <strong>Ubiquitous Language</strong> was hard work! In fact, you had spent a goodly amount of time debating and clarifying with your domain experts:</p>
 
 <ul>
-<li>Is a Coupon <em>applied</em> to a BookingAmount, or is it <em>discounted from</em> one?</li>
-<li>Should we call it a Coupon <em>amount</em>, or a Coupon <em>cost</em>?</li>
-<li>Is the pre-tax, pre-discount amount in the BookingAmount called a <em>price</em>, or a <em>cost</em>?</li>
+  <li>Is a Coupon <em>applied</em> to a BookingAmount, or is it <em>discounted from</em> one?</li>
+  <li>Should we call it a Coupon <em>amount</em>, or a Coupon <em>cost</em>?</li>
+  <li>Is the pre-tax, pre-discount amount in the BookingAmount called a <em>price</em>, or a <em>cost</em>?</li>
 </ul>
 
+<p>Whatever you agreed on, that’s what you changed your code to reflect.</p>
 
-<p>Whatever you agreed on, that&rsquo;s what you changed your code to reflect.</p>
-
-<h4>Continual refinement</h4>
+<h4 id="continual-refinement">Continual refinement</h4>
 
 <p>Hm. Something still feels off.</p>
 
 <p>You and your teammate feel your OOP spidey senses going haywire.</p>
 
-<blockquote><p>Teammate: Hm. I guess that worked, but that&rsquo;s still not exactly as clean as we wanted it. Isn&rsquo;t it kind of weird how the Checkout owns the calculation for the calculation of a discount?</p>
+<blockquote>
+  <p>Teammate: Hm. I guess that worked, but that’s still not exactly as clean as we wanted it. Isn’t it kind of weird how the Checkout owns the calculation for the calculation of a discount?</p>
+</blockquote>
 
-<p>You: Yeah, I see where you&rsquo;re coming from. That&rsquo;s just not good OO design. Additionally, if we notice the language our domain experts were using, they didn&rsquo;t mention that the checkout total was some subtraction of something from another thing. The Checkout&rsquo;s total simply is the order amount, after application of a Coupon.</p></blockquote>
+<blockquote>
+  <p>You: Yeah, I see where you’re coming from. That’s just not good OO design. Additionally, if we notice the language our domain experts were using, they didn’t mention that the checkout total was some subtraction of something from another thing. The Checkout’s total simply is the order amount, after application of a Coupon.</p>
+</blockquote>
 
 <p>Your partner and you take one last step:</p>
 
-<p>```ruby
-class Checkout
-  def initialize(booking_amount, coupon)</p>
-
-<pre><code>@booking_amount = booking_amount
-@booking_amount.apply!(coupon)
-</code></pre>
-
-<p>  end</p>
-
-<p>  def total_amount</p>
-
-<pre><code>@booking_amount.amount
-</code></pre>
-
-<p>  end
-end</p>
-
-<p>class BookingAmount
-  # Implementation&hellip;</p>
-
-<p>  def apply!(coupon)</p>
-
-<pre><code>@coupons += coupon
-</code></pre>
-
-<p>  end</p>
-
-<p>  def amount</p>
-
-<pre><code>@amount - @coupons.sum(&amp;:amount)
-</code></pre>
-
-<p>  end
-end
-```</p>
+<div class="language-ruby highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"> <a href="#n1" name="n1">1</a></span><span style="color:#080;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">Checkout</span>
+<span class="line-numbers"> <a href="#n2" name="n2">2</a></span>  <span style="color:#080;font-weight:bold">def</span> <span style="color:#06B;font-weight:bold">initialize</span>(booking_amount, coupon)
+<span class="line-numbers"> <a href="#n3" name="n3">3</a></span>    <span style="color:#33B">@booking_amount</span> = booking_amount
+<span class="line-numbers"> <a href="#n4" name="n4">4</a></span>    <span style="color:#33B">@booking_amount</span>.apply!(coupon)
+<span class="line-numbers"> <a href="#n5" name="n5">5</a></span>  <span style="color:#080;font-weight:bold">end</span>
+<span class="line-numbers"> <a href="#n6" name="n6">6</a></span>
+<span class="line-numbers"> <a href="#n7" name="n7">7</a></span>  <span style="color:#080;font-weight:bold">def</span> <span style="color:#06B;font-weight:bold">total_amount</span>
+<span class="line-numbers"> <a href="#n8" name="n8">8</a></span>    <span style="color:#33B">@booking_amount</span>.amount
+<span class="line-numbers"> <a href="#n9" name="n9">9</a></span>  <span style="color:#080;font-weight:bold">end</span>
+<span class="line-numbers"><strong><a href="#n10" name="n10">10</a></strong></span><span style="color:#080;font-weight:bold">end</span>
+<span class="line-numbers"><a href="#n11" name="n11">11</a></span>
+<span class="line-numbers"><a href="#n12" name="n12">12</a></span>
+<span class="line-numbers"><a href="#n13" name="n13">13</a></span><span style="color:#080;font-weight:bold">class</span> <span style="color:#B06;font-weight:bold">BookingAmount</span>
+<span class="line-numbers"><a href="#n14" name="n14">14</a></span>  <span style="color:#777"># Implementation...</span>
+<span class="line-numbers"><a href="#n15" name="n15">15</a></span>
+<span class="line-numbers"><a href="#n16" name="n16">16</a></span>  <span style="color:#080;font-weight:bold">def</span> <span style="color:#06B;font-weight:bold">apply!</span>(coupon)
+<span class="line-numbers"><a href="#n17" name="n17">17</a></span>    <span style="color:#33B">@coupons</span> += coupon
+<span class="line-numbers"><a href="#n18" name="n18">18</a></span>  <span style="color:#080;font-weight:bold">end</span>
+<span class="line-numbers"><a href="#n19" name="n19">19</a></span>  
+<span class="line-numbers"><strong><a href="#n20" name="n20">20</a></strong></span>  <span style="color:#080;font-weight:bold">def</span> <span style="color:#06B;font-weight:bold">amount</span>
+<span class="line-numbers"><a href="#n21" name="n21">21</a></span>    <span style="color:#33B">@amount</span> - <span style="color:#33B">@coupons</span>.sum(&amp;<span style="color:#A60">:amount</span>)
+<span class="line-numbers"><a href="#n22" name="n22">22</a></span>  <span style="color:#080;font-weight:bold">end</span>
+<span class="line-numbers"><a href="#n23" name="n23">23</a></span><span style="color:#080;font-weight:bold">end</span>
+</pre></div>
+</div>
+</div>
 
 <p>You sit back and read it back, out loud:</p>
 
-<blockquote><p>The checkout&rsquo;s total amount is the BookingAmount after a Coupon has been applied.</p></blockquote>
+<blockquote>
+  <p>The checkout’s total amount is the BookingAmount after a Coupon has been applied.</p>
+</blockquote>
 
 <p>You both smile. Much better.</p>
 
-<h3>In closing&hellip;</h3>
+<h3 id="in-closing">In closing…</h3>
 
 <p>In this brief time we had together,</p>
 
 <ul>
-<li>We discussed why names are important &ndash; especially in a complex endeavour like software development.</li>
-<li>We covered why it&rsquo;s important to arrive at a shared understanding, together as a team, using the same words and vocabulary.</li>
-<li>We discovered how to build and integrate a <strong>Glossary</strong> into the daily rhythm of our team</li>
-<li>We refactored the code twice &ndash; illustrating how to get code in line with the domain language.</li>
+  <li>We discussed why names are important - especially in a complex endeavour like software development.</li>
+  <li>We covered why it’s important to arrive at a shared understanding, together as a team, using the same words and vocabulary.</li>
+  <li>We discovered how to build and integrate a <strong>Glossary</strong> into the daily rhythm of our team</li>
+  <li>We refactored the code twice - illustrating how to get code in line with the domain language.</li>
 </ul>
 
+<h3 id="and-there-is-much-more">And there is much more!</h3>
 
-<h3>And there is much more!</h3>
+<p>In an upcoming post, we’ll investigate how the <strong>Ubiquitous Language</strong> applies to a core concept of Domain-Driven Design: the <strong>Bounded Context</strong>. Why is that important? Because Bounded Contexts give us tools to organize our code - and to do further advanced things like <a href="https://speakerdeck.com/andrewhao/ddd-rail-your-monorail">break up monoliths into services</a>.</p>
 
-<p>In an upcoming post, we&rsquo;ll investigate how the <strong>Ubiquitous Language</strong> applies to a core concept of Domain-Driven Design: the <strong>Bounded Context</strong>. Why is that important? Because Bounded Contexts give us tools to organize our code &ndash; and to do further advanced things like <a href="https://speakerdeck.com/andrewhao/ddd-rail-your-monorail">break up monoliths into services</a>.</p>
-
-<script async class="speakerdeck-embed" data-id="1e6dd8983891467381036a321cd274a9" data-ratio="1.77777777777778" src="//speakerdeck.com/assets/embed.js"></script>
+<script async="" class="speakerdeck-embed" data-id="1e6dd8983891467381036a321cd274a9" data-ratio="1.77777777777778" src="//speakerdeck.com/assets/embed.js"></script>
 
 ]]></content>
   </entry>
@@ -628,35 +630,34 @@ end
     <link href="http://www.g9labs.com/2014/04/26/implementing-ddd-chapter-2/"/>
     <updated>2014-04-26T08:43:00-07:00</updated>
     <id>http://www.g9labs.com/2014/04/26/implementing-ddd-chapter-2</id>
-    <content type="html"><![CDATA[<h2>Chapter 2: Domains, Subdomains, and Bounded Contexts</h2>
+    <content type="html"><![CDATA[<h2 id="chapter-2-domains-subdomains-and-bounded-contexts">Chapter 2: Domains, Subdomains, and Bounded Contexts</h2>
 
-<p>A <em>Domain</em> is what a business does and the surrounding context of how it does business. It is important to model out its supported <em>Subdomains</em> &mdash; that is, the smaller components of the business that collaborate in real, day-to-day operations of the business. The book describes these as <em>Core Domains</em>.</p>
+<p>A <em>Domain</em> is what a business does and the surrounding context of how it does business. It is important to model out its supported <em>Subdomains</em> – that is, the smaller components of the business that collaborate in real, day-to-day operations of the business. The book describes these as <em>Core Domains</em>.</p>
 
-<p>Finally, a <em>Bounded Context</em> is the physical manifestation of the solution space as software &mdash; models living in a real application. Its key feature in the context of DDD is as a linguistic barrier between different domains.</p>
+<p>Finally, a <em>Bounded Context</em> is the physical manifestation of the solution space as software – models living in a real application. Its key feature in the context of DDD is as a linguistic barrier between different domains.</p>
 
-<p>In an ideal world, each <em>Subdomain</em> maps directly to one <em>Bounded Context</em>. In the real world, this is less common since we tend to build things into monolithic systems. Still &mdash; many monolithic applications have several components that could in themselves be bounded contexts.</p>
+<p>In an ideal world, each <em>Subdomain</em> maps directly to one <em>Bounded Context</em>. In the real world, this is less common since we tend to build things into monolithic systems. Still – many monolithic applications have several components that could in themselves be bounded contexts.</p>
 
-<h6>Side note: In Rails, one could think of Engines as a <em>Bounded Context</em>. But that might be a blog post for another time.</h6>
+<h6 id="side-note-in-rails-one-could-think-of-engines-as-a-bounded-context-but-that-might-be-a-blog-post-for-another-time">Side note: In Rails, one could think of Engines as a <em>Bounded Context</em>. But that might be a blog post for another time.</h6>
 
 <p>It is important to get these ideas and concepts down correctly because we need correct modeling of our systems to determine what they do.</p>
 
-<h3>Bounded Contexts and terms</h3>
+<h3 id="bounded-contexts-and-terms">Bounded Contexts and terms</h3>
 
-<p>It&rsquo;s not usually realistic to get the entire organization agreeing on a universal linguistic definition for every term. Instead, DDD assumes that different terms have different meanings in different contexts.</p>
+<p>It’s not usually realistic to get the entire organization agreeing on a universal linguistic definition for every term. Instead, DDD assumes that different terms have different meanings in different contexts.</p>
 
 <p>The author then dives into the an example of a book, where a <em>book</em> means several different things to different people in different contexts. A book is touched upon by authors, graphic designers, editors, marketing folks. In each of these contexts, the features of a book mean different things at different times. It is impossible to develop an all-knowing Book model without disagreement between stakeholders. DDD, instead, acknowledges these differences and allows stakeholders to use linguistic terms from within their unique Bounded Contexts.</p>
 
 <p>Bounded Contexts may include things like:</p>
 
 <ul>
-<li>Object models</li>
-<li>A database schema / persistence layer</li>
-<li>A SOAP or REST API</li>
-<li>A user interface</li>
+  <li>Object models</li>
+  <li>A database schema / persistence layer</li>
+  <li>A SOAP or REST API</li>
+  <li>A user interface</li>
 </ul>
 
-
-<h3>Bounded context antipatterns</h3>
+<h3 id="bounded-context-antipatterns">Bounded context antipatterns</h3>
 
 <p>You may be tempted to divide up a bounded context by architectural concerns, or because you want to assign smaller tasks to developers (resource allocation). Beware that this kind of work tends to fragment the language.</p>
 
@@ -666,9 +667,9 @@ end
 
 <p>Ideally: we strive to assign one team to work on one Bounded Context with one Ubiquitous Language at a time.</p>
 
-<h6>In Rails, what are the bounded contexts? It could be the top-level Rails application, or an engine, or a gem, that define the context boundaries._</h6>
+<h6 id="in-rails-what-are-the-bounded-contexts-it-could-be-the-top-level-rails-application-or-an-engine-or-a-gem-that-define-the-context-boundaries">In Rails, what are the bounded contexts? It could be the top-level Rails application, or an engine, or a gem, that define the context boundaries._</h6>
 
-<h3>A story&hellip;</h3>
+<h3 id="a-story">A story…</h3>
 
 <p>The chapter then goes on to describe their fictional team designing through three iterations off their DDD strategy:</p>
 
@@ -676,7 +677,7 @@ end
 
 <p>This is, however, missing the point. They realized they needed to listen to business and their domain experts to find out exactly where the right places were to segregate the contexts. The team discovers that the business has a desire to go in a new direction which allows them to segregate the domain in such a way that would enable future directions for the business.</p>
 
-<h6>How often are we as developers in conversation with our product owners and asking where the business <em>wants</em> to go in the future?</h6>
+<h6 id="how-often-are-we-as-developers-in-conversation-with-our-product-owners-and-asking-where-the-business-wants-to-go-in-the-future">How often are we as developers in conversation with our product owners and asking where the business <em>wants</em> to go in the future?</h6>
 
 <p>Conversations with the business reveal an intention to develop an add-on product to the core product. This implies the development of two subdomains. However, further investigation reveals that the shared overlap of certain domain models (like users, roles, and access management) cannot simply be identically shared between two systems, since their <em>linguistic meanings</em> in the two systems differ slightly. Instead, the developers use the linguistic problem to develop a third bounded context.</p>
 
@@ -689,165 +690,155 @@ end
     <link href="http://www.g9labs.com/2014/02/02/blogging-through-implementing-domain-driven-design/"/>
     <updated>2014-02-02T11:31:00-08:00</updated>
     <id>http://www.g9labs.com/2014/02/02/blogging-through-implementing-domain-driven-design</id>
-    <content type="html"><![CDATA[<p>In recent conversations with coworkers, the topic of Domain-Driven Design has
-arisen on more than a few occasions in design and architecture meetings.
-&ldquo;Have you read it?&rdquo; a coworker asked, &ldquo;I think it&rsquo;d help us a lot.&rdquo;</p>
+    <content type="html"><![CDATA[<p>In recent conversations with coworkers, the topic of Domain-Driven Design has<br />
+arisen on more than a few occasions in design and architecture meetings.<br />
+“Have you read it?” a coworker asked, “I think it’d help us a lot.”</p>
 
-<p>I&rsquo;ve gotten my hands on a copy of <a href="http://www.amazon.com/Implementing-Domain-Driven-Design-Vaughn-Vernon/dp/0321834577">Implementing Domain-Driven Design</a>
-by <a href="https://vaughnvernon.co/">Vaughn Vernon</a>, which is a more pragmatic
+<p>I’ve gotten my hands on a copy of <a href="http://www.amazon.com/Implementing-Domain-Driven-Design-Vaughn-Vernon/dp/0321834577">Implementing Domain-Driven Design</a><br />
+by <a href="https://vaughnvernon.co/">Vaughn Vernon</a>, which is a more pragmatic<br />
 approach to DDD than the original <a href="http://www.amazon.com/Domain-Driven-Design-Tackling-Complexity-Software/dp/0321125215/ref=pd_bxgy_b_text_y">Domain-Driven Design</a> book by Eric Evans.</p>
 
-<p>My desire is to share my outlines of the book chapter-by-chapter,
+<p>My desire is to share my outlines of the book chapter-by-chapter,<br />
 hopefully once a week.</p>
 
-<h2>Chapter 1: Getting Started with DDD</h2>
+<h2 id="chapter-1-getting-started-with-ddd">Chapter 1: Getting Started with DDD</h2>
 
-<h3>Can I DDD?</h3>
-
+<h3 id="can-i-ddd">Can I DDD?</h3>
 <ul>
-<li>DDD helps us design software models where &ldquo;our design is exactly how
-the software works&rdquo; (1).</li>
-<li>DDD isn&rsquo;t a technology, it&rsquo;s a set of principles that involve
-discussion, listening, and business value so you can <em>centralize
+  <li>DDD helps us design software models where “our design is exactly how<br />
+the software works” (1).</li>
+  <li>DDD isn’t a technology, it’s a set of principles that involve<br />
+discussion, listening, and business value so you can <em>centralize<br />
 knowledge</em>.</li>
-<li>The main principle here is that we must &ldquo;understand the business in
-which our software works&rdquo; (3). This means we learn from domain experts
+  <li>The main principle here is that we must “understand the business in<br />
+which our software works” (3). This means we learn from domain experts<br />
 in our field.</li>
-<li>What is a domain model? an object model where objects have
+  <li>What is a domain model? an object model where objects have<br />
 data/persistence concerns with an accurate business meaning.</li>
 </ul>
 
-
-<h3>Why You Should Do DDD</h3>
+<h3 id="why-you-should-do-ddd">Why You Should Do DDD</h3>
 
 <ul>
-<li>Domain experts and devs on same playing field, cooperation required as
+  <li>Domain experts and devs on same playing field, cooperation required as<br />
 one team. (Agile teams, anyone?)</li>
-<li>The business can learn more about itself through the questions asked
+  <li>The business can learn more about itself through the questions asked<br />
 about itself.</li>
-<li>Knowledge is centralized.</li>
-<li>Zero translations between domain experts and software devs and
+  <li>Knowledge is centralized.</li>
+  <li>Zero translations between domain experts and software devs and<br />
 software.</li>
-<li>&ldquo;The design is the code, and code is the design.&rdquo; (7)</li>
-<li>It is not without up-front cost</li>
+  <li>“The design is the code, and code is the design.” (7)</li>
+  <li>It is not without up-front cost</li>
 </ul>
 
-
-<h4>The problem</h4>
+<h4 id="the-problem">The problem</h4>
 
 <ul>
-<li>The schism between business domain experts and software developers
+  <li>The schism between business domain experts and software developers<br />
 puts your project (and your business) at a risk.</li>
-<li>The more time passes, the greater the divide grows.</li>
+  <li>The more time passes, the greater the divide grows.</li>
 </ul>
 
-
-<h4>Solution</h4>
+<h4 id="solution">Solution</h4>
 
 <ul>
-<li>DDD brings domain experts and software developers together to develop
+  <li>DDD brings domain experts and software developers together to develop<br />
 software that reflects the business domain mental model.</li>
-<li>Oftentimes this requires that they jointly develop a &ldquo;Ubiquitous
-Language&rdquo; &ndash; a shared vocabulary and set of concepts that are jointly
+  <li>Oftentimes this requires that they jointly develop a “Ubiquitous<br />
+Language” - a shared vocabulary and set of concepts that are jointly<br />
 spoken by everybody.</li>
-<li>DDD produces software that is better designed &amp; architected &ndash;> better testable &ndash;>
+  <li>DDD produces software that is better designed &amp; architected -&gt; better testable -&gt;<br />
 clearer code.</li>
-<li>Take heed: DDD should only be used to simplify your domain. If the net
-cost of implementing DDD is only going to add complexity, then you
+  <li>Take heed: DDD should only be used to simplify your domain. If the net<br />
+cost of implementing DDD is only going to add complexity, then you<br />
 should stay away.</li>
 </ul>
 
-
-<h4>Domain model health</h4>
-
+<h4 id="domain-model-health">Domain model health</h4>
 <ul>
-<li>As time passes, our domain models can become
-<a href="http://www.martinfowler.com/bliki/AnemicDomainModel.html">anemic</a>,
-and lose their expressive capabilities and clean boundaries. This can
+  <li>As time passes, our domain models can become<br />
+<a href="http://www.martinfowler.com/bliki/AnemicDomainModel.html">anemic</a>,<br />
+and lose their expressive capabilities and clean boundaries. This can<br />
 lead to spaghetti code and a violation of object responsibilities.</li>
-<li>Why do anemic domain models hurt us? They claim to be well-formed
-models but they hide a badly designed system that is still unfocused
-in what it does. (Andrew: I&rsquo;ve seen a lot of Service objects that
-claim to be services but really are long scripts to get things done.
-There might be a cost of designing the Service interface, but inside
+  <li>Why do anemic domain models hurt us? They claim to be well-formed<br />
+models but they hide a badly designed system that is still unfocused<br />
+in what it does. (Andrew: I’ve seen a lot of Service objects that<br />
+claim to be services but really are long scripts to get things done.<br />
+There might be a cost of designing the Service interface, but inside<br />
 things are just as messy as before we got there.)</li>
-<li>Seems like Vernon is blaming the influence of IDEs for Visual Basic as
-they influenced Java libraries &mdash; too many explicit getters and
+  <li>Seems like Vernon is blaming the influence of IDEs for Visual Basic as<br />
+they influenced Java libraries – too many explicit getters and<br />
 setters.</li>
-<li>Vernon throws up some code samples comparing two different code
-samples &mdash; one with an anemic model that looks like a long string of
-commands and another with descriptive method names. He makes the case
+  <li>Vernon throws up some code samples comparing two different code<br />
+samples – one with an anemic model that looks like a long string of<br />
+commands and another with descriptive method names. He makes the case<br />
 that simply reading the code is documentation of the domain itself.</li>
 </ul>
 
-
-<h4>How to do DDD</h4>
+<h4 id="how-to-do-ddd">How to do DDD</h4>
 
 <ul>
-<li>Have a <a href="http://martinfowler.com/bliki/UbiquitousLanguage.html"><em>Ubiquitous Language</em></a>
-where the team of domain experts share the language together, from
+  <li>Have a <a href="http://martinfowler.com/bliki/UbiquitousLanguage.html"><em>Ubiquitous Language</em></a><br />
+where the team of domain experts share the language together, from<br />
 domain experts to programmers.</li>
-<li><p>Steps to coming up with a language:</p>
+  <li>
+    <p>Steps to coming up with a language:</p>
 
-<ol>
-<li>Draw out the domain and label it.</li>
-<li>Make a glossary of terms and definitions.</li>
-<li>Have the team review the language document.</li>
-</ol>
-</li>
-<li><p>Note that a Ubiquitous Language is specific to the context it is
-implemented in. In other words, there is one Ubiquitous Language per
-Bounded Context.</p></li>
+    <ol>
+      <li>Draw out the domain and label it.</li>
+      <li>Make a glossary of terms and definitions.</li>
+      <li>Have the team review the language document.</li>
+    </ol>
+  </li>
+  <li>Note that a Ubiquitous Language is specific to the context it is<br />
+implemented in. In other words, there is one Ubiquitous Language per<br />
+Bounded Context.</li>
 </ul>
 
-
-<h3>Business value of DDD</h3>
+<h3 id="business-value-of-ddd">Business value of DDD</h3>
 
 <ol>
-<li>The organization gains a useful model of its domain</li>
-<li>The precise definition of the business is developed</li>
-<li>Domain experts contribute to software design.</li>
-<li>A better user experience is gained.</li>
-<li>Clean boundaries for models keep them pure.</li>
-<li>Enterprise architecture is better designed.</li>
-<li>Continuous modeling is used &mdash; the working software we produce is the
+  <li>The organization gains a useful model of its domain</li>
+  <li>The precise definition of the business is developed</li>
+  <li>Domain experts contribute to software design.</li>
+  <li>A better user experience is gained.</li>
+  <li>Clean boundaries for models keep them pure.</li>
+  <li>Enterprise architecture is better designed.</li>
+  <li>Continuous modeling is used – the working software we produce is the<br />
 model we worked so hard to create.</li>
-<li>New tools and patterns are used.</li>
+  <li>New tools and patterns are used.</li>
 </ol>
 
-
-<h4>Challenges</h4>
+<h4 id="challenges">Challenges</h4>
 
 <ul>
-<li>The time and effort required to think about the busines domain,
+  <li>The time and effort required to think about the busines domain,<br />
 research concepts, and converse with domain experts.</li>
-<li>It may be hard to get a domain expert involved due to their
+  <li>It may be hard to get a domain expert involved due to their<br />
 availability.</li>
-<li>There is a lot of thought required to clarify pure models and do
+  <li>There is a lot of thought required to clarify pure models and do<br />
 domain modeling.</li>
 </ul>
 
-
-<h4>Tactical modeling</h4>
+<h4 id="tactical-modeling">Tactical modeling</h4>
 
 <ul>
-<li>The <em>Core Domain</em> is the part of your application that has key and
-important business value &mdash; and may require high thought and attention
+  <li>The <em>Core Domain</em> is the part of your application that has key and<br />
+important business value – and may require high thought and attention<br />
 to design.</li>
-<li>Sometimes DDD may not be the right fit for you &mdash; if you have a lot of
-experienced developers who are very comfortable with domain modeling,
+  <li>Sometimes DDD may not be the right fit for you – if you have a lot of<br />
+experienced developers who are very comfortable with domain modeling,<br />
 you may be better off trusting their opinion.</li>
 </ul>
 
-
-<h4>DDD is not heavy.</h4>
+<h4 id="ddd-is-not-heavy">DDD is not heavy.</h4>
 
 <ul>
-<li>It fits into any Agile or XP framework. It leans into TDD, eg: you use
-TDD to develop a new domain model that describes how it interacts with
+  <li>It fits into any Agile or XP framework. It leans into TDD, eg: you use<br />
+TDD to develop a new domain model that describes how it interacts with<br />
 other existing models. You go through the red-green-refactor cycle.</li>
-<li>DDD promotes lightweight development. As domain experts read the code, they
-are able to provide in-flight feedback to the development of the
+  <li>DDD promotes lightweight development. As domain experts read the code, they<br />
+are able to provide in-flight feedback to the development of the<br />
 system.</li>
 </ul>
 

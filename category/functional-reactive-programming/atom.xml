@@ -4,7 +4,7 @@
   <title><![CDATA[Category: functional reactive programming | The Sweet Spot]]></title>
   <link href="http://www.g9labs.com/category/functional-reactive-programming/atom.xml" rel="self"/>
   <link href="http://www.g9labs.com/"/>
-  <updated>2016-06-24T11:31:59-07:00</updated>
+  <updated>2016-06-29T16:33:32-07:00</updated>
   <id>http://www.g9labs.com/</id>
   <author>
     <name><![CDATA[Andrew Hao]]></name>
@@ -20,73 +20,78 @@
     <id>http://www.g9labs.com/2015/04/30/building-gpx-stats-through-frp-principles-on-bacon-dot-js</id>
     <content type="html"><![CDATA[<p>With my current fascination with <a href="http://github.com/andrewhao/stressfactor">tracking workouts and location-based-activities</a>, I have been interested in how I might be able to rewrite some of my stats logic with FRP principles.</p>
 
-<h3>What is FRP?</h3>
+<h3 id="what-is-frp">What is FRP?</h3>
 
-<p>FRP, or Functional Reactive Programming, is often defined as &ldquo;functional programming over values that change over time&rdquo;. It uses functional composition for streams of data that may appear in an infinite stream of data for some far indeterminate future &ndash; these types of use cases are served well by FRP which <a href="http://en.wikipedia.org/wiki/Functional_reactive_programming">&ldquo;(simplifies) these problems by explicitly modeling time&rdquo;</a>.</p>
+<p>FRP, or Functional Reactive Programming, is often defined as “functional programming over values that change over time”. It uses functional composition for streams of data that may appear in an infinite stream of data for some far indeterminate future - these types of use cases are served well by FRP which <a href="http://en.wikipedia.org/wiki/Functional_reactive_programming">“(simplifies) these problems by explicitly modeling time”</a>.</p>
 
-<h3>GPS &ndash; your location, varied over time.</h3>
+<h3 id="gps---your-location-varied-over-time">GPS - your location, varied over time.</h3>
 
-<p>A great application of this would be a workout. Let&rsquo;s say I wanted to build an app that received realtime updates on a person&rsquo;s position. Say the app was a Node server that received this JSON blob from a web API as a location update:</p>
+<p>A great application of this would be a workout. Let’s say I wanted to build an app that received realtime updates on a person’s position. Say the app was a Node server that received this JSON blob from a web API as a location update:</p>
 
-<p><code>json
-{ 'lat': 29.192414,
-  'lon': 148.113241,
-  'ele': 122.1,
-  'time': '2015-04-18T13:54:56Z' }
-</code></p>
+<div class="language-json highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n1" name="n1">1</a></span>{ <span style="color:#F00;background-color:#FAA">'</span><span style="color:#F00;background-color:#FAA">l</span><span style="color:#F00;background-color:#FAA">a</span><span style="color:#F00;background-color:#FAA">t</span><span style="color:#F00;background-color:#FAA">'</span>: <span style="color:#60E">29.192414</span>,
+<span class="line-numbers"><a href="#n2" name="n2">2</a></span>  <span style="color:#F00;background-color:#FAA">'</span><span style="color:#F00;background-color:#FAA">l</span><span style="color:#F00;background-color:#FAA">o</span><span style="color:#F00;background-color:#FAA">n</span><span style="color:#F00;background-color:#FAA">'</span>: <span style="color:#60E">148.113241</span>,
+<span class="line-numbers"><a href="#n3" name="n3">3</a></span>  <span style="color:#F00;background-color:#FAA">'</span><span style="color:#F00;background-color:#FAA">e</span><span style="color:#F00;background-color:#FAA">l</span><span style="color:#F00;background-color:#FAA">e</span><span style="color:#F00;background-color:#FAA">'</span>: <span style="color:#60E">122.1</span>,
+<span class="line-numbers"><a href="#n4" name="n4">4</a></span>  <span style="color:#F00;background-color:#FAA">'</span><span style="color:#F00;background-color:#FAA">t</span><span style="color:#F00;background-color:#FAA">i</span><span style="color:#F00;background-color:#FAA">m</span><span style="color:#F00;background-color:#FAA">e</span><span style="color:#F00;background-color:#FAA">'</span>: <span style="color:#F00;background-color:#FAA">'</span><span style="color:#00D">2015</span><span style="color:#00D">-0</span><span style="color:#00D">4</span><span style="color:#00D">-18</span><span style="color:#F00;background-color:#FAA">T</span><span style="color:#00D">13</span>:<span style="color:#00D">54</span>:<span style="color:#00D">56</span><span style="color:#F00;background-color:#FAA">Z</span><span style="color:#F00;background-color:#FAA">'</span> }
+</pre></div>
+</div>
+</div>
 
 <p>Say that some time later, the API receives this JSON blob:</p>
 
-<p><code>json
-{ 'lat': 29.192424,
-  'lon': 148.113251,
-  'ele': 123.1,
-  'time': '2015-04-18T13:55:26Z' }
-</code></p>
+<div class="language-json highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n1" name="n1">1</a></span>{ <span style="color:#F00;background-color:#FAA">'</span><span style="color:#F00;background-color:#FAA">l</span><span style="color:#F00;background-color:#FAA">a</span><span style="color:#F00;background-color:#FAA">t</span><span style="color:#F00;background-color:#FAA">'</span>: <span style="color:#60E">29.192424</span>,
+<span class="line-numbers"><a href="#n2" name="n2">2</a></span>  <span style="color:#F00;background-color:#FAA">'</span><span style="color:#F00;background-color:#FAA">l</span><span style="color:#F00;background-color:#FAA">o</span><span style="color:#F00;background-color:#FAA">n</span><span style="color:#F00;background-color:#FAA">'</span>: <span style="color:#60E">148.113251</span>,
+<span class="line-numbers"><a href="#n3" name="n3">3</a></span>  <span style="color:#F00;background-color:#FAA">'</span><span style="color:#F00;background-color:#FAA">e</span><span style="color:#F00;background-color:#FAA">l</span><span style="color:#F00;background-color:#FAA">e</span><span style="color:#F00;background-color:#FAA">'</span>: <span style="color:#60E">123.1</span>,
+<span class="line-numbers"><a href="#n4" name="n4">4</a></span>  <span style="color:#F00;background-color:#FAA">'</span><span style="color:#F00;background-color:#FAA">t</span><span style="color:#F00;background-color:#FAA">i</span><span style="color:#F00;background-color:#FAA">m</span><span style="color:#F00;background-color:#FAA">e</span><span style="color:#F00;background-color:#FAA">'</span>: <span style="color:#F00;background-color:#FAA">'</span><span style="color:#00D">2015</span><span style="color:#00D">-0</span><span style="color:#00D">4</span><span style="color:#00D">-18</span><span style="color:#F00;background-color:#FAA">T</span><span style="color:#00D">13</span>:<span style="color:#00D">55</span>:<span style="color:#00D">26</span><span style="color:#F00;background-color:#FAA">Z</span><span style="color:#F00;background-color:#FAA">'</span> }
+</pre></div>
+</div>
+</div>
 
 <p>So we have these data points, that the user has moved <code>+0.00001</code> latitude points and <code>+0.00001</code> longitude points, climbing a total of <code>+1.0</code> meters, over a period of <code>30</code> seconds.</p>
 
-<h4>Exercise: Get my instantaneous velocity</h4>
+<h4 id="exercise-get-my-instantaneous-velocity">Exercise: Get my instantaneous velocity</h4>
 
 <p>If we performed this imperatively, we would write it something like this:</p>
 
-<p><code>javascript
-var locations = [{ /*json*/ }, { /*json*/ } /*, ...*/];
-var last = locations[locations.length-1];
-var secondToLast = locations[locations.length-2];
-var timeDelta = last.time - secondToLast.time;
-var distanceDelta = getDistance(last.lon, last.lat, secondToLast.lon, secondToLast.lat);
-var velocity = distanceDelta / timeDelta;
-console.log(velocity);
-</code></p>
+<div class="language-javascript highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n1" name="n1">1</a></span><span style="color:#080;font-weight:bold">var</span> locations = [{ <span style="color:#777">/*json*/</span> }, { <span style="color:#777">/*json*/</span> } <span style="color:#777">/*, ...*/</span>];
+<span class="line-numbers"><a href="#n2" name="n2">2</a></span><span style="color:#080;font-weight:bold">var</span> last = locations[locations.length-<span style="color:#00D">1</span>];
+<span class="line-numbers"><a href="#n3" name="n3">3</a></span><span style="color:#080;font-weight:bold">var</span> secondToLast = locations[locations.length-<span style="color:#00D">2</span>];
+<span class="line-numbers"><a href="#n4" name="n4">4</a></span><span style="color:#080;font-weight:bold">var</span> timeDelta = last.time - secondToLast.time;
+<span class="line-numbers"><a href="#n5" name="n5">5</a></span><span style="color:#080;font-weight:bold">var</span> distanceDelta = getDistance(last.lon, last.lat, secondToLast.lon, secondToLast.lat);
+<span class="line-numbers"><a href="#n6" name="n6">6</a></span><span style="color:#080;font-weight:bold">var</span> velocity = distanceDelta / timeDelta;
+<span class="line-numbers"><a href="#n7" name="n7">7</a></span>console.log(velocity);
+</pre></div>
+</div>
+</div>
 
 <p>With FRP, it might look more like this:</p>
 
-<p>```javascript
-var locationStream = [{ /<em>json</em>/ }, { /<em>json</em>/ } /<em>, &hellip;some JSON objects that might appear in the future </em>/];
-locationStream.slidingWindow(2)</p>
+<div class="language-javascript highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"> <a href="#n1" name="n1">1</a></span><span style="color:#080;font-weight:bold">var</span> locationStream = [{ <span style="color:#777">/*json*/</span> }, { <span style="color:#777">/*json*/</span> } <span style="color:#777">/*, ...some JSON objects that might appear in the future */</span>];
+<span class="line-numbers"> <a href="#n2" name="n2">2</a></span>locationStream.slidingWindow(<span style="color:#00D">2</span>)
+<span class="line-numbers"> <a href="#n3" name="n3">3</a></span>              .map(<span style="color:#080;font-weight:bold">function</span>(pairs) {
+<span class="line-numbers"> <a href="#n4" name="n4">4</a></span>                <span style="color:#080;font-weight:bold">var</span> timeDelta = pairs[<span style="color:#00D">1</span>].time - pairs[<span style="color:#00D">0</span>].time;
+<span class="line-numbers"> <a href="#n5" name="n5">5</a></span>                <span style="color:#080;font-weight:bold">var</span> distanceDelta = getDistance(pairs[<span style="color:#00D">1</span>].lon, pairs[<span style="color:#00D">1</span>].lat, pairs[<span style="color:#00D">0</span>].lon, pairs[<span style="color:#00D">0</span>].lat);
+<span class="line-numbers"> <a href="#n6" name="n6">6</a></span>                <span style="color:#080;font-weight:bold">return</span> distanceDelta / timeDelta
+<span class="line-numbers"> <a href="#n7" name="n7">7</a></span>              })
+<span class="line-numbers"> <a href="#n8" name="n8">8</a></span>              .onValue(<span style="color:#080;font-weight:bold">function</span>(velocity) {
+<span class="line-numbers"> <a href="#n9" name="n9">9</a></span>                console.log(velocity);
+<span class="line-numbers"><strong><a href="#n10" name="n10">10</a></strong></span>              });
+</pre></div>
+</div>
+</div>
 
-<pre><code>          .map(function(pairs) {
-            var timeDelta = pairs[1].time - pairs[0].time;
-            var distanceDelta = getDistance(pairs[1].lon, pairs[1].lat, pairs[0].lon, pairs[0].lat);
-            return distanceDelta / timeDelta
-          })
-          .onValue(function(velocity) {
-            console.log(velocity);
-          });
-</code></pre>
+<p>There is a key difference that is not easily demonstrated here - that the former imperative example requires that all JSON arrays be materialized at once - via db query, in-memory store, etc. It doesn’t account for change in time.</p>
 
-<p>```</p>
+<p>However, the latter functional example accounts for changing values of time as they appear over the stream - as soon as a new value shows up in the stream, the velocity is changed instantly.</p>
 
-<p>There is a key difference that is not easily demonstrated here &ndash; that the former imperative example requires that all JSON arrays be materialized at once &ndash; via db query, in-memory store, etc. It doesn&rsquo;t account for change in time.</p>
-
-<p>However, the latter functional example accounts for changing values of time as they appear over the stream &ndash; as soon as a new value shows up in the stream, the velocity is changed instantly.</p>
-
-<h3>Some more location-based experiments: rxlocation</h3>
+<h3 id="some-more-location-based-experiments-rxlocation">Some more location-based experiments: rxlocation</h3>
 
 <p>I wrote up a library to parse various facts from a changing stream of GPS events, from instantaneous velocity, average velocity, moving/stopped status, etc.</p>
 
-<p>I investigated different reactive frameworks, mainly <a href="https://github.com/Reactive-Extensions/RxJS/">RxJS</a> and <a href="https://github.com/baconjs/bacon.js/">Bacon.js</a>. My takeaways were that RxJS does everything and the kitchen sink, but I got lost trying to reconcile Node streams with RxJS cold streams. Bacon.js just seemed to work for me, out of the box. I&rsquo;m still learning, so I hope to have a better understanding of the core issues here.</p>
+<p>I investigated different reactive frameworks, mainly <a href="https://github.com/Reactive-Extensions/RxJS/">RxJS</a> and <a href="https://github.com/baconjs/bacon.js/">Bacon.js</a>. My takeaways were that RxJS does everything and the kitchen sink, but I got lost trying to reconcile Node streams with RxJS cold streams. Bacon.js just seemed to work for me, out of the box. I’m still learning, so I hope to have a better understanding of the core issues here.</p>
 
 <p>You can check it out here: <a href="https://github.com/andrewhao/rxlocation">rxlocation</a>.</p>
 ]]></content>

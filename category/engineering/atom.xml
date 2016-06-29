@@ -4,7 +4,7 @@
   <title><![CDATA[Category: engineering | The Sweet Spot]]></title>
   <link href="http://www.g9labs.com/category/engineering/atom.xml" rel="self"/>
   <link href="http://www.g9labs.com/"/>
-  <updated>2016-06-24T11:31:59-07:00</updated>
+  <updated>2016-06-29T16:33:32-07:00</updated>
   <id>http://www.g9labs.com/</id>
   <author>
     <name><![CDATA[Andrew Hao]]></name>
@@ -18,29 +18,33 @@
     <link href="http://www.g9labs.com/2014/11/01/conways-law-for-humans/"/>
     <updated>2014-11-01T18:38:00-07:00</updated>
     <id>http://www.g9labs.com/2014/11/01/conways-law-for-humans</id>
-    <content type="html"><![CDATA[<p>If you&rsquo;re familiar with <a href="http://en.wikipedia.org/wiki/Conway's_law">Conway&rsquo;s Law</a>, it states:</p>
+    <content type="html"><![CDATA[<p>If you’re familiar with <a href="http://en.wikipedia.org/wiki/Conway's_law">Conway’s Law</a>, it states:</p>
 
-<blockquote><p>Any organization that designs a system (defined broadly) will produce a design whose structure is a copy of the organization&rsquo;s communication structure.</p></blockquote>
+<blockquote>
+  <p>Any organization that designs a system (defined broadly) will produce a design whose structure is a copy of the organization’s communication structure.</p>
+</blockquote>
 
-<p>Or in layman&rsquo;s terms, your software systems reflect the structure of the teams that create them.</p>
+<p>Or in layman’s terms, your software systems reflect the structure of the teams that create them.</p>
 
-<p>Think about it &mdash; do your teams prefer to do everything themselves? Or do they ask for help from other teams? In general, as a team, we prefer to have as little dependencies as possible. The work that the engineer has to do to send an email, or wait for work from another team (like an API change or design change) is usually time-consuming and burdensome. Therefore, it is not (usually) in the team&rsquo;s best interests to cross silos and ask for help from others. Your teams, if they look like this, tend to work in codebases that are generally monolithic and wholly owned by the team.</p>
+<p>Think about it – do your teams prefer to do everything themselves? Or do they ask for help from other teams? In general, as a team, we prefer to have as little dependencies as possible. The work that the engineer has to do to send an email, or wait for work from another team (like an API change or design change) is usually time-consuming and burdensome. Therefore, it is not (usually) in the team’s best interests to cross silos and ask for help from others. Your teams, if they look like this, tend to work in codebases that are generally monolithic and wholly owned by the team.</p>
 
-<p>It&rsquo;s not wrong, or it&rsquo;s not bad, it&rsquo;s just a sociological observation. This is why companies like Spotify, Netflix or Amazon have embraced Conway&rsquo;s Law and changed their organizations to match the  microservice-driven architecture they want. Small teams work on small codebases and are empowered to make the changes they need.</p>
+<p>It’s not wrong, or it’s not bad, it’s just a sociological observation. This is why companies like Spotify, Netflix or Amazon have embraced Conway’s Law and changed their organizations to match the  microservice-driven architecture they want. Small teams work on small codebases and are empowered to make the changes they need.</p>
 
-<h3>A corollary and some observations about your company culture.</h3>
+<h3 id="a-corollary-and-some-observations-about-your-company-culture">A corollary and some observations about your company culture.</h3>
 
-<p>Here&rsquo;s a corollary, which I&rsquo;ve heard in various shapes and forms. Paraphrased:</p>
+<p>Here’s a corollary, which I’ve heard in various shapes and forms. Paraphrased:</p>
 
-<blockquote><p>An organization&rsquo;s structure tends to pattern after its leaders' communication patterns.</p></blockquote>
+<blockquote>
+  <p>An organization’s structure tends to pattern after its leaders’ communication patterns.</p>
+</blockquote>
 
-<p>I&rsquo;ve been pushing an effort to unify our company&rsquo;s frontend styles and UX into a unified framework in an attempt to standardize the look and feel of the site.</p>
+<p>I’ve been pushing an effort to unify our company’s frontend styles and UX into a unified framework in an attempt to standardize the look and feel of the site.</p>
 
-<p>However, in working with our designers, I realized that they weren&rsquo;t talking to each other. Designers in one department had opposing design aesthetics from designers in another. This was causing problems in the code, because the frontend framework itself was becoming fragmented. You could see it in the code. Version A of the styleguide went into Department A&rsquo;s products. Version B of the styleguide went to Department B&rsquo;s products.</p>
+<p>However, in working with our designers, I realized that they weren’t talking to each other. Designers in one department had opposing design aesthetics from designers in another. This was causing problems in the code, because the frontend framework itself was becoming fragmented. You could see it in the code. Version A of the styleguide went into Department A’s products. Version B of the styleguide went to Department B’s products.</p>
 
 <p>In this case, as we kept rolling out this framework, I realized our organization had no single owner for the design language of the site. Why? I had to wonder if it had to do with some deeper communication issues between the heads of the two departments.</p>
 
-<p>Code can be a good canary to organizational issues, and call out larger human issues at hand. In this case, Conway&rsquo;s Law helps us root out and bring into the light structural concerns. Leaders can pay attention to these concerns and check themselves to become more open communicators.</p>
+<p>Code can be a good canary to organizational issues, and call out larger human issues at hand. In this case, Conway’s Law helps us root out and bring into the light structural concerns. Leaders can pay attention to these concerns and check themselves to become more open communicators.</p>
 ]]></content>
   </entry>
   

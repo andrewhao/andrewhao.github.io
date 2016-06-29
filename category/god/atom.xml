@@ -4,7 +4,7 @@
   <title><![CDATA[Category: god | The Sweet Spot]]></title>
   <link href="http://www.g9labs.com/category/god/atom.xml" rel="self"/>
   <link href="http://www.g9labs.com/"/>
-  <updated>2016-06-24T11:31:59-07:00</updated>
+  <updated>2016-06-29T16:33:32-07:00</updated>
   <id>http://www.g9labs.com/</id>
   <author>
     <name><![CDATA[Andrew Hao]]></name>
@@ -29,43 +29,65 @@
     <link href="http://www.g9labs.com/2011/02/23/save-our-souls-a-twitter-art-installation/"/>
     <updated>2011-02-23T02:51:37-08:00</updated>
     <id>http://www.g9labs.com/2011/02/23/save-our-souls-a-twitter-art-installation</id>
-    <content type="html"><![CDATA[<p>Here&rsquo;s how the installation looked on the day of the art show.</p>
+    <content type="html"><![CDATA[<p>Here’s how the installation looked on the day of the art show.</p>
 
-<p>[caption id=&ldquo;&rdquo; align=&ldquo;alignnone&rdquo; width=&ldquo;333&rdquo; caption=&ldquo;We mounted the installation on the inside of the Regeneration cafe. The Arduino lies behind the Macbook behind the monitor.&rdquo;]<a href="http://www.flickr.com/photos/andrewhao/5467033003/"><img src="http://farm6.static.flickr.com/5180/5467033003_c1c14c5dc0.jpg" alt="Installation" /></a>[/caption]</p>
+<p>[caption id=”” align=”alignnone” width=”333” caption=”We mounted the installation on the inside of the Regeneration cafe. The Arduino lies behind the Macbook behind the monitor.”]<a href="http://www.flickr.com/photos/andrewhao/5467033003/"><img src="http://farm6.static.flickr.com/5180/5467033003_c1c14c5dc0.jpg" alt="Installation" /></a>[/caption]</p>
 
-<p>[caption id=&ldquo;&rdquo; align=&ldquo;alignnone&rdquo; width=&ldquo;333&rdquo; caption=&ldquo;The LEDs are mounted on breadboards suspended on fishing wire, binder clips, rubber bands, chopsticks, and a prayer.&rdquo;]<a href="http://www.flickr.com/photos/andrewhao/5471602272/"><img src="http://farm6.static.flickr.com/5296/5471602272_85203b475e.jpg" alt="Mounted LED array" /></a>[/caption]</p>
+<p>[caption id=”” align=”alignnone” width=”333” caption=”The LEDs are mounted on breadboards suspended on fishing wire, binder clips, rubber bands, chopsticks, and a prayer.”]<a href="http://www.flickr.com/photos/andrewhao/5471602272/"><img src="http://farm6.static.flickr.com/5296/5471602272_85203b475e.jpg" alt="Mounted LED array" /></a>[/caption]</p>
 
-<p>[caption id=&ldquo;&rdquo; align=&ldquo;alignnone&rdquo; width=&ldquo;333&rdquo; caption=&ldquo;Finished it just in time.&rdquo;]<a href="http://www.flickr.com/photos/andrewhao/5471598060/"><img src="http://farm6.static.flickr.com/5057/5471598060_f1bb64a83f.jpg" alt="In action" /></a>[/caption]</p>
+<p>[caption id=”” align=”alignnone” width=”333” caption=”Finished it just in time.”]<a href="http://www.flickr.com/photos/andrewhao/5471598060/"><img src="http://farm6.static.flickr.com/5057/5471598060_f1bb64a83f.jpg" alt="In action" /></a>[/caption]</p>
 
-<p><a href="http://vimeo.com/20267056">Save our souls &ndash; Twitter art installation</a> from <a href="http://vimeo.com/user807863">Andrew Hao</a> on <a href="http://vimeo.com">Vimeo</a>.</p>
+<p><a href="http://vimeo.com/20267056">Save our souls - Twitter art installation</a> from <a href="http://vimeo.com/user807863">Andrew Hao</a> on <a href="http://vimeo.com">Vimeo</a>.</p>
 
-<blockquote><p>What are people saying about the ashes in the world today? This installation visualizes a live Twitter stream on heartache, injustice, loss, and our city and matches them up with the redemptive promises of Isaiah.</p></blockquote>
+<blockquote>
 
-<p>Life is difficult, and redemption is something we all long for. What changes do you hope for in your life or in the world? Send a response from your Twitter account to @sos_61 and watch the installation react. If you&rsquo;d like to be kept anonymous, send your response in a DM to @sos_61.</p>
+  <p>What are people saying about the ashes in the world today? This installation visualizes a live Twitter stream on heartache, injustice, loss, and our city and matches them up with the redemptive promises of Isaiah.</p>
+</blockquote>
 
-<p>&ldquo;I hope for <strong><strong>&rdquo;
-&ldquo;I wish that </strong></strong>&rdquo;
-&ldquo;I want to see ____&rdquo;</p>
+<p>Life is difficult, and redemption is something we all long for. What changes do you hope for in your life or in the world? Send a response from your Twitter account to @sos_61 and watch the installation react. If you’d like to be kept anonymous, send your response in a DM to @sos_61.</p>
 
-<h3>A few notes</h3>
+<p>“I hope for <strong>__”<br />
+“I wish that __</strong>”<br />
+“I want to see <em>__</em>”</p>
+
+<h3 id="a-few-notes">A few notes</h3>
 
 <ul>
-<li><p>Web interface is a fullscreen Google Chrome window. <a href="http://socket.io/">socket.io</a> is the Websocket interface to the <a href="http://nodejs.org">node.js</a> backend. The slide transition is animated via a CSS3 animation, and the red overlay is a simple SVG shape plotted with the help of <a href="http://raphaeljs.com">RaphaëlJS</a>.</p></li>
-<li><p>The Twitter backend is a collection of four self-updating Twitter searches, one for heartache (&ldquo;i feel lonely, sad, depressed&rdquo;), injustice (&ldquo;violence, war, oppression, justice&rdquo;), death (&ldquo;rest in peace, passed away&rdquo;), and Oakland (&ldquo;oakland&rdquo;). A blacklist filters out undesirable tweet keywords (&ldquo;justin bieber&rdquo;).</p></li>
-<li><p>Additionally, the backend connects to Twitter via the <a href="http://dev.twitter.com/pages/streaming_api">Streaming API</a> and displays a special animation for users who reply via tweet to the <a href="http://www.twitter.com/sos_61">@sos_61</a> account.</p></li>
-<li><p>The installation picks a tweet to display and pulses the LED array corresponding to the right tweet.</p></li>
-<li><p>Communication to the Arduino happens via a python script over the Firmata protocol, using the <a href="https://github.com/lupeke/python-firmata">python-firmata</a> library. The nodejs server signals the script over a socket connection which will run the pulse animation on the correct pin.</p></li>
-<li><p>I printed the graphic on an oversize printer with the good folks at <a href="http://alamedacopy.com">Alameda Copy</a>. Friendly service, fast turnaround, very reasonable prices. Ask for Joe.</p></li>
+  <li>
+    <p>Web interface is a fullscreen Google Chrome window. <a href="http://socket.io/">socket.io</a> is the Websocket interface to the <a href="http://nodejs.org">node.js</a> backend. The slide transition is animated via a CSS3 animation, and the red overlay is a simple SVG shape plotted with the help of <a href="http://raphaeljs.com">RaphaëlJS</a>.</p>
+  </li>
+  <li>
+    <p>The Twitter backend is a collection of four self-updating Twitter searches, one for heartache (“i feel lonely, sad, depressed”), injustice (“violence, war, oppression, justice”), death (“rest in peace, passed away”), and Oakland (“oakland”). A blacklist filters out undesirable tweet keywords (“justin bieber”).</p>
+  </li>
+  <li>
+    <p>Additionally, the backend connects to Twitter via the <a href="http://dev.twitter.com/pages/streaming_api">Streaming API</a> and displays a special animation for users who reply via tweet to the <a href="http://www.twitter.com/sos_61">@sos_61</a> account.</p>
+  </li>
+  <li>
+    <p>The installation picks a tweet to display and pulses the LED array corresponding to the right tweet.</p>
+  </li>
+  <li>
+    <p>Communication to the Arduino happens via a python script over the Firmata protocol, using the <a href="https://github.com/lupeke/python-firmata">python-firmata</a> library. The nodejs server signals the script over a socket connection which will run the pulse animation on the correct pin.</p>
+  </li>
+  <li>
+    <p>I printed the graphic on an oversize printer with the good folks at <a href="http://alamedacopy.com">Alameda Copy</a>. Friendly service, fast turnaround, very reasonable prices. Ask for Joe.</p>
+  </li>
 </ul>
 
-
-<h3>Links</h3>
+<h3 id="links">Links</h3>
 
 <ul>
-<li><p><a href="http://www.github.com/andrewhao/isaiah-61-project">Source code on github.</a></p></li>
-<li><p><a href="http://www.flickr.com/photos/andrewhao/sets/72157626107989740/">Flickr photos from the art show.</a></p></li>
-<li><p><a href="http://www.flickr.com/photos/andrewhao/sets/72157625956085386/">Photos of the creation process.</a></p></li>
-<li><p>Other posts on the process: <a href="http://www.g9labs.com/2011/02/01/the-making-of-sos-intro/">[1]</a>, <a href="http://www.g9labs.com/2011/02/11/update/">[2]</a>, <a href="http://www.g9labs.com/2011/02/12/currently-frustrated/">[3]</a>, <a href="http://www.g9labs.com/2011/02/15/arduino-and-python-firmata/">[4]</a></p></li>
+  <li>
+    <p><a href="http://www.github.com/andrewhao/isaiah-61-project">Source code on github.</a></p>
+  </li>
+  <li>
+    <p><a href="http://www.flickr.com/photos/andrewhao/sets/72157626107989740/">Flickr photos from the art show.</a></p>
+  </li>
+  <li>
+    <p><a href="http://www.flickr.com/photos/andrewhao/sets/72157625956085386/">Photos of the creation process.</a></p>
+  </li>
+  <li>
+    <p>Other posts on the process: <a href="http://www.g9labs.com/2011/02/01/the-making-of-sos-intro/">[1]</a>, <a href="http://www.g9labs.com/2011/02/11/update/">[2]</a>, <a href="http://www.g9labs.com/2011/02/12/currently-frustrated/">[3]</a>, <a href="http://www.g9labs.com/2011/02/15/arduino-and-python-firmata/">[4]</a></p>
+  </li>
 </ul>
 
 ]]></content>
@@ -78,41 +100,40 @@
     <id>http://www.g9labs.com/2011/02/01/the-making-of-sos-intro</id>
     <content type="html"><![CDATA[<p><a href="http://www.flickr.com/photos/andrewhao/5408231821/"><img src="http://farm6.static.flickr.com/5095/5408231821_b4d0fd6837.jpg" alt="Save Our Souls - Logo" /></a></p>
 
-<p>I&rsquo;m starting a project for my church&rsquo;s art show that integrates Twitter, print design and light. I&rsquo;m titling it &ldquo;Save Our Souls&rdquo;.</p>
+<p>I’m starting a project for my church’s art show that integrates Twitter, print design and light. I’m titling it “Save Our Souls”.</p>
 
-<p>The theme of the art show is &ldquo;Instead of Ashes&rdquo;, a reference from of <a href="http://www.esvonline.org/search/isaiah+61/">Isaiah 61</a> which highlights of God&rsquo;s promises of redemption for the world&rsquo;s suffering through Jesus.</p>
+<p>The theme of the art show is “Instead of Ashes”, a reference from of <a href="http://www.esvonline.org/search/isaiah+61/">Isaiah 61</a> which highlights of God’s promises of redemption for the world’s suffering through Jesus.</p>
 
-<h2>What does it do?</h2>
+<h2 id="what-does-it-do">What does it do?</h2>
 
-<p>Essentially, what I want it to do is parse the global Twitter firehose and display a live stream of tweets that highlight brokenness and pain: tweets about the world&rsquo;s injustices, breakups, deaths, disappointments, and even ennui. This is inspired by <a href="http://twistori.com">twistori</a>.</p>
+<p>Essentially, what I want it to do is parse the global Twitter firehose and display a live stream of tweets that highlight brokenness and pain: tweets about the world’s injustices, breakups, deaths, disappointments, and even ennui. This is inspired by <a href="http://twistori.com">twistori</a>.</p>
 
 <p>At the same time these tweets are floating across the screen, I want to illuminate a part of the printed verse in physical space that corresponds to the tweet.</p>
 
 <p>Imagine:</p>
 
-<p>Tweet: <em>I just want everyone to understand something&hellip;&hellip;I&rsquo;m SEVERELY depressed right now&hellip;&hellip;my (ex)girlfriend is one of the greatest things to happen to me and she&rsquo;s gone.</em></p>
+<p>Tweet: <em>I just want everyone to understand something……I’m SEVERELY depressed right now……my (ex)girlfriend is one of the greatest things to happen to me and she’s gone.</em></p>
 
-<p>At the same time, the LED array behind &ldquo;he has sent me to bind up the brokenhearted&rdquo; from Isaiah 61:1 would light up and pulse.</p>
+<p>At the same time, the LED array behind “he has sent me to bind up the brokenhearted” from Isaiah 61:1 would light up and pulse.</p>
 
 <p>And so on, for each tweet that flies across the screen.</p>
 
-<h2>Architecture</h2>
-
+<h2 id="architecture">Architecture</h2>
 <p><a href="http://www.flickr.com/photos/andrewhao/5408232737/"><img src="http://farm6.static.flickr.com/5020/5408232737_0ba8545d4e.jpg" alt="Isaiah 61 Architecture" /></a></p>
 
 <p>node.js would process messages from the Twitter streaming API keyed off of certain keywords and filter them by (negative) sentiment, and pushed onto queues. Queues would be drained in a fair manner and pushed out to a browser frontend, while a socket connection to an Arduino script would be responsible for pulsing the LED array.</p>
 
-<p>Of course, there&rsquo;s a lot of questions left unanswered here: How do you make an LED array? How do you do (reliable) sentiment analysis? How big should the print graphic be? How far behind the print should the LED arrays be placed for the light to be sufficiently diffuse, yet bright enough to be visible? I&rsquo;m not sure yet.</p>
+<p>Of course, there’s a lot of questions left unanswered here: How do you make an LED array? How do you do (reliable) sentiment analysis? How big should the print graphic be? How far behind the print should the LED arrays be placed for the light to be sufficiently diffuse, yet bright enough to be visible? I’m not sure yet.</p>
 
-<h2>First steps</h2>
+<h2 id="first-steps">First steps</h2>
 
-<p>So I just bought an Arduino and a ton of LEDs off of eBay. I&rsquo;m trying to relearn all the EE40 I tried so hard to forget way back in my undergrad days.</p>
+<p>So I just bought an Arduino and a ton of LEDs off of eBay. I’m trying to relearn all the EE40 I tried so hard to forget way back in my undergrad days.</p>
 
-<p>[caption id=&ldquo;&rdquo; align=&ldquo;alignnone&rdquo; width=&ldquo;500&rdquo; caption=&ldquo;Arduinos are cool. I had to do my fair share of head-scratching to figure out resistor values.&rdquo;]<a href="http://www.flickr.com/photos/andrewhao/5408162241/"><img src="http://farm6.static.flickr.com/5096/5408162241_201f757ddd.jpg" alt="Arduino is hooked up" /></a>[/caption]</p>
+<p>[caption id=”” align=”alignnone” width=”500” caption=”Arduinos are cool. I had to do my fair share of head-scratching to figure out resistor values.”]<a href="http://www.flickr.com/photos/andrewhao/5408162241/"><img src="http://farm6.static.flickr.com/5096/5408162241_201f757ddd.jpg" alt="Arduino is hooked up" /></a>[/caption]</p>
 
-<p>[caption id=&ldquo;&rdquo; align=&ldquo;alignnone&rdquo; width=&ldquo;500&rdquo; caption=&ldquo;A conceptual design for the print graphic.&rdquo;]<a href="http://www.flickr.com/photos/andrewhao/5408870750/"><img src="http://farm6.static.flickr.com/5098/5408870750_9fa4951f0d.jpg" alt="Print Concepts" /></a>[/caption]</p>
+<p>[caption id=”” align=”alignnone” width=”500” caption=”A conceptual design for the print graphic.”]<a href="http://www.flickr.com/photos/andrewhao/5408870750/"><img src="http://farm6.static.flickr.com/5098/5408870750_9fa4951f0d.jpg" alt="Print Concepts" /></a>[/caption]</p>
 
-<p>[caption id=&ldquo;&rdquo; align=&ldquo;alignnone&rdquo; width=&ldquo;500&rdquo; caption=&ldquo;Basic node.js backend with a rudimentary frontend streams live tweets.&rdquo;]<a href="http://www.flickr.com/photos/andrewhao/5408765510/"><img src="http://farm6.static.flickr.com/5137/5408765510_3381c46945.jpg" alt="Testing backend." /></a>[/caption]</p>
+<p>[caption id=”” align=”alignnone” width=”500” caption=”Basic node.js backend with a rudimentary frontend streams live tweets.”]<a href="http://www.flickr.com/photos/andrewhao/5408765510/"><img src="http://farm6.static.flickr.com/5137/5408765510_3381c46945.jpg" alt="Testing backend." /></a>[/caption]</p>
 
 <p>See the (rudimentary) nodejs/client code at <a href="https://github.com/andrewhao/isaiah-61-project">github</a>.</p>
 

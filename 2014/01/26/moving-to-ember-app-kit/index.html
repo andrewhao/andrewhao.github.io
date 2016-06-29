@@ -68,107 +68,101 @@
 		<time>26 January 2014</time>
 	</header>
 		<div class="content">
-			<p>I&rsquo;ve noticed a bit of the buzz around <a href="https://github.com/stefanpenner/ember-app-kit">Ember App Kit</a>
-recently and decided to move Hendrix, my music management app, over from
-a <a href="http://yeoman.io/">Yeoman</a>-generated Ember app to EAK with all its
+			<p>I’ve noticed a bit of the buzz around <a href="https://github.com/stefanpenner/ember-app-kit">Ember App Kit</a><br />
+recently and decided to move Hendrix, my music management app, over from<br />
+a <a href="http://yeoman.io/">Yeoman</a>-generated Ember app to EAK with all its<br />
 bells and whistles.</p>
 
-<h3>What&rsquo;s the difference?</h3>
+<h3 id="whats-the-difference">What’s the difference?</h3>
 
-<p>Well on the surface, the two frameworks aren&rsquo;t very different. The
-standard Yeoman build tool sets you up with Grunt and Bower, which is
-what EAK provides you out of the box. The cool stuff happens when you
-dive under the hood: ES6 module transpilation and an AMD-compatible
-Ember Resolver, built-in Karma integration and a built-in API stub
+<p>Well on the surface, the two frameworks aren’t very different. The<br />
+standard Yeoman build tool sets you up with Grunt and Bower, which is<br />
+what EAK provides you out of the box. The cool stuff happens when you<br />
+dive under the hood: ES6 module transpilation and an AMD-compatible<br />
+Ember Resolver, built-in Karma integration and a built-in API stub<br />
 framework for development and test environments.</p>
 
-<h3>The joys of modules</h3>
+<h3 id="the-joys-of-modules">The joys of modules</h3>
 
-<p>What I didn&rsquo;t realize was that compiling to ES6 modules required that my
-filenames be renamed exactly how the modules were going to be placed,
-with the extra caveat that resource actions needed to live in their own
-directories. Recall that in the old way of doing things with globals and
-namespaces, you could get away with throwing a route file like this in
+<p>What I didn’t realize was that compiling to ES6 modules required that my<br />
+filenames be renamed exactly how the modules were going to be placed,<br />
+with the extra caveat that resource actions needed to live in their own<br />
+directories. Recall that in the old way of doing things with globals and<br />
+namespaces, you could get away with throwing a route file like this in<br />
 your app directory:</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>routes/
-</span><span class='line'>  songs_index_controller.js</span></code></pre></td></tr></table></div></figure>
-
+<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">routes/
+</span><span class="line">  songs_index_controller.js</span></code></pre></td></tr></table></div></figure>
 
 <p>And inside:</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">MyApp</span><span class="p">.</span><span class="nx">SongsIndexRoute</span> <span class="o">=</span> <span class="nx">Ember</span><span class="p">.</span><span class="nx">Route</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
-</span><span class='line'>  <span class="c1">//...</span>
-</span><span class='line'><span class="p">});</span>
+<figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="javascript"><span class="line"><span class="nx">MyApp</span><span class="p">.</span><span class="nx">SongsIndexRoute</span> <span class="o">=</span> <span class="nx">Ember</span><span class="p">.</span><span class="nx">Route</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
+</span><span class="line">  <span class="c1">//...</span>
+</span><span class="line"><span class="p">});</span>
 </span></code></pre></td></tr></table></div></figure>
 
-
-<p>In EAK&rsquo;s world, you need to nest the file under the <code>songs/</code> directory,
+<p>In EAK’s world, you need to nest the file under the <code>songs/</code> directory,<br />
 and strip the type from the filename, like so:</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">routes</span><span class="o">/</span>
-</span><span class='line'>  <span class="nx">songs</span><span class="o">/</span>
-</span><span class='line'>    <span class="nx">index</span><span class="p">.</span><span class="nx">js</span>
+<figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="javascript"><span class="line"><span class="nx">routes</span><span class="o">/</span>
+</span><span class="line">  <span class="nx">songs</span><span class="o">/</span>
+</span><span class="line">    <span class="nx">index</span><span class="p">.</span><span class="nx">js</span>
 </span></code></pre></td></tr></table></div></figure>
 
-
-<p>Inside the file, you assign the function to a variable and let it be
+<p>Inside the file, you assign the function to a variable and let it be<br />
 exported in the default namespace.</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">SongsIndexRoute</span> <span class="o">=</span> <span class="nx">Ember</span><span class="p">.</span><span class="nx">Route</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
-</span><span class='line'>  <span class="c1">//...</span>
-</span><span class='line'><span class="p">});</span>
-</span><span class='line'><span class="kr">export</span> <span class="k">default</span> <span class="nx">SongsIndexRoute</span><span class="p">;</span>
+<figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+</pre></td><td class="code"><pre><code class="javascript"><span class="line"><span class="kd">var</span> <span class="nx">SongsIndexRoute</span> <span class="o">=</span> <span class="nx">Ember</span><span class="p">.</span><span class="nx">Route</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
+</span><span class="line">  <span class="c1">//...</span>
+</span><span class="line"><span class="p">});</span>
+</span><span class="line"><span class="kr">export</span> <span class="k">default</span> <span class="nx">SongsIndexRoute</span><span class="p">;</span>
 </span></code></pre></td></tr></table></div></figure>
 
+<h3 id="file-name-matters">File name matters</h3>
 
-<h3>File name matters</h3>
-
-<p>The <a href="https://github.com/stefanpenner/ember-jj-abrams-resolver/">new Ember resolver</a>
-loads modules in a smart way &mdash; according to how the framework
-structures resources, controllers and their corresponding actions. So
-visiting <code>#/songs</code> from my app caused the app to look up and load
-<code>appkit/routes/songs/index</code>. What I didn&rsquo;t realize was <em>this module must
-live at a very specific place in the file directory structure</em>.
-I realized that I left the module type in the file name the first time
+<p>The <a href="https://github.com/stefanpenner/ember-jj-abrams-resolver/">new Ember resolver</a> <br />
+loads modules in a smart way – according to how the framework<br />
+structures resources, controllers and their corresponding actions. So<br />
+visiting <code>#/songs</code> from my app caused the app to look up and load<br />
+<code>appkit/routes/songs/index</code>. What I didn’t realize was <em>this module must<br />
+live at a very specific place in the file directory structure</em>.<br />
+I realized that I left the module type in the file name the first time<br />
 around, like this:</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">routes</span><span class="o">/</span>
-</span><span class='line'>  <span class="nx">songs</span><span class="o">/</span>
-</span><span class='line'>    <span class="nx">index_route</span><span class="p">.</span><span class="nx">js</span>
+<figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="javascript"><span class="line"><span class="nx">routes</span><span class="o">/</span>
+</span><span class="line">  <span class="nx">songs</span><span class="o">/</span>
+</span><span class="line">    <span class="nx">index_route</span><span class="p">.</span><span class="nx">js</span>
 </span></code></pre></td></tr></table></div></figure>
 
-
-<p>There are no types in the module names &mdash; or the filenames, for that
-matter. I had not realized this (I&rsquo;m also an AMD newbie) &mdash; so I had
-left my files un-renamed as <code>songs_index_route</code>, which meant that
-the module loader had stored the SongsIndexRoute module under
-<code>appkit/routes/songs/index_route</code>, but was doing a route lookup through
+<p>There are no types in the module names – or the filenames, for that<br />
+matter. I had not realized this (I’m also an AMD newbie) – so I had<br />
+left my files un-renamed as <code>songs_index_route</code>, which meant that<br />
+the module loader had stored the SongsIndexRoute module under<br />
+<code>appkit/routes/songs/index_route</code>, but was doing a route lookup through<br />
 the Resolver for: <code>appkit/routes/songs/index</code>. Renaming the file to:</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">routes</span><span class="o">/</span>
-</span><span class='line'>  <span class="nx">songs</span><span class="o">/</span>
-</span><span class='line'>    <span class="nx">index</span><span class="p">.</span><span class="nx">js</span>
+<figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="javascript"><span class="line"><span class="nx">routes</span><span class="o">/</span>
+</span><span class="line">  <span class="nx">songs</span><span class="o">/</span>
+</span><span class="line">    <span class="nx">index</span><span class="p">.</span><span class="nx">js</span>
 </span></code></pre></td></tr></table></div></figure>
-
 
 <p>did the trick.</p>
 

@@ -68,32 +68,31 @@
 		<time>29 June 2015</time>
 	</header>
 		<div class="content">
-			<p>A couple of months ago, I was tuning a Rails app for one of our clients.
+			<p>A couple of months ago, I was tuning a Rails app for one of our clients.<br />
 This client wanted to know how performant their app would be under load.</p>
 
 <p>To do that, you can do several different things:</p>
 
 <ol>
-<li>Tune the thread/process balance within the VM</li>
-<li>Horizontally scale with your cloud platform.</li>
+  <li>Tune the thread/process balance within the VM</li>
+  <li>Horizontally scale with your cloud platform.</li>
 </ol>
-
 
 <p>This is a discussion of the former (#1):</p>
 
-<h2>1) Set up the test</h2>
+<h2 id="set-up-the-test">1) Set up the test</h2>
 
-<h3>Drive with a synthetic script</h3>
+<h3 id="drive-with-a-synthetic-script">Drive with a synthetic script</h3>
 
-<p>Our application had a synthetic load driver that would run Selenium to
-execute various app tasks. This synthetic driver could be parallelized
+<p>Our application had a synthetic load driver that would run Selenium to<br />
+execute various app tasks. This synthetic driver could be parallelized<br />
 across many notes via Rainforest QA, Sauce Labs or Browserify.</p>
 
-<p>In our case, I only needed to run our synthetic load script on a single
-node in multiple processes, which simulated enough load to anticipate
+<p>In our case, I only needed to run our synthetic load script on a single<br />
+node in multiple processes, which simulated enough load to anticipate<br />
 another order of magnitude of traffic.</p>
 
-<h3>Know how to inspect the server under load.</h3>
+<h3 id="know-how-to-inspect-the-server-under-load">Know how to inspect the server under load.</h3>
 
 <p>Commands you will want to know:</p>
 
@@ -104,79 +103,79 @@ $ kill -TTOU &lt;puma_master_pid&gt; # Remove a puma worker
 $ kill -USR2 &lt;puma_master_pid&gt; # Kill the puma master &amp; workers
 </code></pre>
 
-<h2>Generating more load: use external load testing services, or plain tools.</h2>
+<h2 id="generating-more-load-use-external-load-testing-services-or-plain-tools">Generating more load: use external load testing services, or plain tools.</h2>
 
 <p>Try using <a href="http://www.flood.io">Flood.io</a> or JMeter for performance load.</p>
 
 <p>I tried looking into the <a href="https://github.com/schneems/puma_auto_tune">puma_auto_tune</a> gem, but it required a higher level of production instrumentation than I was ready to give it.</p>
 
-<h2>Analysis: New Relic scalability analysis</h2>
+<h2 id="analysis-new-relic-scalability-analysis">Analysis: New Relic scalability analysis</h2>
 
-<p>New Relic gave us a scalability analysis scatter plot, plotting
-throughput against average application response time. In essence, it
+<p>New Relic gave us a scalability analysis scatter plot, plotting<br />
+throughput against average application response time. In essence, it<br />
 allows you to see spikes in response times as correlated to throughput.</p>
 
-<h2>Process:</h2>
+<h2 id="process">Process:</h2>
 
-<p>My approach was to use the synthetic script to generate productionlike
-node and ramp up the # of load actors in 5m increments. Each run would
+<p>My approach was to use the synthetic script to generate productionlike<br />
+node and ramp up the # of load actors in 5m increments. Each run would<br />
 test the following Puma process/thread balance:</p>
 
-<p>Run #1: Single-process, multi threads.
-Run #2: Multiple processes, single threaded.
+<p>Run #1: Single-process, multi threads.<br />
+Run #2: Multiple processes, single threaded.<br />
 Run #3: Multiple processes, multiple threads.</p>
 
-<blockquote><h3>Aside: <em>how many</em> of these threads/processes should I be using?</h3>
+<blockquote>
+  <h3 id="aside-how-many-of-these-threadsprocesses-should-i-be-using">Aside: <em>how many</em> of these threads/processes should I be using?</h3>
 
-<p>Note that your numbers will be different on the execution
-characteristics of your app and your server environment. Tweak it for
-yourself. You&rsquo;re designing an experiment.</p>
+  <p>Note that your numbers will be different on the execution<br />
+characteristics of your app and your server environment. Tweak it for<br />
+yourself. You’re designing an experiment.</p>
 
-<p>If you&rsquo;re curious, our Rails app started out with 4 threads on 2
-workers. We made the # of Puma workers (both min and max) environment
-variables so we could tweak the variables easily without deploying.</p></blockquote>
+  <p>If you’re curious, our Rails app started out with 4 threads on 2<br />
+workers. We made the # of Puma workers (both min and max) environment<br />
+variables so we could tweak the variables easily without deploying.</p>
+</blockquote>
 
-<p>The strategy was then to look at the perf characteristics of each run in
-the scatter plot. If there were any spikes in the graph with the
-increase of load, then that would be noted. Even minor features like an
-increase in slope would be noted &ndash; at that point, the incremental cost
+<p>The strategy was then to look at the perf characteristics of each run in<br />
+the scatter plot. If there were any spikes in the graph with the<br />
+increase of load, then that would be noted. Even minor features like an<br />
+increase in slope would be noted - at that point, the incremental cost<br />
 of each request increases with overall system load.</p>
 
-<h2>Results</h2>
+<h2 id="results">Results</h2>
 
-<p>I don&rsquo;t have the New Relic data on hand to show, now, but in our case we
+<p>I don’t have the New Relic data on hand to show, now, but in our case we<br />
 discovered two things:</p>
 
 <ol>
-<li>The server easily scaled from ~10 &ndash;> ~500 rpm with a virtually flat
+  <li>The server easily scaled from ~10 -&gt; ~500 rpm with a virtually flat<br />
 line for all runs.</li>
-<li>The app exhibited no noticeable performance differences when flipped
-between uniprocess-multithreaded, multiprocess-unithreaded, and
-multiprocess-multithreaded modes. Any performance gains were under a
+  <li>The app exhibited no noticeable performance differences when flipped<br />
+between uniprocess-multithreaded, multiprocess-unithreaded, and<br />
+multiprocess-multithreaded modes. Any performance gains were under a<br />
 tolerable threshold.</li>
 </ol>
-
 
 <p>How do we parse these results?</p>
 
 <ul>
-<li>We note that we didn&rsquo;t really push the performance threshold on this
-app (it&rsquo;s not meant to be a public web site and 95% of it is behind a
-login wall to a specialized group of users). Thus, if we pushed the
-concurrent connections even more, we may have seen more of a pronounced
+  <li>We note that we didn’t really push the performance threshold on this<br />
+app (it’s not meant to be a public web site and 95% of it is behind a<br />
+login wall to a specialized group of users). Thus, if we pushed the<br />
+concurrent connections even more, we may have seen more of a pronounced<br />
 difference.</li>
-<li>The <em>absence</em> of any major red flags was itself a validation. The
-question we wanted answered coming into this experiment was &ldquo;how close
-are we to maxing out our single-node EC2 configuration such that we will
-have to begin configuring horizontal scaling?&rdquo;? The answer was: we can
-safely scale further out in the near-term future, and cross the bridge
+  <li>The <em>absence</em> of any major red flags was itself a validation. The<br />
+question we wanted answered coming into this experiment was “how close<br />
+are we to maxing out our single-node EC2 configuration such that we will<br />
+have to begin configuring horizontal scaling?”? The answer was: we can<br />
+safely scale further out in the near-term future, and cross the bridge<br />
 of horizontal scaling/bursting when we get there.</li>
-<li>We did not have enough statistically significant differences in
-performance for #threads/#processes in Puma. However, if we wanted to
-truly find the optimal performance in our app, we would have turned to
+  <li>We did not have enough statistically significant differences in<br />
+performance for #threads/#processes in Puma. However, if we wanted to<br />
+truly find the optimal performance in our app, we would have turned to<br />
 tools like <a href="https://github.com/schneems/puma_auto_tune">puma_auto_tune</a> to answer those questions.</li>
 </ul>
-
 
 <p>Let me know in the comments if you have any questions!</p>
 

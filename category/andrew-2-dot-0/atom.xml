@@ -4,7 +4,7 @@
   <title><![CDATA[Category: andrew 2.0 | The Sweet Spot]]></title>
   <link href="http://www.g9labs.com/category/andrew-2-dot-0/atom.xml" rel="self"/>
   <link href="http://www.g9labs.com/"/>
-  <updated>2016-06-24T11:31:59-07:00</updated>
+  <updated>2016-06-29T16:33:32-07:00</updated>
   <id>http://www.g9labs.com/</id>
   <author>
     <name><![CDATA[Andrew Hao]]></name>
@@ -18,22 +18,22 @@
     <link href="http://www.g9labs.com/2012/10/04/deploying-janky-on-ubuntu/"/>
     <updated>2012-10-04T03:29:58-07:00</updated>
     <id>http://www.g9labs.com/2012/10/04/deploying-janky-on-ubuntu</id>
-    <content type="html"><![CDATA[<p><a href="https://github.com/blog/1013-janky">Janky</a> is a Github-developed <a href="https://github.com/github/hubot">Hubot</a> + Jenkins control interface. It&rsquo;s developed to be deployed on Heroku. However, what if you need it to live on an internal VM? Here&rsquo;s how I got it running on a Ubuntu (12.04 Precise) VM.</p>
+    <content type="html"><![CDATA[<p><a href="https://github.com/blog/1013-janky">Janky</a> is a Github-developed <a href="https://github.com/github/hubot">Hubot</a> + Jenkins control interface. It’s developed to be deployed on Heroku. However, what if you need it to live on an internal VM? Here’s how I got it running on a Ubuntu (12.04 Precise) VM.</p>
 
-<h2>Make sure you have the correct MySQL libs installed:</h2>
+<h2 id="make-sure-you-have-the-correct-mysql-libs-installed">Make sure you have the correct MySQL libs installed:</h2>
 
 <pre><code>sudo apt-get install mysql-server libmysqlclient-dev
 </code></pre>
 
-<h2>Clone janky from the <a href="https://github.com/github/janky">Github repository</a></h2>
+<h2 id="clone-janky-from-the-github-repositoryhttpsgithubcomgithubjanky">Clone janky from the <a href="https://github.com/github/janky">Github repository</a></h2>
 
 <pre><code>git clone https://github.com/github/janky.git
 cd janky
 </code></pre>
 
-<h2>Bootstrap your environment</h2>
+<h2 id="bootstrap-your-environment">Bootstrap your environment</h2>
 
-<p>The following steps are taken nearly verbatim from the &ldquo;Hacking&rdquo; section on the Janky README:</p>
+<p>The following steps are taken nearly verbatim from the “Hacking” section on the Janky README:</p>
 
 <pre><code>script/bootstrap
 
@@ -46,7 +46,7 @@ RACK_ENV=test bin/rake db:migrate
 RACK_ENV=development bundle exec rake db:seed
 </code></pre>
 
-<h2>Configure Thin</h2>
+<h2 id="configure-thin">Configure Thin</h2>
 
 <p>Open <code>Gemfile</code> in your text editor and add:</p>
 
@@ -70,7 +70,7 @@ RACK_ENV=development bundle exec rake db:seed
 
 <p>Add the JANKY_* variables to your environment according to the janky README. I use zsh, so I added these as export statements in my ~/.zshenv</p>
 
-<h2>Start your server</h2>
+<h2 id="start-your-server">Start your server</h2>
 
 <pre><code>bundle exec foreman start
 </code></pre>
@@ -80,7 +80,7 @@ RACK_ENV=development bundle exec rake db:seed
 <pre><code>PORT=8080 bundle exec foreman start
 </code></pre>
 
-<h2>That&rsquo;s it!</h2>
+<h2 id="thats-it">That’s it!</h2>
 
 <p>Let me know how that works for you!</p>
 ]]></content>
@@ -91,7 +91,7 @@ RACK_ENV=development bundle exec rake db:seed
     <link href="http://www.g9labs.com/2012/06/20/updating-max-file-limit-on-osx-lion/"/>
     <updated>2012-06-20T02:28:13-07:00</updated>
     <id>http://www.g9labs.com/2012/06/20/updating-max-file-limit-on-osx-lion</id>
-    <content type="html"><![CDATA[<p>I&rsquo;ve been hitting a lot of &ldquo;Maximum file limit exceeded&rdquo; dialogs after a long day at work &mdash; at any point in time I&rsquo;ve got a kajillion Chrome tabs open, five or six Rails envs running (for dev and test) + Guard/Spork actively watching tests, and Sublime with another kajillion tabs open.</p>
+    <content type="html"><![CDATA[<p>I’ve been hitting a lot of “Maximum file limit exceeded” dialogs after a long day at work – at any point in time I’ve got a kajillion Chrome tabs open, five or six Rails envs running (for dev and test) + Guard/Spork actively watching tests, and Sublime with another kajillion tabs open.</p>
 
 <p>Turns out that OSX limits the number of open file descriptors per process to 256. Time to bump up the limit:</p>
 
@@ -110,11 +110,11 @@ RACK_ENV=development bundle exec rake db:seed
     maxfiles    256            unlimited
 </code></pre>
 
-<p>Okay, let&rsquo;s crank &lsquo;er up. First let&rsquo;s create <code>/etc/launchctl.conf</code></p>
+<p>Okay, let’s crank ‘er up. First let’s create <code>/etc/launchctl.conf</code></p>
 
 <p><code>$ sudo touch /etc/launchctl.conf</code></p>
 
-<p>And let&rsquo;s open it with your editor of choice. Add the following line to the new file:</p>
+<p>And let’s open it with your editor of choice. Add the following line to the new file:</p>
 
 <p><code>limit maxfiles 16384 32768</code></p>
 
@@ -127,23 +127,26 @@ RACK_ENV=development bundle exec rake db:seed
     <link href="http://www.g9labs.com/2012/04/23/backup-backup-backup/"/>
     <updated>2012-04-23T01:02:05-07:00</updated>
     <id>http://www.g9labs.com/2012/04/23/backup-backup-backup</id>
-    <content type="html"><![CDATA[<p>Well, the inevitable happened: I finally experienced a hard drive failure. It&rsquo;s pretty incredible that in the twenty-odd years I&rsquo;ve been around computers I&rsquo;ve never had the horror of losing a drive.</p>
+    <content type="html"><![CDATA[<p>Well, the inevitable happened: I finally experienced a hard drive failure. It’s pretty incredible that in the twenty-odd years I’ve been around computers I’ve never had the horror of losing a drive.</p>
 
-<p>Friday rolls around and my Macbook Pro decides to freeze up on me. <em>Strange, </em>I think to myself. It&rsquo;s making a clicking noise. Crap.</p>
+<p>Friday rolls around and my Macbook Pro decides to freeze up on me. _Strange, _I think to myself. It’s making a clicking noise. Crap.</p>
 
-<p>Luckily, I&rsquo;ve been fairly good about making backups and copies of my work. Here&rsquo;s my general strategy:</p>
+<p>Luckily, I’ve been fairly good about making backups and copies of my work. Here’s my general strategy:</p>
 
 <ul>
-<li><p>Work/code: keeping local changes on a separate branch and pushing it to a remote Git branch every so often.</p></li>
-<li><p>Everything else: I keep one local copy here with me in Oakland, and have another copy offsite. I rsync my files out to my server at home, which has a cronjob set up to sync with the offsite copy at my parents' home (I run a <a href="http://pogoplug.com/">Pogoplug</a> with <a href="http://archlinuxarm.org/platforms/armv6/pogoplug-provideov3">Archlinux</a> and a couple of external drives connected to it &mdash; fantastic and totally recommended for a cheap and low-power server setup).</p></li>
+  <li>
+    <p>Work/code: keeping local changes on a separate branch and pushing it to a remote Git branch every so often.</p>
+  </li>
+  <li>
+    <p>Everything else: I keep one local copy here with me in Oakland, and have another copy offsite. I rsync my files out to my server at home, which has a cronjob set up to sync with the offsite copy at my parents’ home (I run a <a href="http://pogoplug.com/">Pogoplug</a> with <a href="http://archlinuxarm.org/platforms/armv6/pogoplug-provideov3">Archlinux</a> and a couple of external drives connected to it – fantastic and totally recommended for a cheap and low-power server setup).</p>
+  </li>
 </ul>
 
+<p>There was a minor scare this time around though – I had some photography work (and an engagement photoshoot!) lying around that almost didn’t make it to the first stage rsync with my local server. Fortunately, I had the foresight to keep my photos backed up to a random local hard disk, and the rest remained on the memory cards (and some even on a shared Dropbox folder that saved my butt!). Most frustrating thing was learning that I had forgotten to back up my Lightroom catalog, so all my edits were lost. At least I have the original shots.</p>
 
-<p>There was a minor scare this time around though &mdash; I had some photography work (and an engagement photoshoot!) lying around that almost didn&rsquo;t make it to the first stage rsync with my local server. Fortunately, I had the foresight to keep my photos backed up to a random local hard disk, and the rest remained on the memory cards (and some even on a shared Dropbox folder that saved my butt!). Most frustrating thing was learning that I had forgotten to back up my Lightroom catalog, so all my edits were lost. At least I have the original shots.</p>
+<p>One thing I think I’ll try doing from here on out – saving my Develop settings/presets directly to the DNGs themselves before backing up. That way if I ever lose my LR catalog, the edit settings are still embedded in the original files.</p>
 
-<p>One thing I think I&rsquo;ll try doing from here on out &mdash; saving my Develop settings/presets directly to the DNGs themselves before backing up. That way if I ever lose my LR catalog, the edit settings are still embedded in the original files.</p>
-
-<p>Jeff Atwood reminds us to <a href="http://www.codinghorror.com/blog/2008/01/whats-your-backup-strategy.html">keep backups around on multiple disks</a>. With the price of storage so low, what&rsquo;s your data worth to you? How are you keeping your backups?</p>
+<p>Jeff Atwood reminds us to <a href="http://www.codinghorror.com/blog/2008/01/whats-your-backup-strategy.html">keep backups around on multiple disks</a>. With the price of storage so low, what’s your data worth to you? How are you keeping your backups?</p>
 ]]></content>
   </entry>
   
@@ -152,7 +155,7 @@ RACK_ENV=development bundle exec rake db:seed
     <link href="http://www.g9labs.com/2012/03/23/rspec-order-agnostic-array-matching/"/>
     <updated>2012-03-23T11:09:40-07:00</updated>
     <id>http://www.g9labs.com/2012/03/23/rspec-order-agnostic-array-matching</id>
-    <content type="html"><![CDATA[<p>What&rsquo;s that? <a href="http://stackoverflow.com/questions/2978922/rspec-array-should-another-array-but-without-concern-for-order">You want to write an expectation for an array but your method returns the Array in a nondeterministic ordering</a>?</p>
+    <content type="html"><![CDATA[<p>What’s that? <a href="http://stackoverflow.com/questions/2978922/rspec-array-should-another-array-but-without-concern-for-order">You want to write an expectation for an array but your method returns the Array in a nondeterministic ordering</a>?</p>
 
 <p>Simple. Write:</p>
 
@@ -168,69 +171,67 @@ RACK_ENV=development bundle exec rake db:seed
     <link href="http://www.g9labs.com/2012/01/20/ohm-gotchas/"/>
     <updated>2012-01-20T10:19:50-08:00</updated>
     <id>http://www.g9labs.com/2012/01/20/ohm-gotchas</id>
-    <content type="html"><![CDATA[<p>Here&rsquo;s a list of things that have been annoying, or at least a bit frustrating using <a href="http://ohm.keyvalue.org">Ohm</a>, the Redis ORM, in a Rails app. Beware to those who assume Ohm is ActiveRecord in new clothes. It is, but it&rsquo;s not:</p>
+    <content type="html"><![CDATA[<p>Here’s a list of things that have been annoying, or at least a bit frustrating using <a href="http://ohm.keyvalue.org">Ohm</a>, the Redis ORM, in a Rails app. Beware to those who assume Ohm is ActiveRecord in new clothes. It is, but it’s not:</p>
 
-<h2>CRUD</h2>
+<h2 id="crud">CRUD</h2>
 
-<p>Don&rsquo;t make the mistake of treating your Ohm objects like AR:</p>
+<p>Don’t make the mistake of treating your Ohm objects like AR:</p>
 
 <table>
-<thead>
-<tr>
-<th>ActiveRecord        </th>
-<th> Ohm</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>`destroy            </td>
-<td> <code>delete</code></td>
-</tr>
-<tr>
-<td><code>self.find(id)</code>     </td>
-<td> <code>self[id]</code></td>
-</tr>
-<tr>
-<td><code>update_attributes</code> </td>
-<td> <code>update</code></td>
-</tr>
-<tr>
-<td><code>create</code>            </td>
-<td> <code>create</code></td>
-</tr>
-</tbody>
+  <thead>
+    <tr>
+      <th>ActiveRecord</th>
+      <th>Ohm</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>destroy            | </code>delete`</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code>self.find(id)</code></td>
+      <td><code>self[id]</code></td>
+    </tr>
+    <tr>
+      <td><code>update_attributes</code></td>
+      <td><code>update</code></td>
+    </tr>
+    <tr>
+      <td><code>create</code></td>
+      <td><code>create</code></td>
+    </tr>
+  </tbody>
 </table>
 
+<p>Also note that Ohm’s <code>update_attributes</code> behaves differently from Rails` – it doesn’t persist the updates to DB. That owned me for the good part of the day.</p>
 
-<p>Also note that Ohm&rsquo;s <code>update_attributes</code> behaves differently from Rails` &mdash; it doesn&rsquo;t persist the updates to DB. That owned me for the good part of the day.</p>
-
-<h2>Callbacks</h2>
+<h2 id="callbacks">Callbacks</h2>
 
 <p>Thankfully, these are ActiveRecord-like with the addition of <a href="http://cyx.github.com/ohm-contrib/doc/"><code>ohm/contrib</code></a>.</p>
 
-<h2>Associations</h2>
+<h2 id="associations">Associations</h2>
 
 <table>
-<thead>
-<tr>
-<th>ActiveRecord            </th>
-<th> Ohm</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>has_a</code> or <code>belongs_to</code> </td>
-<td> <code>reference</code></td>
-</tr>
-<tr>
-<td><code>has_many</code>              </td>
-<td> <code>collection</code></td>
-</tr>
-</tbody>
+  <thead>
+    <tr>
+      <th>ActiveRecord</th>
+      <th>Ohm</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>has_a</code> or <code>belongs_to</code></td>
+      <td><code>reference</code></td>
+    </tr>
+    <tr>
+      <td><code>has_many</code></td>
+      <td><code>collection</code></td>
+    </tr>
+  </tbody>
 </table>
 
-
-<p>Read <a href="http://blog.citrusbyte.com/2010/04/12/mixing-ohm-with-activerecord-datamapper-and-sequel/">this article</a> if you&rsquo;re considering creating associations from AR objects to Ohm objects and the other way &lsquo;round.</p>
+<p>Read <a href="http://blog.citrusbyte.com/2010/04/12/mixing-ohm-with-activerecord-datamapper-and-sequel/">this article</a> if you’re considering creating associations from AR objects to Ohm objects and the other way ‘round.</p>
 ]]></content>
   </entry>
   

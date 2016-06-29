@@ -68,22 +68,22 @@
 		<time>04 October 2012</time>
 	</header>
 		<div class="content">
-			<p><a href="https://github.com/blog/1013-janky">Janky</a> is a Github-developed <a href="https://github.com/github/hubot">Hubot</a> + Jenkins control interface. It&rsquo;s developed to be deployed on Heroku. However, what if you need it to live on an internal VM? Here&rsquo;s how I got it running on a Ubuntu (12.04 Precise) VM.</p>
+			<p><a href="https://github.com/blog/1013-janky">Janky</a> is a Github-developed <a href="https://github.com/github/hubot">Hubot</a> + Jenkins control interface. It’s developed to be deployed on Heroku. However, what if you need it to live on an internal VM? Here’s how I got it running on a Ubuntu (12.04 Precise) VM.</p>
 
-<h2>Make sure you have the correct MySQL libs installed:</h2>
+<h2 id="make-sure-you-have-the-correct-mysql-libs-installed">Make sure you have the correct MySQL libs installed:</h2>
 
 <pre><code>sudo apt-get install mysql-server libmysqlclient-dev
 </code></pre>
 
-<h2>Clone janky from the <a href="https://github.com/github/janky">Github repository</a></h2>
+<h2 id="clone-janky-from-the-github-repositoryhttpsgithubcomgithubjanky">Clone janky from the <a href="https://github.com/github/janky">Github repository</a></h2>
 
 <pre><code>git clone https://github.com/github/janky.git
 cd janky
 </code></pre>
 
-<h2>Bootstrap your environment</h2>
+<h2 id="bootstrap-your-environment">Bootstrap your environment</h2>
 
-<p>The following steps are taken nearly verbatim from the &ldquo;Hacking&rdquo; section on the Janky README:</p>
+<p>The following steps are taken nearly verbatim from the “Hacking” section on the Janky README:</p>
 
 <pre><code>script/bootstrap
 
@@ -96,7 +96,7 @@ RACK_ENV=test bin/rake db:migrate
 RACK_ENV=development bundle exec rake db:seed
 </code></pre>
 
-<h2>Configure Thin</h2>
+<h2 id="configure-thin">Configure Thin</h2>
 
 <p>Open <code>Gemfile</code> in your text editor and add:</p>
 
@@ -120,7 +120,7 @@ RACK_ENV=development bundle exec rake db:seed
 
 <p>Add the JANKY_* variables to your environment according to the janky README. I use zsh, so I added these as export statements in my ~/.zshenv</p>
 
-<h2>Start your server</h2>
+<h2 id="start-your-server">Start your server</h2>
 
 <pre><code>bundle exec foreman start
 </code></pre>
@@ -130,7 +130,7 @@ RACK_ENV=development bundle exec rake db:seed
 <pre><code>PORT=8080 bundle exec foreman start
 </code></pre>
 
-<h2>That&rsquo;s it!</h2>
+<h2 id="thats-it">That’s it!</h2>
 
 <p>Let me know how that works for you!</p>
 

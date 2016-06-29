@@ -68,118 +68,114 @@
 		<time>06 June 2014</time>
 	</header>
 		<div class="content">
-			<p>In one of my personal projects (<a href="https://github.com/andrewhao/chordmeister">Chordmeister</a>), I&rsquo;ve been trying to
-upgrade the code to be written in <a href="http://wiki.ecmascript.org/doku.php?id=harmony:modules#export_declarations">ES6 modules</a> and transpile down to AMD modules with Square&rsquo;s <a href="https://github.com/square/es6-module-transpiler">very excellent es6-module-transpiler project</a>.</p>
+			<p>In one of my personal projects (<a href="https://github.com/andrewhao/chordmeister">Chordmeister</a>), I’ve been trying to<br />
+upgrade the code to be written in <a href="http://wiki.ecmascript.org/doku.php?id=harmony:modules#export_declarations">ES6 modules</a> and transpile down to AMD modules with Square’s <a href="https://github.com/square/es6-module-transpiler">very excellent es6-module-transpiler project</a>.</p>
 
-<p>Since I&rsquo;ve already <a href="https://github.com/andrewhao/hendrix">updated</a> an Ember app of mine to try ES6, I figured it was high time to do it on another project.</p>
+<p>Since I’ve already <a href="https://github.com/andrewhao/hendrix">updated</a> an Ember app of mine to try ES6, I figured it was high time to do it on another project.</p>
 
-<h2>Sorry Coffeescript, but I&rsquo;m moving on.</h2>
+<h2 id="sorry-coffeescript-but-im-moving-on">Sorry Coffeescript, but I’m moving on.</h2>
 
-<p>First problem: Coffeescript seems indecisive with respect to ES6
-support. In order to support <code>import</code> or <code>export</code> keywords, I had to
+<p>First problem: Coffeescript seems indecisive with respect to ES6<br />
+support. In order to support <code>import</code> or <code>export</code> keywords, I had to<br />
 wrap the statements in backticks, making the code look like this:</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='coffeescript'><span class='line'><span class="o">`</span><span class="nx">import</span> <span class="nx">ClassifiedLine</span> <span class="nx">from</span> <span class="s">&quot;chordmeister/classified_line&quot;</span><span class="o">`</span>
-</span><span class='line'><span class="k">class</span> <span class="nx">Parser</span>
-</span><span class='line'>  <span class="c1"># Implementation</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">`</span><span class="nx">export</span> <span class="nx">default</span> <span class="nx">Parser</span><span class="o">`</span>
+<figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+</pre></td><td class="code"><pre><code class="coffeescript"><span class="line"><span class="o">`</span><span class="nx">import</span> <span class="nx">ClassifiedLine</span> <span class="nx">from</span> <span class="s">&quot;chordmeister/classified_line&quot;</span><span class="o">`</span>
+</span><span class="line"><span class="k">class</span> <span class="nx">Parser</span>
+</span><span class="line">  <span class="c1"># Implementation</span>
+</span><span class="line">
+</span><span class="line"><span class="o">`</span><span class="nx">export</span> <span class="nx">default</span> <span class="nx">Parser</span><span class="o">`</span>
 </span></code></pre></td></tr></table></div></figure>
 
+<p>Except this wasn’t being picked up by es6-module-transpiler, since<br />
+Coffeescript wraps the entire declaration in a closure: I was<br />
+finding myself having problems compiling from Coffeescript -&gt; ES5 JS -&gt; ES6 JS.</p>
 
-<p>Except this wasn&rsquo;t being picked up by es6-module-transpiler, since
-Coffeescript wraps the entire declaration in a closure: I was
-finding myself having problems compiling from Coffeescript &ndash;> ES5 JS &ndash;> ES6 JS.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">define</span><span class="p">(</span><span class="s2">&quot;chordmeister/parser&quot;</span><span class="p">,</span>
-</span><span class='line'>  <span class="p">[],</span>
-</span><span class='line'>  <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>    <span class="s2">&quot;use strict&quot;</span><span class="p">;</span>
-</span><span class='line'>    <span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>      <span class="c1">// Oops, I wasn&#39;t transpiled!</span>
-</span><span class='line'>      <span class="kr">import</span> <span class="nx">ClassifiedLine</span> <span class="nx">from</span> <span class="s1">&#39;chordmeister/classified_line&#39;</span><span class="p">;</span>
-</span><span class='line'>      <span class="kd">var</span> <span class="nx">Parser</span><span class="p">;</span>
-</span><span class='line'>      <span class="nx">Parser</span> <span class="o">=</span> <span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>        <span class="c1">// Implementation</span>
-</span><span class='line'>      <span class="p">}</span>
-</span><span class='line'>      <span class="p">)();</span>
-</span><span class='line'>      <span class="c1">// Oops, I wasn&#39;t transpiled!</span>
-</span><span class='line'>      <span class="kr">export</span> <span class="k">default</span> <span class="nx">Parser</span><span class="p">;</span>
-</span><span class='line'>      <span class="p">})()</span>
-</span><span class='line'>  <span class="p">});</span>
+<figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+</pre></td><td class="code"><pre><code class="javascript"><span class="line"><span class="nx">define</span><span class="p">(</span><span class="s2">&quot;chordmeister/parser&quot;</span><span class="p">,</span>
+</span><span class="line">  <span class="p">[],</span>
+</span><span class="line">  <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class="line">    <span class="s2">&quot;use strict&quot;</span><span class="p">;</span>
+</span><span class="line">    <span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class="line">      <span class="c1">// Oops, I wasn&#39;t transpiled!</span>
+</span><span class="line">      <span class="kr">import</span> <span class="nx">ClassifiedLine</span> <span class="nx">from</span> <span class="s1">&#39;chordmeister/classified_line&#39;</span><span class="p">;</span>
+</span><span class="line">      <span class="kd">var</span> <span class="nx">Parser</span><span class="p">;</span>
+</span><span class="line">      <span class="nx">Parser</span> <span class="o">=</span> <span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class="line">        <span class="c1">// Implementation</span>
+</span><span class="line">      <span class="p">}</span>
+</span><span class="line">      <span class="p">)();</span>
+</span><span class="line">      <span class="c1">// Oops, I wasn&#39;t transpiled!</span>
+</span><span class="line">      <span class="kr">export</span> <span class="k">default</span> <span class="nx">Parser</span><span class="p">;</span>
+</span><span class="line">      <span class="p">})()</span>
+</span><span class="line">  <span class="p">});</span>
 </span></code></pre></td></tr></table></div></figure>
-
 
 <p>So the first call: ditch Coffeescript. Write this in pure ES6.</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kr">import</span> <span class="nx">ClassifiedLine</span> <span class="nx">from</span> <span class="s1">&#39;chordmeister/classified_line&#39;</span><span class="p">;</span>
-</span><span class='line'><span class="kd">var</span> <span class="nx">Parser</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'><span class="nx">Parser</span> <span class="o">=</span> <span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>  <span class="c1">// implementation</span>
-</span><span class='line'><span class="p">})();</span>
-</span><span class='line'>
-</span><span class='line'><span class="kr">export</span> <span class="k">default</span> <span class="nx">Parser</span><span class="p">;</span>
+<figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+</pre></td><td class="code"><pre><code class="javascript"><span class="line"><span class="kr">import</span> <span class="nx">ClassifiedLine</span> <span class="nx">from</span> <span class="s1">&#39;chordmeister/classified_line&#39;</span><span class="p">;</span>
+</span><span class="line"><span class="kd">var</span> <span class="nx">Parser</span><span class="p">;</span>
+</span><span class="line">
+</span><span class="line"><span class="nx">Parser</span> <span class="o">=</span> <span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class="line">  <span class="c1">// implementation</span>
+</span><span class="line"><span class="p">})();</span>
+</span><span class="line">
+</span><span class="line"><span class="kr">export</span> <span class="k">default</span> <span class="nx">Parser</span><span class="p">;</span>
 </span></code></pre></td></tr></table></div></figure>
-
 
 <p>Which transpiled nicely to:</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">define</span><span class="p">(</span><span class="s2">&quot;chordmeister/parser&quot;</span><span class="p">,</span>
-</span><span class='line'>  <span class="p">[</span><span class="s2">&quot;chordmeister/classified_line&quot;</span><span class="p">,</span><span class="s2">&quot;exports&quot;</span><span class="p">],</span>
-</span><span class='line'>  <span class="kd">function</span><span class="p">(</span><span class="nx">__dependency1__</span><span class="p">,</span> <span class="nx">__exports__</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="s2">&quot;use strict&quot;</span><span class="p">;</span>
-</span><span class='line'>    <span class="kd">var</span> <span class="nx">ClassifiedLine</span> <span class="o">=</span> <span class="nx">__dependency1__</span><span class="p">[</span><span class="s2">&quot;default&quot;</span><span class="p">];</span>
-</span><span class='line'>    <span class="kd">var</span> <span class="nx">Parser</span><span class="p">;</span>
-</span><span class='line'>    <span class="nx">Parser</span> <span class="o">=</span> <span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>      <span class="c1">// Implementation</span>
-</span><span class='line'>    <span class="p">})();</span>
-</span><span class='line'>    <span class="nx">__exports__</span><span class="p">[</span><span class="s2">&quot;default&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nx">Parser</span><span class="p">;</span>
-</span><span class='line'>    <span class="p">});</span>
+<figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+</pre></td><td class="code"><pre><code class="javascript"><span class="line"><span class="nx">define</span><span class="p">(</span><span class="s2">&quot;chordmeister/parser&quot;</span><span class="p">,</span>
+</span><span class="line">  <span class="p">[</span><span class="s2">&quot;chordmeister/classified_line&quot;</span><span class="p">,</span><span class="s2">&quot;exports&quot;</span><span class="p">],</span>
+</span><span class="line">  <span class="kd">function</span><span class="p">(</span><span class="nx">__dependency1__</span><span class="p">,</span> <span class="nx">__exports__</span><span class="p">)</span> <span class="p">{</span>
+</span><span class="line">    <span class="s2">&quot;use strict&quot;</span><span class="p">;</span>
+</span><span class="line">    <span class="kd">var</span> <span class="nx">ClassifiedLine</span> <span class="o">=</span> <span class="nx">__dependency1__</span><span class="p">[</span><span class="s2">&quot;default&quot;</span><span class="p">];</span>
+</span><span class="line">    <span class="kd">var</span> <span class="nx">Parser</span><span class="p">;</span>
+</span><span class="line">    <span class="nx">Parser</span> <span class="o">=</span> <span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class="line">      <span class="c1">// Implementation</span>
+</span><span class="line">    <span class="p">})();</span>
+</span><span class="line">    <span class="nx">__exports__</span><span class="p">[</span><span class="s2">&quot;default&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nx">Parser</span><span class="p">;</span>
+</span><span class="line">    <span class="p">});</span>
 </span></code></pre></td></tr></table></div></figure>
 
-
-<h2>Next up: adding AMD support in Mocha</h2>
+<h2 id="next-up-adding-amd-support-in-mocha">Next up: adding AMD support in Mocha</h2>
 
 <p>Okay, so we need to set up a few things to get Mocha playing well with RequireJS, the AMD loader.</p>
 
@@ -187,119 +183,115 @@ finding myself having problems compiling from Coffeescript &ndash;> ES5 JS &ndas
 
 <p>The tricky parts will be:</p>
 
-<h3>Set up the Mocha index.html runner</h3>
+<h3 id="set-up-the-mocha-indexhtml-runner">Set up the Mocha index.html runner</h3>
 
 <p>Install <code>mocha</code>, <code>require.js</code>, and <code>chai</code> via <code>bower</code>, then plug them into the harness:</p>
 
-<figure class='code'><figcaption><span>test/index.html</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="cp">&lt;!doctype html&gt;</span>
-</span><span class='line'><span class="nt">&lt;html&gt;</span>
-</span><span class='line'><span class="nt">&lt;head&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;meta</span> <span class="na">charset=</span><span class="s">&quot;utf-8&quot;</span><span class="nt">&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;meta</span> <span class="na">http-equiv=</span><span class="s">&quot;X-UA-Compatible&quot;</span> <span class="na">content=</span><span class="s">&quot;IE=edge,chrome=1&quot;</span><span class="nt">&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;title&gt;</span>Mocha Spec Runner<span class="nt">&lt;/title&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">href=</span><span class="s">&quot;../bower_components/mocha/mocha.css&quot;</span><span class="nt">&gt;</span>
-</span><span class='line'><span class="nt">&lt;/head&gt;</span>
-</span><span class='line'><span class="nt">&lt;body&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;mocha&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;../bower_components/mocha/mocha.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;../bower_components/chai/chai.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;script </span><span class="na">data-main=</span><span class="s">&quot;test_helper&quot;</span> <span class="na">src=</span><span class="s">&quot;../bower_components/requirejs/require.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="nt">&lt;/body&gt;</span>
-</span><span class='line'><span class="nt">&lt;/html&gt;</span>
+<figure class="code"><figcaption><span>test/index.html</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+</pre></td><td class="code"><pre><code class="html"><span class="line"><span class="cp">&lt;!doctype html&gt;</span>
+</span><span class="line"><span class="nt">&lt;html&gt;</span>
+</span><span class="line"><span class="nt">&lt;head&gt;</span>
+</span><span class="line">    <span class="nt">&lt;meta</span> <span class="na">charset=</span><span class="s">&quot;utf-8&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">    <span class="nt">&lt;meta</span> <span class="na">http-equiv=</span><span class="s">&quot;X-UA-Compatible&quot;</span> <span class="na">content=</span><span class="s">&quot;IE=edge,chrome=1&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">    <span class="nt">&lt;title&gt;</span>Mocha Spec Runner<span class="nt">&lt;/title&gt;</span>
+</span><span class="line">    <span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">href=</span><span class="s">&quot;../bower_components/mocha/mocha.css&quot;</span><span class="nt">&gt;</span>
+</span><span class="line"><span class="nt">&lt;/head&gt;</span>
+</span><span class="line"><span class="nt">&lt;body&gt;</span>
+</span><span class="line">    <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;mocha&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+</span><span class="line">    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;../bower_components/mocha/mocha.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+</span><span class="line">    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;../bower_components/chai/chai.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+</span><span class="line">    <span class="nt">&lt;script </span><span class="na">data-main=</span><span class="s">&quot;test_helper&quot;</span> <span class="na">src=</span><span class="s">&quot;../bower_components/requirejs/require.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+</span><span class="line">
+</span><span class="line"><span class="nt">&lt;/body&gt;</span>
+</span><span class="line"><span class="nt">&lt;/html&gt;</span>
 </span></code></pre></td></tr></table></div></figure>
 
+<p>Note the references to <code>data-main="test_helper"</code>, which is require.js’s way of determining its entry point after it loads.</p>
 
-<p>Note the references to <code>data-main="test_helper"</code>, which is require.js&rsquo;s way of determining its entry point after it loads.</p>
+<h3 id="set-up-a-test-runner">Set up a test runner.</h3>
 
-<h3>Set up a test runner.</h3>
-
-<figure class='code'><figcaption><span>test/test_runner.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// Configure and set up the tests.</span>
-</span><span class='line'><span class="nx">require</span><span class="p">.</span><span class="nx">config</span><span class="p">({</span>
-</span><span class='line'>  <span class="nx">baseUrl</span><span class="o">:</span> <span class="s2">&quot;../build/&quot;</span>
-</span><span class='line'><span class="p">})</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// Load up the files to run against</span>
-</span><span class='line'><span class="kd">var</span> <span class="nx">specs</span> <span class="o">=</span> <span class="p">[</span>
-</span><span class='line'>  <span class="s1">&#39;chordmeister/chord_spec.js&#39;</span><span class="p">,</span>
-</span><span class='line'>  <span class="s1">&#39;chordmeister/song_spec.js&#39;</span><span class="p">,</span>
-</span><span class='line'>  <span class="s1">&#39;chordmeister/parser_spec.js&#39;</span><span class="p">,</span>
-</span><span class='line'>  <span class="s1">&#39;chordmeister/classified_line_spec.js&#39;</span><span class="p">,</span>
-</span><span class='line'><span class="p">];</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// Start up the specs.</span>
-</span><span class='line'><span class="nx">require</span><span class="p">(</span><span class="nx">specs</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">require</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>  <span class="nx">mocha</span><span class="p">.</span><span class="nx">setup</span><span class="p">(</span><span class="s1">&#39;bdd&#39;</span><span class="p">);</span>
-</span><span class='line'>  <span class="nx">expect</span> <span class="o">=</span> <span class="nx">chai</span><span class="p">.</span><span class="nx">expect</span><span class="p">;</span>
-</span><span class='line'>  <span class="c1">// Why? Some async loading condition? Is there a callback I should be hooking into?</span>
-</span><span class='line'>  <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nx">mocha</span><span class="p">.</span><span class="nx">run</span><span class="p">();</span>
-</span><span class='line'>  <span class="p">},</span> <span class="mi">100</span><span class="p">);</span>
-</span><span class='line'><span class="p">});</span>
+<figure class="code"><figcaption><span>test/test_runner.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+</pre></td><td class="code"><pre><code class="javascript"><span class="line"><span class="c1">// Configure and set up the tests.</span>
+</span><span class="line"><span class="nx">require</span><span class="p">.</span><span class="nx">config</span><span class="p">({</span>
+</span><span class="line">  <span class="nx">baseUrl</span><span class="o">:</span> <span class="s2">&quot;../build/&quot;</span>
+</span><span class="line"><span class="p">})</span>
+</span><span class="line">
+</span><span class="line"><span class="c1">// Load up the files to run against</span>
+</span><span class="line"><span class="kd">var</span> <span class="nx">specs</span> <span class="o">=</span> <span class="p">[</span>
+</span><span class="line">  <span class="s1">&#39;chordmeister/chord_spec.js&#39;</span><span class="p">,</span>
+</span><span class="line">  <span class="s1">&#39;chordmeister/song_spec.js&#39;</span><span class="p">,</span>
+</span><span class="line">  <span class="s1">&#39;chordmeister/parser_spec.js&#39;</span><span class="p">,</span>
+</span><span class="line">  <span class="s1">&#39;chordmeister/classified_line_spec.js&#39;</span><span class="p">,</span>
+</span><span class="line"><span class="p">];</span>
+</span><span class="line">
+</span><span class="line"><span class="c1">// Start up the specs.</span>
+</span><span class="line"><span class="nx">require</span><span class="p">(</span><span class="nx">specs</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">require</span><span class="p">)</span> <span class="p">{</span>
+</span><span class="line">  <span class="nx">mocha</span><span class="p">.</span><span class="nx">setup</span><span class="p">(</span><span class="s1">&#39;bdd&#39;</span><span class="p">);</span>
+</span><span class="line">  <span class="nx">expect</span> <span class="o">=</span> <span class="nx">chai</span><span class="p">.</span><span class="nx">expect</span><span class="p">;</span>
+</span><span class="line">  <span class="c1">// Why? Some async loading condition? Is there a callback I should be hooking into?</span>
+</span><span class="line">  <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class="line">    <span class="nx">mocha</span><span class="p">.</span><span class="nx">run</span><span class="p">();</span>
+</span><span class="line">  <span class="p">},</span> <span class="mi">100</span><span class="p">);</span>
+</span><span class="line"><span class="p">});</span>
 </span></code></pre></td></tr></table></div></figure>
 
+<p>You’ll notice that I was having synchonicity issues between spec suite load and <code>mocha.run()</code>. Throwing everything back a few hundred ms seemed to have done the fix.</p>
 
-<p>You&rsquo;ll notice that I was having synchonicity issues between spec suite load and <code>mocha.run()</code>. Throwing everything back a few hundred ms seemed to have done the fix.</p>
-
-<h2>AMD gotchas</h2>
+<h2 id="amd-gotchas">AMD gotchas</h2>
 
 <p>Pay attention to the <code>default</code> parameter that the module exports with. This is important to remember since native ES6 will allow you to directly import it with its native syntax:</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kr">import</span> <span class="nx">Parser</span> <span class="nx">from</span> <span class="s2">&quot;chordmeister/parser&quot;</span>
+<figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="javascript"><span class="line"><span class="kr">import</span> <span class="nx">Parser</span> <span class="nx">from</span> <span class="s2">&quot;chordmeister/parser&quot;</span>
 </span></code></pre></td></tr></table></div></figure>
 
+<p>But if you’re using RequireJS/AMD modules, you’ll need to explicitly call out the <code>default</code> namespace from the required module, so like so:</p>
 
-<p>But if you&rsquo;re using RequireJS/AMD modules, you&rsquo;ll need to explicitly call out the <code>default</code> namespace from the required module, so like so:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;chordmeister/parser&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">parser</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>  <span class="nx">Parser</span> <span class="o">=</span> <span class="nx">parser</span><span class="p">.</span><span class="k">default</span><span class="p">;</span>
-</span><span class='line'>  <span class="k">new</span> <span class="nx">Parser</span><span class="p">()</span> <span class="c1">// and do stuff.</span>
-</span><span class='line'><span class="p">});</span>
+<figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+</pre></td><td class="code"><pre><code class="javascript"><span class="line"><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;chordmeister/parser&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">parser</span><span class="p">)</span> <span class="p">{</span>
+</span><span class="line">  <span class="nx">Parser</span> <span class="o">=</span> <span class="nx">parser</span><span class="p">.</span><span class="k">default</span><span class="p">;</span>
+</span><span class="line">  <span class="k">new</span> <span class="nx">Parser</span><span class="p">()</span> <span class="c1">// and do stuff.</span>
+</span><span class="line"><span class="p">});</span>
 </span></code></pre></td></tr></table></div></figure>
-
 
 <p>Let me know if you have any questions!</p>
 

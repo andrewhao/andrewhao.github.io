@@ -4,7 +4,7 @@
   <title><![CDATA[Category: knex.js | The Sweet Spot]]></title>
   <link href="http://www.g9labs.com/category/knex-dot-js/atom.xml" rel="self"/>
   <link href="http://www.g9labs.com/"/>
-  <updated>2016-06-24T11:31:59-07:00</updated>
+  <updated>2016-06-29T16:33:32-07:00</updated>
   <id>http://www.g9labs.com/</id>
   <author>
     <name><![CDATA[Andrew Hao]]></name>
@@ -18,71 +18,82 @@
     <link href="http://www.g9labs.com/2016/04/08/knex-dot-js-and-bookshelf-dot-js-cheat-sheet/"/>
     <updated>2016-04-08T12:33:00-07:00</updated>
     <id>http://www.g9labs.com/2016/04/08/knex-dot-js-and-bookshelf-dot-js-cheat-sheet</id>
-    <content type="html"><![CDATA[<p>As follows are some code snippets for using <a href="http://knexjs.org/">Knex.js</a> for executing
+    <content type="html"><![CDATA[<p>As follows are some code snippets for using <a href="http://knexjs.org/">Knex.js</a> for executing<br />
 Postgres and PostGIS queries.</p>
 
-<h3>Execute raw SQL in migration</h3>
+<h3 id="execute-raw-sql-in-migration">Execute raw SQL in migration</h3>
 
 <p>I often find this useful for fancy SQL, like creating views.</p>
 
-<p><code>js
-exports.up = function(knex, Promise) {
-  return knex.raw(`YOUR RAW SQL`);
-};
-</code></p>
+<div class="language-js highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n1" name="n1">1</a></span>exports.<span style="color:#06B;font-weight:bold">up</span> = <span style="color:#080;font-weight:bold">function</span>(knex, Promise) {
+<span class="line-numbers"><a href="#n2" name="n2">2</a></span>  <span style="color:#080;font-weight:bold">return</span> knex.raw(<span style="color:#F00;background-color:#FAA">`</span>YOUR RAW SQL<span style="color:#F00;background-color:#FAA">`</span>);
+<span class="line-numbers"><a href="#n3" name="n3">3</a></span>};
+</pre></div>
+</div>
+</div>
 
-<h3>Add a PostGIS Point type to a table in a migration:</h3>
+<h3 id="add-a-postgis-point-type-to-a-table-in-a-migration">Add a PostGIS Point type to a table in a migration:</h3>
 
-<p><code>js
-return knex.schema.table('events', function(table) {
-  table.specificType('point', 'geometry(point, 4326)');
-})
-</code></p>
+<div class="language-js highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n1" name="n1">1</a></span><span style="color:#080;font-weight:bold">return</span> knex.schema.table(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">events</span><span style="color:#710">'</span></span>, <span style="color:#080;font-weight:bold">function</span>(table) {
+<span class="line-numbers"><a href="#n2" name="n2">2</a></span>  table.specificType(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">point</span><span style="color:#710">'</span></span>, <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">geometry(point, 4326)</span><span style="color:#710">'</span></span>);
+<span class="line-numbers"><a href="#n3" name="n3">3</a></span>})
+</pre></div>
+</div>
+</div>
 
-<h3>Add a foreign key to another table.</h3>
+<h3 id="add-a-foreign-key-to-another-table">Add a foreign key to another table.</h3>
 
-<p>```js
-return knex.schema.table(&lsquo;events&rsquo;, function(table) {</p>
+<div class="language-js highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n1" name="n1">1</a></span><span style="color:#080;font-weight:bold">return</span> knex.schema.table(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">events</span><span style="color:#710">'</span></span>, <span style="color:#080;font-weight:bold">function</span>(table) {
+<span class="line-numbers"><a href="#n2" name="n2">2</a></span>        table.integer(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">device_id</span><span style="color:#710">'</span></span>).references(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">id</span><span style="color:#710">'</span></span>).inTable(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">devices</span><span style="color:#710">'</span></span>);
+<span class="line-numbers"><a href="#n3" name="n3">3</a></span>});
+</pre></div>
+</div>
+</div>
 
-<pre><code>table.integer('device_id').references('id').inTable('devices');
-</code></pre>
+<h3 id="add-a-multi-column-unique-index">Add a multi-column unique index</h3>
 
-<p>});
-```</p>
+<div class="language-js highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n1" name="n1">1</a></span><span style="color:#080;font-weight:bold">return</span> knex.schema.table(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">events</span><span style="color:#710">'</span></span>, <span style="color:#080;font-weight:bold">function</span>(table) {
+<span class="line-numbers"><a href="#n2" name="n2">2</a></span>  table.unique([<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">start_time</span><span style="color:#710">'</span></span>, <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">end_time</span><span style="color:#710">'</span></span>, <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">start_location</span><span style="color:#710">'</span></span>, <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">end_location</span><span style="color:#710">'</span></span>, <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">distance_miles</span><span style="color:#710">'</span></span>]);
+<span class="line-numbers"><a href="#n3" name="n3">3</a></span>});
+</pre></div>
+</div>
+</div>
 
-<h3>Add a multi-column unique index</h3>
+<h3 id="find-a-collection">Find a collection</h3>
 
-<p><code>js
-return knex.schema.table('events', function(table) {
-  table.unique(['start_time', 'end_time', 'start_location', 'end_location', 'distance_miles']);
-});
-</code></p>
+<div class="language-js highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n1" name="n1">1</a></span>knex.select(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">*</span><span style="color:#710">'</span></span>)
+<span class="line-numbers"><a href="#n2" name="n2">2</a></span>.from(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">participants</span><span style="color:#710">'</span></span>)
+<span class="line-numbers"><a href="#n3" name="n3">3</a></span>.where({ <span style="color:#606">name</span>: <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">Jason</span><span style="color:#710">'</span></span> })
+<span class="line-numbers"><a href="#n4" name="n4">4</a></span>.andWhere(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">age</span><span style="color:#710">'</span></span>, <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">&gt;=</span><span style="color:#710">'</span></span>, <span style="color:#00D">20</span>)
+</pre></div>
+</div>
+</div>
 
-<h3>Find a collection</h3>
+<h3 id="custom-operations-in-select-clause">Custom operations in SELECT clause</h3>
 
-<p><code>js
-knex.select('*')
-.from('participants')
-.where({ name: 'Jason' })
-.andWhere('age', '&gt;=', 20)
-</code></p>
+<div class="language-js highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n1" name="n1">1</a></span>knex(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">trips</span><span style="color:#710">'</span></span>)
+<span class="line-numbers"><a href="#n2" name="n2">2</a></span>.select(knex.raw(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">miles * passengers as passenger_miles</span><span style="color:#710">'</span></span>))
+<span class="line-numbers"><a href="#n3" name="n3">3</a></span>.select(knex.raw(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">CONCAT('Hello, ', name) as greeting_message</span><span style="color:#710">&quot;</span></span>))
+</pre></div>
+</div>
+</div>
 
-<h3>Custom operations in SELECT clause</h3>
+<h3 id="return-postgis-data-from-a-spatial-column">Return PostGIS data from a spatial column:</h3>
 
-<p><code>js
-knex('trips')
-.select(knex.raw('miles * passengers as passenger_miles'))
-.select(knex.raw("CONCAT('Hello, ', name) as greeting_message"))
-</code></p>
+<p>We use <a href="https://github.com/jfgodoy/knex-postgis">knex-postgis</a> to gain access to PostGIS functions in Postgres. Here, we return a ‘point’ column with <code>ST_AsGeoJSON</code>:</p>
 
-<h3>Return PostGIS data from a spatial column:</h3>
-
-<p>We use <a href="https://github.com/jfgodoy/knex-postgis">knex-postgis</a> to gain access to PostGIS functions in Postgres. Here, we return a &lsquo;point&rsquo; column with <code>ST_AsGeoJSON</code>:</p>
-
-<p><code>js
-const knexPostgis = require('knex-postgis')(knex);
-knex('events').select('*', knexPostgis.asGeoJSON('point'));
-</code></p>
+<div class="language-js highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n1" name="n1">1</a></span>const knexPostgis = require(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">knex-postgis</span><span style="color:#710">'</span></span>)(knex);
+<span class="line-numbers"><a href="#n2" name="n2">2</a></span>knex(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">events</span><span style="color:#710">'</span></span>).select(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">*</span><span style="color:#710">'</span></span>, knexPostgis.asGeoJSON(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">point</span><span style="color:#710">'</span></span>));
+</pre></div>
+</div>
+</div>
 
 <p>See <a href="https://github.com/jfgodoy/knex-postgis">knex-postgis</a> documentation for a list of other PostGIS functions that are supported.</p>
 ]]></content>

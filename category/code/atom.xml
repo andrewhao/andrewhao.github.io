@@ -4,7 +4,7 @@
   <title><![CDATA[Category: code | The Sweet Spot]]></title>
   <link href="http://www.g9labs.com/category/code/atom.xml" rel="self"/>
   <link href="http://www.g9labs.com/"/>
-  <updated>2016-06-24T11:31:59-07:00</updated>
+  <updated>2016-06-29T16:33:32-07:00</updated>
   <id>http://www.g9labs.com/</id>
   <author>
     <name><![CDATA[Andrew Hao]]></name>
@@ -18,64 +18,63 @@
     <link href="http://www.g9labs.com/2014/03/08/six-months-as-a-manager/"/>
     <updated>2014-03-08T16:15:00-08:00</updated>
     <id>http://www.g9labs.com/2014/03/08/six-months-as-a-manager</id>
-    <content type="html"><![CDATA[<p>It&rsquo;s been approximately six months since I&rsquo;ve entered engineering management. Here are some thoughts reflecting back on that season now.</p>
+    <content type="html"><![CDATA[<p>It’s been approximately six months since I’ve entered engineering management. Here are some thoughts reflecting back on that season now.</p>
 
-<h2>I didn&rsquo;t like it at first.</h2>
+<h2 id="i-didnt-like-it-at-first">I didn’t like it at first.</h2>
 
-<p>Let&rsquo;s face it: I didn&rsquo;t like the feeling of being a &ldquo;manager&rdquo; now. It comes with too much baggage of pointy-haired bosses or ineffective waste layers. Why do we need managers anyways?</p>
+<p>Let’s face it: I didn’t like the feeling of being a “manager” now. It comes with too much baggage of pointy-haired bosses or ineffective waste layers. Why do we need managers anyways?</p>
 
 <p>More to the point: I love coding. I love working on rewarding projects. I hated the thought of being tied up in meetings while day by day getting more and more disconnected from code.</p>
 
 <p>So I struggled a lot in those first few months (still do), trying to maintain the balance of working with product management to get a strategic vision communicated, or with other engineering teams to get a tactical vision in place, versus trying to be deeply involved with the code base and doing code reviews.</p>
 
-<h3>You can&rsquo;t code anymore.</h3>
+<h3 id="you-cant-code-anymore">You can’t code anymore.</h3>
 
-<p>In the end? I had to come to grips with the reality that my team needed me in a different role &mdash; a strategic role, helping them see the big picture, sniffing out dependencies and destroying blockers before they got to them.</p>
+<p>In the end? I had to come to grips with the reality that my team needed me in a different role – a strategic role, helping them see the big picture, sniffing out dependencies and destroying blockers before they got to them.</p>
 
-<p>But I still needed to be spot-on with the code &mdash; I still needed to be in the know with new product features as they are being developed. So it&rsquo;s my priority to be in design discussions, but I can&rsquo;t be the implementer anymore.</p>
+<p>But I still needed to be spot-on with the code – I still needed to be in the know with new product features as they are being developed. So it’s my priority to be in design discussions, but I can’t be the implementer anymore.</p>
 
-<p>So I&rsquo;ve started a change in mindset &mdash; how can offload all the random codebase knowledge I&rsquo;ve acquired over the years to the team? How can I effectively share my expertise so I&rsquo;m out of a (coding) job? I&rsquo;m starting to be more convinced that the answer to that is pair programming.</p>
+<p>So I’ve started a change in mindset – how can offload all the random codebase knowledge I’ve acquired over the years to the team? How can I effectively share my expertise so I’m out of a (coding) job? I’m starting to be more convinced that the answer to that is pair programming.</p>
 
-<h3>Pairing your way out of a job</h3>
+<h3 id="pairing-your-way-out-of-a-job">Pairing your way out of a job</h3>
 
-<p>Nowadays if there&rsquo;s a story or task in which I am the only one (or one of few) with domain knowledge about the feature, I&rsquo;ll ask a team member to pair with me on the feature. That way we get a really effective teaching tool about the domain model, and the extra plus in that if I get pulled into a meeting, development can continue.</p>
+<p>Nowadays if there’s a story or task in which I am the only one (or one of few) with domain knowledge about the feature, I’ll ask a team member to pair with me on the feature. That way we get a really effective teaching tool about the domain model, and the extra plus in that if I get pulled into a meeting, development can continue.</p>
 
-<h3>But you still have to code.</h3>
+<h3 id="but-you-still-have-to-code">But you still have to code.</h3>
 
 <p>So I code on the weekends (not everybody can do this!)</p>
 
-<p>We&rsquo;re a Rails team taking on a new Ember project. I need to get my chops up around Ember so I&rsquo;ve decided to pull in a <a href="https://github.com/andrewhao/hendrix">side project</a> to hack on the weekends. My side work on <a href="http://www.wejoinin.com">Wejoinin</a> lets me do all the Rails things I don&rsquo;t get to do anymore at work.</p>
+<p>We’re a Rails team taking on a new Ember project. I need to get my chops up around Ember so I’ve decided to pull in a <a href="https://github.com/andrewhao/hendrix">side project</a> to hack on the weekends. My side work on <a href="http://www.wejoinin.com">Wejoinin</a> lets me do all the Rails things I don’t get to do anymore at work.</p>
 
-<p>And it works for me because I love to code, and to be honest, I don&rsquo;t ever want to get weak in that area.</p>
+<p>And it works for me because I love to code, and to be honest, I don’t ever want to get weak in that area.</p>
 
-<p>To be honest, I&rsquo;d love more feedback from other engineering managers in that area. How do you keep your chops sharp?</p>
+<p>To be honest, I’d love more feedback from other engineering managers in that area. How do you keep your chops sharp?</p>
 
-<h3>People are your priority.</h3>
+<h3 id="people-are-your-priority">People are your priority.</h3>
 
-<p>I&rsquo;ve read often that <a href="http://firstround.com/article/My-Management-Lessons-from-Three-Failed-Startups-Google-Apple-Dropbox-Twitter-and-Square">empathy is everything</a> when it comes to management, and it still rings true. No matter how this product launch goes, in the end your team will remember how you treated them, how their thoughts and feelings were taken into account.</p>
+<p>I’ve read often that <a href="http://firstround.com/article/My-Management-Lessons-from-Three-Failed-Startups-Google-Apple-Dropbox-Twitter-and-Square">empathy is everything</a> when it comes to management, and it still rings true. No matter how this product launch goes, in the end your team will remember how you treated them, how their thoughts and feelings were taken into account.</p>
 
-<p>One thing I&rsquo;m trying to check myself is my tendency to jump in on other people&rsquo;s sentences and cut them off. It sounds silly, but sometimes I realize I like to talk a lot more than listen. As a manager, sometimes you need to dwell on the feedback of a team member for some time before you write it off. There&rsquo;s usually a core message in there that&rsquo;s completely valid &mdash; a frustration, a desire for change. Empathy means communicating the message: &ldquo;I heard you, and I respect your thoughts.&rdquo;</p>
+<p>One thing I’m trying to check myself is my tendency to jump in on other people’s sentences and cut them off. It sounds silly, but sometimes I realize I like to talk a lot more than listen. As a manager, sometimes you need to dwell on the feedback of a team member for some time before you write it off. There’s usually a core message in there that’s completely valid – a frustration, a desire for change. Empathy means communicating the message: “I heard you, and I respect your thoughts.”</p>
 
-<h3>It&rsquo;s your attitude</h3>
+<h3 id="its-your-attitude">It’s your attitude</h3>
 
-<p>And finally, here&rsquo;s what I think: your attitude toward your company and the team make <em>ALL</em> the difference.</p>
+<p>And finally, here’s what I think: your attitude toward your company and the team make <em>ALL</em> the difference.</p>
 
 <ul>
-<li>Is your orientation truly to support your team? How will it be clear in the long run that your supported someone in their career?</li>
-<li>Where are places in your workday where you can connect and sympathize with people &mdash; share a joke, listen to someone&rsquo;s frustration, or just simply go out to lunch?</li>
-<li>How are you giving people something to work toward to: a vision of changing the world (for Blurb, it&rsquo;s about transforming the publishing industry).</li>
-<li>How are you addressing negativity? Grumbling is important to address head on in its own space, but how are you empowering people to take charge of issues of culture or organizational friction?</li>
-<li>How are you checking your own negativity &mdash; sometimes we forget that we&rsquo;re the solutions to our own problems, and I&rsquo;ve found oftentimes that the very issues that you assume are impossible to change are crackable by having the right relationships with the right people.</li>
+  <li>Is your orientation truly to support your team? How will it be clear in the long run that your supported someone in their career?</li>
+  <li>Where are places in your workday where you can connect and sympathize with people – share a joke, listen to someone’s frustration, or just simply go out to lunch?</li>
+  <li>How are you giving people something to work toward to: a vision of changing the world (for Blurb, it’s about transforming the publishing industry).</li>
+  <li>How are you addressing negativity? Grumbling is important to address head on in its own space, but how are you empowering people to take charge of issues of culture or organizational friction?</li>
+  <li>How are you checking your own negativity – sometimes we forget that we’re the solutions to our own problems, and I’ve found oftentimes that the very issues that you assume are impossible to change are crackable by having the right relationships with the right people.</li>
 </ul>
-
 
 <p>The little things matter.</p>
 
-<h3>Growth areas</h3>
+<h3 id="growth-areas">Growth areas</h3>
 
-<p>Lord knows I have a lot to learn here. One area I&rsquo;m learning to grow in is how to give honest and accurate feedback to team members, without fearing how they&rsquo;re going to receive it.</p>
+<p>Lord knows I have a lot to learn here. One area I’m learning to grow in is how to give honest and accurate feedback to team members, without fearing how they’re going to receive it.</p>
 
-<p>Another area? Delegation. I&rsquo;m learning to delegate the little micro-responsibilities in my job that I just kind of expect that I&rsquo;m supposed to do. Case in point: every week we accept a translation import from a third-party translation service. I realized that I was burning a lot of time reviewing hundreds of lines of translation keys every week, and the repetition of it was sapping a lot of my energy. I had to learn to ask a team member for help and give them responsibility to own that function of the process.</p>
+<p>Another area? Delegation. I’m learning to delegate the little micro-responsibilities in my job that I just kind of expect that I’m supposed to do. Case in point: every week we accept a translation import from a third-party translation service. I realized that I was burning a lot of time reviewing hundreds of lines of translation keys every week, and the repetition of it was sapping a lot of my energy. I had to learn to ask a team member for help and give them responsibility to own that function of the process.</p>
 ]]></content>
   </entry>
   

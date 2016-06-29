@@ -68,89 +68,82 @@
 		<time>08 April 2016</time>
 	</header>
 		<div class="content">
-			<p>As follows are some code snippets for using <a href="http://knexjs.org/">Knex.js</a> for executing
+			<p>As follows are some code snippets for using <a href="http://knexjs.org/">Knex.js</a> for executing<br />
 Postgres and PostGIS queries.</p>
 
-<h3>Execute raw SQL in migration</h3>
+<h3 id="execute-raw-sql-in-migration">Execute raw SQL in migration</h3>
 
 <p>I often find this useful for fancy SQL, like creating views.</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">exports</span><span class="p">.</span><span class="nx">up</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">knex</span><span class="p">,</span> <span class="nx">Promise</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>  <span class="k">return</span> <span class="nx">knex</span><span class="p">.</span><span class="nx">raw</span><span class="p">(</span><span class="err">`</span><span class="nx">YOUR</span> <span class="nx">RAW</span> <span class="nx">SQL</span><span class="err">`</span><span class="p">);</span>
-</span><span class='line'><span class="p">};</span>
+<figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="nx">exports</span><span class="p">.</span><span class="nx">up</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">knex</span><span class="p">,</span> <span class="nx">Promise</span><span class="p">)</span> <span class="p">{</span>
+</span><span class="line">  <span class="k">return</span> <span class="nx">knex</span><span class="p">.</span><span class="nx">raw</span><span class="p">(</span><span class="err">`</span><span class="nx">YOUR</span> <span class="nx">RAW</span> <span class="nx">SQL</span><span class="err">`</span><span class="p">);</span>
+</span><span class="line"><span class="p">};</span>
 </span></code></pre></td></tr></table></div></figure>
 
+<h3 id="add-a-postgis-point-type-to-a-table-in-a-migration">Add a PostGIS Point type to a table in a migration:</h3>
 
-<h3>Add a PostGIS Point type to a table in a migration:</h3>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="k">return</span> <span class="nx">knex</span><span class="p">.</span><span class="nx">schema</span><span class="p">.</span><span class="nx">table</span><span class="p">(</span><span class="s1">&#39;events&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">table</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>  <span class="nx">table</span><span class="p">.</span><span class="nx">specificType</span><span class="p">(</span><span class="s1">&#39;point&#39;</span><span class="p">,</span> <span class="s1">&#39;geometry(point, 4326)&#39;</span><span class="p">);</span>
-</span><span class='line'><span class="p">})</span>
+<figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="k">return</span> <span class="nx">knex</span><span class="p">.</span><span class="nx">schema</span><span class="p">.</span><span class="nx">table</span><span class="p">(</span><span class="s1">&#39;events&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">table</span><span class="p">)</span> <span class="p">{</span>
+</span><span class="line">  <span class="nx">table</span><span class="p">.</span><span class="nx">specificType</span><span class="p">(</span><span class="s1">&#39;point&#39;</span><span class="p">,</span> <span class="s1">&#39;geometry(point, 4326)&#39;</span><span class="p">);</span>
+</span><span class="line"><span class="p">})</span>
 </span></code></pre></td></tr></table></div></figure>
 
+<h3 id="add-a-foreign-key-to-another-table">Add a foreign key to another table.</h3>
 
-<h3>Add a foreign key to another table.</h3>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="k">return</span> <span class="nx">knex</span><span class="p">.</span><span class="nx">schema</span><span class="p">.</span><span class="nx">table</span><span class="p">(</span><span class="s1">&#39;events&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">table</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>  <span class="nx">table</span><span class="p">.</span><span class="nx">integer</span><span class="p">(</span><span class="s1">&#39;device_id&#39;</span><span class="p">).</span><span class="nx">references</span><span class="p">(</span><span class="s1">&#39;id&#39;</span><span class="p">).</span><span class="nx">inTable</span><span class="p">(</span><span class="s1">&#39;devices&#39;</span><span class="p">);</span>
-</span><span class='line'><span class="p">});</span>
+<figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="k">return</span> <span class="nx">knex</span><span class="p">.</span><span class="nx">schema</span><span class="p">.</span><span class="nx">table</span><span class="p">(</span><span class="s1">&#39;events&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">table</span><span class="p">)</span> <span class="p">{</span>
+</span><span class="line">	<span class="nx">table</span><span class="p">.</span><span class="nx">integer</span><span class="p">(</span><span class="s1">&#39;device_id&#39;</span><span class="p">).</span><span class="nx">references</span><span class="p">(</span><span class="s1">&#39;id&#39;</span><span class="p">).</span><span class="nx">inTable</span><span class="p">(</span><span class="s1">&#39;devices&#39;</span><span class="p">);</span>
+</span><span class="line"><span class="p">});</span>
 </span></code></pre></td></tr></table></div></figure>
 
+<h3 id="add-a-multi-column-unique-index">Add a multi-column unique index</h3>
 
-<h3>Add a multi-column unique index</h3>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="k">return</span> <span class="nx">knex</span><span class="p">.</span><span class="nx">schema</span><span class="p">.</span><span class="nx">table</span><span class="p">(</span><span class="s1">&#39;events&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">table</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>  <span class="nx">table</span><span class="p">.</span><span class="nx">unique</span><span class="p">([</span><span class="s1">&#39;start_time&#39;</span><span class="p">,</span> <span class="s1">&#39;end_time&#39;</span><span class="p">,</span> <span class="s1">&#39;start_location&#39;</span><span class="p">,</span> <span class="s1">&#39;end_location&#39;</span><span class="p">,</span> <span class="s1">&#39;distance_miles&#39;</span><span class="p">]);</span>
-</span><span class='line'><span class="p">});</span>
+<figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="k">return</span> <span class="nx">knex</span><span class="p">.</span><span class="nx">schema</span><span class="p">.</span><span class="nx">table</span><span class="p">(</span><span class="s1">&#39;events&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">table</span><span class="p">)</span> <span class="p">{</span>
+</span><span class="line">  <span class="nx">table</span><span class="p">.</span><span class="nx">unique</span><span class="p">([</span><span class="s1">&#39;start_time&#39;</span><span class="p">,</span> <span class="s1">&#39;end_time&#39;</span><span class="p">,</span> <span class="s1">&#39;start_location&#39;</span><span class="p">,</span> <span class="s1">&#39;end_location&#39;</span><span class="p">,</span> <span class="s1">&#39;distance_miles&#39;</span><span class="p">]);</span>
+</span><span class="line"><span class="p">});</span>
 </span></code></pre></td></tr></table></div></figure>
 
+<h3 id="find-a-collection">Find a collection</h3>
 
-<h3>Find a collection</h3>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">knex</span><span class="p">.</span><span class="nx">select</span><span class="p">(</span><span class="s1">&#39;*&#39;</span><span class="p">)</span>
-</span><span class='line'><span class="p">.</span><span class="nx">from</span><span class="p">(</span><span class="s1">&#39;participants&#39;</span><span class="p">)</span>
-</span><span class='line'><span class="p">.</span><span class="nx">where</span><span class="p">({</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;Jason&#39;</span> <span class="p">})</span>
-</span><span class='line'><span class="p">.</span><span class="nx">andWhere</span><span class="p">(</span><span class="s1">&#39;age&#39;</span><span class="p">,</span> <span class="s1">&#39;&gt;=&#39;</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+<figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="nx">knex</span><span class="p">.</span><span class="nx">select</span><span class="p">(</span><span class="s1">&#39;*&#39;</span><span class="p">)</span>
+</span><span class="line"><span class="p">.</span><span class="nx">from</span><span class="p">(</span><span class="s1">&#39;participants&#39;</span><span class="p">)</span>
+</span><span class="line"><span class="p">.</span><span class="nx">where</span><span class="p">({</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;Jason&#39;</span> <span class="p">})</span>
+</span><span class="line"><span class="p">.</span><span class="nx">andWhere</span><span class="p">(</span><span class="s1">&#39;age&#39;</span><span class="p">,</span> <span class="s1">&#39;&gt;=&#39;</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
 </span></code></pre></td></tr></table></div></figure>
 
+<h3 id="custom-operations-in-select-clause">Custom operations in SELECT clause</h3>
 
-<h3>Custom operations in SELECT clause</h3>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">knex</span><span class="p">(</span><span class="s1">&#39;trips&#39;</span><span class="p">)</span>
-</span><span class='line'><span class="p">.</span><span class="nx">select</span><span class="p">(</span><span class="nx">knex</span><span class="p">.</span><span class="nx">raw</span><span class="p">(</span><span class="s1">&#39;miles * passengers as passenger_miles&#39;</span><span class="p">))</span>
-</span><span class='line'><span class="p">.</span><span class="nx">select</span><span class="p">(</span><span class="nx">knex</span><span class="p">.</span><span class="nx">raw</span><span class="p">(</span><span class="s2">&quot;CONCAT(&#39;Hello, &#39;, name) as greeting_message&quot;</span><span class="p">))</span>
+<figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="nx">knex</span><span class="p">(</span><span class="s1">&#39;trips&#39;</span><span class="p">)</span>
+</span><span class="line"><span class="p">.</span><span class="nx">select</span><span class="p">(</span><span class="nx">knex</span><span class="p">.</span><span class="nx">raw</span><span class="p">(</span><span class="s1">&#39;miles * passengers as passenger_miles&#39;</span><span class="p">))</span>
+</span><span class="line"><span class="p">.</span><span class="nx">select</span><span class="p">(</span><span class="nx">knex</span><span class="p">.</span><span class="nx">raw</span><span class="p">(</span><span class="s2">&quot;CONCAT(&#39;Hello, &#39;, name) as greeting_message&quot;</span><span class="p">))</span>
 </span></code></pre></td></tr></table></div></figure>
 
+<h3 id="return-postgis-data-from-a-spatial-column">Return PostGIS data from a spatial column:</h3>
 
-<h3>Return PostGIS data from a spatial column:</h3>
+<p>We use <a href="https://github.com/jfgodoy/knex-postgis">knex-postgis</a> to gain access to PostGIS functions in Postgres. Here, we return a ‘point’ column with <code>ST_AsGeoJSON</code>:</p>
 
-<p>We use <a href="https://github.com/jfgodoy/knex-postgis">knex-postgis</a> to gain access to PostGIS functions in Postgres. Here, we return a &lsquo;point&rsquo; column with <code>ST_AsGeoJSON</code>:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="kr">const</span> <span class="nx">knexPostgis</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;knex-postgis&#39;</span><span class="p">)(</span><span class="nx">knex</span><span class="p">);</span>
-</span><span class='line'><span class="nx">knex</span><span class="p">(</span><span class="s1">&#39;events&#39;</span><span class="p">).</span><span class="nx">select</span><span class="p">(</span><span class="s1">&#39;*&#39;</span><span class="p">,</span> <span class="nx">knexPostgis</span><span class="p">.</span><span class="nx">asGeoJSON</span><span class="p">(</span><span class="s1">&#39;point&#39;</span><span class="p">));</span>
+<figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="kr">const</span> <span class="nx">knexPostgis</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;knex-postgis&#39;</span><span class="p">)(</span><span class="nx">knex</span><span class="p">);</span>
+</span><span class="line"><span class="nx">knex</span><span class="p">(</span><span class="s1">&#39;events&#39;</span><span class="p">).</span><span class="nx">select</span><span class="p">(</span><span class="s1">&#39;*&#39;</span><span class="p">,</span> <span class="nx">knexPostgis</span><span class="p">.</span><span class="nx">asGeoJSON</span><span class="p">(</span><span class="s1">&#39;point&#39;</span><span class="p">));</span>
 </span></code></pre></td></tr></table></div></figure>
-
 
 <p>See <a href="https://github.com/jfgodoy/knex-postgis">knex-postgis</a> documentation for a list of other PostGIS functions that are supported.</p>
 

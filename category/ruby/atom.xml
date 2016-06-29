@@ -4,7 +4,7 @@
   <title><![CDATA[Category: ruby | The Sweet Spot]]></title>
   <link href="http://www.g9labs.com/category/ruby/atom.xml" rel="self"/>
   <link href="http://www.g9labs.com/"/>
-  <updated>2016-06-24T11:31:59-07:00</updated>
+  <updated>2016-06-29T16:33:32-07:00</updated>
   <id>http://www.g9labs.com/</id>
   <author>
     <name><![CDATA[Andrew Hao]]></name>
@@ -18,16 +18,22 @@
     <link href="http://www.g9labs.com/2012/12/26/decomposing-fat-models/"/>
     <updated>2012-12-26T04:46:09-08:00</updated>
     <id>http://www.g9labs.com/2012/12/26/decomposing-fat-models</id>
-    <content type="html"><![CDATA[<p>Heard an awesome Ruby Rogues podcast recently: <a href="http://rubyrogues.com/083-rr-decomposing-fat-models-with-bryan-helmkamp/">&ldquo;Decomposing Fat Models&rdquo;</a>.</p>
+    <content type="html"><![CDATA[<p>Heard an awesome Ruby Rogues podcast recently: <a href="http://rubyrogues.com/083-rr-decomposing-fat-models-with-bryan-helmkamp/">“Decomposing Fat Models”</a>.</p>
 
-<p>Essentially, they&rsquo;re talking through Bryan Helmkamp&rsquo;s <a href="http://blog.codeclimate.com/blog/2012/10/17/7-ways-to-decompose-fat-activerecord-models/">Code Climate blog entry &ldquo;7 ways to decompose fat ActiveRecord models&rdquo;</a>, which sums up a few strategies that mainly involve extracting objects from your existing code, value, service, policy, decorator objects and the like. Give the entry a read-through, it&rsquo;s opened my eyes a lot to rethinking my architecture of my Rails models.</p>
+<p>Essentially, they’re talking through Bryan Helmkamp’s <a href="http://blog.codeclimate.com/blog/2012/10/17/7-ways-to-decompose-fat-activerecord-models/">Code Climate blog entry “7 ways to decompose fat ActiveRecord models”</a>, which sums up a few strategies that mainly involve extracting objects from your existing code, value, service, policy, decorator objects and the like. Give the entry a read-through, it’s opened my eyes a lot to rethinking my architecture of my Rails models.</p>
 
 <p>A few interesting thoughts that came up in the podcast:</p>
 
 <ul>
-<li><p>The &ldquo;Skinny Controller, Fat Model&rdquo; mantra has hurt the Rails community because we start getting these bloated AR classes. &ldquo;&lsquo;fat-&rsquo; anything is bad&rdquo; one of the hosts mentions in the blog. The smaller your models, the more manageable, readable and testable they become.</p></li>
-<li><p>Rubyists don&rsquo;t like the term &ldquo;Factory&rdquo;, even though in Helmkamp&rsquo;s opinion, Ruby classes <em>are</em> factories. &ldquo;We call them "builders&rdquo;&ldquo; one of the hosts jokes.</p></li>
-<li><p>The Open/Closed Principle as applied to Ruby: using delegators, decorators.</p></li>
+  <li>
+    <p>The “Skinny Controller, Fat Model” mantra has hurt the Rails community because we start getting these bloated AR classes. “‘fat-‘ anything is bad” one of the hosts mentions in the blog. The smaller your models, the more manageable, readable and testable they become.</p>
+  </li>
+  <li>
+    <p>Rubyists don’t like the term “Factory”, even though in Helmkamp’s opinion, Ruby classes <em>are</em> factories. “We call them “builders”” one of the hosts jokes.</p>
+  </li>
+  <li>
+    <p>The Open/Closed Principle as applied to Ruby: using delegators, decorators.</p>
+  </li>
 </ul>
 
 ]]></content>
@@ -38,20 +44,18 @@
     <link href="http://www.g9labs.com/2012/04/27/speeding-up-rspeccucumber-feedback-times-without-sacrificing-coverage/"/>
     <updated>2012-04-27T10:27:17-07:00</updated>
     <id>http://www.g9labs.com/2012/04/27/speeding-up-rspeccucumber-feedback-times-without-sacrificing-coverage</id>
-    <content type="html"><![CDATA[<iframe src="http://www.slideshare.net/slideshow/embed_code/4479466" width="512" height="421" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:1px solid #CCC;border-width:1px 1px 0;margin-bottom:5px" allowfullscreen>
+    <content type="html"><![CDATA[<iframe src="http://www.slideshare.net/slideshow/embed_code/4479466" width="512" height="421" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:1px solid #CCC;border-width:1px 1px 0;margin-bottom:5px" allowfullscreen="">
 </iframe>
-
-
-<p><a href="http://www.slideshare.net/josephwilk/rocket-fuelled-cucumbers">Rocket Fuelled Cucumbers</a>
+<p><a href="http://www.slideshare.net/josephwilk/rocket-fuelled-cucumbers">Rocket Fuelled Cucumbers</a><br />
 View more <a href="http://www.slideshare.net/">presentations</a> from <a href="http://www.slideshare.net/josephwilk">Joseph Wilk</a></p>
 
-<p>One thing the Blurb devs have been discussing is how we can speed up our test feedback cycles without sacrificing coverage. There&rsquo;s some good tips (mainly Rails+Rspec/Cucumber) in the presentation such as:</p>
+<p>One thing the Blurb devs have been discussing is how we can speed up our test feedback cycles without sacrificing coverage. There’s some good tips (mainly Rails+Rspec/Cucumber) in the presentation such as:</p>
 
 <ul>
-<li>Don&rsquo;t run all the tests when developing (tag your tests by function)</li>
-<li>Parallelize, chunk tests over machines/cores using Testjour/<a href="https://github.com/sandro/specjour">Specjour</a>, <a href="https://github.com/ngauthier/hydra">Hydra</a></li>
-<li>Don&rsquo;t run all the tests at once. Tests that never fail should nightly.</li>
-<li>Instead of spinning up a browser for acceptance tests, can you use a js/DOM simulator (e.g. <a href="https://github.com/thatcher/env-js">envjs</a> via <a href="https://github.com/smparkes/capybara-envjs">capybara-envjs</a>, or <a href="https://github.com/jarib/celerity">celerity</a>)</li>
+  <li>Don’t run all the tests when developing (tag your tests by function)</li>
+  <li>Parallelize, chunk tests over machines/cores using Testjour/<a href="https://github.com/sandro/specjour">Specjour</a>, <a href="https://github.com/ngauthier/hydra">Hydra</a></li>
+  <li>Don’t run all the tests at once. Tests that never fail should nightly.</li>
+  <li>Instead of spinning up a browser for acceptance tests, can you use a js/DOM simulator (e.g. <a href="https://github.com/thatcher/env-js">envjs</a> via <a href="https://github.com/smparkes/capybara-envjs">capybara-envjs</a>, or <a href="https://github.com/jarib/celerity">celerity</a>)</li>
 </ul>
 
 ]]></content>
@@ -62,7 +66,7 @@ View more <a href="http://www.slideshare.net/">presentations</a> from <a href="h
     <link href="http://www.g9labs.com/2012/04/12/haml-object-references/"/>
     <updated>2012-04-12T07:40:09-07:00</updated>
     <id>http://www.g9labs.com/2012/04/12/haml-object-references</id>
-    <content type="html"><![CDATA[<p>Did you guys know that you can use the &lsquo;[ ]&rsquo; brackets in HAML to automatically set the id and class on a tag, kind of like Rails' <a href="http://api.rubyonrails.org/classes/ActionView/Helpers/TagHelper.html#method-i-tag">tag</a> helper?</p>
+    <content type="html"><![CDATA[<p>Did you guys know that you can use the ‘[ ]’ brackets in HAML to automatically set the id and class on a tag, kind of like Rails’ <a href="http://api.rubyonrails.org/classes/ActionView/Helpers/TagHelper.html#method-i-tag">tag</a> helper?</p>
 
 <pre><code># file: app/controllers/users_controller.rb
 
@@ -86,6 +90,7 @@ end
 </code></pre>
 
 <p>Keeps things nice, concise and DRY. See the <a href="http://haml-lang.com/docs/yardoc/file.HAML_REFERENCE.html#object_reference_">HAML documentation</a>.</p>
+
 ]]></content>
   </entry>
   
@@ -94,7 +99,7 @@ end
     <link href="http://www.g9labs.com/2012/03/23/rspec-order-agnostic-array-matching/"/>
     <updated>2012-03-23T11:09:40-07:00</updated>
     <id>http://www.g9labs.com/2012/03/23/rspec-order-agnostic-array-matching</id>
-    <content type="html"><![CDATA[<p>What&rsquo;s that? <a href="http://stackoverflow.com/questions/2978922/rspec-array-should-another-array-but-without-concern-for-order">You want to write an expectation for an array but your method returns the Array in a nondeterministic ordering</a>?</p>
+    <content type="html"><![CDATA[<p>What’s that? <a href="http://stackoverflow.com/questions/2978922/rspec-array-should-another-array-but-without-concern-for-order">You want to write an expectation for an array but your method returns the Array in a nondeterministic ordering</a>?</p>
 
 <p>Simple. Write:</p>
 

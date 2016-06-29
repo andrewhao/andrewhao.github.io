@@ -75,18 +75,33 @@
 <p>But last night I spent a good chunk of my evening and early morning hitting a lot of walls:</p>
 
 <ul>
-<li><p>I might have to throw out the idea of using the Twitter Streaming API. For the kind of searches I need to do, I just can&rsquo;t get enough granularity to use live information. Plus, I can only open one connection to the API at a time, which is not good if I need to run four listeners at a time.</p></li>
-<li><p>I couldn&rsquo;t get the <a href="http://classifier.rubyforge.org/">Classifier</a> Ruby gem to work; which looked like the easiest implementation of an LSI/naive Bayes classifier out there. The next closest thing was <a href="http://code.google.com/p/nltk/">nltk</a>, and there was no way in heck I had the time to figure that out. Plus, I realized that creating a training set was a LOT more work than I thought I had. So&hellip; scratch the machine intelligence out of this. I&rsquo;m just going to manually search for specific search terms.</p></li>
-<li><p>New solution: Periodically use the Search API to grab results. This allows more exact search results and gives me the ability to tweak the search terms while the demo loop is running.</p></li>
-<li><p>Event-driven programming is throwing me for a loop (ha, get it?). After perusing the <a href="http://nodejs.org/docs/v0.4.0/api/">node.js docs</a> for the better part of an evening, I think I need to re-architect the code. I need to create a simple event-driven queue, which is confusing because it seems like something simple, yet support isn&rsquo;t built in. node provides so little out of the box.</p></li>
-<li><p>It could be more difficult to set up a socket connection to Arduino than I thought. I may have to set up a socket connection in python with <a href="https://github.com/lupeke/python-firmata">python-firmata</a> to interface with the Arduino. Other Arduino/serial proxies report not working well with Snow Leopard.</p></li>
-<li><p>I haven&rsquo;t yet thought about the Web interface.</p></li>
-<li><p>I haven&rsquo;t thought about how I&rsquo;m going to hang the piece. I have some scrap wood and fishing wire, but I haven&rsquo;t thought about whether it&rsquo;s possible to hang all those LED arrays w/o some weird gravity issues.</p></li>
-<li><p>Woodwork help? I need to figure out how to use a rotary saw.</p></li>
+  <li>
+    <p>I might have to throw out the idea of using the Twitter Streaming API. For the kind of searches I need to do, I just can’t get enough granularity to use live information. Plus, I can only open one connection to the API at a time, which is not good if I need to run four listeners at a time.</p>
+  </li>
+  <li>
+    <p>I couldn’t get the <a href="http://classifier.rubyforge.org/">Classifier</a> Ruby gem to work; which looked like the easiest implementation of an LSI/naive Bayes classifier out there. The next closest thing was <a href="http://code.google.com/p/nltk/">nltk</a>, and there was no way in heck I had the time to figure that out. Plus, I realized that creating a training set was a LOT more work than I thought I had. So… scratch the machine intelligence out of this. I’m just going to manually search for specific search terms.</p>
+  </li>
+  <li>
+    <p>New solution: Periodically use the Search API to grab results. This allows more exact search results and gives me the ability to tweak the search terms while the demo loop is running.</p>
+  </li>
+  <li>
+    <p>Event-driven programming is throwing me for a loop (ha, get it?). After perusing the <a href="http://nodejs.org/docs/v0.4.0/api/">node.js docs</a> for the better part of an evening, I think I need to re-architect the code. I need to create a simple event-driven queue, which is confusing because it seems like something simple, yet support isn’t built in. node provides so little out of the box.</p>
+  </li>
+  <li>
+    <p>It could be more difficult to set up a socket connection to Arduino than I thought. I may have to set up a socket connection in python with <a href="https://github.com/lupeke/python-firmata">python-firmata</a> to interface with the Arduino. Other Arduino/serial proxies report not working well with Snow Leopard.</p>
+  </li>
+  <li>
+    <p>I haven’t yet thought about the Web interface.</p>
+  </li>
+  <li>
+    <p>I haven’t thought about how I’m going to hang the piece. I have some scrap wood and fishing wire, but I haven’t thought about whether it’s possible to hang all those LED arrays w/o some weird gravity issues.</p>
+  </li>
+  <li>
+    <p>Woodwork help? I need to figure out how to use a rotary saw.</p>
+  </li>
 </ul>
 
-
-<p>So uh, yeah, I&rsquo;m getting nowhere but at least I know what I still need to do.</p>
+<p>So uh, yeah, I’m getting nowhere but at least I know what I still need to do.</p>
 
 			
 			

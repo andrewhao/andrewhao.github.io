@@ -68,73 +68,69 @@
 		<time>21 March 2016</time>
 	</header>
 		<div class="content">
-			<p>Much of RxJS involves working with
-<a href="http://reactivex.io/documentation/operators/backpressure.html">backpressure</a> &ndash; how to reconcile
-streams that emit/process data at different rates, without overloading
-the system. Much of that model is built with lossy handling in mind &ndash; it
-makes sense that when your system is under duress, that you design your
-streams to degrade gracefully (e.g. drop certain events, or rate limit
+			<p>Much of RxJS involves working with<br />
+<a href="http://reactivex.io/documentation/operators/backpressure.html">backpressure</a> - how to reconcile<br />
+streams that emit/process data at different rates, without overloading<br />
+the system. Much of that model is built with lossy handling in mind - it<br />
+makes sense that when your system is under duress, that you design your<br />
+streams to degrade gracefully (e.g. drop certain events, or rate limit<br />
 them by chunking into windows, etc).</p>
 
-<p>However, there are times when it is appropriate to have a lossless
-approach to backpressure &ndash; e.g., to store every chunk of data that comes
-through a stream in memory, and not drop things. These use cases may
+<p>However, there are times when it is appropriate to have a lossless<br />
+approach to backpressure - e.g., to store every chunk of data that comes<br />
+through a stream in memory, and not drop things. These use cases may<br />
 come about when:</p>
 
 <ul>
-<li>You have a short-lived, or bounded set of data you know will come over
-the pipe. You understand the bounds of the data that will ever come over
+  <li>You have a short-lived, or bounded set of data you know will come over<br />
+the pipe. You understand the bounds of the data that will ever come over<br />
 the pipe.</li>
-<li>You have a processing script you want to run, which is not part of a
+  <li>You have a processing script you want to run, which is not part of a<br />
 large system.</li>
-<li>You have a honkin' large system that can handle the load.</li>
+  <li>You have a honkin’ large system that can handle the load.</li>
 </ul>
 
-
-<p>In my case, I had a script that called the Google Geocoding API for a
-set of GPS coordinates. Now for a set of several hundred coordinates, I
-would end up calling the API several hundred times all at once with this
+<p>In my case, I had a script that called the Google Geocoding API for a<br />
+set of GPS coordinates. Now for a set of several hundred coordinates, I<br />
+would end up calling the API several hundred times all at once with this<br />
 naive implementation:</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// address$: [ &quot;1234 Widget Way, Promiseland, WV&quot; ] -- [...] -- [...]</span>
-</span><span class='line'><span class="kr">const</span> <span class="nx">geocoded$</span> <span class="o">=</span> <span class="nx">addresses$</span>
-</span><span class='line'><span class="p">.</span><span class="nx">flatMap</span><span class="p">(</span><span class="nx">address</span> <span class="o">=&gt;</span> <span class="nx">Rx</span><span class="p">.</span><span class="nx">Observable</span><span class="p">.</span><span class="nx">fromPromise</span><span class="p">(</span><span class="nx">callGoogleGeocodingService</span><span class="p">(</span><span class="nx">address</span><span class="p">)))</span>
-</span><span class='line'><span class="c1">// geocoded$: [ { latitude: 89.99, longitude: 90.00, ... } ] -- [...] -- [...]</span>
+<figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+</pre></td><td class="code"><pre><code class="javascript"><span class="line"><span class="c1">// address$: [ &quot;1234 Widget Way, Promiseland, WV&quot; ] -- [...] -- [...]</span>
+</span><span class="line"><span class="kr">const</span> <span class="nx">geocoded$</span> <span class="o">=</span> <span class="nx">addresses$</span>
+</span><span class="line"><span class="p">.</span><span class="nx">flatMap</span><span class="p">(</span><span class="nx">address</span> <span class="o">=&gt;</span> <span class="nx">Rx</span><span class="p">.</span><span class="nx">Observable</span><span class="p">.</span><span class="nx">fromPromise</span><span class="p">(</span><span class="nx">callGoogleGeocodingService</span><span class="p">(</span><span class="nx">address</span><span class="p">)))</span>
+</span><span class="line"><span class="c1">// geocoded$: [ { latitude: 89.99, longitude: 90.00, ... } ] -- [...] -- [...]</span>
 </span></code></pre></td></tr></table></div></figure>
 
+<p>I searched all over for a lossless throttling mechanism, but all I could<br />
+find was references to RxJS’s lossy <a href="">throttle</a> behavior.</p>
 
-<p>I searched all over for a lossless throttling mechanism, but all I could
-find was references to RxJS&rsquo;s lossy <a href="">throttle</a> behavior.</p>
+<p>Other frameworks, like <a href="https://github.com/baconjs/bacon.js/#observable-bufferingthrottle">Bacon.js’s bufferingThrottle()</a> and <a href="http://highlandjs.org/#ratelimit">Highland.js ratelimit()</a> seemed attractive. Where was RxJS’s equivalent?</p>
 
-<p>Other frameworks, like <a href="https://github.com/baconjs/bacon.js/#observable-bufferingthrottle">Bacon.js&rsquo;s bufferingThrottle()</a> and <a href="http://highlandjs.org/#ratelimit">Highland.js ratelimit()</a> seemed attractive. Where was RxJS&rsquo;s equivalent?</p>
-
-<p>Thanks to a <a href="http://stackoverflow.com/questions/34955842/rate-limiting-http-calls-made-by-rxjs">helpful StackOverflow post</a>,
-I found the answer: the use of
-<a href="https://github.com/Reactive-Extensions/RxJS/blob/master/doc/api/core/operators/concatmap.md">concatMap()</a>
-and
-<a href="https://github.com/Reactive-Extensions/RxJS/blob/master/doc/api/core/operators/delay.md">delay()</a>
+<p>Thanks to a <a href="http://stackoverflow.com/questions/34955842/rate-limiting-http-calls-made-by-rxjs">helpful StackOverflow post</a>,<br />
+I found the answer: the use of<br />
+<a href="https://github.com/Reactive-Extensions/RxJS/blob/master/doc/api/core/operators/concatmap.md">concatMap()</a><br />
+and<br />
+<a href="https://github.com/Reactive-Extensions/RxJS/blob/master/doc/api/core/operators/delay.md">delay()</a><br />
 forces the incoming stream to execute serially over artificial time delayed streams.</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kr">const</span> <span class="nx">geocoded$</span> <span class="o">=</span> <span class="nx">addresses$</span>
-</span><span class='line'><span class="p">.</span><span class="nx">concatMap</span><span class="p">(</span><span class="nx">address</span> <span class="o">=&gt;</span> <span class="nx">Rx</span><span class="p">.</span><span class="nx">Observable</span><span class="p">.</span><span class="nx">just</span><span class="p">(</span><span class="nx">address</span><span class="p">).</span><span class="nx">delay</span><span class="p">(</span><span class="nx">TIME_INTERVAL</span><span class="p">))</span>
-</span><span class='line'><span class="p">.</span><span class="nx">flatMap</span><span class="p">(</span><span class="nx">address</span> <span class="o">=&gt;</span> <span class="nx">Rx</span><span class="p">.</span><span class="nx">Observable</span><span class="p">.</span><span class="nx">fromPromise</span><span class="p">(</span><span class="nx">callGoogleGeocodingService</span><span class="p">(</span><span class="nx">address</span><span class="p">)))</span>
+<figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="javascript"><span class="line"><span class="kr">const</span> <span class="nx">geocoded$</span> <span class="o">=</span> <span class="nx">addresses$</span>
+</span><span class="line"><span class="p">.</span><span class="nx">concatMap</span><span class="p">(</span><span class="nx">address</span> <span class="o">=&gt;</span> <span class="nx">Rx</span><span class="p">.</span><span class="nx">Observable</span><span class="p">.</span><span class="nx">just</span><span class="p">(</span><span class="nx">address</span><span class="p">).</span><span class="nx">delay</span><span class="p">(</span><span class="nx">TIME_INTERVAL</span><span class="p">))</span>
+</span><span class="line"><span class="p">.</span><span class="nx">flatMap</span><span class="p">(</span><span class="nx">address</span> <span class="o">=&gt;</span> <span class="nx">Rx</span><span class="p">.</span><span class="nx">Observable</span><span class="p">.</span><span class="nx">fromPromise</span><span class="p">(</span><span class="nx">callGoogleGeocodingService</span><span class="p">(</span><span class="nx">address</span><span class="p">)))</span>
 </span></code></pre></td></tr></table></div></figure>
-
 
 <p>Thanks to:</p>
 
 <ul>
-<li><a href="http://stackoverflow.com/questions/34955842/rate-limiting-http-calls-made-by-rxjs">http://stackoverflow.com/questions/34955842/rate-limiting-http-calls-made-by-rxjs</a></li>
-<li><a href="http://stackoverflow.com/questions/30876361/rxjs-rate-limit-requests-per-second-and-concurrency?rq=1">http://stackoverflow.com/questions/30876361/rxjs-rate-limit-requests-per-second-and-concurrency?rq=1</a></li>
+  <li>http://stackoverflow.com/questions/34955842/rate-limiting-http-calls-made-by-rxjs</li>
+  <li>http://stackoverflow.com/questions/30876361/rxjs-rate-limit-requests-per-second-and-concurrency?rq=1</li>
 </ul>
-
 
 			
 			

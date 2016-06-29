@@ -68,7 +68,7 @@
 		<time>20 June 2012</time>
 	</header>
 		<div class="content">
-			<p>I&rsquo;ve been hitting a lot of &ldquo;Maximum file limit exceeded&rdquo; dialogs after a long day at work &mdash; at any point in time I&rsquo;ve got a kajillion Chrome tabs open, five or six Rails envs running (for dev and test) + Guard/Spork actively watching tests, and Sublime with another kajillion tabs open.</p>
+			<p>I’ve been hitting a lot of “Maximum file limit exceeded” dialogs after a long day at work – at any point in time I’ve got a kajillion Chrome tabs open, five or six Rails envs running (for dev and test) + Guard/Spork actively watching tests, and Sublime with another kajillion tabs open.</p>
 
 <p>Turns out that OSX limits the number of open file descriptors per process to 256. Time to bump up the limit:</p>
 
@@ -87,11 +87,11 @@
     maxfiles    256            unlimited
 </code></pre>
 
-<p>Okay, let&rsquo;s crank &lsquo;er up. First let&rsquo;s create <code>/etc/launchctl.conf</code></p>
+<p>Okay, let’s crank ‘er up. First let’s create <code>/etc/launchctl.conf</code></p>
 
 <p><code>$ sudo touch /etc/launchctl.conf</code></p>
 
-<p>And let&rsquo;s open it with your editor of choice. Add the following line to the new file:</p>
+<p>And let’s open it with your editor of choice. Add the following line to the new file:</p>
 
 <p><code>limit maxfiles 16384 32768</code></p>
 

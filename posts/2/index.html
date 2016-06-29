@@ -1,0 +1,991 @@
+
+<!doctype html>
+<!-- START OF _layouts/default.html -->
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" >
+		<meta content="width=device-width,initial-scale=1" name="viewport">
+		<meta content="Andrew Hao's thoughts on software engineering, team leadership & product design." name="description">
+		<meta content="The Sweet Spot" name="author">
+
+		<title>The Sweet Spot</title>
+
+		<!-- Styles -->
+		<link href="/stylesheets/main.css" rel="stylesheet">
+
+		<!-- Google webfonts -->
+    <link href="https://fonts.googleapis.com/css?family=Cousine|Suez+One|Yellowtail|Space+Mono|Alike+Angular" rel="stylesheet">
+
+		<!-- jQuery and plugins -->
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+		<script src="/js/jquery.zclip.min.js"></script>
+
+		<!-- Syntax highlighter -->
+		<link href="/stylesheets/prettify-hemisu.css" type="text/css" rel="stylesheet" />
+    <script type="text/javascript" src="/js/prettify.js"></script>
+
+    <link href="/atom.xml" rel="alternate" title="The Sweet Spot" type="application/atom+xml">
+    
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-2330913-9']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+
+  </head>
+
+	<body onload="prettyPrint()">
+		<div class="wrap">
+
+			<header>
+        <a href="/"><div class="title">The Sweet Spot</div></a>
+				<div class="subtitle">On software, engineering leadership, and anything shiny.</div>
+
+				<div class="navi">
+					<ul>
+						<li><a href="/blog/archives">Articles</a></li>
+						<li><a href="https://www.github.com/andrewhao">Github</a></li>
+						<li><a href="https://twitter.com/andrewhao">Twitter</a></li>
+					</ul>
+				</div> <!-- // .navi -->
+			</header>
+
+				<!-- START OF index.html -->
+
+	
+		
+		<!-- START OF _includes/article.html -->
+<article>
+	<header>
+		<h1><a href="/2016/02/17/partitioning-rxjs-streams-adventures-in-nested-observables-with-groupby-and-flatmap/">Partitioning RxJS streams: adventures in nested Observables with groupBy() and flatMap()</a></h1>
+		<time>17 February 2016</time>
+	</header>
+		<div class="content">
+			<p>One of the confusing aspects about working with streams is diving into<br />
+Rx operators that take a stream and fan out into multiple streams.</p>
+
+<p>Is your head exploding yet?</p>
+
+<h2 id="the-problem">The problem:</h2>
+
+<p>Let’s dive into a problem I ran into while working on a personal<br />
+project:</p>
+
+<p>The task at hand is to take a list of GPS moving point data and<br />
+partition the group data into multiple clusters of points, count up each<br />
+group, then return the aggregate stats. As a cyclist is moving, I want<br />
+to know how often they are moving at that specific velocity (speed).</p>
+
+<p>Our weapon of choice is the <a href="http://reactivex.io/documentation/operators/groupby.html">RxJS groupBy() function</a>,<br />
+which groups like stream values based on a key value you define.</p>
+
+<p><a href="http://reactivex.io/documentation/operators/groupby.html"><img src="http://reactivex.io/documentation/operators/images/groupBy.c.png" alt="Image of groupBy() at work, with marbles." /></a></p>
+
+<p>OK. Easy enough. So my implementation looked something like this:</p>
+
+<figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="nx">gpsPointStream</span>
+</span><span class="line"><span class="p">.</span><span class="nx">groupBy</span><span class="p">((</span><span class="nx">point</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">point</span><span class="p">.</span><span class="nx">velocity</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+<p>The supplied <code>(point) =&gt; point.velocity</code> function determines the <code>key</code><br />
+value for the supplied event, which then 1) creates a new Observable<br />
+sequence for that specific <code>key</code> value, if it doesn’t exist, or 2)<br />
+assigns your event to an existing Observable sequence.</p>
+
+<p>Let’s illustrate:</p>
+
+<figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="nx">src</span><span class="o">:</span>     <span class="o">--</span> <span class="p">{</span> <span class="nx">velocity</span><span class="o">:</span> <span class="mi">0</span> <span class="p">}</span> <span class="o">----------</span> <span class="p">{</span> <span class="nx">velocity</span><span class="o">:</span> <span class="mf">0.1</span> <span class="p">}</span> <span class="o">-----------------------------------</span> <span class="p">{</span> <span class="nx">velocity</span><span class="o">:</span> <span class="mi">0</span> <span class="p">}</span> <span class="o">--&gt;</span>
+</span><span class="line"><span class="nx">groupBy</span><span class="o">:</span> <span class="o">--</span> <span class="p">[{</span> <span class="nx">Observable</span> <span class="nx">key</span><span class="o">:</span> <span class="mi">0</span> <span class="p">}]</span> <span class="o">--</span> <span class="p">[</span> <span class="p">{</span> <span class="nx">Observable</span> <span class="nx">key</span><span class="o">:</span> <span class="mi">0</span> <span class="p">},</span> <span class="p">{</span> <span class="nx">Observable</span> <span class="nx">key</span><span class="o">:</span> <span class="mf">0.1</span> <span class="p">}</span> <span class="p">]</span> <span class="o">--</span> <span class="p">[</span> <span class="p">{</span> <span class="nx">Observable</span> <span class="nx">key</span><span class="o">:</span> <span class="mi">0</span> <span class="nx">count</span><span class="o">:</span> <span class="mi">2</span> <span class="p">},</span> <span class="p">{</span> <span class="nx">Observable</span> <span class="nx">key</span><span class="o">:</span> <span class="mf">0.1</span> <span class="p">}</span> <span class="p">]</span> <span class="o">--&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+<h2 id="never-fear-flatmap-to-the-rescue">Never fear, <code>flatMap()</code> to the rescue.</h2>
+
+<p>So the story turns to our hero<br />
+<a href="http://reactivex.io/documentation/operators/flatmap.html"><code>flatMap()</code></a>, which as it turns out is<br />
+specifically tuned to deal with issues of dealing with multiple streams.</p>
+
+<p><a href="http://reactivex.io/documentation/operators/flatmap.html"><img src="http://reactivex.io/documentation/operators/images/flatMap.c.png" alt="Marble diagram for flatMap" /></a></p>
+
+<p><code>flatMap</code> will take a supplied function as its argument, which is the<br />
+operation to apply to each argument within the supplied stream.</p>
+
+<figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="nx">gpsPointStream</span>
+</span><span class="line"><span class="p">.</span><span class="nx">groupBy</span><span class="p">((</span><span class="nx">point</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">point</span><span class="p">.</span><span class="nx">velocity</span><span class="p">)</span>
+</span><span class="line"><span class="p">.</span><span class="nx">flatMap</span><span class="p">((</span><span class="nx">group</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class="line">  <span class="k">return</span> <span class="nx">group</span><span class="p">.</span><span class="nx">scan</span><span class="p">((</span><span class="nx">h</span><span class="p">,</span> <span class="nx">v</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">h</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+</span><span class="line">              <span class="p">.</span><span class="nx">zip</span><span class="p">(</span><span class="nx">Observable</span><span class="p">.</span><span class="nx">just</span><span class="p">(</span><span class="nx">group</span><span class="p">.</span><span class="nx">key</span><span class="p">))</span>
+</span><span class="line"><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+<figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="nx">src</span><span class="o">:</span>     <span class="o">--</span> <span class="p">{</span> <span class="nx">velocity</span><span class="o">:</span> <span class="mi">0</span> <span class="p">}</span> <span class="o">----------</span> <span class="p">{</span> <span class="nx">velocity</span><span class="o">:</span> <span class="mf">0.1</span> <span class="p">}</span> <span class="o">-----------------------------------</span> <span class="p">{</span> <span class="nx">velocity</span><span class="o">:</span> <span class="mi">0</span> <span class="p">}</span> <span class="o">----&gt;</span>
+</span><span class="line"><span class="nx">groupBy</span><span class="o">:</span> <span class="o">--</span> <span class="p">[{</span> <span class="nx">Observable</span> <span class="nx">key</span><span class="o">:</span> <span class="mi">0</span> <span class="p">}]</span> <span class="o">--</span> <span class="p">[</span> <span class="p">{</span> <span class="nx">Observable</span> <span class="nx">key</span><span class="o">:</span> <span class="mi">0</span> <span class="p">},</span> <span class="p">{</span> <span class="nx">Observable</span> <span class="nx">key</span><span class="o">:</span> <span class="mf">0.1</span> <span class="p">}</span> <span class="p">]</span> <span class="o">--</span> <span class="p">[</span> <span class="p">{</span> <span class="nx">Observable</span> <span class="nx">key</span><span class="o">:</span> <span class="mi">0</span> <span class="nx">count</span><span class="o">:</span> <span class="mi">2</span> <span class="p">},</span> <span class="p">{</span> <span class="nx">Observable</span> <span class="nx">key</span><span class="o">:</span> <span class="mf">0.1</span> <span class="p">}</span> <span class="p">]</span> <span class="o">--&gt;</span>
+</span><span class="line"><span class="nx">flatMap</span><span class="o">:</span> <span class="o">--</span> <span class="p">[</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span> <span class="p">]</span> <span class="o">-----------------</span> <span class="p">[</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">0.1</span> <span class="p">]</span> <span class="o">------------------------------------------</span> <span class="p">[</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span> <span class="p">]</span> <span class="o">--&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+<p>What just happened here?</p>
+
+<p>I specified a merging function for the <code>flatMap()</code> stream, which<br />
+performed the <code>scan()</code> counting aggregation on my group before merging the<br />
+stream back into the main stream. I threw in a <code>zip</code>, which annotated my<br />
+aggregate count value with a record of the group key (velocity) that<br />
+this value was computed for.</p>
+
+<h2 id="compare-it-to-imperative">Compare it to imperative</h2>
+
+<p>The equivalent of <code>groupBy</code>/<code>flatMap</code> in imperative programming is, quite<br />
+literally, just <code>_.groupBy()</code> and <code>_.flatMap()</code>. With a few key<br />
+differences. Here it is in <a href="https://lodash.com/docs#groupBy">lodash</a>:</p>
+
+<figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="kd">var</span> <span class="nx">grouped</span> <span class="o">=</span> <span class="nx">_</span><span class="p">([</span> <span class="p">{</span> <span class="nx">velocity</span><span class="o">:</span> <span class="mi">0</span> <span class="p">},</span> <span class="p">{</span> <span class="nx">velocity</span><span class="o">:</span> <span class="mf">0.1</span> <span class="p">},</span> <span class="p">{</span> <span class="nx">velocity</span><span class="o">:</span> <span class="mi">0</span> <span class="p">}</span> <span class="p">])</span>
+</span><span class="line"><span class="p">.</span><span class="nx">groupBy</span><span class="p">((</span><span class="nx">point</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">point</span><span class="p">.</span><span class="nx">velocity</span><span class="p">)</span>
+</span><span class="line">
+</span><span class="line"><span class="nx">grouped</span><span class="p">.</span><span class="nx">value</span><span class="p">()</span>
+</span><span class="line"><span class="c1">// { 0: [ { velocity: 0 }, { velocity: 0 } ], 0.1: [ { velocity: 0.1 } ] }</span>
+</span><span class="line">
+</span><span class="line"><span class="kd">var</span> <span class="nx">flatmapped</span> <span class="o">=</span> <span class="nx">grouped</span><span class="p">.</span><span class="nx">flatMap</span><span class="p">((</span><span class="nx">v</span><span class="p">,</span> <span class="nx">k</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class="line">  <span class="k">return</span> <span class="p">[</span> <span class="p">[</span><span class="nx">v</span><span class="p">.</span><span class="nx">length</span><span class="p">,</span> <span class="nx">k</span><span class="p">]</span> <span class="p">]</span>
+</span><span class="line">  <span class="p">})</span>
+</span><span class="line">
+</span><span class="line"><span class="nx">flatmapped</span><span class="p">.</span><span class="nx">value</span><span class="p">()</span>
+</span><span class="line"><span class="c1">// [[2, &quot;0&quot;], [1, &quot;0.1&quot;]]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+<p>So in the end, the end result was the same with one crucial difference -<br />
+our Observable, reactive version was able to take intermediate accounts<br />
+into time and perform an intermediate calculation as data was flowing<br />
+in. This allowed us to generate an intermediate count for the “0” velocity<br />
+group.</p>
+
+<h2 id="takeaways">Takeaways</h2>
+
+<ul>
+  <li>When you want to fan out a stream into groups or partitions based on a<br />
+specific stream value, turn to<br />
+<a href="https://github.com/Reactive-Extensions/RxJS/blob/master/doc/api/core/operators/groupby.md"><code>groupBy</code></a>.</li>
+  <li>When you have a need to combine a stream-of-streams, you want to look at<br />
+<a href="https://github.com/Reactive-Extensions/RxJS/blob/master/doc/api/core/operators/selectmany.md"><code>flatMap</code></a>. You may also consider looking at <a href="https://github.com/Reactive-Extensions/RxJS/blob/master/doc/api/core/operators/concatmap.md"><code>concatMap</code></a>, a close cousin of <code>flatMap</code>.</li>
+  <li>Reactive programming gives you more expressive abilities to reason<br />
+about time and event ordering. You just have to tilt your head a little<br />
+bit.</li>
+</ul>
+
+<h2 id="further-reading">Further reading:</h2>
+
+<ul>
+  <li>http://blogs.microsoft.co.il/iblogger/2015/08/11/animations-of-rx-operators-groupby/</li>
+</ul>
+
+<p><strong>Update: 2016/03/22</strong></p>
+
+<p>Updated typo where the <code>index</code> variable on a GroupedObservable was<br />
+changed to correctly be <code>key</code>.</p>
+
+			
+			
+		</div>
+	<footer>
+		
+
+
+		
+
+
+
+  
+		
+			Tagged under
+		
+    <a class='category' href='/category/observables/'>observables</a>, <a class='category' href='/category/rxjs/'>rxjs</a>, <a class='category' href='/category/streams/'>streams</a>
+	
+
+
+	
+	
+	</footer>
+	
+</article>
+<!-- END OF _includes/article.html -->
+
+	
+		
+		<!-- START OF _includes/article.html -->
+<article>
+	<header>
+		<h1><a href="/2015/09/27/strange-loop-2015-reflections/">Strange Loop 2015: Notes & Reflections</a></h1>
+		<time>27 September 2015</time>
+	</header>
+		<div class="content">
+			<p>Going to Strange Loop was a huge check off my conference bucket list<br />
+(lanyard?). I’d always heard about this slightly-weird, highly academic<br />
+collision between academia and industry, skewing toward programming<br />
+languages you haven’t heard of (or, at the very least, you’ve never used<br />
+in production). I anticipated sitting at the feet of gray-haired wizards<br />
+and bright-eyed hipsters with Ph.Ds.</p>
+
+<p>The conference did not disappoint. And it was not quite what I<br />
+expected-I less sat at the feet of geniuses than I did talk with them,<br />
+peer-to-peer, about topics of interest. All around me people were saying<br />
+“Don’t be afraid to ask questions. Don’t feel stupid - nobody knows<br />
+everything.” Speakers were tweeting about how much they were learning.<br />
+It was comforting, because lots of topics I had come to see were those<br />
+in which I had no. freakin. clue. about.</p>
+
+<p>The following is culled from my notes from different sessions I<br />
+attended. I will focus on brevity. I will keep it clear. Here we go:</p>
+
+<h3 id="opening-keynote-i-see-what-you-mean---peter-alvaro">Opening Keynote: “I see what you mean” - Peter Alvaro</h3>
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/R2Aa4PivG0g" frameborder="0" allowfullscreen=""></iframe>
+
+<ul>
+  <li>Instructions, behaviors &amp; outcomes.</li>
+  <li>It “feels good” to write in C (a hardcore 1000 liner)</li>
+  <li>But a declarative program (e.g. SQL) works well, but is harder to come<br />
+up with.</li>
+  <li>The declarative world - as described in the work done in Datalog</li>
+  <li>How can we take concepts from Datalog and apply to real-world<br />
+resources like network actors (distributed systems)?</li>
+  <li>It becomes easier to model these systems declaratively when we<br />
+explicitly capture time.</li>
+  <li>Enter Dedalus: extension to Datalog where time is a modeling<br />
+construct.</li>
+  <li>(Show off usage of <code>@next</code> and <code>@async</code> annotations</li>
+  <li>Computation is redezvous - the only thing that you know is what YOU<br />
+know at that point in time.</li>
+  <li>Takeaway: Abstractions leak. Model them better (e.g. with time)</li>
+  <li>Inventing languages is dope.</li>
+</ul>
+
+<h3 id="have-your-causality-and-your-wall-clocks-too-jon-moore">Have your Causality and your Wall Clocks Too (Jon Moore)</h3>
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/YqNGbvFHoKM" frameborder="0" allowfullscreen=""></iframe>
+
+<ul>
+  <li>Take concept of Lamport clocks and extend them with hybrid clocks.</li>
+  <li>And extend them one further with: Distributed Monotonic Clocks</li>
+  <li>These DMCs use population protocol (flocking) to each actor in the<br />
+system communicate with another, updating their source of truth to<br />
+eventually agree on a media time w/in the group</li>
+  <li>DMC components:
+    <ol>
+      <li>Have a reset button by adding epoch bit</li>
+      <li>Use flocking (via population protocol) to avoid resets</li>
+      <li>Accomodates for some clockless nodes</li>
+      <li>Explicitly reflects causality</li>
+    </ol>
+  </li>
+</ul>
+
+<h3 id="building-isomorphic-web-apps-with-react---elyse-gordon">Building Isomorphic Web Apps with React - Elyse Gordon</h3>
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/QPXNb6bl7hc" frameborder="0" allowfullscreen=""></iframe>
+
+<ul>
+  <li>Vevo needed better SEO for SPAs. Old soln was to snapshot page and upload to S3.</li>
+  <li>Beneficial for SEO crawlers</li>
+  <li>React in frontend. Node in backend.</li>
+  <li>Vevo-developed <a href="">pellet</a> project as Flux-like framework to organize<br />
+files.</li>
+  <li>Webpack aliases/shims</li>
+  <li>Server hands off to browser, bootstraps React in client.</li>
+  <li>Alternatives: Relay, Ember</li>
+</ul>
+
+<h3 id="designing-for-the-worst-case-peter-bailis-pbailis">Designing for the Worst Case: Peter Bailis (@pbailis)</h3>
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/ZGIAypUUwoQ" frameborder="0" allowfullscreen=""></iframe>
+
+<ul>
+  <li>Designing for worst case often penalizes average case</li>
+  <li>But what if designing for the worst case actually helps avg case?</li>
+  <li>Examples from dstbd systems:
+    <ul>
+      <li>Worst case of disconnected data centers, packet loss/link loss. Fix<br />
+by introducing coordination-free protocols. Boom, you’ve now made your<br />
+network more scalable, performant, resistent to downtime.</li>
+      <li>Worst case: hard to coordinate a distributed transaction between<br />
+services. What do you do? You implement something like buffered writes<br />
+out of process.
+        <ul>
+          <li>CRDT, RAMP, HAT, bloom</li>
+          <li>Suddenly, you have fault tolerance</li>
+        </ul>
+      </li>
+      <li>Tail latency problem in microservices: the more microservices you<br />
+query, the higher the probability of hitting a slow server response.
+        <ul>
+          <li>Your service’s corner case is your user’s average case</li>
+        </ul>
+      </li>
+      <li>HCI: accessibility guidelines in W3C lift standards for all. Make<br />
+webpages easier to navigate. Side effect of better page performance,<br />
+higher conversion.</li>
+      <li>Netflix designing CC subtitles also benefits other users.</li>
+      <li>Curb cuts in the real world to help ADA/mobility-assisted folks also<br />
+benefit normal folks too</li>
+    </ul>
+  </li>
+  <li>Best has pitfalls too: your notion of best may be hard to hit, or<br />
+risky. You may want to optimize for “stable” solution. (Robust<br />
+optimization)</li>
+  <li>When to design for worst case?
+    <ul>
+      <li>common corner cases</li>
+      <li>environmental conditions vary</li>
+      <li>“normal” isn’t normal</li>
+    </ul>
+  </li>
+  <li>worst forces a conversation
+    <ul>
+      <li>how do we plan for failures?</li>
+      <li>what is our scale-out strategy?</li>
+      <li>how do we audit failures? data breaches?</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="ideology-by-gary-bernardt">Ideology by Gary Bernardt</h3>
+
+<ul>
+  <li>Rumsfeld: known knowns, known unknowns, and unknown unknowns.</li>
+  <li>Ideology is the thing you know you do not know you know</li>
+  <li>Conflict between typed vs dynamic programmers:
+    <ul>
+      <li>Typed: “I don’t need tests, I have types”</li>
+      <li>Dynamic: “I write tests, so I don’t need types”</li>
+    </ul>
+  </li>
+  <li>In reality, they are solving different places in the problem domain,<br />
+but they have different beliefs about the world that are hidden in the<br />
+shadows:
+    <ul>
+      <li>Typed: “Correctness comes solely from types”</li>
+      <li>Dynamic: “Correctness comes solely from example”</li>
+    </ul>
+  </li>
+  <li>“I need nulls” -&gt; You believe nulls are the only way to represent absence</li>
+  <li>“Immutable data structures are slow” -&gt; You believe all immutable types are slow</li>
+  <li>“GC is impractical” -&gt; you believe GC algorithms won’t get faster.</li>
+  <li>Read CSE 341 Type systems, Dan Grossman</li>
+</ul>
+
+<h3 id="building-scalable-stateful-services-caitlin-mccaffrey">Building Scalable, Stateful Services: Caitlin McCaffrey</h3>
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/H0i_bXKwujQ" frameborder="0" allowfullscreen=""></iframe>
+
+<h4 id="sticky-connection-always-talk-to-the-same-machine">Sticky connection: always talk to the same machine</h4>
+<p>Building sticky connections:<br />
+- persistent connections (load balancing cannot rebalance server)<br />
+- implement backpressure (d/c connection)</p>
+
+<h4 id="dynamic-cluster-membership">dynamic cluster membership</h4>
+
+<ul>
+  <li>gossip protocols -&gt; availability</li>
+  <li>consensus systems -&gt; consistency<br />
+(everybody needs to have the same worldview.</li>
+</ul>
+
+<h4 id="work-distribution">work distribution:</h4>
+
+<h5 id="random">random:</h5>
+<ul>
+  <li>write anywhere, read from all</li>
+</ul>
+
+<h5 id="consistent-hashing-on-session-id">consistent hashing: on session ID</h5>
+
+<p>hash space -&gt; node<br />
+dynamoDB, Manhattan</p>
+
+<p>con: can have hotspots, could have uneven distribution of resources cannot move work.</p>
+
+<h4 id="distributed-hash-table">distributed hash table</h4>
+<p>statefully store hash</p>
+
+<h4 id="real-world">Real world</h4>
+<p>Scuba (Facebook)<br />
+- distributed in-memory DB</p>
+
+<p>Ringpop (Uber)<br />
+- Node.js swim gossip protocol, consistent hashing</p>
+
+<p>Orleans (MS Research)<br />
+- actor model<br />
+- gossip<br />
+- consistent hash<br />
+- distributed hashtable</p>
+
+<h3 id="idalin-abby-bob-from-protesting-to-programming-becoming-a-tech-activist">Idalin “Abby” Bobé: From Protesting to Programming: Becoming a Tech Activist</h3>
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/gy82S8tjJX8" frameborder="0" allowfullscreen=""></iframe>
+
+<ul>
+  <li>Tech to resist exploitation</li>
+  <li>Technologists as activists</li>
+  <li>Idalin Bobé -&gt; Changed name to “Abby” to get a job.</li>
+  <li>Pastor Jenkins - magnifying glass vs paper</li>
+  <li>Philadelphia Partnership Program:
+    <ul>
+      <li>1st to college</li>
+      <li>work &lt;&gt; school</li>
+    </ul>
+  </li>
+  <li>Difficult to balance.</li>
+  <li>Mills MBA, CS</li>
+  <li>Joined Black Girls Code
+    <ul>
+      <li>Apply technology in the right way</li>
+    </ul>
+  </li>
+  <li>Ferguson happened
+    <ul>
+      <li>Thoughtworkers joined on the ground</li>
+      <li>Hands Up United: www.handsupunited.org</li>
+    </ul>
+  </li>
+  <li>“Do not be led by digital metrics” - even though the activists had<br />
+digital tooling, the tools were being used against activists. Phone<br />
+calls, chats monitored. Movement tracked.</li>
+  <li>New group starting up in St. Louis called “Ray Clark, Sr.” - named<br />
+after a black man who played a strong role in the founding of Silicon<br />
+Valley.</li>
+  <li>21st century technologists need 21st century skillsets.</li>
+  <li>Dream Defenders</li>
+  <li>“it is our duty to fight for our freedom/it is our duty to win/we must<br />
+love and support one another/we have nothing to lose but our chains”</li>
+</ul>
+
+			
+			
+		</div>
+	<footer>
+		
+
+
+		
+
+
+
+  
+		
+			Tagged under
+		
+    <a class='category' href='/category/conference/'>conference</a>, <a class='category' href='/category/distributed-systems/'>distributed systems</a>, <a class='category' href='/category/functional-programming/'>functional programming</a>, <a class='category' href='/category/software/'>software</a>, <a class='category' href='/category/strangeloop/'>strangeloop</a>
+	
+
+
+	
+	
+	</footer>
+	
+</article>
+<!-- END OF _includes/article.html -->
+
+	
+		
+		<!-- START OF _includes/article.html -->
+<article>
+	<header>
+		<h1><a href="/2015/06/29/notes-on-performance-tuning-a-puma-server/">Notes on performance tuning a Puma server</a></h1>
+		<time>29 June 2015</time>
+	</header>
+		<div class="content">
+			<p>A couple of months ago, I was tuning a Rails app for one of our clients.<br />
+This client wanted to know how performant their app would be under load.</p>
+
+<p>To do that, you can do several different things:</p>
+
+<ol>
+  <li>Tune the thread/process balance within the VM</li>
+  <li>Horizontally scale with your cloud platform.</li>
+</ol>
+
+<p>This is a discussion of the former (#1):</p>
+
+<h2 id="set-up-the-test">1) Set up the test</h2>
+
+<h3 id="drive-with-a-synthetic-script">Drive with a synthetic script</h3>
+
+<p>Our application had a synthetic load driver that would run Selenium to<br />
+execute various app tasks. This synthetic driver could be parallelized<br />
+across many notes via Rainforest QA, Sauce Labs or Browserify.</p>
+
+<p>In our case, I only needed to run our synthetic load script on a single<br />
+node in multiple processes, which simulated enough load to anticipate<br />
+another order of magnitude of traffic.</p>
+
+<h3 id="know-how-to-inspect-the-server-under-load">Know how to inspect the server under load.</h3>
+
+<p>Commands you will want to know:</p>
+
+<pre><code>$ free -m # Find the total amount of free memory on your machine
+$ ps uH p &lt;pid&gt; # List out process threads
+$ kill -TTIN &lt;puma_master_pid&gt; # Add a puma worker
+$ kill -TTOU &lt;puma_master_pid&gt; # Remove a puma worker
+$ kill -USR2 &lt;puma_master_pid&gt; # Kill the puma master &amp; workers
+</code></pre>
+
+<h2 id="generating-more-load-use-external-load-testing-services-or-plain-tools">Generating more load: use external load testing services, or plain tools.</h2>
+
+<p>Try using <a href="http://www.flood.io">Flood.io</a> or JMeter for performance load.</p>
+
+<p>I tried looking into the <a href="https://github.com/schneems/puma_auto_tune">puma_auto_tune</a> gem, but it required a higher level of production instrumentation than I was ready to give it.</p>
+
+<h2 id="analysis-new-relic-scalability-analysis">Analysis: New Relic scalability analysis</h2>
+
+<p>New Relic gave us a scalability analysis scatter plot, plotting<br />
+throughput against average application response time. In essence, it<br />
+allows you to see spikes in response times as correlated to throughput.</p>
+
+<h2 id="process">Process:</h2>
+
+<p>My approach was to use the synthetic script to generate productionlike<br />
+node and ramp up the # of load actors in 5m increments. Each run would<br />
+test the following Puma process/thread balance:</p>
+
+<p>Run #1: Single-process, multi threads.<br />
+Run #2: Multiple processes, single threaded.<br />
+Run #3: Multiple processes, multiple threads.</p>
+
+<blockquote>
+  <h3 id="aside-how-many-of-these-threadsprocesses-should-i-be-using">Aside: <em>how many</em> of these threads/processes should I be using?</h3>
+
+  <p>Note that your numbers will be different on the execution<br />
+characteristics of your app and your server environment. Tweak it for<br />
+yourself. You’re designing an experiment.</p>
+
+  <p>If you’re curious, our Rails app started out with 4 threads on 2<br />
+workers. We made the # of Puma workers (both min and max) environment<br />
+variables so we could tweak the variables easily without deploying.</p>
+</blockquote>
+
+<p>The strategy was then to look at the perf characteristics of each run in<br />
+the scatter plot. If there were any spikes in the graph with the<br />
+increase of load, then that would be noted. Even minor features like an<br />
+increase in slope would be noted - at that point, the incremental cost<br />
+of each request increases with overall system load.</p>
+
+<h2 id="results">Results</h2>
+
+<p>I don’t have the New Relic data on hand to show, now, but in our case we<br />
+discovered two things:</p>
+
+<ol>
+  <li>The server easily scaled from ~10 -&gt; ~500 rpm with a virtually flat<br />
+line for all runs.</li>
+  <li>The app exhibited no noticeable performance differences when flipped<br />
+between uniprocess-multithreaded, multiprocess-unithreaded, and<br />
+multiprocess-multithreaded modes. Any performance gains were under a<br />
+tolerable threshold.</li>
+</ol>
+
+<p>How do we parse these results?</p>
+
+<ul>
+  <li>We note that we didn’t really push the performance threshold on this<br />
+app (it’s not meant to be a public web site and 95% of it is behind a<br />
+login wall to a specialized group of users). Thus, if we pushed the<br />
+concurrent connections even more, we may have seen more of a pronounced<br />
+difference.</li>
+  <li>The <em>absence</em> of any major red flags was itself a validation. The<br />
+question we wanted answered coming into this experiment was “how close<br />
+are we to maxing out our single-node EC2 configuration such that we will<br />
+have to begin configuring horizontal scaling?”? The answer was: we can<br />
+safely scale further out in the near-term future, and cross the bridge<br />
+of horizontal scaling/bursting when we get there.</li>
+  <li>We did not have enough statistically significant differences in<br />
+performance for #threads/#processes in Puma. However, if we wanted to<br />
+truly find the optimal performance in our app, we would have turned to<br />
+tools like <a href="https://github.com/schneems/puma_auto_tune">puma_auto_tune</a> to answer those questions.</li>
+</ul>
+
+<p>Let me know in the comments if you have any questions!</p>
+
+			
+			
+		</div>
+	<footer>
+		
+
+
+		
+
+
+
+  
+		
+			Tagged under
+		
+    <a class='category' href='/category/performance-tuning/'>performance tuning</a>, <a class='category' href='/category/puma/'>puma</a>, <a class='category' href='/category/rails/'>rails</a>
+	
+
+
+	
+	
+	</footer>
+	
+</article>
+<!-- END OF _includes/article.html -->
+
+	
+		
+		<!-- START OF _includes/article.html -->
+<article>
+	<header>
+		<h1><a href="/2015/06/01/toolbox-learning-swift-and-viper/">Toolbox: learning Swift and VIPER</a></h1>
+		<time>01 June 2015</time>
+	</header>
+		<div class="content">
+			<p>The following are some notes I’m compiling as I’m beginning a journey<br />
+down the rabbit hole, writing an app in Swift utilizing the <a href="http://www.objc.io/issue-13/viper.html">VIPER app development methodology</a></p>
+
+<ul>
+  <li>
+    <p>I had trouble importing nested source code into XCode before realizing that I<br />
+needed to import the folder with corresponding Groups. This is done by<br />
+clicking the checkbox “Create Groups for any Added Folders”</p>
+
+    <p><em>Reference</em>: https://developer.apple.com/library/ios/technotes/iOSStaticLibraries/Articles/configuration.html</p>
+
+    <p>Without doing this, the compiler was not able to build the project.</p>
+
+    <ul>
+      <li>Since there is no way to do method swizzling in Swift, there are no real easy ways to do mocking/stubbing the way we used to do so in Ruby. Instead, this is forcing me to rely on plain old Swift structs. There are some simple ways to stub, but it ends up looking kind of awkward and very wiring-intensive like this:</li>
+    </ul>
+  </li>
+</ul>
+
+<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">class NewRidePresenterSpec: QuickSpec {
+</span><span class="line">  override func spec() {
+</span><span class="line">    describe("#startRecordingGpsTrack") {
+</span><span class="line">      class MockInteractor: NewRideInteractor {
+</span><span class="line">        var wasCalled: Bool = false
+</span><span class="line">
+</span><span class="line">        @objc private override func startRecordingGpsTrack() {
+</span><span class="line">          wasCalled = true
+</span><span class="line">        }
+</span><span class="line">      }
+</span><span class="line">
+</span><span class="line">      var subject = NewRidePresenter()
+</span><span class="line">
+</span><span class="line">      it("tells the interactor to start recording") {
+</span><span class="line">        let mockInteractor = MockInteractor()
+</span><span class="line">        subject.interactor = mockInteractor
+</span><span class="line">        subject.startRecordingGpsTrack()
+</span><span class="line">
+</span><span class="line">        expect(mockInteractor.wasCalled).to(beTrue())
+</span><span class="line">      }
+</span><span class="line">    }
+</span><span class="line">  }
+</span><span class="line">}</span></code></pre></td></tr></table></div></figure>
+
+<ul>
+  <li>Using the <a href="https://github.com/teambox/viper-module-generator"><code>vipergen</code></a> and <a href="https://github.com/team-supercharge/boa"><code>boa</code></a> scaffolding generators helped me understand the concepts behind the view.</li>
+  <li>Tip: Build a VIPER module, but don’t build it all at once. Just focus on the Presenter-Interactor-Wireframe component, or the DataStore-Entity-Interactor component. This will keep your head from exploding.</li>
+  <li>Dude. I miss vim. <a href="http://alcatraz.io/">Alcatraz</a> + xvim helped a little…</li>
+  <li>xcodebuild + <a href="https://github.com/supermarin/xcpretty">xcpretty</a> + Guard-shell == some sort of CI feedback loop.</li>
+  <li>Manually creating mocks in Swift = kind of painful. If you override (subclass) a NSObject in Swift, <a href="http://stackoverflow.com/a/30530308/993929">you must provide it with the <code>@objc</code> pragma, otherwise it throws a segfault error</a></li>
+  <li>You must contact CircleCI manually if you want to activate an iOS build (it’s still in beta). What are some other good CI tools to use with iOS?</li>
+</ul>
+
+			
+			
+		</div>
+	<footer>
+		
+
+
+		
+
+
+
+  
+		
+			Tagged under
+		
+    <a class='category' href='/category/ios/'>ios</a>, <a class='category' href='/category/swift/'>swift</a>, <a class='category' href='/category/viper/'>viper</a>
+	
+
+
+	
+	
+	</footer>
+	
+</article>
+<!-- END OF _includes/article.html -->
+
+	
+		
+		<!-- START OF _includes/article.html -->
+<article>
+	<header>
+		<h1><a href="/2015/04/30/building-gpx-stats-through-frp-principles-on-bacon-dot-js/">Building GPX stats through FRP principles with Bacon.js</a></h1>
+		<time>30 April 2015</time>
+	</header>
+		<div class="content">
+			<p>With my current fascination with <a href="http://github.com/andrewhao/stressfactor">tracking workouts and location-based-activities</a>, I have been interested in how I might be able to rewrite some of my stats logic with FRP principles.</p>
+
+<h3 id="what-is-frp">What is FRP?</h3>
+
+<p>FRP, or Functional Reactive Programming, is often defined as “functional programming over values that change over time”. It uses functional composition for streams of data that may appear in an infinite stream of data for some far indeterminate future - these types of use cases are served well by FRP which <a href="http://en.wikipedia.org/wiki/Functional_reactive_programming">“(simplifies) these problems by explicitly modeling time”</a>.</p>
+
+<h3 id="gps---your-location-varied-over-time">GPS - your location, varied over time.</h3>
+
+<p>A great application of this would be a workout. Let’s say I wanted to build an app that received realtime updates on a person’s position. Say the app was a Node server that received this JSON blob from a web API as a location update:</p>
+
+<figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+</pre></td><td class="code"><pre><code class="json"><span class="line"><span class="p">{</span> <span class="err">&#39;lat&#39;:</span> <span class="err">29.192414,</span>
+</span><span class="line">  <span class="err">&#39;lon&#39;:</span> <span class="err">148.113241,</span>
+</span><span class="line">  <span class="err">&#39;ele&#39;:</span> <span class="err">122.1,</span>
+</span><span class="line">  <span class="err">&#39;time&#39;:</span> <span class="err">&#39;2015-04-18T13:54:56Z&#39;</span> <span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+<p>Say that some time later, the API receives this JSON blob:</p>
+
+<figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+</pre></td><td class="code"><pre><code class="json"><span class="line"><span class="p">{</span> <span class="err">&#39;lat&#39;:</span> <span class="err">29.192424,</span>
+</span><span class="line">  <span class="err">&#39;lon&#39;:</span> <span class="err">148.113251,</span>
+</span><span class="line">  <span class="err">&#39;ele&#39;:</span> <span class="err">123.1,</span>
+</span><span class="line">  <span class="err">&#39;time&#39;:</span> <span class="err">&#39;2015-04-18T13:55:26Z&#39;</span> <span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+<p>So we have these data points, that the user has moved <code>+0.00001</code> latitude points and <code>+0.00001</code> longitude points, climbing a total of <code>+1.0</code> meters, over a period of <code>30</code> seconds.</p>
+
+<h4 id="exercise-get-my-instantaneous-velocity">Exercise: Get my instantaneous velocity</h4>
+
+<p>If we performed this imperatively, we would write it something like this:</p>
+
+<figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+</pre></td><td class="code"><pre><code class="javascript"><span class="line"><span class="kd">var</span> <span class="nx">locations</span> <span class="o">=</span> <span class="p">[{</span> <span class="cm">/*json*/</span> <span class="p">},</span> <span class="p">{</span> <span class="cm">/*json*/</span> <span class="p">}</span> <span class="cm">/*, ...*/</span><span class="p">];</span>
+</span><span class="line"><span class="kd">var</span> <span class="nx">last</span> <span class="o">=</span> <span class="nx">locations</span><span class="p">[</span><span class="nx">locations</span><span class="p">.</span><span class="nx">length</span><span class="o">-</span><span class="mi">1</span><span class="p">];</span>
+</span><span class="line"><span class="kd">var</span> <span class="nx">secondToLast</span> <span class="o">=</span> <span class="nx">locations</span><span class="p">[</span><span class="nx">locations</span><span class="p">.</span><span class="nx">length</span><span class="o">-</span><span class="mi">2</span><span class="p">];</span>
+</span><span class="line"><span class="kd">var</span> <span class="nx">timeDelta</span> <span class="o">=</span> <span class="nx">last</span><span class="p">.</span><span class="nx">time</span> <span class="o">-</span> <span class="nx">secondToLast</span><span class="p">.</span><span class="nx">time</span><span class="p">;</span>
+</span><span class="line"><span class="kd">var</span> <span class="nx">distanceDelta</span> <span class="o">=</span> <span class="nx">getDistance</span><span class="p">(</span><span class="nx">last</span><span class="p">.</span><span class="nx">lon</span><span class="p">,</span> <span class="nx">last</span><span class="p">.</span><span class="nx">lat</span><span class="p">,</span> <span class="nx">secondToLast</span><span class="p">.</span><span class="nx">lon</span><span class="p">,</span> <span class="nx">secondToLast</span><span class="p">.</span><span class="nx">lat</span><span class="p">);</span>
+</span><span class="line"><span class="kd">var</span> <span class="nx">velocity</span> <span class="o">=</span> <span class="nx">distanceDelta</span> <span class="o">/</span> <span class="nx">timeDelta</span><span class="p">;</span>
+</span><span class="line"><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">velocity</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+<p>With FRP, it might look more like this:</p>
+
+<figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+</pre></td><td class="code"><pre><code class="javascript"><span class="line"><span class="kd">var</span> <span class="nx">locationStream</span> <span class="o">=</span> <span class="p">[{</span> <span class="cm">/*json*/</span> <span class="p">},</span> <span class="p">{</span> <span class="cm">/*json*/</span> <span class="p">}</span> <span class="cm">/*, ...some JSON objects that might appear in the future */</span><span class="p">];</span>
+</span><span class="line"><span class="nx">locationStream</span><span class="p">.</span><span class="nx">slidingWindow</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+</span><span class="line">              <span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">pairs</span><span class="p">)</span> <span class="p">{</span>
+</span><span class="line">                <span class="kd">var</span> <span class="nx">timeDelta</span> <span class="o">=</span> <span class="nx">pairs</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="nx">time</span> <span class="o">-</span> <span class="nx">pairs</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">time</span><span class="p">;</span>
+</span><span class="line">                <span class="kd">var</span> <span class="nx">distanceDelta</span> <span class="o">=</span> <span class="nx">getDistance</span><span class="p">(</span><span class="nx">pairs</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="nx">lon</span><span class="p">,</span> <span class="nx">pairs</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="nx">lat</span><span class="p">,</span> <span class="nx">pairs</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">lon</span><span class="p">,</span> <span class="nx">pairs</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">lat</span><span class="p">);</span>
+</span><span class="line">                <span class="k">return</span> <span class="nx">distanceDelta</span> <span class="o">/</span> <span class="nx">timeDelta</span>
+</span><span class="line">              <span class="p">})</span>
+</span><span class="line">              <span class="p">.</span><span class="nx">onValue</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">velocity</span><span class="p">)</span> <span class="p">{</span>
+</span><span class="line">                <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">velocity</span><span class="p">);</span>
+</span><span class="line">              <span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+<p>There is a key difference that is not easily demonstrated here - that the former imperative example requires that all JSON arrays be materialized at once - via db query, in-memory store, etc. It doesn’t account for change in time.</p>
+
+<p>However, the latter functional example accounts for changing values of time as they appear over the stream - as soon as a new value shows up in the stream, the velocity is changed instantly.</p>
+
+<h3 id="some-more-location-based-experiments-rxlocation">Some more location-based experiments: rxlocation</h3>
+
+<p>I wrote up a library to parse various facts from a changing stream of GPS events, from instantaneous velocity, average velocity, moving/stopped status, etc.</p>
+
+<p>I investigated different reactive frameworks, mainly <a href="https://github.com/Reactive-Extensions/RxJS/">RxJS</a> and <a href="https://github.com/baconjs/bacon.js/">Bacon.js</a>. My takeaways were that RxJS does everything and the kitchen sink, but I got lost trying to reconcile Node streams with RxJS cold streams. Bacon.js just seemed to work for me, out of the box. I’m still learning, so I hope to have a better understanding of the core issues here.</p>
+
+<p>You can check it out here: <a href="https://github.com/andrewhao/rxlocation">rxlocation</a>.</p>
+
+			
+			
+		</div>
+	<footer>
+		
+
+
+		
+
+
+
+  
+		
+			Tagged under
+		
+    <a class='category' href='/category/functional-reactive-programming/'>functional reactive programming</a>, <a class='category' href='/category/javascript/'>javascript</a>, <a class='category' href='/category/node/'>node</a>
+	
+
+
+	
+	
+	</footer>
+	
+</article>
+<!-- END OF _includes/article.html -->
+
+	
+	
+<div class="pagination">
+	
+		<a class="older" href="3">Older</a>
+	
+	
+	<span class="total">2 of 20</span>
+	
+	
+		<a class="newer" href="1">Newer</a>
+	
+</div>
+<!-- END OF index.html -->
+
+
+			<footer>
+				Copyright &copy; 2016
+
+	Andrew Hao
+
+
+				
+
+<script type="text/javascript">
+      var disqus_shortname = 'g9labs';
+      
+        
+        var disqus_script = 'count.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+			</footer>
+
+		</div> <!-- // .wrap -->
+  </body>
+
+	<script>
+		$(document).ready(function() {
+			// Make images center
+			$('p:has(img)').css('text-align', 'center');
+
+			// Add the image's title attribute as a caption
+			$('p:has(img)').append(function () {
+				return '<div class="caption">' + ($('img', this).attr('title') || "") + '</div>';
+			});
+
+			// Prettify code
+			$('code').addClass('prettyprint');
+			$('pre code').addClass('linenums');
+
+			// Copy to clipboard with button
+			$('pre:has(code)').prepend(function(){
+				return '<div class="clip-btn">copy to clipboard</div>';
+      });
+
+			$('.clip-btn').zclip({
+				path:'/js/ZeroClipboard.swf',
+				copy: $(this).next('code').text(),
+				afterCopy: function(){
+					$(this).replaceWith('<div class="clip-btn">copied!');
+					}
+			});
+		});
+	</script>
+</html>
+<!-- END OF _layouts/default.html -->

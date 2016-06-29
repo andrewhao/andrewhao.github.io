@@ -68,69 +68,67 @@
 		<time>20 January 2012</time>
 	</header>
 		<div class="content">
-			<p>Here&rsquo;s a list of things that have been annoying, or at least a bit frustrating using <a href="http://ohm.keyvalue.org">Ohm</a>, the Redis ORM, in a Rails app. Beware to those who assume Ohm is ActiveRecord in new clothes. It is, but it&rsquo;s not:</p>
+			<p>Here’s a list of things that have been annoying, or at least a bit frustrating using <a href="http://ohm.keyvalue.org">Ohm</a>, the Redis ORM, in a Rails app. Beware to those who assume Ohm is ActiveRecord in new clothes. It is, but it’s not:</p>
 
-<h2>CRUD</h2>
+<h2 id="crud">CRUD</h2>
 
-<p>Don&rsquo;t make the mistake of treating your Ohm objects like AR:</p>
+<p>Don’t make the mistake of treating your Ohm objects like AR:</p>
 
 <table>
-<thead>
-<tr>
-<th>ActiveRecord        </th>
-<th> Ohm</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>`destroy            </td>
-<td> <code>delete</code></td>
-</tr>
-<tr>
-<td><code>self.find(id)</code>     </td>
-<td> <code>self[id]</code></td>
-</tr>
-<tr>
-<td><code>update_attributes</code> </td>
-<td> <code>update</code></td>
-</tr>
-<tr>
-<td><code>create</code>            </td>
-<td> <code>create</code></td>
-</tr>
-</tbody>
+  <thead>
+    <tr>
+      <th>ActiveRecord</th>
+      <th>Ohm</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>destroy            | </code>delete`</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code>self.find(id)</code></td>
+      <td><code>self[id]</code></td>
+    </tr>
+    <tr>
+      <td><code>update_attributes</code></td>
+      <td><code>update</code></td>
+    </tr>
+    <tr>
+      <td><code>create</code></td>
+      <td><code>create</code></td>
+    </tr>
+  </tbody>
 </table>
 
+<p>Also note that Ohm’s <code>update_attributes</code> behaves differently from Rails` – it doesn’t persist the updates to DB. That owned me for the good part of the day.</p>
 
-<p>Also note that Ohm&rsquo;s <code>update_attributes</code> behaves differently from Rails` &mdash; it doesn&rsquo;t persist the updates to DB. That owned me for the good part of the day.</p>
-
-<h2>Callbacks</h2>
+<h2 id="callbacks">Callbacks</h2>
 
 <p>Thankfully, these are ActiveRecord-like with the addition of <a href="http://cyx.github.com/ohm-contrib/doc/"><code>ohm/contrib</code></a>.</p>
 
-<h2>Associations</h2>
+<h2 id="associations">Associations</h2>
 
 <table>
-<thead>
-<tr>
-<th>ActiveRecord            </th>
-<th> Ohm</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>has_a</code> or <code>belongs_to</code> </td>
-<td> <code>reference</code></td>
-</tr>
-<tr>
-<td><code>has_many</code>              </td>
-<td> <code>collection</code></td>
-</tr>
-</tbody>
+  <thead>
+    <tr>
+      <th>ActiveRecord</th>
+      <th>Ohm</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>has_a</code> or <code>belongs_to</code></td>
+      <td><code>reference</code></td>
+    </tr>
+    <tr>
+      <td><code>has_many</code></td>
+      <td><code>collection</code></td>
+    </tr>
+  </tbody>
 </table>
 
-
-<p>Read <a href="http://blog.citrusbyte.com/2010/04/12/mixing-ohm-with-activerecord-datamapper-and-sequel/">this article</a> if you&rsquo;re considering creating associations from AR objects to Ohm objects and the other way &lsquo;round.</p>
+<p>Read <a href="http://blog.citrusbyte.com/2010/04/12/mixing-ohm-with-activerecord-datamapper-and-sequel/">this article</a> if you’re considering creating associations from AR objects to Ohm objects and the other way ‘round.</p>
 
 			
 			

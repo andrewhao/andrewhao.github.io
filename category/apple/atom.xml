@@ -4,7 +4,7 @@
   <title><![CDATA[Category: apple | The Sweet Spot]]></title>
   <link href="http://www.g9labs.com/category/apple/atom.xml" rel="self"/>
   <link href="http://www.g9labs.com/"/>
-  <updated>2016-06-24T11:31:59-07:00</updated>
+  <updated>2016-06-29T16:33:32-07:00</updated>
   <id>http://www.g9labs.com/</id>
   <author>
     <name><![CDATA[Andrew Hao]]></name>
@@ -18,7 +18,7 @@
     <link href="http://www.g9labs.com/2012/06/20/updating-max-file-limit-on-osx-lion/"/>
     <updated>2012-06-20T02:28:13-07:00</updated>
     <id>http://www.g9labs.com/2012/06/20/updating-max-file-limit-on-osx-lion</id>
-    <content type="html"><![CDATA[<p>I&rsquo;ve been hitting a lot of &ldquo;Maximum file limit exceeded&rdquo; dialogs after a long day at work &mdash; at any point in time I&rsquo;ve got a kajillion Chrome tabs open, five or six Rails envs running (for dev and test) + Guard/Spork actively watching tests, and Sublime with another kajillion tabs open.</p>
+    <content type="html"><![CDATA[<p>I’ve been hitting a lot of “Maximum file limit exceeded” dialogs after a long day at work – at any point in time I’ve got a kajillion Chrome tabs open, five or six Rails envs running (for dev and test) + Guard/Spork actively watching tests, and Sublime with another kajillion tabs open.</p>
 
 <p>Turns out that OSX limits the number of open file descriptors per process to 256. Time to bump up the limit:</p>
 
@@ -37,11 +37,11 @@
     maxfiles    256            unlimited
 </code></pre>
 
-<p>Okay, let&rsquo;s crank &lsquo;er up. First let&rsquo;s create <code>/etc/launchctl.conf</code></p>
+<p>Okay, let’s crank ‘er up. First let’s create <code>/etc/launchctl.conf</code></p>
 
 <p><code>$ sudo touch /etc/launchctl.conf</code></p>
 
-<p>And let&rsquo;s open it with your editor of choice. Add the following line to the new file:</p>
+<p>And let’s open it with your editor of choice. Add the following line to the new file:</p>
 
 <p><code>limit maxfiles 16384 32768</code></p>
 
@@ -54,41 +54,75 @@
     <link href="http://www.g9labs.com/2010/08/03/on-selling-my-soul-and-switching-to-mac/"/>
     <updated>2010-08-03T14:44:45-07:00</updated>
     <id>http://www.g9labs.com/2010/08/03/on-selling-my-soul-and-switching-to-mac</id>
-    <content type="html"><![CDATA[<p>A month ago I bought an &lsquo;07 MacBook on Craigslist. No, it&rsquo;s not one of those sexy aluminum hot rods, but it sure is pretty.</p>
+    <content type="html"><![CDATA[<p>A month ago I bought an ‘07 MacBook on Craigslist. No, it’s not one of those sexy aluminum hot rods, but it sure is pretty.</p>
 
-<p>I was full of mixed emotions. I had finally joined the Tribe! I had sold my soul. I can now develop iPhone apps! I am property of SJ. Yes, I had interned at Apple in the summer of &lsquo;08, but I haven&rsquo;t really paid much attention to OS X until I&rsquo;ve owned one of these suckers for myself.</p>
+<p>I was full of mixed emotions. I had finally joined the Tribe! I had sold my soul. I can now develop iPhone apps! I am property of SJ. Yes, I had interned at Apple in the summer of ‘08, but I haven’t really paid much attention to OS X until I’ve owned one of these suckers for myself.</p>
 
-<p>It&rsquo;s not easy making the switch. Here are some of my gripes with OSX and some stopgap replacements I&rsquo;ve found:</p>
-
-<ul>
-<li><p>No keyboard shortcut to maximize windows. (Solved with <a href="http://www.blazingtools.com/downloads.html#RightZoom">RightZoom</a>)</p></li>
-<li><p>MacPorts really sucks (that is, having to compile everything from source is really slow). (Still outstanding)</p></li>
-<li><p>Switching windows between spaces is really clunky. (Sorta solved with <a href="http://thecocoabots.com/hyperspaces/">Hyperspaces</a>)</p></li>
-<li><p>No keyboard shortcut to &ldquo;move active window to space&rdquo;. (Still outstanding)</p></li>
-<li><p>No way to force windows to a grid. (Solved with <a href="http://www.mizage.com/divvy/">Divvy</a>)</p></li>
-<li><p>No right Ctrl key makes things really painful in Emacs. (Remapped right &ldquo;Enter&rdquo; with <a href="http://doublecommand.sourceforge.net/">DoubleCommand</a>)</p></li>
-<li><p>Aero Snap is cool. (Check out <a href="http://www.irradiatedsoftware.com/cinch/">Cinch</a>)</p></li>
-<li><p>The MacBook keyboard keys feel cheap compared to a Thinkpad. (Still outstanding)</p></li>
-<li><p>Really annoyed with Command-Tab switching. I just want to switch to a different window! (Still outstanding).</p></li>
-<li><p>Expose feels limited compared to Compiz' Scale plugin. Cannot Expose all windows in all spaces. (Still outstanding)</p></li>
-<li><p>Closing window doesn&rsquo;t kill the process. I suspect this is just a design philosophy I have to deal with. (Still outstanding)</p></li>
-<li><p>Not sure why, but my wrists generally tend to hurt more after using the MB rather than my work Thinkpad.</p></li>
-</ul>
-
-
-<p>Okay, I&rsquo;m not going to do all complaining. Some things I really enjoy:</p>
+<p>It’s not easy making the switch. Here are some of my gripes with OSX and some stopgap replacements I’ve found:</p>
 
 <ul>
-<li><p>Drag-and-drop installation is totally elegant.</p></li>
-<li><p>Time Machine just works, and the zoomable interface is totally slick.</p></li>
-<li><p>Helvetica Neue, I love you.</p></li>
-<li><p>Something about the font rendering is just amazing.</p></li>
-<li><p>I get to look cool (and slightly cliche&hellip;) at coffee shops</p></li>
-<li><p>Desktop graphics &amp; animations render smoothly with CoreAnimation. This stuff just looks slick.</p></li>
+  <li>
+    <p>No keyboard shortcut to maximize windows. (Solved with <a href="http://www.blazingtools.com/downloads.html#RightZoom">RightZoom</a>)</p>
+  </li>
+  <li>
+    <p>MacPorts really sucks (that is, having to compile everything from source is really slow). (Still outstanding)</p>
+  </li>
+  <li>
+    <p>Switching windows between spaces is really clunky. (Sorta solved with <a href="http://thecocoabots.com/hyperspaces/">Hyperspaces</a>)</p>
+  </li>
+  <li>
+    <p>No keyboard shortcut to “move active window to space”. (Still outstanding)</p>
+  </li>
+  <li>
+    <p>No way to force windows to a grid. (Solved with <a href="http://www.mizage.com/divvy/">Divvy</a>)</p>
+  </li>
+  <li>
+    <p>No right Ctrl key makes things really painful in Emacs. (Remapped right “Enter” with <a href="http://doublecommand.sourceforge.net/">DoubleCommand</a>)</p>
+  </li>
+  <li>
+    <p>Aero Snap is cool. (Check out <a href="http://www.irradiatedsoftware.com/cinch/">Cinch</a>)</p>
+  </li>
+  <li>
+    <p>The MacBook keyboard keys feel cheap compared to a Thinkpad. (Still outstanding)</p>
+  </li>
+  <li>
+    <p>Really annoyed with Command-Tab switching. I just want to switch to a different window! (Still outstanding).</p>
+  </li>
+  <li>
+    <p>Expose feels limited compared to Compiz’ Scale plugin. Cannot Expose all windows in all spaces. (Still outstanding)</p>
+  </li>
+  <li>
+    <p>Closing window doesn’t kill the process. I suspect this is just a design philosophy I have to deal with. (Still outstanding)</p>
+  </li>
+  <li>
+    <p>Not sure why, but my wrists generally tend to hurt more after using the MB rather than my work Thinkpad.</p>
+  </li>
 </ul>
 
+<p>Okay, I’m not going to do all complaining. Some things I really enjoy:</p>
 
-<p>I guess it&rsquo;s not as bad as I&rsquo;ve made it out to be. Well here I am. Swore I&rsquo;d never do it, but you got me with all that shiny, Mr. Jobs. You got me.</p>
+<ul>
+  <li>
+    <p>Drag-and-drop installation is totally elegant.</p>
+  </li>
+  <li>
+    <p>Time Machine just works, and the zoomable interface is totally slick.</p>
+  </li>
+  <li>
+    <p>Helvetica Neue, I love you.</p>
+  </li>
+  <li>
+    <p>Something about the font rendering is just amazing.</p>
+  </li>
+  <li>
+    <p>I get to look cool (and slightly cliche…) at coffee shops</p>
+  </li>
+  <li>
+    <p>Desktop graphics &amp; animations render smoothly with CoreAnimation. This stuff just looks slick.</p>
+  </li>
+</ul>
+
+<p>I guess it’s not as bad as I’ve made it out to be. Well here I am. Swore I’d never do it, but you got me with all that shiny, Mr. Jobs. You got me.</p>
 ]]></content>
   </entry>
   

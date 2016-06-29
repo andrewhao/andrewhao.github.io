@@ -4,7 +4,7 @@
   <title><![CDATA[Category: programming | The Sweet Spot]]></title>
   <link href="http://www.g9labs.com/category/programming/atom.xml" rel="self"/>
   <link href="http://www.g9labs.com/"/>
-  <updated>2016-06-24T11:31:59-07:00</updated>
+  <updated>2016-06-29T16:33:32-07:00</updated>
   <id>http://www.g9labs.com/</id>
   <author>
     <name><![CDATA[Andrew Hao]]></name>
@@ -18,99 +18,90 @@
     <link href="http://www.g9labs.com/2014/01/26/moving-to-ember-app-kit/"/>
     <updated>2014-01-26T23:32:00-08:00</updated>
     <id>http://www.g9labs.com/2014/01/26/moving-to-ember-app-kit</id>
-    <content type="html"><![CDATA[<p>I&rsquo;ve noticed a bit of the buzz around <a href="https://github.com/stefanpenner/ember-app-kit">Ember App Kit</a>
-recently and decided to move Hendrix, my music management app, over from
-a <a href="http://yeoman.io/">Yeoman</a>-generated Ember app to EAK with all its
+    <content type="html"><![CDATA[<p>I’ve noticed a bit of the buzz around <a href="https://github.com/stefanpenner/ember-app-kit">Ember App Kit</a><br />
+recently and decided to move Hendrix, my music management app, over from<br />
+a <a href="http://yeoman.io/">Yeoman</a>-generated Ember app to EAK with all its<br />
 bells and whistles.</p>
 
-<h3>What&rsquo;s the difference?</h3>
+<h3 id="whats-the-difference">What’s the difference?</h3>
 
-<p>Well on the surface, the two frameworks aren&rsquo;t very different. The
-standard Yeoman build tool sets you up with Grunt and Bower, which is
-what EAK provides you out of the box. The cool stuff happens when you
-dive under the hood: ES6 module transpilation and an AMD-compatible
-Ember Resolver, built-in Karma integration and a built-in API stub
+<p>Well on the surface, the two frameworks aren’t very different. The<br />
+standard Yeoman build tool sets you up with Grunt and Bower, which is<br />
+what EAK provides you out of the box. The cool stuff happens when you<br />
+dive under the hood: ES6 module transpilation and an AMD-compatible<br />
+Ember Resolver, built-in Karma integration and a built-in API stub<br />
 framework for development and test environments.</p>
 
-<h3>The joys of modules</h3>
+<h3 id="the-joys-of-modules">The joys of modules</h3>
 
-<p>What I didn&rsquo;t realize was that compiling to ES6 modules required that my
-filenames be renamed exactly how the modules were going to be placed,
-with the extra caveat that resource actions needed to live in their own
-directories. Recall that in the old way of doing things with globals and
-namespaces, you could get away with throwing a route file like this in
+<p>What I didn’t realize was that compiling to ES6 modules required that my<br />
+filenames be renamed exactly how the modules were going to be placed,<br />
+with the extra caveat that resource actions needed to live in their own<br />
+directories. Recall that in the old way of doing things with globals and<br />
+namespaces, you could get away with throwing a route file like this in<br />
 your app directory:</p>
 
-<p><code>
-routes/
+<pre><code>routes/
   songs_index_controller.js
-</code></p>
+</code></pre>
 
 <p>And inside:</p>
 
-<p><code>javascript
-MyApp.SongsIndexRoute = Ember.Route.extend({
-  //...
-});
-</code></p>
+<div class="language-javascript highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n1" name="n1">1</a></span>MyApp.SongsIndexRoute = Ember.Route.extend({
+<span class="line-numbers"><a href="#n2" name="n2">2</a></span>  <span style="color:#777">//...</span>
+<span class="line-numbers"><a href="#n3" name="n3">3</a></span>});
+</pre></div>
+</div>
+</div>
 
-<p>In EAK&rsquo;s world, you need to nest the file under the <code>songs/</code> directory,
+<p>In EAK’s world, you need to nest the file under the <code>songs/</code> directory,<br />
 and strip the type from the filename, like so:</p>
 
-<p>```
-routes/
-  songs/</p>
-
-<pre><code>index.js
+<pre><code>routes/
+  songs/
+    index.js
 </code></pre>
 
-<p>```</p>
-
-<p>Inside the file, you assign the function to a variable and let it be
+<p>Inside the file, you assign the function to a variable and let it be<br />
 exported in the default namespace.</p>
 
-<p><code>javascript
-var SongsIndexRoute = Ember.Route.extend({
-  //...
-});
-export default SongsIndexRoute;
-</code></p>
+<div class="language-javascript highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n1" name="n1">1</a></span><span style="color:#080;font-weight:bold">var</span> SongsIndexRoute = Ember.Route.extend({
+<span class="line-numbers"><a href="#n2" name="n2">2</a></span>  <span style="color:#777">//...</span>
+<span class="line-numbers"><a href="#n3" name="n3">3</a></span>});
+<span class="line-numbers"><a href="#n4" name="n4">4</a></span><span style="color:#080;font-weight:bold">export</span> <span style="color:#080;font-weight:bold">default</span> SongsIndexRoute;
+</pre></div>
+</div>
+</div>
 
-<h3>File name matters</h3>
+<h3 id="file-name-matters">File name matters</h3>
 
-<p>The <a href="https://github.com/stefanpenner/ember-jj-abrams-resolver/">new Ember resolver</a>
-loads modules in a smart way &mdash; according to how the framework
-structures resources, controllers and their corresponding actions. So
-visiting <code>#/songs</code> from my app caused the app to look up and load
-<code>appkit/routes/songs/index</code>. What I didn&rsquo;t realize was <em>this module must
-live at a very specific place in the file directory structure</em>.
-I realized that I left the module type in the file name the first time
+<p>The <a href="https://github.com/stefanpenner/ember-jj-abrams-resolver/">new Ember resolver</a> <br />
+loads modules in a smart way – according to how the framework<br />
+structures resources, controllers and their corresponding actions. So<br />
+visiting <code>#/songs</code> from my app caused the app to look up and load<br />
+<code>appkit/routes/songs/index</code>. What I didn’t realize was <em>this module must<br />
+live at a very specific place in the file directory structure</em>.<br />
+I realized that I left the module type in the file name the first time<br />
 around, like this:</p>
 
-<p>```
-routes/
-  songs/</p>
-
-<pre><code>index_route.js
+<pre><code>routes/
+  songs/
+    index_route.js
 </code></pre>
 
-<p>```</p>
-
-<p>There are no types in the module names &mdash; or the filenames, for that
-matter. I had not realized this (I&rsquo;m also an AMD newbie) &mdash; so I had
-left my files un-renamed as <code>songs_index_route</code>, which meant that
-the module loader had stored the SongsIndexRoute module under
-<code>appkit/routes/songs/index_route</code>, but was doing a route lookup through
+<p>There are no types in the module names – or the filenames, for that<br />
+matter. I had not realized this (I’m also an AMD newbie) – so I had<br />
+left my files un-renamed as <code>songs_index_route</code>, which meant that<br />
+the module loader had stored the SongsIndexRoute module under<br />
+<code>appkit/routes/songs/index_route</code>, but was doing a route lookup through<br />
 the Resolver for: <code>appkit/routes/songs/index</code>. Renaming the file to:</p>
 
-<p>```
-routes/
-  songs/</p>
-
-<pre><code>index.js
+<pre><code>routes/
+  songs/
+    index.js
 </code></pre>
-
-<p>```</p>
 
 <p>did the trick.</p>
 ]]></content>
@@ -121,69 +112,67 @@ routes/
     <link href="http://www.g9labs.com/2012/01/20/ohm-gotchas/"/>
     <updated>2012-01-20T10:19:50-08:00</updated>
     <id>http://www.g9labs.com/2012/01/20/ohm-gotchas</id>
-    <content type="html"><![CDATA[<p>Here&rsquo;s a list of things that have been annoying, or at least a bit frustrating using <a href="http://ohm.keyvalue.org">Ohm</a>, the Redis ORM, in a Rails app. Beware to those who assume Ohm is ActiveRecord in new clothes. It is, but it&rsquo;s not:</p>
+    <content type="html"><![CDATA[<p>Here’s a list of things that have been annoying, or at least a bit frustrating using <a href="http://ohm.keyvalue.org">Ohm</a>, the Redis ORM, in a Rails app. Beware to those who assume Ohm is ActiveRecord in new clothes. It is, but it’s not:</p>
 
-<h2>CRUD</h2>
+<h2 id="crud">CRUD</h2>
 
-<p>Don&rsquo;t make the mistake of treating your Ohm objects like AR:</p>
+<p>Don’t make the mistake of treating your Ohm objects like AR:</p>
 
 <table>
-<thead>
-<tr>
-<th>ActiveRecord        </th>
-<th> Ohm</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>`destroy            </td>
-<td> <code>delete</code></td>
-</tr>
-<tr>
-<td><code>self.find(id)</code>     </td>
-<td> <code>self[id]</code></td>
-</tr>
-<tr>
-<td><code>update_attributes</code> </td>
-<td> <code>update</code></td>
-</tr>
-<tr>
-<td><code>create</code>            </td>
-<td> <code>create</code></td>
-</tr>
-</tbody>
+  <thead>
+    <tr>
+      <th>ActiveRecord</th>
+      <th>Ohm</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>destroy            | </code>delete`</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code>self.find(id)</code></td>
+      <td><code>self[id]</code></td>
+    </tr>
+    <tr>
+      <td><code>update_attributes</code></td>
+      <td><code>update</code></td>
+    </tr>
+    <tr>
+      <td><code>create</code></td>
+      <td><code>create</code></td>
+    </tr>
+  </tbody>
 </table>
 
+<p>Also note that Ohm’s <code>update_attributes</code> behaves differently from Rails` – it doesn’t persist the updates to DB. That owned me for the good part of the day.</p>
 
-<p>Also note that Ohm&rsquo;s <code>update_attributes</code> behaves differently from Rails` &mdash; it doesn&rsquo;t persist the updates to DB. That owned me for the good part of the day.</p>
-
-<h2>Callbacks</h2>
+<h2 id="callbacks">Callbacks</h2>
 
 <p>Thankfully, these are ActiveRecord-like with the addition of <a href="http://cyx.github.com/ohm-contrib/doc/"><code>ohm/contrib</code></a>.</p>
 
-<h2>Associations</h2>
+<h2 id="associations">Associations</h2>
 
 <table>
-<thead>
-<tr>
-<th>ActiveRecord            </th>
-<th> Ohm</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>has_a</code> or <code>belongs_to</code> </td>
-<td> <code>reference</code></td>
-</tr>
-<tr>
-<td><code>has_many</code>              </td>
-<td> <code>collection</code></td>
-</tr>
-</tbody>
+  <thead>
+    <tr>
+      <th>ActiveRecord</th>
+      <th>Ohm</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>has_a</code> or <code>belongs_to</code></td>
+      <td><code>reference</code></td>
+    </tr>
+    <tr>
+      <td><code>has_many</code></td>
+      <td><code>collection</code></td>
+    </tr>
+  </tbody>
 </table>
 
-
-<p>Read <a href="http://blog.citrusbyte.com/2010/04/12/mixing-ohm-with-activerecord-datamapper-and-sequel/">this article</a> if you&rsquo;re considering creating associations from AR objects to Ohm objects and the other way &lsquo;round.</p>
+<p>Read <a href="http://blog.citrusbyte.com/2010/04/12/mixing-ohm-with-activerecord-datamapper-and-sequel/">this article</a> if you’re considering creating associations from AR objects to Ohm objects and the other way ‘round.</p>
 ]]></content>
   </entry>
   
@@ -192,17 +181,17 @@ routes/
     <link href="http://www.g9labs.com/2011/10/02/mmtss-a-collaborative-loop-station/"/>
     <updated>2011-10-02T03:53:45-07:00</updated>
     <id>http://www.g9labs.com/2011/10/02/mmtss-a-collaborative-loop-station</id>
-    <content type="html"><![CDATA[<h2>mmtss is a loop station built for live performances.</h2>
+    <content type="html"><![CDATA[<h2 id="mmtss-is-a-loop-station-built-for-live-performances">mmtss is a loop station built for live performances.</h2>
 
-<p>Let&rsquo;s make music together! This project simplifies a traditional loop tracking station and is designed for interactive collaborative music performances.</p>
+<p>Let’s make music together! This project simplifies a traditional loop tracking station and is designed for interactive collaborative music performances.</p>
 
-<p>The idea: Everybody adds or modifies one &ldquo;part&rdquo; of a 32-bar loop. The user gets to play an instrument over the existing mix and record the 32-bar phrase when she or he is ready. Once the person is finished, the project selects another instrument at random for the next viewer to record.</p>
+<p>The idea: Everybody adds or modifies one “part” of a 32-bar loop. The user gets to play an instrument over the existing mix and record the 32-bar phrase when she or he is ready. Once the person is finished, the project selects another instrument at random for the next viewer to record.</p>
 
-<p>It&rsquo;s an Ableton Live controller serving a Webkit view, backed by node.js on the backend and socket.io + RaphaelJS on the front. Communication is done through a LiveOSC Live plugin via sockets.</p>
+<p>It’s an Ableton Live controller serving a Webkit view, backed by node.js on the backend and socket.io + RaphaelJS on the front. Communication is done through a LiveOSC Live plugin via sockets.</p>
 
-<p>Displayed at the Regeneration &ldquo;We Collaborate&rdquo; art show in Oakland, CA. 9/24/2011.</p>
+<p>Displayed at the Regeneration “We Collaborate” art show in Oakland, CA. 9/24/2011.</p>
 
-<h3>Screenshots</h3>
+<h3 id="screenshots">Screenshots</h3>
 
 <p><img src="https://a248.e.akamai.net/assets.github.com/img/64abaefb0d10744dda42f362b6cd991522a88da4/687474703a2f2f6661726d372e7374617469632e666c69636b722e636f6d2f363136392f363138383336363537375f376261343864333864315f7a2e6a7067" alt="Practice mode" /></p>
 
@@ -210,69 +199,90 @@ routes/
 
 <p><img src="https://a248.e.akamai.net/assets.github.com/img/3f0c633b9b8d9d35970efe73f84c0f67bf68c6a8/687474703a2f2f6661726d372e7374617469632e666c69636b722e636f6d2f363132312f363138383838363131345f396436643531393937325f7a2e6a7067" alt="Cued mode" /></p>
 
-<p>Pressing &ldquo;record&rdquo; puts the user in a wait state. They are prompted to begin recording when all the black boxes count down and disappear.</p>
+<p>Pressing “record” puts the user in a wait state. They are prompted to begin recording when all the black boxes count down and disappear.</p>
 
 <p><img src="https://a248.e.akamai.net/assets.github.com/img/650dc62a52d8ca6441eff57e697307325390caaa/687474703a2f2f6661726d372e7374617469632e666c69636b722e636f6d2f363137372f363138383336373135315f636135623738323733355f7a2e6a7067" alt="Record mode" /></p>
 
 <p>mmtss in record mode.</p>
 
-<p>More screenshots: <a href="http://www.flickr.com/photos/andrewhao/sets/72157627640840853/">http://www.flickr.com/photos/andrewhao/sets/72157627640840853/</a></p>
+<p>More screenshots: http://www.flickr.com/photos/andrewhao/sets/72157627640840853/</p>
 
-<h3>Source code</h3>
+<h3 id="source-code">Source code</h3>
 
-<p>Github: <a href="http://www.github.com/andrewhao/mmtss.">http://www.github.com/andrewhao/mmtss.</a></p>
+<p>Github: http://www.github.com/andrewhao/mmtss.</p>
 
 <p>MIT/GPL-sourced for your coding pleasure.</p>
 
-<h3>Installation</h3>
+<h3 id="installation">Installation</h3>
 
 <ul>
-<li><p>Make sure you have npm installed: <a href="http://www.npmjs.org/">http://www.npmjs.org</a></p></li>
-<li><p>Copy <code>lib/LiveOSC</code> into <code>/Applications/Live x.y.z OS X/Live.app/Contents/App-Resources/MIDI\ Remote\ Scripts/</code> folder</p></li>
-<li><p>Set it as your MIDI remote in the Ableton Live Preferences pane, in the &ldquo;MIDI Remote&rdquo; tab.</p></li>
+  <li>
+    <p>Make sure you have npm installed: <a href="http://www.npmjs.org/">http://www.npmjs.org</a></p>
+  </li>
+  <li>
+    <p>Copy <code>lib/LiveOSC</code> into <code>/Applications/Live x.y.z OS X/Live.app/Contents/App-Resources/MIDI\ Remote\ Scripts/</code> folder</p>
+  </li>
+  <li>
+    <p>Set it as your MIDI remote in the Ableton Live Preferences pane, in the “MIDI Remote” tab.</p>
+  </li>
 </ul>
 
-
-<h3>Running it</h3>
+<h3 id="running-it">Running it</h3>
 
 <ul>
-<li><p>Open <code>Mmtss_0.als</code> as a sample Live project.</p></li>
-<li><p>Install all project dependencies with <code>npm install</code> from the project root.</p></li>
-<li><p>Start the Node server with <code>node app.js</code> from the root directory.</p></li>
-<li><p>Open a Web browser and visit <code>localhost:3000</code></p></li>
+  <li>
+    <p>Open <code>Mmtss_0.als</code> as a sample Live project.</p>
+  </li>
+  <li>
+    <p>Install all project dependencies with <code>npm install</code> from the project root.</p>
+  </li>
+  <li>
+    <p>Start the Node server with <code>node app.js</code> from the root directory.</p>
+  </li>
+  <li>
+    <p>Open a Web browser and visit <code>localhost:3000</code></p>
+  </li>
 </ul>
 
-
-<h3>Modifying the sample project</h3>
+<h3 id="modifying-the-sample-project">Modifying the sample project</h3>
 
 <p>You can modify this project to suit your own needs. Note that there are two sets of tracks; instrument (MIDI input) tracks and loop tracks that actually store clips.</p>
 
 <p>For <code>n</code> tracks, you can add or remove your own instruments. Just make sure that instrument at track <code>x</code> corresponds to track <code>x</code> + <code>n</code>.</p>
 
-<h3>Credits</h3>
+<h3 id="credits">Credits</h3>
 
 <ul>
-<li><p>Design and architectural inspiration taken from <a href="http://github.com/vnoise/vtouch">vtouch</a>, a HTML5/Node/Canvas Ableton controller.</p></li>
-<li><p>Original LiveOSC source is found at: <a href="http://monome.q3f.org/browser/trunk/LiveOSC">http://monome.q3f.org/browser/trunk/LiveOSC</a>. We use a different fork of the project at:<a href="http://github.com/vnoise/vtouch">http://github.com/vnoise/vtouch</a>.</p></li>
-<li><p>Super sweet CSS3 rocker widgets courtesy of <a href="http://www.simurai.com/">Simurai</a>: <a href="http://lab.simurai.com/css/umbrui/">UmbrUI</a></p></li>
+  <li>
+    <p>Design and architectural inspiration taken from <a href="http://github.com/vnoise/vtouch">vtouch</a>, a HTML5/Node/Canvas Ableton controller.</p>
+  </li>
+  <li>
+    <p>Original LiveOSC source is found at: <a href="http://monome.q3f.org/browser/trunk/LiveOSC">http://monome.q3f.org/browser/trunk/LiveOSC</a>. We use a different fork of the project at:<a href="http://github.com/vnoise/vtouch">http://github.com/vnoise/vtouch</a>.</p>
+  </li>
+  <li>
+    <p>Super sweet CSS3 rocker widgets courtesy of <a href="http://www.simurai.com/">Simurai</a>: <a href="http://lab.simurai.com/css/umbrui/">UmbrUI</a></p>
+  </li>
 </ul>
 
-
-<h3>License</h3>
+<h3 id="license">License</h3>
 
 <p><a href="http://www.opensource.org/licenses/mit-license.php">MIT</a> and <a href="http://www.gnu.org/copyleft/gpl.html">GPLv3</a> licensed. Go for it.</p>
 
 <p>You will, however, need to get a license for <a href="http://www.ableton.com/live">Ableton Live</a> yourself.</p>
 
-<h3>The handsome collaborators</h3>
+<h3 id="the-handsome-collaborators">The handsome collaborators</h3>
 
 <ul>
-<li><p>Andrew Hao: <a href="http://www.g9labs.com/">http://www.g9labs.com</a></p></li>
-<li><p>David Luoh: <a href="http://www.inkproj.com/">http://www.inkproj.com</a></p></li>
+  <li>
+    <p>Andrew Hao: <a href="http://www.g9labs.com/">http://www.g9labs.com</a></p>
+  </li>
+  <li>
+    <p>David Luoh: <a href="http://www.inkproj.com/">http://www.inkproj.com</a></p>
+  </li>
 </ul>
 
+<p>###</p>
 
-<h3></h3>
 ]]></content>
   </entry>
   
@@ -285,17 +295,17 @@ routes/
 
 <p>Glen and I from the <a href="http://porkbuns.net">Porkbuns Initiative</a> stepped up in full armor, ready to help.</p>
 
-<p>What is it? It&rsquo;s a self-running photobooth that uses your Mac for brains and DSLR for eyes and a Webkit browser for its clothes and a photo printer for&hellip; a printer. You can connect an iPad as the frontend for a nice visual touch (pun intended).</p>
+<p>What is it? It’s a self-running photobooth that uses your Mac for brains and DSLR for eyes and a Webkit browser for its clothes and a photo printer for… a printer. You can connect an iPad as the frontend for a nice visual touch (pun intended).</p>
 
 <p>We built it on a backend Rails instance, pushing SVG+HTML5 in the frontend and using the gphoto4ruby gem as a camera library wrapper.</p>
 
-<p>[caption id=&ldquo;attachment_1105&rdquo; align=&ldquo;alignnone&rdquo; width=&ldquo;500&rdquo; caption=&ldquo;All dressed up and ready to go.&rdquo;]<a href="http://www.g9labs.com/2011/08/10/introducing-boink-a-photobooth-for-the-rest-of-us/284852_10100607611957573_1201208_60011361_805844_n/"><img src="http://www.g9labs.com/wp-content/uploads/2011/08/284852_10100607611957573_1201208_60011361_805844_n-500x333.jpg" alt="" /></a>[/caption]</p>
+<p>[caption id=”attachment_1105” align=”alignnone” width=”500” caption=”All dressed up and ready to go.”]<a href="http://www.g9labs.com/2011/08/10/introducing-boink-a-photobooth-for-the-rest-of-us/284852_10100607611957573_1201208_60011361_805844_n/"><img src="http://www.g9labs.com/wp-content/uploads/2011/08/284852_10100607611957573_1201208_60011361_805844_n-500x333.jpg" alt="" /></a>[/caption]</p>
 
-<p>[caption id=&ldquo;&rdquo; align=&ldquo;alignnone&rdquo; width=&ldquo;500&rdquo; caption=&ldquo;An early UI prototype.&rdquo;]<a href="http://www.flickr.com/photos/andrewhao/6006564205/"><img src="http://farm7.static.flickr.com/6029/6006564205_60fda1b366.jpg" alt="Boink Preview" /></a>[/caption]</p>
+<p>[caption id=”” align=”alignnone” width=”500” caption=”An early UI prototype.”]<a href="http://www.flickr.com/photos/andrewhao/6006564205/"><img src="http://farm7.static.flickr.com/6029/6006564205_60fda1b366.jpg" alt="Boink Preview" /></a>[/caption]</p>
 
-<p>[caption id=&ldquo;attachment_1106&rdquo; align=&ldquo;alignnone&rdquo; width=&ldquo;500&rdquo; caption=&ldquo;This comes out of the printer.&rdquo;]<a href="http://www.g9labs.com/2011/08/10/introducing-boink-a-photobooth-for-the-rest-of-us/gen_219/"><img src="http://www.g9labs.com/wp-content/uploads/2011/08/gen_219-500x348.jpg" alt="" /></a>[/caption]</p>
+<p>[caption id=”attachment_1106” align=”alignnone” width=”500” caption=”This comes out of the printer.”]<a href="http://www.g9labs.com/2011/08/10/introducing-boink-a-photobooth-for-the-rest-of-us/gen_219/"><img src="http://www.g9labs.com/wp-content/uploads/2011/08/gen_219-500x348.jpg" alt="" /></a>[/caption]</p>
 
-<h3>Try it out</h3>
+<h3 id="try-it-out">Try it out</h3>
 
 <p>Check it out on <a href="http://www.github.com/andrewhao/boink">Github</a>.</p>
 ]]></content>
@@ -310,9 +320,9 @@ routes/
 
 <p>Hint: you need to load Firmata first onto the board before it can understand the protocol. Oh. Duh.</p>
 
-<p>[caption id=&ldquo;attachment_1032&rdquo; align=&ldquo;alignnone&rdquo; width=&ldquo;500&rdquo; caption=&ldquo;Don&rsquo;t forget to load up "OldStandardFirmata&rdquo;&ldquo;]<a href="http://www.g9labs.com/2011/02/15/arduino-and-python-firmata/screen-shot-2011-02-15-at-4-24-47-am/"><img src="http://www.g9labs.com/wp-content/uploads/2011/02/Screen-shot-2011-02-15-at-4.24.47-AM-500x312.png" alt="" /></a>[/caption]</p>
+<p>[caption id=”attachment_1032” align=”alignnone” width=”500” caption=”Don’t forget to load up “OldStandardFirmata””]<a href="http://www.g9labs.com/2011/02/15/arduino-and-python-firmata/screen-shot-2011-02-15-at-4-24-47-am/"><img src="http://www.g9labs.com/wp-content/uploads/2011/02/Screen-shot-2011-02-15-at-4.24.47-AM-500x312.png" alt="" /></a>[/caption]</p>
 
-<p>Only &ldquo;OldStandardFirmata&rdquo; (Firmata 2.0) seems to work with my version of <a href="https://github.com/lupeke/python-firmata">python-firmata</a>. The newer Firmata PDEs can talk Firmata 2.1 and 2.2, but I&rsquo;m too tired to figure them out.</p>
+<p>Only “OldStandardFirmata” (Firmata 2.0) seems to work with my version of <a href="https://github.com/lupeke/python-firmata">python-firmata</a>. The newer Firmata PDEs can talk Firmata 2.1 and 2.2, but I’m too tired to figure them out.</p>
 ]]></content>
   </entry>
   
