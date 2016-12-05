@@ -8,6 +8,7 @@ categories:
 - Spring Boot
 - Liquibase
 - Ruby on Rails
+published: false
 ---
 
 The first question you may be asking is - *why would I want to go from
@@ -15,7 +16,7 @@ Rails to Java*?
 
 Maybe you don't have a choice. Maybe you started a new job. Maybe you
 heard Java was the new, old hotness. In any case, you're a Ruby on Rails
-developer and you're looking Java in the face.
+developer and you're staring Java in the face.
 
 ### The languages
 
@@ -46,5 +47,24 @@ convention-driven. Where in Java, everything was explicitly traceable
 through system calls, Rails used magic methods of dynamically-defined
 methods, monkey-patching and big ol' global God Objects to accomplish
 its magic.
+
+### Liquibase vs Active Record
+
+In Active Record, database changes are called *migrations*.
+
+Migrations are only run from migration files, and may optionally be
+generated from the CLI.
+
+In Liquibase, these are called *changesets*, and the files are called
+*changelogs*.
+
+These migrations are either generated from the Liquibase CLI, or there
+is a nifty tool that reads Hibernate persistence entities and generates
+a "diff" against a known database, writing the migration to a file.
+
+Rails checks in a `schema.rb` file, encompassing the canonical
+definition of the DB schema. There is no such equivalent in Liquibase (*
+I may be wrong).
+
 
 *To be continued*
