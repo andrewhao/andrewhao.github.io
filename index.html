@@ -66,6 +66,101 @@
 		<!-- START OF _includes/article.html -->
 <article>
 	<header>
+		<h1><a href="/2017/07/19/pitfalls-to-avoid-when-moving-to-async-systems/">Pitfalls to avoid when moving to async systems</a></h1>
+		<time>19 July 2017</time>
+	</header>
+		<div class="content">
+			<p>I recently published a post on the <a href="http://blog.carbonfive.com">Carbon Five blog</a> titled <a href="http://blog.carbonfive.com/2017/07/18/evented-rails-decoupling-complex-domains-in-rails-with-domain-events/">“Evented Rails: Decoupling complex domains in Rails with Domain Events”</a> that takes some of my thoughts about moving a Rails app to use Domain Events - leveraging the power of Sidekiq (or your job runner of choice) to send async messages between different domains of your app.</p>
+
+<p>This approach always seems nice from the outset, but can hide some painful complexities if you go too far down the rabbit hole. Here is a repost of the latter half of that article, which is worth repeating:</p>
+
+<h2 id="big-wins-of-the-async-model-speed--scalability">Big win[s of the async model]: speed &amp; scalability</h2>
+
+<p>By splitting out domain logic into cohesive units, we’ve just designed our systems to farm out their workloads to a greater scalable number of workers. Imagine if you had a web request thread that would take 500ms to return, but 150ms of that time was spent doing a round trip to a different service. By decoupling that work from the main request thread and moving it to a background job – we’ve just sped up the responsiveness of our system for our end user, and we know that studies have shown that page speed performance equals money.</p>
+
+<p>Additionally, making our application calls asynchronous allows us to scale the number of processing power we allocate to our system. We now have the ability to horizontally scale workers according to the type of job, or the domain they are working from. This may result in cost and efficiency savings as we match processing power to the workload at hand.</p>
+
+<h2 id="big-challenge-dealing-with-asynchronous-data-flows">Big challenge: dealing with asynchronous data flows</h2>
+
+<p>Once things go async, we now have a fundamentally different data design. For example, say you implemented an HTTP API endpoint that performed some action in the system synchronously. However, now you’ve farmed out the effects of the action to background processes through domain events. While this is great for response times, you’ve now no longer got the guarantees to the caller that the desired side effect has been performed once the server responds back.</p>
+
+<h3 id="asynchronous-polling">Asynchronous polling</h3>
+
+<p>An option is to implement the Polling pattern. The API can return a request identifier back to the caller on first call, with which which the caller can now query the API for the result status. If the result is not ready, the API service will return with a Nack message, or negative Ack, implying that the result data has not arrived yet. As soon as the results in the HTTP API are ready, the API will correctly return the result.</p>
+
+<h3 id="pubsub-all-the-way-down">Pub/Sub all the way down</h3>
+
+<p>Another option is to embrace the asynchronous nature of the system wholly and transition the APIs to event-driven, message-based systems instead. In this paradigm, we would introduce an external message broker such as RabbitMQ to facilitate messages within our systems. Instead of providing an HTTP endpoint to perform an action, the API service could subscribe to a domain event from the calling system, perform its side effect, then fire off its own domain event, to which the calling system would subscribe to. The advantage of this approach is that this scheme makes more efficient use of the network (reducing chattiness), but we trade off the advantages of using HTTP (the ubiquity of the protocol, performance enhancements like layered caching).</p>
+
+<p>Browser-based clients can also get in on the asynchronous fun with the use of WebSockets to subscribe to server events. Instead of having a browser call an HTTP API, the browser could simply fire a WebSocket event, to which the service would asynchronously process (potentially also proxying the message downstream to other APIs with messages) and then responding via a WebSocket message when the data is done processing.</p>
+
+<h2 id="big-challenge-data-consistency">Big challenge: data consistency</h2>
+
+<p>When we choose an asynchronous evented approach, we now have to consider how to model asynchronous transactions. Imagine that one domain process charges a user’s credit card with a third party payment processor and another domain process is responsible for updating it in your database. There are now two processes updating two data stores. A central tenet in distributed systems design is to anticipate and expect failure. Let’s imagine any of the following scenarios happens:</p>
+
+<ol>
+  <li>An Amazon AWS partial outage takes down one of your services but not the other.</li>
+  <li>One of your services becomes backed up due to high traffic, and no longer can service new requests in a timely manner.</li>
+  <li>A new deployment has introduced a data bug in a downstream API that your teams are rushing to fix, but will requiring manual reconciling with the data in the upstream system.</li>
+</ol>
+
+<p>How will you build your domain and data models to account for failures in each processing step? What would happen if you have one operation occur in one domain that depends on data that has not yet appeared in another part of the system? Can you design your data models (and database schema) to support independent updates without any dependencies? How will you handle the case when one domain action fails and the other completes?</p>
+
+<h3 id="first-approach-avoid-it-by-choosing-noncritical-paths-to-decouple-first">First approach: avoid it by choosing noncritical paths to decouple, first</h3>
+
+<p>If you are implementing an asynchronous, evented paradigm for the first time, I suggest you carefully begin decoupling boundaries with domain events only for events that lie outside the critical business domain path. Begin with some noncritical aspect of the system — for example, you may have a third party analytics tracking service that you must publish certain business events to. That would be a nice candidate to decouple from the main request process and move to an async path.</p>
+
+<h3 id="second-approach-enforce-transactional-consistency-within-the-same-processdomain-boundary">Second approach: enforce transactional consistency within the same process/domain boundary</h3>
+
+<p>Although we won’t discuss specifics in this article, if you must enforce transactional consistency in some part of your system (say, the charging of a credit card with the crediting of money to a user’s account) then I suggest that you perform those operations within the same bounded context and same process, leaning on transactional consistency guarantees provided by your database layer.</p>
+
+<h3 id="third-approach-embrace-it-with-eventual-consistency">Third approach: embrace it with eventual consistency</h3>
+
+<p>Alternatively, you may be able to lean on “eventual consistency” semantics with your data. Maybe it’s less important that your data squares away with itself immediately — maybe it’s more important that the data, at some guaranteed point in time — eventually lines up. It may be OK for some aspect of your data (e.g. notifications in a news feed) and may not be appropriate for other data (e.g. a bank account balance).</p>
+
+<p>You may need to fortify your system to ensure that data eventually becomes consistent. This may involve building out the following pieces of infrastructure.</p>
+
+<ol>
+  <li>Messages need to be durable — make sure your job enqueuing system does not drop messages, or at least has a failure mode to re-process them when (not if!) your system fails.</li>
+  <li>Your jobs should be designed to be idempotent, so they can be retried multiple times and result in the correct outcome.</li>
+  <li>You should easily be able to recover from bad data scenarios. Should a service go down, it should be able to replay messages, logs, or the consumer should have a queue of retry-able messages it can send.</li>
+  <li>Eventual consistency means that you may need an external process to verify consistency. You may be doing this sort of verification process in a data warehouse, or in a different software system that has a full view of all the data in your distributed system. Be sure that this sort of verification is able to reveal to you holes in the data, and provide actionable insights so you can fix them.</li>
+  <li>You will need to add monitoring and logging to measure the failure modes of the system. When errors spike, or messages fail to send (events fail to fire), you need to be alerted. Once alerted, your logging must be good enough to be able to trace the source and the data that each request is firing.</li>
+</ol>
+
+<p>The scale of this subject is large and is under active research in the field of computer science. A good book to pick up that discusses this topic is <a href="https://www.amazon.com/Service-Oriented-Design-Rails-Addison-Wesley-Professional/dp/0321659368">Service-Oriented Design with Ruby on Rails</a>. The popular <a href="http://www.enterpriseintegrationpatterns.com/">Enterprise Integration Patterns</a> book also has a great topic on consistency (and is accompanied by a very helpful <a href="http://www.enterpriseintegrationpatterns.com/patterns/conversation/EnsuringConsistencyIntro.html">online guide</a> as well).</p>
+
+			
+			
+		</div>
+	<footer>
+		
+
+
+		
+
+
+
+  
+		
+			Tagged under
+		
+    <a class='category' href='/category/ddd/'>ddd</a>, <a class='category' href='/category/microservices/'>microservices</a>, <a class='category' href='/category/rails/'>rails</a>
+	
+
+
+	
+	
+	</footer>
+	
+</article>
+<!-- END OF _includes/article.html -->
+
+	
+		
+		<!-- START OF _includes/article.html -->
+<article>
+	<header>
 		<h1><a href="/2016/06/24/migrating-to-phoenix-with-rails-session-sharing/">Rails, meet Phoenix: Migrating to Phoenix with Rails session sharing</a></h1>
 		<time>24 June 2016</time>
 	</header>
@@ -1493,105 +1588,6 @@ Postgres and PostGIS queries.</p>
 <!-- END OF _includes/article.html -->
 
 	
-		
-		<!-- START OF _includes/article.html -->
-<article>
-	<header>
-		<h1><a href="/2016/03/21/lossless-rate-limiting-with-rxjs/">Lossless rate limiting with RxJS</a></h1>
-		<time>21 March 2016</time>
-	</header>
-		<div class="content">
-			<p>Much of RxJS involves working with<br />
-<a href="http://reactivex.io/documentation/operators/backpressure.html">backpressure</a> - how to reconcile<br />
-streams that emit/process data at different rates, without overloading<br />
-the system. Much of that model is built with lossy handling in mind - it<br />
-makes sense that when your system is under duress, that you design your<br />
-streams to degrade gracefully (e.g. drop certain events, or rate limit<br />
-them by chunking into windows, etc).</p>
-
-<p>However, there are times when it is appropriate to have a lossless<br />
-approach to backpressure - e.g., to store every chunk of data that comes<br />
-through a stream in memory, and not drop things. These use cases may<br />
-come about when:</p>
-
-<ul>
-  <li>You have a short-lived, or bounded set of data you know will come over<br />
-the pipe. You understand the bounds of the data that will ever come over<br />
-the pipe.</li>
-  <li>You have a processing script you want to run, which is not part of a<br />
-large system.</li>
-  <li>You have a honkin’ large system that can handle the load.</li>
-</ul>
-
-<p>In my case, I had a script that called the Google Geocoding API for a<br />
-set of GPS coordinates. Now for a set of several hundred coordinates, I<br />
-would end up calling the API several hundred times all at once with this<br />
-naive implementation:</p>
-
-<figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-</pre></td><td class="code"><pre><code class="javascript"><span class="line"><span class="c1">// address$: [ &quot;1234 Widget Way, Promiseland, WV&quot; ] -- [...] -- [...]</span>
-</span><span class="line"><span class="kr">const</span> <span class="nx">geocoded$</span> <span class="o">=</span> <span class="nx">addresses$</span>
-</span><span class="line"><span class="p">.</span><span class="nx">flatMap</span><span class="p">(</span><span class="nx">address</span> <span class="o">=&gt;</span> <span class="nx">Rx</span><span class="p">.</span><span class="nx">Observable</span><span class="p">.</span><span class="nx">fromPromise</span><span class="p">(</span><span class="nx">callGoogleGeocodingService</span><span class="p">(</span><span class="nx">address</span><span class="p">)))</span>
-</span><span class="line"><span class="c1">// geocoded$: [ { latitude: 89.99, longitude: 90.00, ... } ] -- [...] -- [...]</span>
-</span></code></pre></td></tr></table></div></figure>
-
-<p>I searched all over for a lossless throttling mechanism, but all I could<br />
-find was references to RxJS’s lossy <a href="">throttle</a> behavior.</p>
-
-<p>Other frameworks, like <a href="https://github.com/baconjs/bacon.js/#observable-bufferingthrottle">Bacon.js’s bufferingThrottle()</a> and <a href="http://highlandjs.org/#ratelimit">Highland.js ratelimit()</a> seemed attractive. Where was RxJS’s equivalent?</p>
-
-<p>Thanks to a <a href="http://stackoverflow.com/questions/34955842/rate-limiting-http-calls-made-by-rxjs">helpful StackOverflow post</a>,<br />
-I found the answer: the use of<br />
-<a href="https://github.com/Reactive-Extensions/RxJS/blob/master/doc/api/core/operators/concatmap.md">concatMap()</a><br />
-and<br />
-<a href="https://github.com/Reactive-Extensions/RxJS/blob/master/doc/api/core/operators/delay.md">delay()</a><br />
-forces the incoming stream to execute serially over artificial time delayed streams.</p>
-
-<figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-</pre></td><td class="code"><pre><code class="javascript"><span class="line"><span class="kr">const</span> <span class="nx">geocoded$</span> <span class="o">=</span> <span class="nx">addresses$</span>
-</span><span class="line"><span class="p">.</span><span class="nx">concatMap</span><span class="p">(</span><span class="nx">address</span> <span class="o">=&gt;</span> <span class="nx">Rx</span><span class="p">.</span><span class="nx">Observable</span><span class="p">.</span><span class="nx">just</span><span class="p">(</span><span class="nx">address</span><span class="p">).</span><span class="nx">delay</span><span class="p">(</span><span class="nx">TIME_INTERVAL</span><span class="p">))</span>
-</span><span class="line"><span class="p">.</span><span class="nx">flatMap</span><span class="p">(</span><span class="nx">address</span> <span class="o">=&gt;</span> <span class="nx">Rx</span><span class="p">.</span><span class="nx">Observable</span><span class="p">.</span><span class="nx">fromPromise</span><span class="p">(</span><span class="nx">callGoogleGeocodingService</span><span class="p">(</span><span class="nx">address</span><span class="p">)))</span>
-</span></code></pre></td></tr></table></div></figure>
-
-<p>Thanks to:</p>
-
-<ul>
-  <li>http://stackoverflow.com/questions/34955842/rate-limiting-http-calls-made-by-rxjs</li>
-  <li>http://stackoverflow.com/questions/30876361/rxjs-rate-limit-requests-per-second-and-concurrency?rq=1</li>
-</ul>
-
-			
-			
-		</div>
-	<footer>
-		
-
-
-		
-
-
-
-  
-		
-			Tagged under
-		
-    <a class='category' href='/category/frp/'>frp</a>, <a class='category' href='/category/rate-limiting/'>rate limiting</a>, <a class='category' href='/category/reactive-programming/'>reactive programming</a>, <a class='category' href='/category/rxjs/'>rxjs</a>
-	
-
-
-	
-	
-	</footer>
-	
-</article>
-<!-- END OF _includes/article.html -->
-
-	
 	
 <div class="pagination">
 	
@@ -1606,7 +1602,7 @@ forces the incoming stream to execute serially over artificial time delayed stre
 
 
 			<footer>
-				Copyright &copy; 2016
+				Copyright &copy; 2017
 
 	Andrew Hao
 

@@ -66,6 +66,105 @@
 		<!-- START OF _includes/article.html -->
 <article>
 	<header>
+		<h1><a href="/2012/01/20/ohm-gotchas/">Ohm gotchas</a></h1>
+		<time>20 January 2012</time>
+	</header>
+		<div class="content">
+			<p>Here’s a list of things that have been annoying, or at least a bit frustrating using <a href="http://ohm.keyvalue.org">Ohm</a>, the Redis ORM, in a Rails app. Beware to those who assume Ohm is ActiveRecord in new clothes. It is, but it’s not:</p>
+
+<h2 id="crud">CRUD</h2>
+
+<p>Don’t make the mistake of treating your Ohm objects like AR:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>ActiveRecord</th>
+      <th>Ohm</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>destroy            | </code>delete`</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code>self.find(id)</code></td>
+      <td><code>self[id]</code></td>
+    </tr>
+    <tr>
+      <td><code>update_attributes</code></td>
+      <td><code>update</code></td>
+    </tr>
+    <tr>
+      <td><code>create</code></td>
+      <td><code>create</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Also note that Ohm’s <code>update_attributes</code> behaves differently from Rails` – it doesn’t persist the updates to DB. That owned me for the good part of the day.</p>
+
+<h2 id="callbacks">Callbacks</h2>
+
+<p>Thankfully, these are ActiveRecord-like with the addition of <a href="http://cyx.github.com/ohm-contrib/doc/"><code>ohm/contrib</code></a>.</p>
+
+<h2 id="associations">Associations</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>ActiveRecord</th>
+      <th>Ohm</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>has_a</code> or <code>belongs_to</code></td>
+      <td><code>reference</code></td>
+    </tr>
+    <tr>
+      <td><code>has_many</code></td>
+      <td><code>collection</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Read <a href="http://blog.citrusbyte.com/2010/04/12/mixing-ohm-with-activerecord-datamapper-and-sequel/">this article</a> if you’re considering creating associations from AR objects to Ohm objects and the other way ‘round.</p>
+
+			
+			
+		</div>
+	<footer>
+		
+
+
+		
+			andrewhao 
+		
+
+
+
+  
+		
+			on
+		
+    <a class='category' href='/category/andrew-2-dot-0/'>andrew 2.0</a>, <a class='category' href='/category/programming/'>programming</a>, <a class='category' href='/category/software/'>software</a>
+	
+
+
+	
+	
+	</footer>
+	
+</article>
+<!-- END OF _includes/article.html -->
+
+	
+		
+		<!-- START OF _includes/article.html -->
+<article>
+	<header>
 		<h1><a href="/2011/11/21/now-at-blurb/">Now at Blurb</a></h1>
 		<time>21 November 2011</time>
 	</header>
@@ -347,49 +446,6 @@
 <!-- END OF _includes/article.html -->
 
 	
-		
-		<!-- START OF _includes/article.html -->
-<article>
-	<header>
-		<h1><a href="/2011/06/15/brute-labs-ux-project-studentsconnect/">BRUTE LABS UX project: StudentsConnect</a></h1>
-		<time>15 June 2011</time>
-	</header>
-		<div class="content">
-			<p>I’m on a team with <a href="http://www.brutelabs.org">BRUTE LABS</a>, a volunteer-led design agency working on StudentsConnect, a prototype project making chatroulette-style interactions connecting students from the global North and South. Here’s a UX flow we worked on:</p>
-
-<p><strong><a href="http://www.slideshare.net/andrewhao/brute-labs-wireframes">BRUTE LABS - StudentsConnect UX</a></strong></p>
-
-<p>View more <a href="http://www.slideshare.net/">presentations</a> from <a href="http://www.slideshare.net/andrewhao">Andrew Hao</a></p>
-
-			
-			
-		</div>
-	<footer>
-		
-
-
-		
-			andrewhao 
-		
-
-
-
-  
-		
-			on
-		
-    <a class='category' href='/category/design/'>design</a>, <a class='category' href='/category/interfaces/'>interfaces</a>, <a class='category' href='/category/ux/'>ux</a>
-	
-
-
-	
-	
-	</footer>
-	
-</article>
-<!-- END OF _includes/article.html -->
-
-	
 	
 <div class="pagination">
 	
@@ -406,7 +462,7 @@
 
 
 			<footer>
-				Copyright &copy; 2016
+				Copyright &copy; 2017
 
 	Andrew Hao
 

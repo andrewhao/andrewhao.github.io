@@ -66,6 +66,131 @@
 		<!-- START OF _includes/article.html -->
 <article>
 	<header>
+		<h1><a href="/2015/04/30/building-gpx-stats-through-frp-principles-on-bacon-dot-js/">Building GPX stats through FRP principles with Bacon.js</a></h1>
+		<time>30 April 2015</time>
+	</header>
+		<div class="content">
+			<p>With my current fascination with <a href="http://github.com/andrewhao/stressfactor">tracking workouts and location-based-activities</a>, I have been interested in how I might be able to rewrite some of my stats logic with FRP principles.</p>
+
+<h3 id="what-is-frp">What is FRP?</h3>
+
+<p>FRP, or Functional Reactive Programming, is often defined as “functional programming over values that change over time”. It uses functional composition for streams of data that may appear in an infinite stream of data for some far indeterminate future - these types of use cases are served well by FRP which <a href="http://en.wikipedia.org/wiki/Functional_reactive_programming">“(simplifies) these problems by explicitly modeling time”</a>.</p>
+
+<h3 id="gps---your-location-varied-over-time">GPS - your location, varied over time.</h3>
+
+<p>A great application of this would be a workout. Let’s say I wanted to build an app that received realtime updates on a person’s position. Say the app was a Node server that received this JSON blob from a web API as a location update:</p>
+
+<figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+</pre></td><td class="code"><pre><code class="json"><span class="line"><span class="p">{</span> <span class="err">&#39;lat&#39;:</span> <span class="err">29.192414,</span>
+</span><span class="line">  <span class="err">&#39;lon&#39;:</span> <span class="err">148.113241,</span>
+</span><span class="line">  <span class="err">&#39;ele&#39;:</span> <span class="err">122.1,</span>
+</span><span class="line">  <span class="err">&#39;time&#39;:</span> <span class="err">&#39;2015-04-18T13:54:56Z&#39;</span> <span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+<p>Say that some time later, the API receives this JSON blob:</p>
+
+<figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+</pre></td><td class="code"><pre><code class="json"><span class="line"><span class="p">{</span> <span class="err">&#39;lat&#39;:</span> <span class="err">29.192424,</span>
+</span><span class="line">  <span class="err">&#39;lon&#39;:</span> <span class="err">148.113251,</span>
+</span><span class="line">  <span class="err">&#39;ele&#39;:</span> <span class="err">123.1,</span>
+</span><span class="line">  <span class="err">&#39;time&#39;:</span> <span class="err">&#39;2015-04-18T13:55:26Z&#39;</span> <span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+<p>So we have these data points, that the user has moved <code>+0.00001</code> latitude points and <code>+0.00001</code> longitude points, climbing a total of <code>+1.0</code> meters, over a period of <code>30</code> seconds.</p>
+
+<h4 id="exercise-get-my-instantaneous-velocity">Exercise: Get my instantaneous velocity</h4>
+
+<p>If we performed this imperatively, we would write it something like this:</p>
+
+<figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+</pre></td><td class="code"><pre><code class="javascript"><span class="line"><span class="kd">var</span> <span class="nx">locations</span> <span class="o">=</span> <span class="p">[{</span> <span class="cm">/*json*/</span> <span class="p">},</span> <span class="p">{</span> <span class="cm">/*json*/</span> <span class="p">}</span> <span class="cm">/*, ...*/</span><span class="p">];</span>
+</span><span class="line"><span class="kd">var</span> <span class="nx">last</span> <span class="o">=</span> <span class="nx">locations</span><span class="p">[</span><span class="nx">locations</span><span class="p">.</span><span class="nx">length</span><span class="o">-</span><span class="mi">1</span><span class="p">];</span>
+</span><span class="line"><span class="kd">var</span> <span class="nx">secondToLast</span> <span class="o">=</span> <span class="nx">locations</span><span class="p">[</span><span class="nx">locations</span><span class="p">.</span><span class="nx">length</span><span class="o">-</span><span class="mi">2</span><span class="p">];</span>
+</span><span class="line"><span class="kd">var</span> <span class="nx">timeDelta</span> <span class="o">=</span> <span class="nx">last</span><span class="p">.</span><span class="nx">time</span> <span class="o">-</span> <span class="nx">secondToLast</span><span class="p">.</span><span class="nx">time</span><span class="p">;</span>
+</span><span class="line"><span class="kd">var</span> <span class="nx">distanceDelta</span> <span class="o">=</span> <span class="nx">getDistance</span><span class="p">(</span><span class="nx">last</span><span class="p">.</span><span class="nx">lon</span><span class="p">,</span> <span class="nx">last</span><span class="p">.</span><span class="nx">lat</span><span class="p">,</span> <span class="nx">secondToLast</span><span class="p">.</span><span class="nx">lon</span><span class="p">,</span> <span class="nx">secondToLast</span><span class="p">.</span><span class="nx">lat</span><span class="p">);</span>
+</span><span class="line"><span class="kd">var</span> <span class="nx">velocity</span> <span class="o">=</span> <span class="nx">distanceDelta</span> <span class="o">/</span> <span class="nx">timeDelta</span><span class="p">;</span>
+</span><span class="line"><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">velocity</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+<p>With FRP, it might look more like this:</p>
+
+<figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+</pre></td><td class="code"><pre><code class="javascript"><span class="line"><span class="kd">var</span> <span class="nx">locationStream</span> <span class="o">=</span> <span class="p">[{</span> <span class="cm">/*json*/</span> <span class="p">},</span> <span class="p">{</span> <span class="cm">/*json*/</span> <span class="p">}</span> <span class="cm">/*, ...some JSON objects that might appear in the future */</span><span class="p">];</span>
+</span><span class="line"><span class="nx">locationStream</span><span class="p">.</span><span class="nx">slidingWindow</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+</span><span class="line">              <span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">pairs</span><span class="p">)</span> <span class="p">{</span>
+</span><span class="line">                <span class="kd">var</span> <span class="nx">timeDelta</span> <span class="o">=</span> <span class="nx">pairs</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="nx">time</span> <span class="o">-</span> <span class="nx">pairs</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">time</span><span class="p">;</span>
+</span><span class="line">                <span class="kd">var</span> <span class="nx">distanceDelta</span> <span class="o">=</span> <span class="nx">getDistance</span><span class="p">(</span><span class="nx">pairs</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="nx">lon</span><span class="p">,</span> <span class="nx">pairs</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="nx">lat</span><span class="p">,</span> <span class="nx">pairs</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">lon</span><span class="p">,</span> <span class="nx">pairs</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">lat</span><span class="p">);</span>
+</span><span class="line">                <span class="k">return</span> <span class="nx">distanceDelta</span> <span class="o">/</span> <span class="nx">timeDelta</span>
+</span><span class="line">              <span class="p">})</span>
+</span><span class="line">              <span class="p">.</span><span class="nx">onValue</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">velocity</span><span class="p">)</span> <span class="p">{</span>
+</span><span class="line">                <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">velocity</span><span class="p">);</span>
+</span><span class="line">              <span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+<p>There is a key difference that is not easily demonstrated here - that the former imperative example requires that all JSON arrays be materialized at once - via db query, in-memory store, etc. It doesn’t account for change in time.</p>
+
+<p>However, the latter functional example accounts for changing values of time as they appear over the stream - as soon as a new value shows up in the stream, the velocity is changed instantly.</p>
+
+<h3 id="some-more-location-based-experiments-rxlocation">Some more location-based experiments: rxlocation</h3>
+
+<p>I wrote up a library to parse various facts from a changing stream of GPS events, from instantaneous velocity, average velocity, moving/stopped status, etc.</p>
+
+<p>I investigated different reactive frameworks, mainly <a href="https://github.com/Reactive-Extensions/RxJS/">RxJS</a> and <a href="https://github.com/baconjs/bacon.js/">Bacon.js</a>. My takeaways were that RxJS does everything and the kitchen sink, but I got lost trying to reconcile Node streams with RxJS cold streams. Bacon.js just seemed to work for me, out of the box. I’m still learning, so I hope to have a better understanding of the core issues here.</p>
+
+<p>You can check it out here: <a href="https://github.com/andrewhao/rxlocation">rxlocation</a>.</p>
+
+			
+			
+		</div>
+	<footer>
+		
+
+
+		
+
+
+
+  
+		
+			Tagged under
+		
+    <a class='category' href='/category/functional-reactive-programming/'>functional reactive programming</a>, <a class='category' href='/category/javascript/'>javascript</a>, <a class='category' href='/category/node/'>node</a>
+	
+
+
+	
+	
+	</footer>
+	
+</article>
+<!-- END OF _includes/article.html -->
+
+	
+		
+		<!-- START OF _includes/article.html -->
+<article>
+	<header>
 		<h1><a href="/2015/03/19/docker-rails-and-docker-compose-in-your-development-workflow/">Docker, Rails, and Docker Compose in your development workflow</a></h1>
 		<time>19 March 2015</time>
 	</header>
@@ -848,69 +973,6 @@ each container. You should see output that indicates that both our <code>web</co
 <!-- END OF _includes/article.html -->
 
 	
-		
-		<!-- START OF _includes/article.html -->
-<article>
-	<header>
-		<h1><a href="/2014/11/01/conways-law-for-humans/">Conway's Law for humans</a></h1>
-		<time>01 November 2014</time>
-	</header>
-		<div class="content">
-			<p>If you’re familiar with <a href="http://en.wikipedia.org/wiki/Conway's_law">Conway’s Law</a>, it states:</p>
-
-<blockquote>
-  <p>Any organization that designs a system (defined broadly) will produce a design whose structure is a copy of the organization’s communication structure.</p>
-</blockquote>
-
-<p>Or in layman’s terms, your software systems reflect the structure of the teams that create them.</p>
-
-<p>Think about it – do your teams prefer to do everything themselves? Or do they ask for help from other teams? In general, as a team, we prefer to have as little dependencies as possible. The work that the engineer has to do to send an email, or wait for work from another team (like an API change or design change) is usually time-consuming and burdensome. Therefore, it is not (usually) in the team’s best interests to cross silos and ask for help from others. Your teams, if they look like this, tend to work in codebases that are generally monolithic and wholly owned by the team.</p>
-
-<p>It’s not wrong, or it’s not bad, it’s just a sociological observation. This is why companies like Spotify, Netflix or Amazon have embraced Conway’s Law and changed their organizations to match the  microservice-driven architecture they want. Small teams work on small codebases and are empowered to make the changes they need.</p>
-
-<h3 id="a-corollary-and-some-observations-about-your-company-culture">A corollary and some observations about your company culture.</h3>
-
-<p>Here’s a corollary, which I’ve heard in various shapes and forms. Paraphrased:</p>
-
-<blockquote>
-  <p>An organization’s structure tends to pattern after its leaders’ communication patterns.</p>
-</blockquote>
-
-<p>I’ve been pushing an effort to unify our company’s frontend styles and UX into a unified framework in an attempt to standardize the look and feel of the site.</p>
-
-<p>However, in working with our designers, I realized that they weren’t talking to each other. Designers in one department had opposing design aesthetics from designers in another. This was causing problems in the code, because the frontend framework itself was becoming fragmented. You could see it in the code. Version A of the styleguide went into Department A’s products. Version B of the styleguide went to Department B’s products.</p>
-
-<p>In this case, as we kept rolling out this framework, I realized our organization had no single owner for the design language of the site. Why? I had to wonder if it had to do with some deeper communication issues between the heads of the two departments.</p>
-
-<p>Code can be a good canary to organizational issues, and call out larger human issues at hand. In this case, Conway’s Law helps us root out and bring into the light structural concerns. Leaders can pay attention to these concerns and check themselves to become more open communicators.</p>
-
-			
-			
-		</div>
-	<footer>
-		
-
-
-		
-
-
-
-  
-		
-			Tagged under
-		
-    <a class='category' href='/category/conways-law/'>conway's law</a>, <a class='category' href='/category/engineering/'>engineering</a>, <a class='category' href='/category/management/'>management</a>, <a class='category' href='/category/management-theory/'>management theory</a>
-	
-
-
-	
-	
-	</footer>
-	
-</article>
-<!-- END OF _includes/article.html -->
-
-	
 	
 <div class="pagination">
 	
@@ -927,7 +989,7 @@ each container. You should see output that indicates that both our <code>web</co
 
 
 			<footer>
-				Copyright &copy; 2016
+				Copyright &copy; 2017
 
 	Andrew Hao
 

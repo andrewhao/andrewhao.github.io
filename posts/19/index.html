@@ -66,6 +66,73 @@
 		<!-- START OF _includes/article.html -->
 <article>
 	<header>
+		<h1><a href="/2007/03/28/verilogical/">Verilogical</a></h1>
+		<time>28 March 2007</time>
+	</header>
+		<div class="content">
+			<p>Oftentimes in <a href="http://en.wikipedia.org/wiki/Verilog">Verilog</a> code, we build testbenches (test fixtures). A common thing to do is to instantiate a module and plug in wires of the same names.</p>
+
+<p>Now a common hack is to copy and paste the module declaration line (the “prototype,” if you will). The prototype looks like this:</p>
+
+<blockquote>
+  <p>module 	Foo(	bar,<br />&lt;/br&gt;		baz,<br />&lt;/br&gt;		…<br />&lt;/br&gt;	);	<br />&lt;/br&gt;</p>
+</blockquote>
+
+<p>The HDL synthesizer can correctly wire inputs, regardless of instantiated order, by surrounding the names of the local wires with the input names as declared in the prototype in a format such as:</p>
+
+<blockquote>
+  <p>Foo foo_instance (	.bar(bar),<br />&lt;/br&gt;			.baz(baz),<br />&lt;/br&gt;			…<br />&lt;/br&gt;		);<br />&lt;/br&gt;</p>
+</blockquote>
+
+<p>So to do so is a rather painful matter of adding a period before the input name, copy and pasting the input name and pasting it after the name, bracketed by parentheses.</p>
+
+<p>But what do you do if your module has thirty inputs? Our previous solution was to surrender our wrists to inevitable Repetitive Stress Injuries. Today, I realized that I should have used a freakin’ elementary <a href="http://en.wikipedia.org/wiki/Regular_expression">regular expression</a>.</p>
+
+<blockquote>
+  <p>Search:		(.*),<br />&lt;/br&gt;Replace:	.$1($1),<br />&lt;/br&gt;</p>
+</blockquote>
+
+<p>Wah-lah! I’m kicking myself for not thinking of this earlier. And it has taken me 10 minutes to tell you how I saved forty-five seconds and my poor wrists. Anything to avoid more work (shh, don’t tell Alex) :)</p>
+
+<p><a href="http://www.xanga.com/Amazon/Click.aspx?asin=B00004XONN&amp;user=378399"><img src="http://ec1.images-amazon.com/images/P/B00004XONN.01._SCTHUMBZZZ_.jpg" alt="" /></a><br />
+<strong>Currently Listening</strong>  <br />
+<a href="http://www.xanga.com/Amazon/Click.aspx?asin=B00004XONN&amp;user=378399"><strong>Kid A</strong></a>  <br />
+By Radiohead  <br />
+<a href="http://www.xanga.com/Amazon/Click.aspx?asin=B00004XONN&amp;user=378399&amp;related=1">see related</a></p>
+
+			
+			
+		</div>
+	<footer>
+		
+
+
+		
+			andrewhao 
+		
+
+
+
+  
+		
+			on
+		
+    <a class='category' href='/category/andrew-2-dot-0/'>andrew 2.0</a>
+	
+
+
+	
+	
+	</footer>
+	
+</article>
+<!-- END OF _includes/article.html -->
+
+	
+		
+		<!-- START OF _includes/article.html -->
+<article>
+	<header>
 		<h1><a href="/2007/03/10/sensations/">Sensations</a></h1>
 		<time>10 March 2007</time>
 	</header>
@@ -275,45 +342,6 @@ understanding of our neighbors.</p>
 <!-- END OF _includes/article.html -->
 
 	
-		
-		<!-- START OF _includes/article.html -->
-<article>
-	<header>
-		<h1><a href="/2007/02/19/sensations-i/">Sensations I</a></h1>
-		<time>19 February 2007</time>
-	</header>
-		<div class="content">
-			<p><img src="http://www.g9labs.com/img/blogart/never-ending.jpg" alt="never-ending" /></p>
-
-			
-			
-		</div>
-	<footer>
-		
-
-
-		
-			andrewhao 
-		
-
-
-
-  
-		
-			on
-		
-    <a class='category' href='/category/andrew-2-dot-0/'>andrew 2.0</a>
-	
-
-
-	
-	
-	</footer>
-	
-</article>
-<!-- END OF _includes/article.html -->
-
-	
 	
 <div class="pagination">
 	
@@ -330,7 +358,7 @@ understanding of our neighbors.</p>
 
 
 			<footer>
-				Copyright &copy; 2016
+				Copyright &copy; 2017
 
 	Andrew Hao
 
