@@ -68,40 +68,23 @@
 		<time>23 June 2016</time>
 	</header>
 		<div class="content">
-			<p>One common pattern in Domain-Driven Design is the use of<br />
-publish/subscribe messaging to communicate between domains. When<br />
-<a href="http://martinfowler.com/eaaDev/DomainEvent.html">Domain Events</a> are created from within a domain, other domains are<br />
-able to subscribe to these events and take action within their own<br />
-domains, respectively.</p>
+			<p>One common pattern in Domain-Driven Design is the use of publish/subscribe messaging to communicate between domains. When <a href="http://martinfowler.com/eaaDev/DomainEvent.html">Domain Events</a> are created from within a domain, other domains are able to subscribe to these events and take action within their own domains, respectively.</p>
 
-<p>This is not a common pattern in Rails, particularly because of Ruby’s<br />
-lack of language support for functional programming paradigms that exist<br />
-in other languages. However, with a nifty framework and the help of<br />
-Sidekiq, we can get just a little bit closer.</p>
+<p>This is not a common pattern in Rails, particularly because of Ruby’s lack of language support for functional programming paradigms that exist in other languages. However, with a nifty framework and the help of Sidekiq, we can get just a little bit closer.</p>
 
 <h3 id="what-is-a-domain-event">What is a Domain Event?</h3>
 
-<p>A domain event is a recorded property in the system that tracks an<br />
-action that the system performs, and the factors/properties that lead to<br />
-its creation.</p>
+<p>A domain event is a recorded property in the system that tracks an action that the system performs, and the factors/properties that lead to its creation.</p>
 
-<p>In the following examples, we are going to use the <a href="https://github.com/krisleech/wisper">Wisper</a> gem to<br />
-implement domain events in our sample <a href="http://github.com/andrewhao/delorean">Delorean</a> app.</p>
+<p>In the following examples, we are going to use the <a href="https://github.com/krisleech/wisper">Wisper</a> gem to implement domain events in our sample <a href="http://github.com/andrewhao/delorean">Delorean</a> app.</p>
 
-<p>Imagine that we are writing an endpoint that our users will hit,<br />
-indicating that they want to hail a time-traveling cab. Now the logic to<br />
-hail a cab is rather complicated and lives in an entirely different area<br />
-of the codebase, perhaps even in another application. How should we call<br />
-the other code and ensure that our code is cleanly decoupled?</p>
+<p>Imagine that we are writing an endpoint that our users will hit, indicating that they want to hail a time-traveling cab. Now the logic to hail a cab is rather complicated and lives in an entirely different area of the codebase, perhaps even in another application. How should we call the other code and ensure that our code is cleanly decoupled?</p>
 
-<p>With our Domain-Driven powers, we’ve been smart enough to segregate our code into different<br />
-subdomains and bounded contexts,<br />
-denoted by these two Ruby modules <code>Ridesharing</code> and <code>DriverRouting</code>.</p>
+<p>With our Domain-Driven powers, we’ve been smart enough to segregate our code into different subdomains and bounded contexts, denoted by these two Ruby modules <code>Ridesharing</code> and <code>DriverRouting</code>.</p>
 
 <h2 id="example-1-in-process-pub-sub-event-modeling-with-a-service-object">Example 1: In-process pub-sub event modeling, with a service object.</h2>
 
-<p>A simple way to use Wisper is to use it to implement your service<br />
-objects with Wisper, calling the service from the controller.</p>
+<p>A simple way to use Wisper is to use it to implement your service objects with Wisper, calling the service from the controller.</p>
 
 <figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
@@ -135,11 +118,7 @@ objects with Wisper, calling the service from the controller.</p>
 </span><span class="line"><span class="k">end</span>
 </span></code></pre></td></tr></table></div></figure>
 
-<p>Note that the <code>HailDelorean</code> class has powers of event subscriptions<br />
-now. Our calling code does not have to concern itself with the<br />
-implementation details of the <code>HailDelorean</code> service - it merely needs<br />
-to register handlers for the two possible outcomes, <code>hailed</code> and<br />
-<code>could_not_hail</code>. Here’s how the service class is implemented:</p>
+<p>Note that the <code>HailDelorean</code> class has powers of event subscriptions now. Our calling code does not have to concern itself with the implementation details of the <code>HailDelorean</code> service - it merely needs to register handlers for the two possible outcomes, <code>hailed</code> and <code>could_not_hail</code>. Here’s how the service class is implemented:</p>
 
 <figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
@@ -183,8 +162,7 @@ to register handlers for the two possible outcomes, <code>hailed</code> and<br /
 
 <h3 id="handling-side-effects-in-subscriber-classes">Handling side effects in subscriber classes</h3>
 
-<p>Other side-effects can subscribe to the <code>HailDelorean</code> events. Let’s say we want to fire an event<br />
-to Segment analytics tracking. I can create a plain Ruby object that simply needs to implement a method with the same name as the event.</p>
+<p>Other side-effects can subscribe to the <code>HailDelorean</code> events. Let’s say we want to fire an event to Segment analytics tracking. I can create a plain Ruby object that simply needs to implement a method with the same name as the event.</p>
 
 <p>Let’s implement <code>hailed</code> and <code>could_not_hail</code> methods on this subscriber class:</p>
 
@@ -236,8 +214,7 @@ to Segment analytics tracking. I can create a plain Ruby object that simply need
 </span><span class="line"><span class="k">end</span>
 </span></code></pre></td></tr></table></div></figure>
 
-<p>OK, that was a little awkward, doing all that wiring up in the controller. What if we did the wiring globally,<br />
-within an app initializer?</p>
+<p>OK, that was a little awkward, doing all that wiring up in the controller. What if we did the wiring globally, within an app initializer?</p>
 
 <figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
@@ -255,12 +232,9 @@ within an app initializer?</p>
 
 <h2 id="example-2-asynchronous-events-with-subscription-handlers-and-sidekiq">Example 2: Asynchronous events with subscription handlers and Sidekiq</h2>
 
-<p>Here’s the real power of Wisper - we can decouple our application domain responsibilities by modeling<br />
-effects as subscription objects and do them out-of-band of the primary web request thread.</p>
+<p>Here’s the real power of Wisper - we can decouple our application domain responsibilities by modeling effects as subscription objects and do them out-of-band of the primary web request thread.</p>
 
-<p>Note that with the <a href="https://github.com/krisleech/wisper-sidekiq"><code>wisper-sidekiq</code></a> gem, all subscriptions<br />
-given with an <code>async: true</code> option flag will automatically execute in an external thread as a Sidekiq job.<br />
-Let’s take advantage of that now.</p>
+<p>Note that with the <a href="https://github.com/krisleech/wisper-sidekiq"><code>wisper-sidekiq</code></a> gem, all subscriptions given with an <code>async: true</code> option flag will automatically execute in an external thread as a Sidekiq job. Let’s take advantage of that now.</p>
 
 <figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
@@ -372,37 +346,23 @@ Let’s take advantage of that now.</p>
 </span><span class="line"><span class="no">Wisper</span><span class="o">.</span><span class="n">subscribe</span><span class="p">(</span><span class="no">AnalyticsListener</span><span class="p">,</span> <span class="ss">scope</span><span class="p">:</span> <span class="s2">&quot;Ridesharing::NotifyPassengerWithDriverStatus&quot;</span><span class="p">,</span> <span class="s2">&quot;DriverRouting::FindDriver&quot;</span><span class="o">]</span><span class="p">,</span> <span class="ss">async</span><span class="p">:</span> <span class="kp">true</span><span class="p">)</span>
 </span></code></pre></td></tr></table></div></figure>
 
-<p>Now our messages between our domains are pulled out of the main request thread, and operate in an asynchronous<br />
-fashion with Sidekiq as the runner.</p>
+<p>Now our messages between our domains are pulled out of the main request thread, and operate in an asynchronous fashion with Sidekiq as the runner.</p>
 
-<p>Code in our domains are kept clean - note that there are no direct references to the other subdomains within each<br />
-subdomain. Our app more cleanly segregates the responsibilities between each app, heavy workloads are naturally<br />
-balanced as they move to worker threads.</p>
+<p>Code in our domains are kept clean - note that there are no direct references to the other subdomains within each subdomain. Our app more cleanly segregates the responsibilities between each app, heavy workloads are naturally balanced as they move to worker threads.</p>
 
 <h2 id="caveats-beware-of-overbuilding">Caveats: Beware of overbuilding</h2>
 
-<p>If you are on a small app, you probably should go with approach #1. The weight of indirection<br />
-can be a cognitive load on development, unless you truly need to build async code in #2. The overhead and<br />
-conceptual complexities of the approach can only be justified with large codebases, or in apps<br />
-where a domain-centric view (and segregation) of code is present.</p>
+<p>If you are on a small app, you probably should go with approach #1. The weight of indirection can be a cognitive load on development, unless you truly need to build async code in #2. The overhead and conceptual complexities of the approach can only be justified with large codebases, or in apps where a domain-centric view (and segregation) of code is present.</p>
 
 <h2 id="caveats-event-subscriptions-can-be-a-tangled-mess">Caveats: Event subscriptions can be a tangled mess</h2>
 
-<p>Note that the act of wiring can quickly fan out into a spidery mess of handlers - you could even further<br />
-decouple your handlers by modeling a global event bus as a publisher, and having each domain tap into the bus’ events<br />
-and figure out how to handle each event on its own.</p>
+<p>Note that the act of wiring can quickly fan out into a spidery mess of handlers - you could even further decouple your handlers by modeling a global event bus as a publisher, and having each domain tap into the bus’ events and figure out how to handle each event on its own.</p>
 
 <h2 id="caveats-transactional-consistency">Caveats: transactional consistency!</h2>
 
-<p>If you implement this asynchronously, you’ll have to think about how to<br />
-deal with transactional consistency. Can you design your data models<br />
-(and database schema) to support independent updates without any<br />
-dependencies? How will you handle<br />
-the case when one domain action fails and the other completes?</p>
+<p>If you implement this asynchronously, you’ll have to think about how to deal with transactional consistency. Can you design your data models (and database schema) to support independent updates without any dependencies? How will you handle the case when one domain action fails and the other completes?</p>
 
-<p>You may have to roll your own two-phase commit here, the specifics of<br />
-which I won’t delve into. However, for most of our applications, we may<br />
-want to skip the asynchronous and keep our events synchronous.</p>
+<p>You may have to roll your own two-phase commit here, the specifics of which I won’t delve into. However, for most of our applications, we may want to skip the asynchronous and keep our events synchronous.</p>
 
 			
 			

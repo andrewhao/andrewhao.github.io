@@ -169,8 +169,7 @@ forces the incoming stream to execute serially over artificial time delayed stre
 		<time>17 February 2016</time>
 	</header>
 		<div class="content">
-			<p>One of the confusing aspects about working with streams is diving into<br />
-Rx operators that take a stream and fan out into multiple streams.</p>
+			<p>One of the confusing aspects about working with streams is diving into Rx operators that take a stream and fan out into multiple streams.</p>
 
 <p>Is your head exploding yet?</p>
 
@@ -179,13 +178,9 @@ Rx operators that take a stream and fan out into multiple streams.</p>
 <p>Let’s dive into a problem I ran into while working on a personal<br />
 project:</p>
 
-<p>The task at hand is to take a list of GPS moving point data and<br />
-partition the group data into multiple clusters of points, count up each<br />
-group, then return the aggregate stats. As a cyclist is moving, I want<br />
-to know how often they are moving at that specific velocity (speed).</p>
+<p>The task at hand is to take a list of GPS moving point data and partition the group data into multiple clusters of points, count up each group, then return the aggregate stats. As a cyclist is moving, I want to know how often they are moving at that specific velocity (speed).</p>
 
-<p>Our weapon of choice is the <a href="http://reactivex.io/documentation/operators/groupby.html">RxJS groupBy() function</a>,<br />
-which groups like stream values based on a key value you define.</p>
+<p>Our weapon of choice is the <a href="http://reactivex.io/documentation/operators/groupby.html">RxJS groupBy() function</a>, which groups like stream values based on a key value you define.</p>
 
 <p><a href="http://reactivex.io/documentation/operators/groupby.html"><img src="http://reactivex.io/documentation/operators/images/groupBy.c.png" alt="Image of groupBy() at work, with marbles." /></a></p>
 
@@ -197,10 +192,7 @@ which groups like stream values based on a key value you define.</p>
 </span><span class="line"><span class="p">.</span><span class="nx">groupBy</span><span class="p">((</span><span class="nx">point</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">point</span><span class="p">.</span><span class="nx">velocity</span><span class="p">)</span>
 </span></code></pre></td></tr></table></div></figure>
 
-<p>The supplied <code>(point) =&gt; point.velocity</code> function determines the <code>key</code><br />
-value for the supplied event, which then 1) creates a new Observable<br />
-sequence for that specific <code>key</code> value, if it doesn’t exist, or 2)<br />
-assigns your event to an existing Observable sequence.</p>
+<p>The supplied <code>(point) =&gt; point.velocity</code> function determines the <code>key</code> value for the supplied event, which then 1) creates a new Observable sequence for that specific <code>key</code> value, if it doesn’t exist, or 2) assigns your event to an existing Observable sequence.</p>
 
 <p>Let’s illustrate:</p>
 
@@ -212,14 +204,11 @@ assigns your event to an existing Observable sequence.</p>
 
 <h2 id="never-fear-flatmap-to-the-rescue">Never fear, <code>flatMap()</code> to the rescue.</h2>
 
-<p>So the story turns to our hero<br />
-<a href="http://reactivex.io/documentation/operators/flatmap.html"><code>flatMap()</code></a>, which as it turns out is<br />
-specifically tuned to deal with issues of dealing with multiple streams.</p>
+<p>So the story turns to our hero <a href="http://reactivex.io/documentation/operators/flatmap.html"><code>flatMap()</code></a>, which as it turns out is specifically tuned to deal with issues of dealing with multiple streams.</p>
 
 <p><a href="http://reactivex.io/documentation/operators/flatmap.html"><img src="http://reactivex.io/documentation/operators/images/flatMap.c.png" alt="Marble diagram for flatMap" /></a></p>
 
-<p><code>flatMap</code> will take a supplied function as its argument, which is the<br />
-operation to apply to each argument within the supplied stream.</p>
+<p><code>flatMap</code> will take a supplied function as its argument, which is the operation to apply to each argument within the supplied stream.</p>
 
 <figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
@@ -245,17 +234,11 @@ operation to apply to each argument within the supplied stream.</p>
 
 <p>What just happened here?</p>
 
-<p>I specified a merging function for the <code>flatMap()</code> stream, which<br />
-performed the <code>scan()</code> counting aggregation on my group before merging the<br />
-stream back into the main stream. I threw in a <code>zip</code>, which annotated my<br />
-aggregate count value with a record of the group key (velocity) that<br />
-this value was computed for.</p>
+<p>I specified a merging function for the <code>flatMap()</code> stream, which performed the <code>scan()</code> counting aggregation on my group before merging the stream back into the main stream. I threw in a <code>zip</code>, which annotated my aggregate count value with a record of the group key (velocity) that this value was computed for.</p>
 
 <h2 id="compare-it-to-imperative">Compare it to imperative</h2>
 
-<p>The equivalent of <code>groupBy</code>/<code>flatMap</code> in imperative programming is, quite<br />
-literally, just <code>_.groupBy()</code> and <code>_.flatMap()</code>. With a few key<br />
-differences. Here it is in <a href="https://lodash.com/docs#groupBy">lodash</a>:</p>
+<p>The equivalent of <code>groupBy</code>/<code>flatMap</code> in imperative programming is, quite literally, just <code>_.groupBy()</code> and <code>_.flatMap()</code>. With a few key differences. Here it is in <a href="https://lodash.com/docs#groupBy">lodash</a>:</p>
 
 <figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
@@ -283,23 +266,14 @@ differences. Here it is in <a href="https://lodash.com/docs#groupBy">lodash</a>:
 </span><span class="line"><span class="c1">// [[2, &quot;0&quot;], [1, &quot;0.1&quot;]]</span>
 </span></code></pre></td></tr></table></div></figure>
 
-<p>So in the end, the end result was the same with one crucial difference -<br />
-our Observable, reactive version was able to take intermediate accounts<br />
-into time and perform an intermediate calculation as data was flowing<br />
-in. This allowed us to generate an intermediate count for the “0” velocity<br />
-group.</p>
+<p>So in the end, the end result was the same with one crucial difference - our Observable, reactive version was able to take intermediate accounts into time and perform an intermediate calculation as data was flowing in. This allowed us to generate an intermediate count for the “0” velocity group.</p>
 
 <h2 id="takeaways">Takeaways</h2>
 
 <ul>
-  <li>When you want to fan out a stream into groups or partitions based on a<br />
-specific stream value, turn to<br />
-<a href="https://github.com/Reactive-Extensions/RxJS/blob/master/doc/api/core/operators/groupby.md"><code>groupBy</code></a>.</li>
-  <li>When you have a need to combine a stream-of-streams, you want to look at<br />
-<a href="https://github.com/Reactive-Extensions/RxJS/blob/master/doc/api/core/operators/selectmany.md"><code>flatMap</code></a>. You may also consider looking at <a href="https://github.com/Reactive-Extensions/RxJS/blob/master/doc/api/core/operators/concatmap.md"><code>concatMap</code></a>, a close cousin of <code>flatMap</code>.</li>
-  <li>Reactive programming gives you more expressive abilities to reason<br />
-about time and event ordering. You just have to tilt your head a little<br />
-bit.</li>
+  <li>When you want to fan out a stream into groups or partitions based on a specific stream value, turn to <a href="https://github.com/Reactive-Extensions/RxJS/blob/master/doc/api/core/operators/groupby.md"><code>groupBy</code></a>.</li>
+  <li>When you have a need to combine a stream-of-streams, you want to look at <a href="https://github.com/Reactive-Extensions/RxJS/blob/master/doc/api/core/operators/selectmany.md"><code>flatMap</code></a>. You may also consider looking at <a href="https://github.com/Reactive-Extensions/RxJS/blob/master/doc/api/core/operators/concatmap.md"><code>concatMap</code></a>, a close cousin of <code>flatMap</code>.</li>
+  <li>Reactive programming gives you more expressive abilities to reason about time and event ordering. You just have to tilt your head a little bit.</li>
 </ul>
 
 <h2 id="further-reading">Further reading:</h2>
@@ -310,8 +284,7 @@ bit.</li>
 
 <p><strong>Update: 2016/03/22</strong></p>
 
-<p>Updated typo where the <code>index</code> variable on a GroupedObservable was<br />
-changed to correctly be <code>key</code>.</p>
+<p>Updated typo where the <code>index</code> variable on a GroupedObservable was changed to correctly be <code>key</code>.</p>
 
 			
 			
@@ -875,13 +848,13 @@ clicking the checkbox “Create Groups for any Added Folders”</p>
 	
 <div class="pagination">
 	
-		<a class="older" href="3">Older</a>
+		<a class="older" href="/posts/3">Older</a>
 	
 	
 	<span class="total">2 of 20</span>
 	
 	
-		<a class="newer" href="1">Newer</a>
+		<a class="newer" href="/index.html">Newer</a>
 	
 </div>
 <!-- END OF index.html -->

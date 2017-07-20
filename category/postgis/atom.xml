@@ -4,7 +4,7 @@
   <title><![CDATA[Category: postgis | The Sweet Spot]]></title>
   <link href="http://www.g9labs.com/category/postgis/atom.xml" rel="self"/>
   <link href="http://www.g9labs.com/"/>
-  <updated>2017-07-19T20:17:32-07:00</updated>
+  <updated>2017-07-19T20:48:22-07:00</updated>
   <id>http://www.g9labs.com/</id>
   <author>
     <name><![CDATA[Andrew Hao]]></name>
@@ -18,8 +18,7 @@
     <link href="http://www.g9labs.com/2016/04/08/knex-dot-js-and-bookshelf-dot-js-cheat-sheet/"/>
     <updated>2016-04-08T12:33:00-07:00</updated>
     <id>http://www.g9labs.com/2016/04/08/knex-dot-js-and-bookshelf-dot-js-cheat-sheet</id>
-    <content type="html"><![CDATA[<p>As follows are some code snippets for using <a href="http://knexjs.org/">Knex.js</a> for executing<br />
-Postgres and PostGIS queries.</p>
+    <content type="html"><![CDATA[<p>As follows are some code snippets for using <a href="http://knexjs.org/">Knex.js</a> for executing Postgres and PostGIS queries.</p>
 
 <h3 id="execute-raw-sql-in-migration">Execute raw SQL in migration</h3>
 

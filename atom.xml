@@ -4,7 +4,7 @@
 	<title><![CDATA[The Sweet Spot]]></title>
 	<link href="http://www.g9labs.com/atom.xml" rel="self"/>
 	<link href="http://www.g9labs.com/"/>
-	<updated>2017-07-19T20:17:32-07:00</updated>
+	<updated>2017-07-19T20:48:22-07:00</updated>
 	<id>http://www.g9labs.com/</id>
 	<author>
 		<name><![CDATA[Andrew Hao]]></name>
@@ -584,40 +584,23 @@
 					<p></p>
 				
 			]]>
-			<![CDATA[<p>One common pattern in Domain-Driven Design is the use of<br />
-publish/subscribe messaging to communicate between domains. When<br />
-<a href="http://martinfowler.com/eaaDev/DomainEvent.html">Domain Events</a> are created from within a domain, other domains are<br />
-able to subscribe to these events and take action within their own<br />
-domains, respectively.</p>
+			<![CDATA[<p>One common pattern in Domain-Driven Design is the use of publish/subscribe messaging to communicate between domains. When <a href="http://martinfowler.com/eaaDev/DomainEvent.html">Domain Events</a> are created from within a domain, other domains are able to subscribe to these events and take action within their own domains, respectively.</p>
 
-<p>This is not a common pattern in Rails, particularly because of Ruby’s<br />
-lack of language support for functional programming paradigms that exist<br />
-in other languages. However, with a nifty framework and the help of<br />
-Sidekiq, we can get just a little bit closer.</p>
+<p>This is not a common pattern in Rails, particularly because of Ruby’s lack of language support for functional programming paradigms that exist in other languages. However, with a nifty framework and the help of Sidekiq, we can get just a little bit closer.</p>
 
 <h3 id="what-is-a-domain-event">What is a Domain Event?</h3>
 
-<p>A domain event is a recorded property in the system that tracks an<br />
-action that the system performs, and the factors/properties that lead to<br />
-its creation.</p>
+<p>A domain event is a recorded property in the system that tracks an action that the system performs, and the factors/properties that lead to its creation.</p>
 
-<p>In the following examples, we are going to use the <a href="https://github.com/krisleech/wisper">Wisper</a> gem to<br />
-implement domain events in our sample <a href="http://github.com/andrewhao/delorean">Delorean</a> app.</p>
+<p>In the following examples, we are going to use the <a href="https://github.com/krisleech/wisper">Wisper</a> gem to implement domain events in our sample <a href="http://github.com/andrewhao/delorean">Delorean</a> app.</p>
 
-<p>Imagine that we are writing an endpoint that our users will hit,<br />
-indicating that they want to hail a time-traveling cab. Now the logic to<br />
-hail a cab is rather complicated and lives in an entirely different area<br />
-of the codebase, perhaps even in another application. How should we call<br />
-the other code and ensure that our code is cleanly decoupled?</p>
+<p>Imagine that we are writing an endpoint that our users will hit, indicating that they want to hail a time-traveling cab. Now the logic to hail a cab is rather complicated and lives in an entirely different area of the codebase, perhaps even in another application. How should we call the other code and ensure that our code is cleanly decoupled?</p>
 
-<p>With our Domain-Driven powers, we’ve been smart enough to segregate our code into different<br />
-subdomains and bounded contexts,<br />
-denoted by these two Ruby modules <code>Ridesharing</code> and <code>DriverRouting</code>.</p>
+<p>With our Domain-Driven powers, we’ve been smart enough to segregate our code into different subdomains and bounded contexts, denoted by these two Ruby modules <code>Ridesharing</code> and <code>DriverRouting</code>.</p>
 
 <h2 id="example-1-in-process-pub-sub-event-modeling-with-a-service-object">Example 1: In-process pub-sub event modeling, with a service object.</h2>
 
-<p>A simple way to use Wisper is to use it to implement your service<br />
-objects with Wisper, calling the service from the controller.</p>
+<p>A simple way to use Wisper is to use it to implement your service objects with Wisper, calling the service from the controller.</p>
 
 <figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
@@ -651,11 +634,7 @@ objects with Wisper, calling the service from the controller.</p>
 </span><span class="line"><span class="k">end</span>
 </span></code></pre></td></tr></table></div></figure>
 
-<p>Note that the <code>HailDelorean</code> class has powers of event subscriptions<br />
-now. Our calling code does not have to concern itself with the<br />
-implementation details of the <code>HailDelorean</code> service - it merely needs<br />
-to register handlers for the two possible outcomes, <code>hailed</code> and<br />
-<code>could_not_hail</code>. Here’s how the service class is implemented:</p>
+<p>Note that the <code>HailDelorean</code> class has powers of event subscriptions now. Our calling code does not have to concern itself with the implementation details of the <code>HailDelorean</code> service - it merely needs to register handlers for the two possible outcomes, <code>hailed</code> and <code>could_not_hail</code>. Here’s how the service class is implemented:</p>
 
 <figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
@@ -699,8 +678,7 @@ to register handlers for the two possible outcomes, <code>hailed</code> and<br /
 
 <h3 id="handling-side-effects-in-subscriber-classes">Handling side effects in subscriber classes</h3>
 
-<p>Other side-effects can subscribe to the <code>HailDelorean</code> events. Let’s say we want to fire an event<br />
-to Segment analytics tracking. I can create a plain Ruby object that simply needs to implement a method with the same name as the event.</p>
+<p>Other side-effects can subscribe to the <code>HailDelorean</code> events. Let’s say we want to fire an event to Segment analytics tracking. I can create a plain Ruby object that simply needs to implement a method with the same name as the event.</p>
 
 <p>Let’s implement <code>hailed</code> and <code>could_not_hail</code> methods on this subscriber class:</p>
 
@@ -752,8 +730,7 @@ to Segment analytics tracking. I can create a plain Ruby object that simply need
 </span><span class="line"><span class="k">end</span>
 </span></code></pre></td></tr></table></div></figure>
 
-<p>OK, that was a little awkward, doing all that wiring up in the controller. What if we did the wiring globally,<br />
-within an app initializer?</p>
+<p>OK, that was a little awkward, doing all that wiring up in the controller. What if we did the wiring globally, within an app initializer?</p>
 
 <figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
@@ -771,12 +748,9 @@ within an app initializer?</p>
 
 <h2 id="example-2-asynchronous-events-with-subscription-handlers-and-sidekiq">Example 2: Asynchronous events with subscription handlers and Sidekiq</h2>
 
-<p>Here’s the real power of Wisper - we can decouple our application domain responsibilities by modeling<br />
-effects as subscription objects and do them out-of-band of the primary web request thread.</p>
+<p>Here’s the real power of Wisper - we can decouple our application domain responsibilities by modeling effects as subscription objects and do them out-of-band of the primary web request thread.</p>
 
-<p>Note that with the <a href="https://github.com/krisleech/wisper-sidekiq"><code>wisper-sidekiq</code></a> gem, all subscriptions<br />
-given with an <code>async: true</code> option flag will automatically execute in an external thread as a Sidekiq job.<br />
-Let’s take advantage of that now.</p>
+<p>Note that with the <a href="https://github.com/krisleech/wisper-sidekiq"><code>wisper-sidekiq</code></a> gem, all subscriptions given with an <code>async: true</code> option flag will automatically execute in an external thread as a Sidekiq job. Let’s take advantage of that now.</p>
 
 <figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
@@ -888,37 +862,23 @@ Let’s take advantage of that now.</p>
 </span><span class="line"><span class="no">Wisper</span><span class="o">.</span><span class="n">subscribe</span><span class="p">(</span><span class="no">AnalyticsListener</span><span class="p">,</span> <span class="ss">scope</span><span class="p">:</span> <span class="s2">&quot;Ridesharing::NotifyPassengerWithDriverStatus&quot;</span><span class="p">,</span> <span class="s2">&quot;DriverRouting::FindDriver&quot;</span><span class="o">]</span><span class="p">,</span> <span class="ss">async</span><span class="p">:</span> <span class="kp">true</span><span class="p">)</span>
 </span></code></pre></td></tr></table></div></figure>
 
-<p>Now our messages between our domains are pulled out of the main request thread, and operate in an asynchronous<br />
-fashion with Sidekiq as the runner.</p>
+<p>Now our messages between our domains are pulled out of the main request thread, and operate in an asynchronous fashion with Sidekiq as the runner.</p>
 
-<p>Code in our domains are kept clean - note that there are no direct references to the other subdomains within each<br />
-subdomain. Our app more cleanly segregates the responsibilities between each app, heavy workloads are naturally<br />
-balanced as they move to worker threads.</p>
+<p>Code in our domains are kept clean - note that there are no direct references to the other subdomains within each subdomain. Our app more cleanly segregates the responsibilities between each app, heavy workloads are naturally balanced as they move to worker threads.</p>
 
 <h2 id="caveats-beware-of-overbuilding">Caveats: Beware of overbuilding</h2>
 
-<p>If you are on a small app, you probably should go with approach #1. The weight of indirection<br />
-can be a cognitive load on development, unless you truly need to build async code in #2. The overhead and<br />
-conceptual complexities of the approach can only be justified with large codebases, or in apps<br />
-where a domain-centric view (and segregation) of code is present.</p>
+<p>If you are on a small app, you probably should go with approach #1. The weight of indirection can be a cognitive load on development, unless you truly need to build async code in #2. The overhead and conceptual complexities of the approach can only be justified with large codebases, or in apps where a domain-centric view (and segregation) of code is present.</p>
 
 <h2 id="caveats-event-subscriptions-can-be-a-tangled-mess">Caveats: Event subscriptions can be a tangled mess</h2>
 
-<p>Note that the act of wiring can quickly fan out into a spidery mess of handlers - you could even further<br />
-decouple your handlers by modeling a global event bus as a publisher, and having each domain tap into the bus’ events<br />
-and figure out how to handle each event on its own.</p>
+<p>Note that the act of wiring can quickly fan out into a spidery mess of handlers - you could even further decouple your handlers by modeling a global event bus as a publisher, and having each domain tap into the bus’ events and figure out how to handle each event on its own.</p>
 
 <h2 id="caveats-transactional-consistency">Caveats: transactional consistency!</h2>
 
-<p>If you implement this asynchronously, you’ll have to think about how to<br />
-deal with transactional consistency. Can you design your data models<br />
-(and database schema) to support independent updates without any<br />
-dependencies? How will you handle<br />
-the case when one domain action fails and the other completes?</p>
+<p>If you implement this asynchronously, you’ll have to think about how to deal with transactional consistency. Can you design your data models (and database schema) to support independent updates without any dependencies? How will you handle the case when one domain action fails and the other completes?</p>
 
-<p>You may have to roll your own two-phase commit here, the specifics of<br />
-which I won’t delve into. However, for most of our applications, we may<br />
-want to skip the asynchronous and keep our events synchronous.</p>
+<p>You may have to roll your own two-phase commit here, the specifics of which I won’t delve into. However, for most of our applications, we may want to skip the asynchronous and keep our events synchronous.</p>
 ]]>
 		</content>
 	</entry>
@@ -936,9 +896,7 @@ want to skip the asynchronous and keep our events synchronous.</p>
 					<p></p>
 				
 			]]>
-			<![CDATA[<p>I want to discuss a topic near and dear to my heart, and what I believe<br />
-is at the crux of effective software design. It’s not a new functional language,<br />
-it’s not a fancy new framework, a how-to guide to do microservices, nor a quantum leap in the field of machine learning.</p>
+			<![CDATA[<p>I want to discuss a topic near and dear to my heart, and what I believe is at the crux of effective software design. It’s not a new functional language, it’s not a fancy new framework, a how-to guide to do microservices, nor a quantum leap in the field of machine learning.</p>
 
 <p>It’s much simpler.</p>
 
@@ -1362,8 +1320,7 @@ it’s not a fancy new framework, a how-to guide to do microservices, nor a quan
 					<p></p>
 				
 			]]>
-			<![CDATA[<p>As follows are some code snippets for using <a href="http://knexjs.org/">Knex.js</a> for executing<br />
-Postgres and PostGIS queries.</p>
+			<![CDATA[<p>As follows are some code snippets for using <a href="http://knexjs.org/">Knex.js</a> for executing Postgres and PostGIS queries.</p>
 
 <h3 id="execute-raw-sql-in-migration">Execute raw SQL in migration</h3>
 
@@ -1537,8 +1494,7 @@ forces the incoming stream to execute serially over artificial time delayed stre
 					<p></p>
 				
 			]]>
-			<![CDATA[<p>One of the confusing aspects about working with streams is diving into<br />
-Rx operators that take a stream and fan out into multiple streams.</p>
+			<![CDATA[<p>One of the confusing aspects about working with streams is diving into Rx operators that take a stream and fan out into multiple streams.</p>
 
 <p>Is your head exploding yet?</p>
 
@@ -1547,13 +1503,9 @@ Rx operators that take a stream and fan out into multiple streams.</p>
 <p>Let’s dive into a problem I ran into while working on a personal<br />
 project:</p>
 
-<p>The task at hand is to take a list of GPS moving point data and<br />
-partition the group data into multiple clusters of points, count up each<br />
-group, then return the aggregate stats. As a cyclist is moving, I want<br />
-to know how often they are moving at that specific velocity (speed).</p>
+<p>The task at hand is to take a list of GPS moving point data and partition the group data into multiple clusters of points, count up each group, then return the aggregate stats. As a cyclist is moving, I want to know how often they are moving at that specific velocity (speed).</p>
 
-<p>Our weapon of choice is the <a href="http://reactivex.io/documentation/operators/groupby.html">RxJS groupBy() function</a>,<br />
-which groups like stream values based on a key value you define.</p>
+<p>Our weapon of choice is the <a href="http://reactivex.io/documentation/operators/groupby.html">RxJS groupBy() function</a>, which groups like stream values based on a key value you define.</p>
 
 <p><a href="http://reactivex.io/documentation/operators/groupby.html"><img src="http://reactivex.io/documentation/operators/images/groupBy.c.png" alt="Image of groupBy() at work, with marbles." /></a></p>
 
@@ -1565,10 +1517,7 @@ which groups like stream values based on a key value you define.</p>
 </span><span class="line"><span class="p">.</span><span class="nx">groupBy</span><span class="p">((</span><span class="nx">point</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">point</span><span class="p">.</span><span class="nx">velocity</span><span class="p">)</span>
 </span></code></pre></td></tr></table></div></figure>
 
-<p>The supplied <code>(point) =&gt; point.velocity</code> function determines the <code>key</code><br />
-value for the supplied event, which then 1) creates a new Observable<br />
-sequence for that specific <code>key</code> value, if it doesn’t exist, or 2)<br />
-assigns your event to an existing Observable sequence.</p>
+<p>The supplied <code>(point) =&gt; point.velocity</code> function determines the <code>key</code> value for the supplied event, which then 1) creates a new Observable sequence for that specific <code>key</code> value, if it doesn’t exist, or 2) assigns your event to an existing Observable sequence.</p>
 
 <p>Let’s illustrate:</p>
 
@@ -1580,14 +1529,11 @@ assigns your event to an existing Observable sequence.</p>
 
 <h2 id="never-fear-flatmap-to-the-rescue">Never fear, <code>flatMap()</code> to the rescue.</h2>
 
-<p>So the story turns to our hero<br />
-<a href="http://reactivex.io/documentation/operators/flatmap.html"><code>flatMap()</code></a>, which as it turns out is<br />
-specifically tuned to deal with issues of dealing with multiple streams.</p>
+<p>So the story turns to our hero <a href="http://reactivex.io/documentation/operators/flatmap.html"><code>flatMap()</code></a>, which as it turns out is specifically tuned to deal with issues of dealing with multiple streams.</p>
 
 <p><a href="http://reactivex.io/documentation/operators/flatmap.html"><img src="http://reactivex.io/documentation/operators/images/flatMap.c.png" alt="Marble diagram for flatMap" /></a></p>
 
-<p><code>flatMap</code> will take a supplied function as its argument, which is the<br />
-operation to apply to each argument within the supplied stream.</p>
+<p><code>flatMap</code> will take a supplied function as its argument, which is the operation to apply to each argument within the supplied stream.</p>
 
 <figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
@@ -1613,17 +1559,11 @@ operation to apply to each argument within the supplied stream.</p>
 
 <p>What just happened here?</p>
 
-<p>I specified a merging function for the <code>flatMap()</code> stream, which<br />
-performed the <code>scan()</code> counting aggregation on my group before merging the<br />
-stream back into the main stream. I threw in a <code>zip</code>, which annotated my<br />
-aggregate count value with a record of the group key (velocity) that<br />
-this value was computed for.</p>
+<p>I specified a merging function for the <code>flatMap()</code> stream, which performed the <code>scan()</code> counting aggregation on my group before merging the stream back into the main stream. I threw in a <code>zip</code>, which annotated my aggregate count value with a record of the group key (velocity) that this value was computed for.</p>
 
 <h2 id="compare-it-to-imperative">Compare it to imperative</h2>
 
-<p>The equivalent of <code>groupBy</code>/<code>flatMap</code> in imperative programming is, quite<br />
-literally, just <code>_.groupBy()</code> and <code>_.flatMap()</code>. With a few key<br />
-differences. Here it is in <a href="https://lodash.com/docs#groupBy">lodash</a>:</p>
+<p>The equivalent of <code>groupBy</code>/<code>flatMap</code> in imperative programming is, quite literally, just <code>_.groupBy()</code> and <code>_.flatMap()</code>. With a few key differences. Here it is in <a href="https://lodash.com/docs#groupBy">lodash</a>:</p>
 
 <figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
@@ -1651,23 +1591,14 @@ differences. Here it is in <a href="https://lodash.com/docs#groupBy">lodash</a>:
 </span><span class="line"><span class="c1">// [[2, &quot;0&quot;], [1, &quot;0.1&quot;]]</span>
 </span></code></pre></td></tr></table></div></figure>
 
-<p>So in the end, the end result was the same with one crucial difference -<br />
-our Observable, reactive version was able to take intermediate accounts<br />
-into time and perform an intermediate calculation as data was flowing<br />
-in. This allowed us to generate an intermediate count for the “0” velocity<br />
-group.</p>
+<p>So in the end, the end result was the same with one crucial difference - our Observable, reactive version was able to take intermediate accounts into time and perform an intermediate calculation as data was flowing in. This allowed us to generate an intermediate count for the “0” velocity group.</p>
 
 <h2 id="takeaways">Takeaways</h2>
 
 <ul>
-  <li>When you want to fan out a stream into groups or partitions based on a<br />
-specific stream value, turn to<br />
-<a href="https://github.com/Reactive-Extensions/RxJS/blob/master/doc/api/core/operators/groupby.md"><code>groupBy</code></a>.</li>
-  <li>When you have a need to combine a stream-of-streams, you want to look at<br />
-<a href="https://github.com/Reactive-Extensions/RxJS/blob/master/doc/api/core/operators/selectmany.md"><code>flatMap</code></a>. You may also consider looking at <a href="https://github.com/Reactive-Extensions/RxJS/blob/master/doc/api/core/operators/concatmap.md"><code>concatMap</code></a>, a close cousin of <code>flatMap</code>.</li>
-  <li>Reactive programming gives you more expressive abilities to reason<br />
-about time and event ordering. You just have to tilt your head a little<br />
-bit.</li>
+  <li>When you want to fan out a stream into groups or partitions based on a specific stream value, turn to <a href="https://github.com/Reactive-Extensions/RxJS/blob/master/doc/api/core/operators/groupby.md"><code>groupBy</code></a>.</li>
+  <li>When you have a need to combine a stream-of-streams, you want to look at <a href="https://github.com/Reactive-Extensions/RxJS/blob/master/doc/api/core/operators/selectmany.md"><code>flatMap</code></a>. You may also consider looking at <a href="https://github.com/Reactive-Extensions/RxJS/blob/master/doc/api/core/operators/concatmap.md"><code>concatMap</code></a>, a close cousin of <code>flatMap</code>.</li>
+  <li>Reactive programming gives you more expressive abilities to reason about time and event ordering. You just have to tilt your head a little bit.</li>
 </ul>
 
 <h2 id="further-reading">Further reading:</h2>
@@ -1678,8 +1609,7 @@ bit.</li>
 
 <p><strong>Update: 2016/03/22</strong></p>
 
-<p>Updated typo where the <code>index</code> variable on a GroupedObservable was<br />
-changed to correctly be <code>key</code>.</p>
+<p>Updated typo where the <code>index</code> variable on a GroupedObservable was changed to correctly be <code>key</code>.</p>
 ]]>
 		</content>
 	</entry>

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: architecture | The Sweet Spot]]></title>
   <link href="http://www.g9labs.com/category/architecture/atom.xml" rel="self"/>
   <link href="http://www.g9labs.com/"/>
-  <updated>2017-07-19T20:17:32-07:00</updated>
+  <updated>2017-07-19T20:48:22-07:00</updated>
   <id>http://www.g9labs.com/</id>
   <author>
     <name><![CDATA[Andrew Hao]]></name>
@@ -18,9 +18,7 @@
     <link href="http://www.g9labs.com/2016/04/18/the-joy-of-naming-with-the-powers-of-domain-driven-design/"/>
     <updated>2016-04-18T17:14:00-07:00</updated>
     <id>http://www.g9labs.com/2016/04/18/the-joy-of-naming-with-the-powers-of-domain-driven-design</id>
-    <content type="html"><![CDATA[<p>I want to discuss a topic near and dear to my heart, and what I believe<br />
-is at the crux of effective software design. It’s not a new functional language,<br />
-it’s not a fancy new framework, a how-to guide to do microservices, nor a quantum leap in the field of machine learning.</p>
+    <content type="html"><![CDATA[<p>I want to discuss a topic near and dear to my heart, and what I believe is at the crux of effective software design. It’s not a new functional language, it’s not a fancy new framework, a how-to guide to do microservices, nor a quantum leap in the field of machine learning.</p>
 
 <p>It’s much simpler.</p>
 
