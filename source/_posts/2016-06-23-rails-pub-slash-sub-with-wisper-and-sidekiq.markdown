@@ -11,40 +11,23 @@ categories:
 - Wisper
 ---
 
-One common pattern in Domain-Driven Design is the use of
-publish/subscribe messaging to communicate between domains. When
-[Domain Events](http://martinfowler.com/eaaDev/DomainEvent.html) are created from within a domain, other domains are
-able to subscribe to these events and take action within their own
-domains, respectively.
+One common pattern in Domain-Driven Design is the use of publish/subscribe messaging to communicate between domains. When [Domain Events](http://martinfowler.com/eaaDev/DomainEvent.html) are created from within a domain, other domains are able to subscribe to these events and take action within their own domains, respectively.
 
-This is not a common pattern in Rails, particularly because of Ruby's
-lack of language support for functional programming paradigms that exist
-in other languages. However, with a nifty framework and the help of
-Sidekiq, we can get just a little bit closer.
+This is not a common pattern in Rails, particularly because of Ruby's lack of language support for functional programming paradigms that exist in other languages. However, with a nifty framework and the help of Sidekiq, we can get just a little bit closer.
 
 ### What is a Domain Event?
 
-A domain event is a recorded property in the system that tracks an
-action that the system performs, and the factors/properties that lead to
-its creation.
+A domain event is a recorded property in the system that tracks an action that the system performs, and the factors/properties that lead to its creation.
 
-In the following examples, we are going to use the [Wisper](https://github.com/krisleech/wisper) gem to
-implement domain events in our sample [Delorean](http://github.com/andrewhao/delorean) app.
+In the following examples, we are going to use the [Wisper](https://github.com/krisleech/wisper) gem to implement domain events in our sample [Delorean](http://github.com/andrewhao/delorean) app.
 
-Imagine that we are writing an endpoint that our users will hit,
-indicating that they want to hail a time-traveling cab. Now the logic to
-hail a cab is rather complicated and lives in an entirely different area
-of the codebase, perhaps even in another application. How should we call
-the other code and ensure that our code is cleanly decoupled?
+Imagine that we are writing an endpoint that our users will hit, indicating that they want to hail a time-traveling cab. Now the logic to hail a cab is rather complicated and lives in an entirely different area of the codebase, perhaps even in another application. How should we call the other code and ensure that our code is cleanly decoupled?
 
-With our Domain-Driven powers, we've been smart enough to segregate our code into different
-subdomains and bounded contexts,
-denoted by these two Ruby modules `Ridesharing` and `DriverRouting`.
+With our Domain-Driven powers, we've been smart enough to segregate our code into different subdomains and bounded contexts, denoted by these two Ruby modules `Ridesharing` and `DriverRouting`.
 
 ## Example 1: In-process pub-sub event modeling, with a service object.
 
-A simple way to use Wisper is to use it to implement your service
-objects with Wisper, calling the service from the controller.
+A simple way to use Wisper is to use it to implement your service objects with Wisper, calling the service from the controller.
 
 ```ruby
 module Ridesharing
@@ -64,11 +47,7 @@ module Ridesharing
 end
 ```
 
-Note that the `HailDelorean` class has powers of event subscriptions
-now. Our calling code does not have to concern itself with the
-implementation details of the `HailDelorean` service - it merely needs
-to register handlers for the two possible outcomes, `hailed` and
-`could_not_hail`. Here's how the service class is implemented:
+Note that the `HailDelorean` class has powers of event subscriptions now. Our calling code does not have to concern itself with the implementation details of the `HailDelorean` service - it merely needs to register handlers for the two possible outcomes, `hailed` and `could_not_hail`. Here's how the service class is implemented:
 
 ```ruby
 module Ridesharing
@@ -94,8 +73,7 @@ end
 
 ### Handling side effects in subscriber classes
 
-Other side-effects can subscribe to the `HailDelorean` events. Let's say we want to fire an event
-to Segment analytics tracking. I can create a plain Ruby object that simply needs to implement a method with the same name as the event.
+Other side-effects can subscribe to the `HailDelorean` events. Let's say we want to fire an event to Segment analytics tracking. I can create a plain Ruby object that simply needs to implement a method with the same name as the event.
 
 Let's implement `hailed` and `could_not_hail` methods on this subscriber class:
 
@@ -128,8 +106,7 @@ module Ridesharing
 end
 ```
 
-OK, that was a little awkward, doing all that wiring up in the controller. What if we did the wiring globally,
-within an app initializer?
+OK, that was a little awkward, doing all that wiring up in the controller. What if we did the wiring globally, within an app initializer?
 
 ```ruby
 # config/initializers/domain_event_subscriptions.rb
@@ -143,12 +120,9 @@ This registers a global subscriber for all future instances of `HailDelorean`.
 
 ## Example 2: Asynchronous events with subscription handlers and Sidekiq
 
-Here's the real power of Wisper - we can decouple our application domain responsibilities by modeling
-effects as subscription objects and do them out-of-band of the primary web request thread.
+Here's the real power of Wisper - we can decouple our application domain responsibilities by modeling effects as subscription objects and do them out-of-band of the primary web request thread.
 
-Note that with the [`wisper-sidekiq`](https://github.com/krisleech/wisper-sidekiq) gem, all subscriptions
-given with an `async: true` option flag will automatically execute in an external thread as a Sidekiq job.
-Let's take advantage of that now.
+Note that with the [`wisper-sidekiq`](https://github.com/krisleech/wisper-sidekiq) gem, all subscriptions given with an `async: true` option flag will automatically execute in an external thread as a Sidekiq job. Let's take advantage of that now.
 
 ```ruby
 module Ridesharing
@@ -213,34 +187,20 @@ DriverRouting::FindDriver.subscribe(Ridesharing::NotifyPassengerWithDriverStatus
 Wisper.subscribe(AnalyticsListener, scope: "Ridesharing::NotifyPassengerWithDriverStatus", "DriverRouting::FindDriver"], async: true)
 ```
 
-Now our messages between our domains are pulled out of the main request thread, and operate in an asynchronous
-fashion with Sidekiq as the runner.
+Now our messages between our domains are pulled out of the main request thread, and operate in an asynchronous fashion with Sidekiq as the runner.
 
-Code in our domains are kept clean - note that there are no direct references to the other subdomains within each
-subdomain. Our app more cleanly segregates the responsibilities between each app, heavy workloads are naturally
-balanced as they move to worker threads.
+Code in our domains are kept clean - note that there are no direct references to the other subdomains within each subdomain. Our app more cleanly segregates the responsibilities between each app, heavy workloads are naturally balanced as they move to worker threads.
 
 ## Caveats: Beware of overbuilding
 
-If you are on a small app, you probably should go with approach #1. The weight of indirection
-can be a cognitive load on development, unless you truly need to build async code in #2. The overhead and
-conceptual complexities of the approach can only be justified with large codebases, or in apps
-where a domain-centric view (and segregation) of code is present.
+If you are on a small app, you probably should go with approach #1. The weight of indirection can be a cognitive load on development, unless you truly need to build async code in #2. The overhead and conceptual complexities of the approach can only be justified with large codebases, or in apps where a domain-centric view (and segregation) of code is present.
 
 ## Caveats: Event subscriptions can be a tangled mess
 
-Note that the act of wiring can quickly fan out into a spidery mess of handlers - you could even further
-decouple your handlers by modeling a global event bus as a publisher, and having each domain tap into the bus' events
-and figure out how to handle each event on its own.
+Note that the act of wiring can quickly fan out into a spidery mess of handlers - you could even further decouple your handlers by modeling a global event bus as a publisher, and having each domain tap into the bus' events and figure out how to handle each event on its own.
 
 ## Caveats: transactional consistency!
 
-If you implement this asynchronously, you'll have to think about how to
-deal with transactional consistency. Can you design your data models
-(and database schema) to support independent updates without any
-dependencies? How will you handle
-the case when one domain action fails and the other completes?
+If you implement this asynchronously, you'll have to think about how to deal with transactional consistency. Can you design your data models (and database schema) to support independent updates without any dependencies? How will you handle the case when one domain action fails and the other completes?
 
-You may have to roll your own two-phase commit here, the specifics of
-which I won't delve into. However, for most of our applications, we may
-want to skip the asynchronous and keep our events synchronous.
+You may have to roll your own two-phase commit here, the specifics of which I won't delve into. However, for most of our applications, we may want to skip the asynchronous and keep our events synchronous.

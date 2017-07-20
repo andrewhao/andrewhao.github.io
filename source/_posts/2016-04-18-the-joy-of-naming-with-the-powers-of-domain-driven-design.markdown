@@ -9,9 +9,7 @@ categories:
 - DDD
 ---
 
-I want to discuss a topic near and dear to my heart, and what I believe
-is at the crux of effective software design. It's not a new functional language,
-it's not a fancy new framework, a how-to guide to do microservices, nor a quantum leap in the field of machine learning.
+I want to discuss a topic near and dear to my heart, and what I believe is at the crux of effective software design. It's not a new functional language, it's not a fancy new framework, a how-to guide to do microservices, nor a quantum leap in the field of machine learning.
 
 It's much simpler.
 

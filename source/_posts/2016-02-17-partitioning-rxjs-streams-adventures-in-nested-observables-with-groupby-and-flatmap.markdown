@@ -9,8 +9,7 @@ categories:
 - Streams
 ---
 
-One of the confusing aspects about working with streams is diving into
-Rx operators that take a stream and fan out into multiple streams.
+One of the confusing aspects about working with streams is diving into Rx operators that take a stream and fan out into multiple streams.
 
 Is your head exploding yet?
 
@@ -19,13 +18,9 @@ Is your head exploding yet?
 Let's dive into a problem I ran into while working on a personal
 project:
 
-The task at hand is to take a list of GPS moving point data and
-partition the group data into multiple clusters of points, count up each
-group, then return the aggregate stats. As a cyclist is moving, I want
-to know how often they are moving at that specific velocity (speed).
+The task at hand is to take a list of GPS moving point data and partition the group data into multiple clusters of points, count up each group, then return the aggregate stats. As a cyclist is moving, I want to know how often they are moving at that specific velocity (speed).
 
-Our weapon of choice is the [RxJS groupBy() function](http://reactivex.io/documentation/operators/groupby.html),
-which groups like stream values based on a key value you define.
+Our weapon of choice is the [RxJS groupBy() function](http://reactivex.io/documentation/operators/groupby.html), which groups like stream values based on a key value you define.
 
 [![Image of groupBy() at work, with marbles.](http://reactivex.io/documentation/operators/images/groupBy.c.png)](http://reactivex.io/documentation/operators/groupby.html)
 
@@ -36,10 +31,7 @@ gpsPointStream
 .groupBy((point) => point.velocity)
 ```
 
-The supplied `(point) => point.velocity` function determines the `key`
-value for the supplied event, which then 1) creates a new Observable
-sequence for that specific `key` value, if it doesn't exist, or 2)
-assigns your event to an existing Observable sequence.
+The supplied `(point) => point.velocity` function determines the `key` value for the supplied event, which then 1) creates a new Observable sequence for that specific `key` value, if it doesn't exist, or 2) assigns your event to an existing Observable sequence.
 
 Let's illustrate:
 
@@ -50,14 +42,11 @@ groupBy: -- [{ Observable key: 0 }] -- [ { Observable key: 0 }, { Observable key
 
 ## Never fear, `flatMap()` to the rescue.
 
-So the story turns to our hero
-[`flatMap()`](http://reactivex.io/documentation/operators/flatmap.html), which as it turns out is
-specifically tuned to deal with issues of dealing with multiple streams.
+So the story turns to our hero [`flatMap()`](http://reactivex.io/documentation/operators/flatmap.html), which as it turns out is specifically tuned to deal with issues of dealing with multiple streams.
 
 [![Marble diagram for flatMap](http://reactivex.io/documentation/operators/images/flatMap.c.png)](http://reactivex.io/documentation/operators/flatmap.html)
 
-`flatMap` will take a supplied function as its argument, which is the
-operation to apply to each argument within the supplied stream.
+`flatMap` will take a supplied function as its argument, which is the operation to apply to each argument within the supplied stream.
 
 ```js
 gpsPointStream
@@ -76,17 +65,11 @@ flatMap: -- [ 1, 0 ] ----------------- [ 1, 0.1 ] ------------------------------
 
 What just happened here?
 
-I specified a merging function for the `flatMap()` stream, which
-performed the `scan()` counting aggregation on my group before merging the
-stream back into the main stream. I threw in a `zip`, which annotated my
-aggregate count value with a record of the group key (velocity) that
-this value was computed for.
+I specified a merging function for the `flatMap()` stream, which performed the `scan()` counting aggregation on my group before merging the stream back into the main stream. I threw in a `zip`, which annotated my aggregate count value with a record of the group key (velocity) that this value was computed for.
 
 ## Compare it to imperative
 
-The equivalent of `groupBy`/`flatMap` in imperative programming is, quite
-literally, just `_.groupBy()` and `_.flatMap()`. With a few key
-differences. Here it is in [lodash](https://lodash.com/docs#groupBy):
+The equivalent of `groupBy`/`flatMap` in imperative programming is, quite literally, just `_.groupBy()` and `_.flatMap()`. With a few key differences. Here it is in [lodash](https://lodash.com/docs#groupBy):
 
 ```js
 var grouped = _([ { velocity: 0 }, { velocity: 0.1 }, { velocity: 0 } ])
@@ -103,22 +86,13 @@ flatmapped.value()
 // [[2, "0"], [1, "0.1"]]
 ```
 
-So in the end, the end result was the same with one crucial difference -
-our Observable, reactive version was able to take intermediate accounts
-into time and perform an intermediate calculation as data was flowing
-in. This allowed us to generate an intermediate count for the "0" velocity
-group.
+So in the end, the end result was the same with one crucial difference - our Observable, reactive version was able to take intermediate accounts into time and perform an intermediate calculation as data was flowing in. This allowed us to generate an intermediate count for the "0" velocity group.
 
 ## Takeaways
 
-* When you want to fan out a stream into groups or partitions based on a
-specific stream value, turn to
-[`groupBy`](https://github.com/Reactive-Extensions/RxJS/blob/master/doc/api/core/operators/groupby.md).
-* When you have a need to combine a stream-of-streams, you want to look at
-[`flatMap`](https://github.com/Reactive-Extensions/RxJS/blob/master/doc/api/core/operators/selectmany.md). You may also consider looking at [`concatMap`](https://github.com/Reactive-Extensions/RxJS/blob/master/doc/api/core/operators/concatmap.md), a close cousin of `flatMap`.
-* Reactive programming gives you more expressive abilities to reason
-about time and event ordering. You just have to tilt your head a little
-bit.
+* When you want to fan out a stream into groups or partitions based on a specific stream value, turn to [`groupBy`](https://github.com/Reactive-Extensions/RxJS/blob/master/doc/api/core/operators/groupby.md).
+* When you have a need to combine a stream-of-streams, you want to look at [`flatMap`](https://github.com/Reactive-Extensions/RxJS/blob/master/doc/api/core/operators/selectmany.md). You may also consider looking at [`concatMap`](https://github.com/Reactive-Extensions/RxJS/blob/master/doc/api/core/operators/concatmap.md), a close cousin of `flatMap`.
+* Reactive programming gives you more expressive abilities to reason about time and event ordering. You just have to tilt your head a little bit.
 
 ## Further reading:
 
@@ -126,5 +100,4 @@ bit.
 
 __Update: 2016/03/22__
 
-Updated typo where the `index` variable on a GroupedObservable was
-changed to correctly be `key`.
+Updated typo where the `index` variable on a GroupedObservable was changed to correctly be `key`.

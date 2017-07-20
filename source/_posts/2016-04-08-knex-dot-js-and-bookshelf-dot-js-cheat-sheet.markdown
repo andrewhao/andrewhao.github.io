@@ -9,8 +9,7 @@ categories:
 - PostGIS
 ---
 
-As follows are some code snippets for using [Knex.js](http://knexjs.org/) for executing
-Postgres and PostGIS queries.
+As follows are some code snippets for using [Knex.js](http://knexjs.org/) for executing Postgres and PostGIS queries.
 
 ### Execute raw SQL in migration
 
