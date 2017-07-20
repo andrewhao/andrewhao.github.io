@@ -15,8 +15,7 @@ Is your head exploding yet?
 
 ## The problem:
 
-Let's dive into a problem I ran into while working on a personal
-project:
+Let's dive into a problem I ran into while working on a personal project:
 
 The task at hand is to take a list of GPS moving point data and partition the group data into multiple clusters of points, count up each group, then return the aggregate stats. As a cyclist is moving, I want to know how often they are moving at that specific velocity (speed).
 
