@@ -11,23 +11,11 @@ categories:
 - distributed systems
 ---
 
-Going to Strange Loop was a huge check off my conference bucket list
-(lanyard?). I'd always heard about this slightly-weird, highly academic
-collision between academia and industry, skewing toward programming
-languages you haven't heard of (or, at the very least, you've never used
-in production). I anticipated sitting at the feet of gray-haired wizards
-and bright-eyed hipsters with Ph.Ds.
+Going to Strange Loop was a huge check off my conference bucket list (lanyard?). I'd always heard about this slightly-weird, highly academic collision between academia and industry, skewing toward programming languages you haven't heard of (or, at the very least, you've never used in production). I anticipated sitting at the feet of gray-haired wizards and bright-eyed hipsters with Ph.Ds.
 
-The conference did not disappoint. And it was not quite what I
-expected-I less sat at the feet of geniuses than I did talk with them,
-peer-to-peer, about topics of interest. All around me people were saying
-"Don't be afraid to ask questions. Don't feel stupid - nobody knows
-everything." Speakers were tweeting about how much they were learning.
-It was comforting, because lots of topics I had come to see were those
-in which I had no. freakin. clue. about.
+The conference did not disappoint. And it was not quite what I expected-I less sat at the feet of geniuses than I did talk with them, peer-to-peer, about topics of interest. All around me people were saying "Don't be afraid to ask questions. Don't feel stupid - nobody knows everything." Speakers were tweeting about how much they were learning.  It was comforting, because lots of topics I had come to see were those in which I had no. freakin. clue. about.
 
-The following is culled from my notes from different sessions I
-attended. I will focus on brevity. I will keep it clear. Here we go:
+The following is culled from my notes from different sessions I attended. I will focus on brevity. I will keep it clear. Here we go:
 
 ### Opening Keynote: "I see what you mean" - Peter Alvaro
 
@@ -93,26 +81,16 @@ allowfullscreen></iframe>
 - Designing for worst case often penalizes average case
 - But what if designing for the worst case actually helps avg case?
 - Examples from dstbd systems:
-  - Worst case of disconnected data centers, packet loss/link loss. Fix
-  by introducing coordination-free protocols. Boom, you've now made your
-  network more scalable, performant, resistent to downtime.
-  - Worst case: hard to coordinate a distributed transaction between
-  services. What do you do? You implement something like buffered writes
-  out of process.
+  - Worst case of disconnected data centers, packet loss/link loss. Fix by introducing coordination-free protocols. Boom, you've now made your network more scalable, performant, resistent to downtime.
+  - Worst case: hard to coordinate a distributed transaction between services. What do you do? You implement something like buffered writes out of process.
     - CRDT, RAMP, HAT, bloom
     - Suddenly, you have fault tolerance
-  - Tail latency problem in microservices: the more microservices you
-  query, the higher the probability of hitting a slow server response.
+  - Tail latency problem in microservices: the more microservices you query, the higher the probability of hitting a slow server response.
     - Your service's corner case is your user's average case
-  - HCI: accessibility guidelines in W3C lift standards for all. Make
-  webpages easier to navigate. Side effect of better page performance,
-  higher conversion.
+  - HCI: accessibility guidelines in W3C lift standards for all. Make webpages easier to navigate. Side effect of better page performance, higher conversion.
   - Netflix designing CC subtitles also benefits other users.
-  - Curb cuts in the real world to help ADA/mobility-assisted folks also
-  benefit normal folks too
-- Best has pitfalls too: your notion of best may be hard to hit, or
-risky. You may want to optimize for "stable" solution. (Robust
-optimization)
+  - Curb cuts in the real world to help ADA/mobility-assisted folks also benefit normal folks too
+- Best has pitfalls too: your notion of best may be hard to hit, or risky. You may want to optimize for "stable" solution. (Robust optimization)
 - When to design for worst case?
   - common corner cases
   - environmental conditions vary
@@ -129,9 +107,7 @@ optimization)
 - Conflict between typed vs dynamic programmers:
   - Typed: "I don't need tests, I have types"
   - Dynamic: "I write tests, so I don't need types"
-- In reality, they are solving different places in the problem domain,
-but they have different beliefs about the world that are hidden in the
-shadows:
+- In reality, they are solving different places in the problem domain, but they have different beliefs about the world that are hidden in the shadows:
   - Typed: "Correctness comes solely from types"
   - Dynamic: "Correctness comes solely from example"
 - "I need nulls" -> You believe nulls are the only way to represent absence
@@ -204,13 +180,8 @@ allowfullscreen></iframe>
 - Ferguson happened
   - Thoughtworkers joined on the ground
   - Hands Up United: www.handsupunited.org
-- "Do not be led by digital metrics" - even though the activists had
-digital tooling, the tools were being used against activists. Phone
-calls, chats monitored. Movement tracked.
-- New group starting up in St. Louis called "Ray Clark, Sr." - named
-after a black man who played a strong role in the founding of Silicon
-Valley.
+- "Do not be led by digital metrics" - even though the activists had digital tooling, the tools were being used against activists. Phone calls, chats monitored. Movement tracked.
+- New group starting up in St. Louis called "Ray Clark, Sr." - named after a black man who played a strong role in the founding of Silicon Valley.
 - 21st century technologists need 21st century skillsets.
 - Dream Defenders
-- "it is our duty to fight for our freedom/it is our duty to win/we must
-love and support one another/we have nothing to lose but our chains"
+- "it is our duty to fight for our freedom/it is our duty to win/we must love and support one another/we have nothing to lose but our chains"

@@ -15,7 +15,7 @@ frequently nowadays, but here are some for posterity.</h2>
 
 Carbon Five sent a group of co-workers to Strange Loop in 2015.
 
-* [Strange Loop 2015: Notes and Reflections]()
+* [Strange Loop 2015: Notes and Reflections]({% post_url 2015-09-27-strange-loop-2015-reflections %})
 
 ## QCon SF 2014
 
