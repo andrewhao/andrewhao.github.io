@@ -1,11 +1,15 @@
 ---
 layout: page
-title: "Notes"
+title: "Conference Notes"
 date: 2014-11-15 08:31
 comments: false
 sharing: true
 footer: true
 ---
+
+<h2 class="intro">Once in awhile, I take notes when at a conference and
+upload the notable talks from each one. I find I do these less
+frequently nowadays, but here are some for posterity.</h2>
 
 ## Strange Loop 2015
 
