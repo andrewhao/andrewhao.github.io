@@ -68,6 +68,115 @@
 		<!-- START OF _includes/article.html -->
 <article>
 	<header>
+		<h1><a href="/2012/04/12/haml-object-references/">HAML object references</a></h1>
+		<time>12 April 2012</time>
+	</header>
+		<div class="content">
+			<p>Did you guys know that you can use the ‘[ ]’ brackets in HAML to automatically set the id and class on a tag, kind of like Rails’ <a href="http://api.rubyonrails.org/classes/ActionView/Helpers/TagHelper.html#method-i-tag">tag</a> helper?</p>
+
+<pre><code># file: app/controllers/users_controller.rb
+
+def show
+  @user = CrazyUser.find(15)
+end
+
+-# file: app/views/users/show.haml
+
+%div[@user, :greeting]
+  %bar[290]/
+  Hello!
+</code></pre>
+
+<p>is compiled to:</p>
+
+<pre><code>&lt;div class='greeting_crazy_user' id='greeting_crazy_user_15'&gt;
+  &lt;bar class='fixnum' id='fixnum_581' /&gt;
+  Hello!
+&lt;/div&gt;
+</code></pre>
+
+<p>Keeps things nice, concise and DRY. See the <a href="http://haml-lang.com/docs/yardoc/file.HAML_REFERENCE.html#object_reference_">HAML documentation</a>.</p>
+
+
+			
+			
+		</div>
+	<footer>
+		
+
+
+		
+			andrewhao 
+		
+
+
+
+  
+		
+			on
+		
+    <a class='category' href='/category/haml/'>haml</a>, <a class='category' href='/category/rails/'>rails</a>, <a class='category' href='/category/ruby/'>ruby</a>, <a class='category' href='/category/web/'>web</a>
+	
+
+
+	
+	
+	</footer>
+	
+</article>
+<!-- END OF _includes/article.html -->
+
+	
+		
+		<!-- START OF _includes/article.html -->
+<article>
+	<header>
+		<h1><a href="/2012/03/23/rspec-order-agnostic-array-matching/">RSpec order-agnostic array matching</a></h1>
+		<time>23 March 2012</time>
+	</header>
+		<div class="content">
+			<p>What’s that? <a href="http://stackoverflow.com/questions/2978922/rspec-array-should-another-array-but-without-concern-for-order">You want to write an expectation for an array but your method returns the Array in a nondeterministic ordering</a>?</p>
+
+<p>Simple. Write:</p>
+
+<pre><code>my_method.should =~ &lt;my_expectation&gt;
+</code></pre>
+
+<p>See the <a href="https://github.com/dchelimsky/rspec/blob/master/lib/spec/matchers/match_array.rb">source</a>.</p>
+
+			
+			
+		</div>
+	<footer>
+		
+
+
+		
+			andrewhao 
+		
+
+
+
+  
+		
+			on
+		
+    <a class='category' href='/category/andrew-2-dot-0/'>andrew 2.0</a>, <a class='category' href='/category/rails/'>rails</a>, <a class='category' href='/category/ruby/'>ruby</a>
+	
+
+
+	
+	
+	</footer>
+	
+</article>
+<!-- END OF _includes/article.html -->
+
+	
+		
+		<!-- START OF _includes/article.html -->
+<article>
+	<header>
 		<h1><a href="/2012/01/20/ohm-gotchas/">Ohm gotchas</a></h1>
 		<time>20 January 2012</time>
 	</header>
@@ -346,108 +455,6 @@
 <!-- END OF _includes/article.html -->
 
 	
-		
-		<!-- START OF _includes/article.html -->
-<article>
-	<header>
-		<h1><a href="/2011/08/10/introducing-boink-a-photobooth-for-the-rest-of-us/">Introducing Boink, a photobooth for the rest of us.</a></h1>
-		<time>10 August 2011</time>
-	</header>
-		<div class="content">
-			<p>My friends were complaining that wedding photobooths were too expensive to rent. Could we make one for them?</p>
-
-<p>Glen and I from the <a href="http://porkbuns.net">Porkbuns Initiative</a> stepped up in full armor, ready to help.</p>
-
-<p>What is it? It’s a self-running photobooth that uses your Mac for brains and DSLR for eyes and a Webkit browser for its clothes and a photo printer for… a printer. You can connect an iPad as the frontend for a nice visual touch (pun intended).</p>
-
-<p>We built it on a backend Rails instance, pushing SVG+HTML5 in the frontend and using the gphoto4ruby gem as a camera library wrapper.</p>
-
-<p>[caption id=”attachment_1105” align=”alignnone” width=”500” caption=”All dressed up and ready to go.”]<a href="http://www.g9labs.com/2011/08/10/introducing-boink-a-photobooth-for-the-rest-of-us/284852_10100607611957573_1201208_60011361_805844_n/"><img src="http://www.g9labs.com/wp-content/uploads/2011/08/284852_10100607611957573_1201208_60011361_805844_n-500x333.jpg" alt="" /></a>[/caption]</p>
-
-<p>[caption id=”” align=”alignnone” width=”500” caption=”An early UI prototype.”]<a href="http://www.flickr.com/photos/andrewhao/6006564205/"><img src="http://farm7.static.flickr.com/6029/6006564205_60fda1b366.jpg" alt="Boink Preview" /></a>[/caption]</p>
-
-<p>[caption id=”attachment_1106” align=”alignnone” width=”500” caption=”This comes out of the printer.”]<a href="http://www.g9labs.com/2011/08/10/introducing-boink-a-photobooth-for-the-rest-of-us/gen_219/"><img src="http://www.g9labs.com/wp-content/uploads/2011/08/gen_219-500x348.jpg" alt="" /></a>[/caption]</p>
-
-<h3 id="try-it-out">Try it out</h3>
-
-<p>Check it out on <a href="http://www.github.com/andrewhao/boink">Github</a>.</p>
-
-			
-			
-		</div>
-	<footer>
-		
-
-
-		
-			andrewhao 
-		
-
-
-
-  
-		
-			on
-		
-    <a class='category' href='/category/design/'>design</a>, <a class='category' href='/category/geek/'>geek</a>, <a class='category' href='/category/interfaces/'>interfaces</a>, <a class='category' href='/category/programming/'>programming</a>
-	
-
-
-	
-	
-	</footer>
-	
-</article>
-<!-- END OF _includes/article.html -->
-
-	
-		
-		<!-- START OF _includes/article.html -->
-<article>
-	<header>
-		<h1><a href="/2011/07/01/chat-app-frontend-prototype/">Chat App - Frontend Prototype</a></h1>
-		<time>01 July 2011</time>
-	</header>
-		<div class="content">
-			<p><a href="http://www.flickr.com/photos/andrewhao/5885861130/"><img src="http://farm6.static.flickr.com/5261/5885861130_71e25f2beb.jpg" alt="Chat View - 1" /></a></p>
-
-<p><a href="http://www.flickr.com/photos/andrewhao/5885860254/"><img src="http://farm7.static.flickr.com/6053/5885860254_a2aa7f7895.jpg" alt="Interview View" /></a></p>
-
-<p>Some UI work I did for a stealth startup in early ‘11. Responsible for look &amp; feel and frontend chat interactions. jQuery/UI communicating to a CakePHP/nodejs backend.</p>
-
-<p>We developed this prototype with <a href="http://www.wisdom.weizmann.ac.il/~dharel/SCANNED.PAPERS/Statecharts.pdf">statecharts</a>, a concept commonly found in event-driven programming and with which I first learned from <a href="http://frozencanuck.wordpress.com/2011/03/09/sproutcore-statecharts-vs-controllers/">Sproutcore</a>. I found it really helped map out all the complex user interactions we had to deal with on the page.</p>
-
-<p><a href="http://www.flickr.com/photos/andrewhao/sets/72157626954648391/with/5885860254/">See more screenshots from the set</a>.</p>
-
-			
-			
-		</div>
-	<footer>
-		
-
-
-		
-			andrewhao 
-		
-
-
-
-  
-		
-			on
-		
-    <a class='category' href='/category/design/'>design</a>, <a class='category' href='/category/interfaces/'>interfaces</a>, <a class='category' href='/category/javascript/'>javascript</a>, <a class='category' href='/category/software/'>software</a>
-	
-
-
-	
-	
-	</footer>
-	
-</article>
-<!-- END OF _includes/article.html -->
-
-	
 	
 <div class="pagination">
 	
@@ -464,7 +471,7 @@
 
 
 			<footer>
-				Copyright &copy; 2017
+				Copyright &copy; 2018
 
 	Andrew Hao
 

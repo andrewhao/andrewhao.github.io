@@ -4,7 +4,7 @@
   <title><![CDATA[Category: development | The Sweet Spot]]></title>
   <link href="http://www.g9labs.com/category/development/atom.xml" rel="self"/>
   <link href="http://www.g9labs.com/"/>
-  <updated>2017-09-21T10:31:26-07:00</updated>
+  <updated>2018-03-13T21:12:28-07:00</updated>
   <id>http://www.g9labs.com/</id>
   <author>
     <name><![CDATA[Andrew Hao]]></name>
@@ -12,6 +12,21 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Elixir and Elm things I've written about elsewhere]]></title>
+    <link href="http://www.g9labs.com/2018/03/13/elixir-and-elm-things-ive-written-elsewhere/"/>
+    <updated>2018-03-13T20:52:23-07:00</updated>
+    <id>http://www.g9labs.com/2018/03/13/elixir-and-elm-things-ive-written-elsewhere</id>
+    <content type="html"><![CDATA[<p>While it’s been pretty quiet around these parts, I’ve kept the technical blogging up over on <a href="https://blog.carbonfive.com">my employer’s blog</a>. I’ve got quite a few posts around Elixir:</p>
+
+<p><a href="https://blog.carbonfive.com/2018/01/16/functional-mocks-with-mox-in-elixir/">Functional Mocks with Mox in Elixir</a>: This post discusses a mocking library in Elixir called <a href="https://github.com/plataformatec/mox">mox</a> that adheres to the Elixir Way(tm) of mocking (that is, the usage of fakes or doubles).</p>
+
+<p><a href="https://blog.carbonfive.com/2018/01/30/comparing-dynamic-supervision-strategies-in-elixir-1-5-and-1-6/">Comparing Dynamic Supervision Strategies in Elixir 1.5 and 1.6</a>: In this blog post, I discuss the benefits of the new <code>DynamicSupervisor</code> module in Elixir 1.6 and how it makes the supervision of a dynamically-scaled supervision tree easier to set up.</p>
+
+<p>Finally, I wrote <a href="https://blog.carbonfive.com/2017/10/25/taking-elm-for-a-test-drive/">“Taking Elm for a Test Drive”</a> about playing around with Elm, giving my take on the trajectory of the language.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Moving to Ember App Kit]]></title>

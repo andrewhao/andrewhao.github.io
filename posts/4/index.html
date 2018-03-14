@@ -68,6 +68,159 @@
 		<!-- START OF _includes/article.html -->
 <article>
 	<header>
+		<h1><a href="/2014/11/15/my-own-robot-training-buddy/">My own robot training buddy.</a></h1>
+		<time>15 November 2014</time>
+	</header>
+		<div class="content">
+			<p>As an ultra runner, I am really into the mountains. As a software engineer, I’m really into data. So naturally, I’m interested in the intersection of both.</p>
+
+<p>I’ve particularly been interested in how systems like <a href="http://www.strava.com">Strava</a> work, especially when they quantify what is known as a “Suffer Score”, a single number denoting the amount of training stress (a.k.a. suffering) you put yourself through in a workout.</p>
+
+<p>How does a track workout compare to a long day on the trails? Which is tougher: a 5m tempo road run in and around my neighborhood, or a tough 2m climb into a local regional park?</p>
+
+<h2 id="data-in">Data in…</h2>
+
+<p>I first attacked the problem of getting data off of my phone. I record my GPX tracks in <a href="http://runmeter.com/">Runmeter</a>, a fantastic iPhone application with all sorts of metrics and data export capabilities. What I wanted was a seamless way to get the data off my phone without fuss after a hard workout.</p>
+
+<p>The application has a nifty feature in which it can automatically send an email to an email address after a workout is completed.</p>
+
+<p>I wrote an <a href="https://github.com/andrewhao/velocitas">email ingester, Velocitas</a>, with the help of <a href="http://cloudmailin.com/">Cloudmailin</a>, which fires off a POST request to the Node application. Velocitas does the following:</p>
+
+<ul>
+  <li><code>curl</code>s and downloads the GPX link embedded in the email.</li>
+  <li>Saves the GPX file to a linked Dropbox account.</li>
+  <li>Republishes the GPX file to a linked Strava account.</li>
+</ul>
+
+<h2 id="deriving-the-training-stress-score">Deriving the Training Stress Score</h2>
+
+<p>Next up: I wanted to do a quick and dirty implementation of the (run-based) Training Stress Score. <a href="https://github.com/andrewhao/stressfactor">Stressfactor</a>, a Ruby gem, is what came out of it.</p>
+
+<p>It implements the rTSS as detailed in <a href="http://home.trainingpeaks.com/blog/article/running-training-stress-score-rtss-explained">this article</a>.</p>
+
+<figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class="ruby"><span class="line"><span class="p">(</span><span class="n">duration_seconds</span> <span class="o">*</span> <span class="n">normalized_graded_pace</span> <span class="o">*</span> <span class="n">intensity_factor</span><span class="p">)</span> <span class="o">/</span>
+</span><span class="line"><span class="p">(</span><span class="n">functional_threshold_pace</span> <span class="o">*</span> <span class="mi">3600</span><span class="p">)</span> <span class="o">*</span> <span class="mi">100</span>
+</span></code></pre></td></tr></table></div></figure>
+
+<p>Stressfactor is a higher-order tookit for deriving meaning from GPX tracks, so it, at the moment, attempts to calculate the stress score and grade adjusted pace.</p>
+
+<p>The data still needs validation, so I’m eager to run it on my data set of GPX tracks from the past years.</p>
+
+<h2 id="generating-reports">Generating reports</h2>
+
+<p>I’m working on this part right now – I need to nicely display a report from my workout history in Dropbox and display per-GPX. I’ve started the project – <a href="https://github.com/andrewhao/stressreport">Stressreport</a>.</p>
+
+<h2 id="some-things-ive-learned-and-am-learning">Some things I’ve learned and am learning</h2>
+
+<ul>
+  <li>The human body is complex, and cannot be <a href="http://fellrnr.com/wiki/Modeling_Human_Performance">easily modeled</a> without sufficient data. That said, what I’m doing now may be sufficient for basic training data.</li>
+  <li>The nature of parsing and generating higher-order stats from raw data may lend itself well to experimentation with functional languages. I’m interested in trying to reimplement Stressfactor in Scala, or a functional equivalent.</li>
+  <li>Deploying all my apps on Heroku’s free tier may actually be an interesting start to building a microservice architecture – with the space limitations on Heroku, I’m forced to build new features on new services. Call it cheapskate architecture.</li>
+</ul>
+
+			
+			
+		</div>
+	<footer>
+		
+
+
+		
+
+
+
+  
+		
+			Tagged under
+		
+    <a class='category' href='/category/open-source/'>open source</a>, <a class='category' href='/category/running/'>running</a>, <a class='category' href='/category/software/'>software</a>
+	
+
+
+	
+	
+	</footer>
+	
+</article>
+<!-- END OF _includes/article.html -->
+
+	
+		
+		<!-- START OF _includes/article.html -->
+<article>
+	<header>
+		<h1><a href="/2014/11/05/qcon-sf-2014/">Recap: QCon SF 2014</a></h1>
+		<time>05 November 2014</time>
+	</header>
+		<div class="content">
+			<p>Blurb sent me off to QCon SF 2014 for three days.</p>
+
+<h2 id="notes">Notes</h2>
+
+<p>I took a series of notes each day in attendance:</p>
+
+<ul>
+  <li><a href="/notes/2014-11-03-qconsf-day-one.html">Day One: Architectures, Functional</a></li>
+  <li><a href="/notes/2014-11-04-qconsf-day-two.html">Day Two: Rx Systems, API Platforms</a></li>
+  <li><a href="/notes/2014-11-05-qconsf-day-three.html">Day Three: Microservices, Culture</a></li>
+</ul>
+
+<h2 id="summary">Summary</h2>
+
+<ul>
+  <li>Big trends in continuous delivery and deployment – deploy more often, smaller feedback loops</li>
+  <li>A lot of emphasis on event driven architectures + microservices. Lots of emphasis on DDD as a design tool.</li>
+  <li>Reactive systems with functional implementations were widely discussed as a scaling tool (backpressure-sensitive) and as a coordination tool between multiple async services.</li>
+  <li>Big data/realtime streaming talks were interesting – my personal experience with them is limited, but it seems there is a debate over the merits of existing Lambda architecture practice.</li>
+  <li>A lot of talk about microservice orchestration tools – acknowledging the pain of configuration and management of many services.</li>
+  <li>Scala got a lotttt of attention. Probably because of its presence in bigger companies like Netflix, Twitter, LinkedIn. Wonder what smaller startups are using.</li>
+  <li>Web Components were a big upcoming trend in frontend technologies. Strong modularization of views + behaviors in HTML documents.</li>
+</ul>
+
+<h2 id="questions">Questions</h2>
+
+<ul>
+  <li>If I could do a startup over again, would I begin an app in Rails? Where is the sweet spot for that sort of application architecture?</li>
+  <li>How can I design systems such that they can be extractible into focused components/services as early as possible?</li>
+  <li>How can we plan for failures (<a href="http://en.wikipedia.org/wiki/Fault_injection">fault injection</a>)?</li>
+  <li>How does one implement change in software engineering organizations? Bottom-up (organic initiatives bubbling up through management) vs top-down (management/software leaders direct org to implement).</li>
+  <li>How are we doing with encouraging women and minorities who traditionally are underrepresented in our industry?</li>
+  <li>What are places in our hiring funnels that, unbeknownst to us, may be turning away or detracting women and minorities?</li>
+</ul>
+
+			
+			
+		</div>
+	<footer>
+		
+
+
+		
+
+
+
+  
+		
+			Tagged under
+		
+    <a class='category' href='/category/conference/'>conference</a>, <a class='category' href='/category/qconsf/'>qconsf</a>, <a class='category' href='/category/software/'>software</a>
+	
+
+
+	
+	
+	</footer>
+	
+</article>
+<!-- END OF _includes/article.html -->
+
+	
+		
+		<!-- START OF _includes/article.html -->
+<article>
+	<header>
 		<h1><a href="/2014/11/01/conways-law-for-humans/">Conway's Law for humans</a></h1>
 		<time>01 November 2014</time>
 	</header>
@@ -564,187 +717,6 @@ finding myself having problems compiling from Coffeescript -&gt; ES5 JS -&gt; ES
 <!-- END OF _includes/article.html -->
 
 	
-		
-		<!-- START OF _includes/article.html -->
-<article>
-	<header>
-		<h1><a href="/2014/04/26/implementing-ddd-chapter-2/">Implementing DDD: Domains, Subdomains and Bounded Contexts</a></h1>
-		<time>26 April 2014</time>
-	</header>
-		<div class="content">
-			<h2 id="chapter-2-domains-subdomains-and-bounded-contexts">Chapter 2: Domains, Subdomains, and Bounded Contexts</h2>
-
-<p>A <em>Domain</em> is what a business does and the surrounding context of how it does business. It is important to model out its supported <em>Subdomains</em> – that is, the smaller components of the business that collaborate in real, day-to-day operations of the business. The book describes these as <em>Core Domains</em>.</p>
-
-<p>Finally, a <em>Bounded Context</em> is the physical manifestation of the solution space as software – models living in a real application. Its key feature in the context of DDD is as a linguistic barrier between different domains.</p>
-
-<p>In an ideal world, each <em>Subdomain</em> maps directly to one <em>Bounded Context</em>. In the real world, this is less common since we tend to build things into monolithic systems. Still – many monolithic applications have several components that could in themselves be bounded contexts.</p>
-
-<h6 id="side-note-in-rails-one-could-think-of-engines-as-a-bounded-context-but-that-might-be-a-blog-post-for-another-time">Side note: In Rails, one could think of Engines as a <em>Bounded Context</em>. But that might be a blog post for another time.</h6>
-
-<p>It is important to get these ideas and concepts down correctly because we need correct modeling of our systems to determine what they do.</p>
-
-<h3 id="bounded-contexts-and-terms">Bounded Contexts and terms</h3>
-
-<p>It’s not usually realistic to get the entire organization agreeing on a universal linguistic definition for every term. Instead, DDD assumes that different terms have different meanings in different contexts.</p>
-
-<p>The author then dives into the an example of a book, where a <em>book</em> means several different things to different people in different contexts. A book is touched upon by authors, graphic designers, editors, marketing folks. In each of these contexts, the features of a book mean different things at different times. It is impossible to develop an all-knowing Book model without disagreement between stakeholders. DDD, instead, acknowledges these differences and allows stakeholders to use linguistic terms from within their unique Bounded Contexts.</p>
-
-<p>Bounded Contexts may include things like:</p>
-
-<ul>
-  <li>Object models</li>
-  <li>A database schema / persistence layer</li>
-  <li>A SOAP or REST API</li>
-  <li>A user interface</li>
-</ul>
-
-<h3 id="bounded-context-antipatterns">Bounded context antipatterns</h3>
-
-<p>You may be tempted to divide up a bounded context by architectural concerns, or because you want to assign smaller tasks to developers (resource allocation). Beware that this kind of work tends to fragment the language.</p>
-
-<p>DDD operates on <em>linquistic drivers</em>. The unity, cohesion and domain-adherence of the bounded context should be the first priority in the design.</p>
-
-<p>Assigning two teams to the same bounded context results in fragmentation of the bounded context.</p>
-
-<p>Ideally: we strive to assign one team to work on one Bounded Context with one Ubiquitous Language at a time.</p>
-
-<h6 id="in-rails-what-are-the-bounded-contexts-it-could-be-the-top-level-rails-application-or-an-engine-or-a-gem-that-define-the-context-boundaries">In Rails, what are the bounded contexts? It could be the top-level Rails application, or an engine, or a gem, that define the context boundaries._</h6>
-
-<h3 id="a-story">A story…</h3>
-
-<p>The chapter then goes on to describe their fictional team designing through three iterations off their DDD strategy:</p>
-
-<p>A system in which all domains live within the same bounded context. They see the folly of this and refactor with some tactical patterns, like creating services.</p>
-
-<p>This is, however, missing the point. They realized they needed to listen to business and their domain experts to find out exactly where the right places were to segregate the contexts. The team discovers that the business has a desire to go in a new direction which allows them to segregate the domain in such a way that would enable future directions for the business.</p>
-
-<h6 id="how-often-are-we-as-developers-in-conversation-with-our-product-owners-and-asking-where-the-business-wants-to-go-in-the-future">How often are we as developers in conversation with our product owners and asking where the business <em>wants</em> to go in the future?</h6>
-
-<p>Conversations with the business reveal an intention to develop an add-on product to the core product. This implies the development of two subdomains. However, further investigation reveals that the shared overlap of certain domain models (like users, roles, and access management) cannot simply be identically shared between two systems, since their <em>linguistic meanings</em> in the two systems differ slightly. Instead, the developers use the linguistic problem to develop a third bounded context.</p>
-
-<p>The developers separate their app into three bounded contexts built as three software systems.</p>
-
-			
-			
-		</div>
-	<footer>
-		
-
-
-		
-
-
-
-  
-		
-			Tagged under
-		
-    <a class='category' href='/category/book-review/'>book review</a>, <a class='category' href='/category/ddd/'>ddd</a>, <a class='category' href='/category/domain-driven-design/'>domain-driven design</a>
-	
-
-
-	
-	
-	</footer>
-	
-</article>
-<!-- END OF _includes/article.html -->
-
-	
-		
-		<!-- START OF _includes/article.html -->
-<article>
-	<header>
-		<h1><a href="/2014/03/08/six-months-as-a-manager/">Six months as a manager</a></h1>
-		<time>08 March 2014</time>
-	</header>
-		<div class="content">
-			<p>It’s been approximately six months since I’ve entered engineering management. Here are some thoughts reflecting back on that season now.</p>
-
-<h2 id="i-didnt-like-it-at-first">I didn’t like it at first.</h2>
-
-<p>Let’s face it: I didn’t like the feeling of being a “manager” now. It comes with too much baggage of pointy-haired bosses or ineffective waste layers. Why do we need managers anyways?</p>
-
-<p>More to the point: I love coding. I love working on rewarding projects. I hated the thought of being tied up in meetings while day by day getting more and more disconnected from code.</p>
-
-<p>So I struggled a lot in those first few months (still do), trying to maintain the balance of working with product management to get a strategic vision communicated, or with other engineering teams to get a tactical vision in place, versus trying to be deeply involved with the code base and doing code reviews.</p>
-
-<h3 id="you-cant-code-anymore">You can’t code anymore.</h3>
-
-<p>In the end? I had to come to grips with the reality that my team needed me in a different role – a strategic role, helping them see the big picture, sniffing out dependencies and destroying blockers before they got to them.</p>
-
-<p>But I still needed to be spot-on with the code – I still needed to be in the know with new product features as they are being developed. So it’s my priority to be in design discussions, but I can’t be the implementer anymore.</p>
-
-<p>So I’ve started a change in mindset – how can offload all the random codebase knowledge I’ve acquired over the years to the team? How can I effectively share my expertise so I’m out of a (coding) job? I’m starting to be more convinced that the answer to that is pair programming.</p>
-
-<h3 id="pairing-your-way-out-of-a-job">Pairing your way out of a job</h3>
-
-<p>Nowadays if there’s a story or task in which I am the only one (or one of few) with domain knowledge about the feature, I’ll ask a team member to pair with me on the feature. That way we get a really effective teaching tool about the domain model, and the extra plus in that if I get pulled into a meeting, development can continue.</p>
-
-<h3 id="but-you-still-have-to-code">But you still have to code.</h3>
-
-<p>So I code on the weekends (not everybody can do this!)</p>
-
-<p>We’re a Rails team taking on a new Ember project. I need to get my chops up around Ember so I’ve decided to pull in a <a href="https://github.com/andrewhao/hendrix">side project</a> to hack on the weekends. My side work on <a href="http://www.wejoinin.com">Wejoinin</a> lets me do all the Rails things I don’t get to do anymore at work.</p>
-
-<p>And it works for me because I love to code, and to be honest, I don’t ever want to get weak in that area.</p>
-
-<p>To be honest, I’d love more feedback from other engineering managers in that area. How do you keep your chops sharp?</p>
-
-<h3 id="people-are-your-priority">People are your priority.</h3>
-
-<p>I’ve read often that <a href="http://firstround.com/article/My-Management-Lessons-from-Three-Failed-Startups-Google-Apple-Dropbox-Twitter-and-Square">empathy is everything</a> when it comes to management, and it still rings true. No matter how this product launch goes, in the end your team will remember how you treated them, how their thoughts and feelings were taken into account.</p>
-
-<p>One thing I’m trying to check myself is my tendency to jump in on other people’s sentences and cut them off. It sounds silly, but sometimes I realize I like to talk a lot more than listen. As a manager, sometimes you need to dwell on the feedback of a team member for some time before you write it off. There’s usually a core message in there that’s completely valid – a frustration, a desire for change. Empathy means communicating the message: “I heard you, and I respect your thoughts.”</p>
-
-<h3 id="its-your-attitude">It’s your attitude</h3>
-
-<p>And finally, here’s what I think: your attitude toward your company and the team make <em>ALL</em> the difference.</p>
-
-<ul>
-  <li>Is your orientation truly to support your team? How will it be clear in the long run that your supported someone in their career?</li>
-  <li>Where are places in your workday where you can connect and sympathize with people – share a joke, listen to someone’s frustration, or just simply go out to lunch?</li>
-  <li>How are you giving people something to work toward to: a vision of changing the world (for Blurb, it’s about transforming the publishing industry).</li>
-  <li>How are you addressing negativity? Grumbling is important to address head on in its own space, but how are you empowering people to take charge of issues of culture or organizational friction?</li>
-  <li>How are you checking your own negativity – sometimes we forget that we’re the solutions to our own problems, and I’ve found oftentimes that the very issues that you assume are impossible to change are crackable by having the right relationships with the right people.</li>
-</ul>
-
-<p>The little things matter.</p>
-
-<h3 id="growth-areas">Growth areas</h3>
-
-<p>Lord knows I have a lot to learn here. One area I’m learning to grow in is how to give honest and accurate feedback to team members, without fearing how they’re going to receive it.</p>
-
-<p>Another area? Delegation. I’m learning to delegate the little micro-responsibilities in my job that I just kind of expect that I’m supposed to do. Case in point: every week we accept a translation import from a third-party translation service. I realized that I was burning a lot of time reviewing hundreds of lines of translation keys every week, and the repetition of it was sapping a lot of my energy. I had to learn to ask a team member for help and give them responsibility to own that function of the process.</p>
-
-			
-			
-		</div>
-	<footer>
-		
-
-
-		
-
-
-
-  
-		
-			Tagged under
-		
-    <a class='category' href='/category/code/'>code</a>, <a class='category' href='/category/management/'>management</a>, <a class='category' href='/category/thoughts/'>thoughts</a>
-	
-
-
-	
-	
-	</footer>
-	
-</article>
-<!-- END OF _includes/article.html -->
-
-	
 	
 <div class="pagination">
 	
@@ -761,7 +733,7 @@ finding myself having problems compiling from Coffeescript -&gt; ES5 JS -&gt; ES
 
 
 			<footer>
-				Copyright &copy; 2017
+				Copyright &copy; 2018
 
 	Andrew Hao
 

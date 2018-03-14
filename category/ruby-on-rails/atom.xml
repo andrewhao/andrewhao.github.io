@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: ruby on rails | The Sweet Spot]]></title>
+  <link href="http://www.g9labs.com/category/ruby-on-rails/atom.xml" rel="self"/>
+  <link href="http://www.g9labs.com/"/>
+  <updated>2018-03-13T21:12:28-07:00</updated>
+  <id>http://www.g9labs.com/</id>
+  <author>
+    <name><![CDATA[Andrew Hao]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[JHipster &amp; Spring Boot for Rails developers]]></title>
+    <link href="http://www.g9labs.com/2016/10/14/jhipster-and-spring-boot-for-rails-developers/"/>
+    <updated>2016-10-14T14:24:39-07:00</updated>
+    <id>http://www.g9labs.com/2016/10/14/jhipster-and-spring-boot-for-rails-developers</id>
+    <content type="html"><![CDATA[<p>The first question you may be asking is - <em>why would I want to go from Rails to Java</em>?</p>
+
+<p>Maybe you don’t have a choice. Maybe you started a new job. Maybe you heard Java was the new, old hotness. In any case, you’re a Ruby on Rails developer and you’re staring Java in the face.</p>
+
+<h3 id="the-languages">The languages</h3>
+
+<p>First off, Rails and Java share similar philosophies.</p>
+
+<p>You may argue that Java is the One True Language for old-fashioned Object-Oriented Programming. The existence of strong types lead to powerful expressions around OOP concepts like inheritance, polymorphism, and the like.</p>
+
+<p>Java and Ruby share similar philosophies - in that Everything Is An Object. In Ruby, the <code>nil</code> value is modeled as a <code>NilClass</code>. In Java, objects abound everywhere.</p>
+
+<h3 id="the-frameworks">The frameworks</h3>
+
+<p>I can’t speak from firsthand experience, but Java developers will tell you that developing Java apps in the early 2000s was like configuration soup. Everything was explicit and configured in XML.</p>
+
+<p>Spring Boot arguable moves the state of the art in Java frameworks more towards’ Rails’ philosophies - that convention trumps configuration. It accomplishes this through <em>annotations</em> - more on this later.</p>
+
+<p>Rails was precisely so groundbreaking and exciting in 2005 because it was everything Java was not - terse, expressive, and unapologetically convention-driven. Where in Java, everything was explicitly traceable through system calls, Rails used magic methods of dynamically-defined methods, monkey-patching and big ol’ global God Objects to accomplish its magic.</p>
+
+<h3 id="liquibase-vs-active-record">Liquibase vs Active Record</h3>
+
+<p>In Active Record, database changes are called <em>migrations</em>.</p>
+
+<p>Migrations are only run from migration files, and may optionally be generated from the CLI.</p>
+
+<p>In Liquibase, these are called <em>changesets</em>, and the files are called <em>changelogs</em>.</p>
+
+<p>These migrations are either generated from the Liquibase CLI, or there is a nifty tool that reads Hibernate persistence entities and generates a “diff” against a known database, writing the migration to a file.</p>
+
+<p>Rails checks in a <code>schema.rb</code> file, encompassing the canonical definition of the DB schema. There is no such equivalent in Liquibase (* I may be wrong).</p>
+
+<p><strong>To be continued…</strong></p>
+]]></content>
+  </entry>
+  
+</feed>

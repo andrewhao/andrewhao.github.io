@@ -68,6 +68,162 @@
 		<!-- START OF _includes/article.html -->
 <article>
 	<header>
+		<h1><a href="/2010/03/12/shiny-font-overhaul/">Shiny font overhaul!</a></h1>
+		<time>12 March 2010</time>
+	</header>
+		<div class="content">
+			<h3 id="httpwwwg9labscomwp-contentuploads201003screenshot1-500x126pnghttpwwwg9labscom20100312shiny-font-overhaulscreenshot1"><a href="http://www.g9labs.com/2010/03/12/shiny-font-overhaul/screenshot1/"><img src="http://www.g9labs.com/wp-content/uploads/2010/03/screenshot1-500x126.png" alt="" /></a></h3>
+
+<p>A couple of months ago I switched over to TypeKit, a cloud-hosted font service (buzzword! “cloud” gets me all warm and fuzzy). They basically take your font stack and enhance it with @font-face goodness, pulling in lots of fonts from their library.</p>
+
+<h3 id="why-not-roll-a-font-face-implementation-yourself">Why not roll a @font-face implementation yourself?</h3>
+
+<p>The availability of good, high-quality, <em>licensed</em> fonts out there is still pretty small. The hoopla over @font-face has been centered around the fact that the fonts are unobfuscated, and anybody with the gumption to do so could go out to your site and steal yer font. So I’d say if you have a font you want to put up on the Web, you’d better make sure the font publisher/licenseholder is kosher with that.</p>
+
+<p>(Ironically, Microsoft got it pretty right with their EOT font format, drafted way back in the days of IE 4 (!). Oh yeah, TypeKit takes care of EOT fonts for you as well.)</p>
+
+<p>(Also, Mozilla is pushing their <a href="http://hacks.mozilla.org/2009/10/woff/">WOFF format</a> which is currently supported in FF 3.6. Typekit does that too!).</p>
+
+<h3 id="so-hows-typekit-working-out-for-you">So, how’s TypeKit working out for you?</h3>
+
+<p>Well, TypeKit’s not bad. If you’re running a cutting-edge browser (Safari 4, FF 3+, Chromium 4), you’re going to see the font shininess. If you’re not, you still get the default stack.</p>
+
+<p>A problem way early on was the fact that Firefox for Windows was rendering certain fonts with very, very jagged features (<a href="http://www.elated.com/articles/typekit-first-impressions/">see comparisons</a>). Turns out this was a fault of both the font and the OS/browser– certain browsers and OSes don’t render hints properly.</p>
+
+<p>The best solution I’ve found? <a href="http://blog.typekit.com/2009/12/08/new-fonts-and-improved-hinting-from-our-partners/">Use a better font with better hinting</a>.</p>
+
+<p>I’m using FF Nuvo Web and FF Enzo Web Pro:</p>
+
+<p><a href="http://www.g9labs.com/2010/03/12/shiny-font-overhaul/screenshot-g9labs-design-studio-typekit-namoroka/"><img src="http://www.g9labs.com/wp-content/uploads/2010/03/Screenshot-g9Labs-Design-Studio-Typekit-Namoroka-500x412.png" alt="" /></a></p>
+
+<p>All in all, I’m pretty satisfied.</p>
+
+			
+			
+		</div>
+	<footer>
+		
+
+
+		
+			andrewhao 
+		
+
+
+
+  
+		
+			on
+		
+    <a class='category' href='/category/andrew-2-dot-0/'>andrew 2.0</a>
+	
+
+
+	
+	
+	</footer>
+	
+</article>
+<!-- END OF _includes/article.html -->
+
+	
+		
+		<!-- START OF _includes/article.html -->
+<article>
+	<header>
+		<h1><a href="/2009/02/15/thoughts-on-rural-computing-in-botswana/">Thoughts on rural computing in Botswana</a></h1>
+		<time>15 February 2009</time>
+	</header>
+		<div class="content">
+			<p>I’m currently in Botswana, doing volunteer work at a nonprofit Christian agency called <a href="http://lovebotswana.org">Love Botswana Outreach Mission</a>. Among my responsibilities are helping out with the organization’s IT needs. I was pleasantly surprised to discover that the organization is wired for 24/7 Internet access, despite being located about 10km out from the center of Maun, a medium-sized village.</p>
+
+<h3 id="infrastructure">Infrastructure</h3>
+
+<p>As far as I understand it, there is little-to-no telecom infrastructure here in Maun (i.e. there are no telephone, cable or fiber lines). Thus, most communication links happen via satellite or wifi radio.</p>
+
+<p>The mission has a 100-ft radio tower, where a local ISP colocates a wireless repeater to hook into its wireless network. In exchange, the mission receives a special deal on its Internet access plan.</p>
+
+<h3 id="existing-network-setup">Existing network setup</h3>
+
+<p>Because of the relatively low price and quick setup of wireless access points, the mission currently uses a mix of wired switches and wireless repeaters to extend the reach of the network.</p>
+
+<p>A directional antenna on the tower beams a signal to a directional antenna mounted above the IT office trailer to an access point connected through a gateway serving as the DHCP server and firewall. From there, the signal gets sent via a a wired Ethernet network to the other office buildings.</p>
+
+<p>Wireless access points have been installed at various points along the wired office network, allowing wireless access onto the Net.</p>
+
+<p>Only recently has Internet connectivity been extended to reach a cluster of family homes, situated about 200 meters away from the office buildings. A wireless access point is set up in the IT trailer, broadcasting on a +10dB omnidirectional antenna. The closest house to the office has an outdoor +10dB omnidirectional antenna hooked up to a wireless bridge/repeater. Thus, the link from the houses to the gateway is maintained via a wireless bridge. The houses themselves are connected on a hardwired Ethernet network.</p>
+
+<h3 id="lessons-from-the-field">Lessons from the field</h3>
+
+<h4 id="lesson-plan-for-environmental-factors">Lesson: plan for environmental factors.</h4>
+
+<p>We observed that the wireless link from the homes to the offices would be intermittently reliable at best, often going down for no reason. We discovered later on that our link would fail on particularly humid days, because the signal quality over the wireless bridge would degrade significantly and decrease the range of the network.</p>
+
+<h4 id="lesson-keep-power-voltages-in-mind">Lesson: keep power voltages in mind.</h4>
+
+<p>I fried a power supply when I left it switched to a 115V (US) input, and plugged it into the 220V power plugs there. Sizzle. This led to a lot of apologizing and reassurances from the staff that this was a common thing for Americans to do.</p>
+
+<h4 id="lesson-clean-computers-frequently">Lesson: Clean computers frequently.</h4>
+
+<p>Dust is a common fact of life here. Thus, computer innards were frequently coated with dust, and more susceptible to overheating and/or a shorter lifecycle on moving parts (fans, etc).</p>
+
+<h4 id="lesson-scan-for-viruses-too">Lesson: Scan for viruses, too</h4>
+
+<p>I don’t know why, but viruses just seem to be more common here. I’ve been passed a few flash drives that have been infected. In the states, I’d be (un)lucky to find one a year.</p>
+
+<h4 id="lesson-plan-for-low-bandwidth-and-outages">Lesson: Plan for low bandwidth and outages</h4>
+
+<p>In the States, we depend on always-on Internet. Here, however, the Internet seems to go down for any of a multitude of reasons. If it <em>is</em> up, it’s being shared by fifteen computers all downloading at once over an already-restricted pipeline. Thus, Web pages can’t be expected to load reliably, Skype sessions will cut out, and chat services won’t be accessible.</p>
+
+<p>I’ve come to depend on <a href="http://gmailblog.blogspot.com/2009/01/new-in-labs-offline-gmail.html">Offline Gmail</a> to compose email when the Internet’s down. Other productivity apps like <a href="http://rememberthemilk.com">Remember the Milk</a> and <a href="http://docs.google.com">Google Docs</a> offer offline modes for their applications.</p>
+
+<p>I rely on Bonjour-enabled chat (iChat on a Mac, <a href="http://pidgin.im">Pidgin</a> + <a href="http://apple.com/support/downloads/bonjourforwindows.htm">Bonjour for Windows</a>) for the times when the Internet or DHCP server goes down and I need to chat with somebody in another office or house.</p>
+
+<p>When making large-ish downloads, I’ve gone to using a download manager (flashback to the days of the 56K modem trying to download a 20 MB file)! I’ve been using <a href="http://freedownloadmanager.org">Free Download Manager</a>. It’s not much of a name, but it’s a full-featured open source program allowing you to schedule, pause, resume downloads.</p>
+
+<p>Just FYI: my downloads range between 900 bytes/sec up to 28KB/sec.</p>
+
+<h4 id="lesson-designing-web-pages-for-low-bandwidth-is-still-a-good-idea">Lesson: Designing Web pages for low bandwidth is still a good idea</h4>
+
+<p>As a Web developer, I tend to make the erroneous assumption people have the same quality of high-speed connection as I do back home in the States. Now that I’m a continent away from most of the sites I visit, I’m beginning to realize that optimizing a site for bandwidth savings can be a lifesaver. Here, a round trip to and from the States can take up to 20 seconds. That adds up over the course of a page load. As a Web designer or developer, ask yourself if you can be doing anything for the “56K guy”: Are you using CSS sprites? A CDN? Compressing (gzip, mod_deflate) your output? Are you optimizing your image files for the Web?</p>
+
+<h4 id="lesson-knock-out-as-many-failure-points-as-possible">Lesson: Knock out as many failure points as possible</h4>
+
+<p>Because the wireless bridge seemed to be the weakest link in our network, we decided to bypass it. We ran a really long Ethernet line from the IT office to the houses. This meant ordering a 200-meter length of cable, some sleeving and doing a lot of trench-digging to embed the cable under the dirt access roads. Our work paid off as everybody in the houses now enjoys a reliable network link to the main server (including me!).</p>
+
+			
+			
+		</div>
+	<footer>
+		
+
+
+		
+			andrewhao 
+		
+
+
+
+  
+		
+			on
+		
+    <a class='category' href='/category/andrew-2-dot-0/'>andrew 2.0</a>, <a class='category' href='/category/geek/'>geek</a>, <a class='category' href='/category/ict4d/'>ict4d</a>, <a class='category' href='/category/web/'>web</a>
+	
+
+
+	
+	
+	</footer>
+	
+</article>
+<!-- END OF _includes/article.html -->
+
+	
+		
+		<!-- START OF _includes/article.html -->
+<article>
+	<header>
 		<h1><a href="/2008/11/05/setting-up-a-multi-ap-wireless-network/">Setting up a multi-AP wireless network</a></h1>
 		<time>05 November 2008</time>
 	</header>
@@ -337,139 +493,6 @@
 <!-- END OF _includes/article.html -->
 
 	
-		
-		<!-- START OF _includes/article.html -->
-<article>
-	<header>
-		<h1><a href="/2008/09/24/updated-portfolio-sort-of/">Updated portfolio... sort of.</a></h1>
-		<time>24 September 2008</time>
-	</header>
-		<div class="content">
-			<p>Since I’m in the process of doing some housekeeping around the blog, I’ve begun moving my <a href="http://www.flickr.com/photos/andrewhao/sets/72157602687541585/">old design portfolio over to Flickr</a>.</p>
-
-<p><a href="http://www.flickr.com/photos/andrewhao/sets/72157602687541585/"><img src="http://www.g9labs.com/wp-content/uploads/2008/09/design-gallery-updated-300x288.png" alt="" /></a></p>
-
-<p>This is sort of an intermediary step to another intermediary step of overhauling my portfolio (yeah, I’ve been meaning to do this for the past five years). Watch this space for updated project briefs to come trickling in.</p>
-
-			
-			
-		</div>
-	<footer>
-		
-
-
-		
-			andrewhao 
-		
-
-
-
-  
-		
-			on
-		
-    <a class='category' href='/category/andrew-2-dot-0/'>andrew 2.0</a>, <a class='category' href='/category/design/'>design</a>
-	
-
-
-	
-	
-	</footer>
-	
-</article>
-<!-- END OF _includes/article.html -->
-
-	
-		
-		<!-- START OF _includes/article.html -->
-<article>
-	<header>
-		<h1><a href="/2008/09/16/a-laymans-guide-to-the-oai-ore-data-aggregation-protocol/">A layman's guide to the OAI-ORE data aggregation protocol</a></h1>
-		<time>16 September 2008</time>
-	</header>
-		<div class="content">
-			<p>In Spring 2008, I took an information architecture course in the <a href="http://ischool.berkeley.edu">UC Berkeley School of Information</a>, taught by <a href="http://dret.typepad.com">Erik Wilde</a> (disclaimer: I dropped the course after a month because of schedule conflicts). An interesting part of my research for that class involved investigating the nascent <a href="http://www.openarchives.org/ore/">Object Reuse and Exchange (OAI-ORE)</a> protocol, a way of organizing groups of resources across the Web. I’m going to try to describe in laymen’s terms what I learned from my research and explain why it’s significant.</p>
-
-<h3 id="group-things-together-on-the-web">Group things together on the Web</h3>
-
-<p>Let’s say you’re looking for a book online. You’ll hit up JStor or Google Books and browse through the pages of that book you found. Easy enough, right?</p>
-
-<p>In reality, the <em>physical, electronic representation</em> of the book online is actually more than just “that book on JStor” or “http://www.jstor.com/book”. It’s actually a collection of images on a Web server. We need a uniform way to descibe that jStor’ specific online version of “War and Peace” is actually comprised of “page1.jpg”, “page2.jpg”, et cetera.</p>
-
-<p>As another example, let’s say that the local public library wants to create a digital representation of its materials on Jimi Hendrix. Well, the library’s got Jimi Hendrix CDs, Jimi Hendrix books, Jimi Hendrix magazine articles, and so on. With the OAI-ORE protocol, we can create a digital “Jimi Hendrix @ Your Local Public Library” object that lists out each CD, book and magazine article contained in the library.</p>
-
-<p>Let’s say on top of that, a certain Jimi Hendrix biography references “Little Wing” on pages 12, 141 and 254. This “Jimi Hendrix” object is capable of encoding that reference from those pages to “Little Wing” on the “Axis: Bold as Love” album in the library.</p>
-
-<h3 id="why-even-have-a-description-framework">Why even have a description framework?</h3>
-
-<p>As the Web gets more connected and as we’re seeing the rise of interoperable Web services, it becomes increasingly important to have a standard resource description language. Various protocols (such as RDF) have built a foundation on which to describe relationships between electronic resources.</p>
-
-<p>Think of OAI-ORE as a way of organizing information for re-use by others. If every library created its own “Jimi Hendrix” resource object and made them accessible to others, we could potentially create programs and Web services to collect all “Jimi Hendrix” objects from across the globe and reconstruct the ultimate, canonical Jimi Hendrix electronic resource library. We could note which books made references to “Little Wing.” We could view “Little Wing” as an WMA file, an MP3 file, or as lyrics.</p>
-
-<p>The key is that by standardizing a description language, we <strong>enable programmatic ways to collect and synthesize data</strong> that can potentially add to the value of the world’s sum knowledge.</p>
-
-<h3 id="resource-maps--implementation-formats">Resource maps &amp; implementation formats</h3>
-
-<p>OAI-ORE is a specification that defines relationships between resources through an object called the <em>resource map</em>. The resource map is a resource file enumerating a collection of resources and describing the relationships between each resource. Each resource map has its own URI, so it can be discoverable and accessible.</p>
-
-<p>There is no standard file format to encode resource maps. Currently, the OAI-ORE working group has suggested the following description formats (HT: <a href="http://www.natlib.govt.nz/downloads/IT19-Hunter-OAI-ORE-Oct30.ppt">Univ. of Queensland</a>):</p>
-
-<ul>
-  <li><a href="http://www.w3.org/TR/REC-rdf-syntax/">RDF</a> (Resource Description Framework)</li>
-  <li><a href="http://en.wikipedia.org/wiki/Atom_(standard)">Atom</a> syndication format</li>
-  <li><a href="http://nurture.nature.com/yads">YADS</a></li>
-  <li><a href="http://www.w3.org/2004/03/trix/">TriX</a> (RDF triples in XML)</li>
-</ul>
-
-<p>The <a href="http://www.openarchives.org/ore/0.9/rdfxml">recommended method of describing a resource map is in RDF/XML</a>. I’m not very familiar with the RDF syntax, however, and the TriX format, which affords us RDF triples that can easiliy express relationships between objects and resources, seems to make more sense to me.. However, there is a <a href="http://www.openarchives.org/ore/0.1/atom">complete Atom implementation of the protocol</a>, used when syndication is preferred.</p>
-
-<p>I’d definitely refer the reader to the <a href="http://www.natlib.govt.nz/downloads/IT19-Hunter-OAI-ORE-Oct30.ppt">Univ. of Queensland’s OAI-ORE PDF overview</a> for a broader overview of the protocol and its potential implementations.</p>
-
-<h3 id="the-nitty-gritty">The nitty-gritty</h3>
-
-<blockquote>
-  <p><strong>Collections</strong>: Multiple resources can be grouped together, but only via an “aggregate object” or a “collection”, which maintains pointers to each object in a collection.</p>
-</blockquote>
-
-<blockquote>
-  <p><strong>Links</strong>: Links describe relationships between objects in a resource map, such as “has-part” (“War &amp; Peace “-has-part-“page 2”) or “derived-from” (“Radiohead - 15 Step Remix”-derived-from-“Radiohead - 15 Step”). Actual relationships depend on selected vocabularies and namespaces (meaning you can change the link relationships to be whatever you need them to be). There is a <a href="http://www.openarchives.org/ore/0.9/primer.html#Namespaces">list of default namespaces on the spec</a>.</p>
-</blockquote>
-
-<h3 id="in-conclusion">In conclusion</h3>
-
-<p>I took a high-level and somewhat abstract tack in describing the protocol, and would direct you to the <a href="http://www.openarchives.org/ore/0.9/primer.html">OAI-ORE Primer</a> for more implementation specifics. Apologies to those of you who were completely lost in this discussion.</p>
-
-<p>I’m excited about developing standards like these because resource mapping protocols such as OAI-ORE are an instrumental step in connecting resources, services and information on the Web. They’ll help us “connect the tubes” and create the infrastructure needed to link the world’s information together. Now that’s pretty cool.</p>
-
-			
-			
-		</div>
-	<footer>
-		
-
-
-		
-			andrewhao 
-		
-
-
-
-  
-		
-			on
-		
-    <a class='category' href='/category/andrew-2-dot-0/'>andrew 2.0</a>, <a class='category' href='/category/geek/'>geek</a>, <a class='category' href='/category/information-architecture/'>information architecture</a>
-	
-
-
-	
-	
-	</footer>
-	
-</article>
-<!-- END OF _includes/article.html -->
-
-	
 	
 <div class="pagination">
 	
@@ -486,7 +509,7 @@
 
 
 			<footer>
-				Copyright &copy; 2017
+				Copyright &copy; 2018
 
 	Andrew Hao
 

@@ -68,6 +68,100 @@
 		<!-- START OF _includes/article.html -->
 <article>
 	<header>
+		<h1><a href="/2008/04/26/sensations-negotiating-noise/">Sensations - Negotiating Noise</a></h1>
+		<time>26 April 2008</time>
+	</header>
+		<div class="content">
+			<p><a href="http://www.flickr.com/photos/andrewhao/2443375144/"><img src="http://farm3.static.flickr.com/2124/2443375144_9e096efe29.jpg" alt="Sensations - Negotiating Noise" /></a></p>
+
+<p>I’m showing this and a few more design pieces at <strong>Exposed</strong>, Cal Christian Fellowship’s art and performance extravaganza tonight. You can visit it today, April 26–the gallery will be open all day in the Wurster lobby, and there are two performance shows: 6PM and 9PM in 112 Wurster.</p>
+
+			
+			
+		</div>
+	<footer>
+		
+
+
+		
+			andrewhao 
+		
+
+
+
+  
+		
+			on
+		
+    <a class='category' href='/category/andrew-2-dot-0/'>andrew 2.0</a>, <a class='category' href='/category/design/'>design</a>, <a class='category' href='/category/sensations/'>sensations</a>
+	
+
+
+	
+	
+	</footer>
+	
+</article>
+<!-- END OF _includes/article.html -->
+
+	
+		
+		<!-- START OF _includes/article.html -->
+<article>
+	<header>
+		<h1><a href="/2008/04/07/designing-the-thinkanywhere-logo/">Designing the ThinkAnywhere Logo</a></h1>
+		<time>07 April 2008</time>
+	</header>
+		<div class="content">
+			<p>In my IEOR190A class (entrepreneurship), we’re developing a business plan of a company making a device that tracks gestures on any surface. Install it on a whiteboard or a chalkboard and boom, your gesture strokes are digitized and recorded on any Bluetooth-enabled computer.</p>
+
+<p>This device is actually implemented right now by our friend Leo Tran in one of his EE classes, using only an LED light and a Wiimote controller. It works by using the infrared camera within the Wiimote to recognize the movement of the LED. The Wiimote then broadcasts its data to a computer via its Bluetooth link.</p>
+
+<p><a href="http://blog.g9labs.com/wp-content/uploads/2008/04/thinkanywheresketches.jpg"><img src="http://blog.g9labs.com/wp-content/uploads/2008/04/thinkanywheresketches.jpg" alt="ThinkAnywhere Design Sketches" /></a></p>
+
+<h5 id="some-concept-sketches-just-for-fun">Some concept sketches, just for fun.</h5>
+
+<p>Now in designing the logo for this product, I wanted to convey a clean feel for the brand. Smooth, swooshy gradients and simple shapes tend to work well for this kind of thing. So I built a chalkboard (the green) and drew our device mounted above the chalkboard. The yellow beam conveys the idea that our device works via camera sensors.</p>
+
+<p><a href="http://blog.g9labs.com/wp-content/uploads/2008/04/thinkanywhere-icon.jpg"><img src="http://blog.g9labs.com/wp-content/uploads/2008/04/thinkanywhere-icon.jpg" alt="ThinkAnywhere Branding" /></a></p>
+
+<h5 id="voila">Voila.</h5>
+
+<p>The logo was built entirely in Illustrator. I went with a dark background so the lighter shades of the camera, the IR beam and chalkboard could get a “pop”. The font you see there is Colaborate Bold–it’s nicely <a href="http://www.smashingmagazine.com/2007/02/24/five-more-freefonts-chucara-preface-colaborate/">given out for free</a>.</p>
+
+			
+			
+		</div>
+	<footer>
+		
+
+
+		
+			andrewhao 
+		
+
+
+
+  
+		
+			on
+		
+    <a class='category' href='/category/design/'>design</a>, <a class='category' href='/category/school/'>school</a>
+	
+
+
+	
+	
+	</footer>
+	
+</article>
+<!-- END OF _includes/article.html -->
+
+	
+		
+		<!-- START OF _includes/article.html -->
+<article>
+	<header>
 		<h1><a href="/2008/03/29/tales-from-the-crypt/">Tales from the crypt</a></h1>
 		<time>29 March 2008</time>
 	</header>
@@ -281,144 +375,6 @@ RewriteRule ^([0-9]+)/([0-9]+)/([0-9]+)/([^/]+)/*$ http://blog.andrewhao.com/$1
 <!-- END OF _includes/article.html -->
 
 	
-		
-		<!-- START OF _includes/article.html -->
-<article>
-	<header>
-		<h1><a href="/2008/02/18/todays-geek-hijinks/">Today's Geek Hijinks</a></h1>
-		<time>18 February 2008</time>
-	</header>
-		<div class="content">
-			<h3 id="morning-woke-up-and-attempted-to-mount-a-samba-file-share-under-ubuntu">Morning: Woke up and attempted to mount a Samba file share under Ubuntu.</h3>
-
-<p>My Gutsy server in the living room is getting a second life as a backup file server. I need to mount it in my filesystem so I can rsync certain directories on my desktop over to the server.</p>
-
-<p><code>mount -t //my_server_ip/share_folder /media/mount_folder</code></p>
-
-<p>Alas! I couldn’t get write access into the mount point! At first I thought this was a chmod problem, so I added myself as the mount_folder owner.</p>
-
-<p><code>sudo chown username mount_folder/</code></p>
-
-<p>To no avail. So then I attempted to use the “permit all” chmod sledgehammer:</p>
-
-<p><code>sudo chmod 777 mount_folder/</code></p>
-
-<p>Argh! STILL no good!</p>
-
-<p>So then I went back to the drawing board and did some investigating. I could, 50% of the time, gain write access to child subfolders on the Samba share via GNOME Nautilus interface (smb://my_server_ip). Weird! Was this a Samba config problem? I didn’t have the cajones to find out.</p>
-
-<p>As a last-ditch attempt, I tried to modify my fstab file to mount the Samba share (I read somewhere that the uid and gid option flags give you the win). Side note: you can find your username’s uid and gid numbers from the <code>/etc/passwd file</code>.</p>
-
-<pre><code># TEMPORARY SAMBA SHARE FROM LIVINGROOM SERVER
-
-# @author Andrew
-
-//my_server_ip/archive /media/archive smbfs noauto,rw,uid=1000,gid=1000 0 0
-</code></pre>
-
-<p><em>Still</em> no good! Arghs! At this point, I gave up and simply SFTP-ed in to dump my files. Admitting defeat is a sad, sad thing.</p>
-
-<h3 id="afternoon-designed-some-logo-comps-for-a-web-company">Afternoon: Designed some logo comps for a Web company.</h3>
-
-<p><a href="http://blog.g9labs.com/wp-content/uploads/2008/02/logo.png"><img src="http://blog.g9labs.com/wp-content/uploads/2008/02/logo.png" alt="Logo I started on." /></a></p>
-
-<p>I’m working under contract from Ryan Waliany. This site should be doing some cool things. Unfortunately, I can’t reveal too much. All this to say that I’ve taken a long hiatus from design and I really miss it.</p>
-
-<h3 id="late-afternoon-set-up-google-apps-for-g9labscom">Late Afternoon: Set up Google Apps for g9labs.com</h3>
-
-<p>I gave in to the hype, and began setting up a Google Apps For Your Domain (GFYD) account for this g9labs site, primarily so I can hook into the awesome GMail interface instead of being chained to the Thunderbird client.</p>
-
-<p>This was a multi-step process of:</p>
-
-<ol>
-  <li>
-    <p>**Verifying ownership of your domain. **Google has you modify a CNAME entry on your domain so they can ping it to check that it’s changed. I marched happily over to the <a href="http://dreamhost.com">Dreamhost</a> panel where I found the DNS page for <a href="http://g9labs.com">g9labs.com</a>. There I added a CNAME value of googlexxxxxxxxx (a unique value given to you) and set its CNAME value to “google.com”.</p>
-  </li>
-  <li>
-    <p>While Google takes 48 hours to verify you’ve done the right steps, you can go ahead and **modify the MX records for your domain **so mail gets sent on over to Google instead of your Dreamhost server. This was easily set in the Dreamhost panel under Mail » MX Records. You change your MX records to Google’s special MX server, and you’re on your way!</p>
-  </li>
-  <li>
-    <p>I’m waiting for verification to go through, then I’ll talk about how to get <strong>IMAP for GFYD working</strong>.</p>
-  </li>
-</ol>
-
-
-			
-			
-		</div>
-	<footer>
-		
-
-
-		
-			andrewhao 
-		
-
-
-
-  
-		
-			on
-		
-    <a class='category' href='/category/andrew-2-dot-0/'>andrew 2.0</a>, <a class='category' href='/category/design/'>design</a>, <a class='category' href='/category/geek/'>geek</a>, <a class='category' href='/category/linux/'>linux</a>
-	
-
-
-	
-	
-	</footer>
-	
-</article>
-<!-- END OF _includes/article.html -->
-
-	
-		
-		<!-- START OF _includes/article.html -->
-<article>
-	<header>
-		<h1><a href="/2008/02/17/noam-chomsky-is-the-man/">Noam Chomsky is The Man</a></h1>
-		<time>17 February 2008</time>
-	</header>
-		<div class="content">
-			<p>Why?</p>
-
-<p>The man is a respected thinker, theorist and activist. I’ve had several Mass Communications classes devote a couple of sections to his thoughts about mass media and its effect in forming dissent and complacency in the masses.</p>
-
-<p>The man took a period of his life in the 50’s devoted to formalizing computer languages (he is by profession, a linguist). We just went over <a href="http://en.wikipedia.org/wiki/Chomsky_normal_form">Chomsky normal form</a> in my CS164 (compilers) course–a recursive method for generating languages from a set of rules.</p>
-
-<p>My CS and humanities world collide, but this man has done it way before. How stunning. <a href="http://en.wikipedia.org/wiki/Noam_Chomsky">Noam Chomsky</a> is The Man.</p>
-
-<p>(Disclaimer: I don’t agree with very many of his views, but the purpose of this post is to point out that Mr. Chomsky is a man who’s pretty much Done It All).</p>
-
-			
-			
-		</div>
-	<footer>
-		
-
-
-		
-			andrewhao 
-		
-
-
-
-  
-		
-			on
-		
-    <a class='category' href='/category/andrew-2-dot-0/'>andrew 2.0</a>, <a class='category' href='/category/geek/'>geek</a>, <a class='category' href='/category/school/'>school</a>
-	
-
-
-	
-	
-	</footer>
-	
-</article>
-<!-- END OF _includes/article.html -->
-
-	
 	
 <div class="pagination">
 	
@@ -435,7 +391,7 @@ RewriteRule ^([0-9]+)/([0-9]+)/([0-9]+)/([^/]+)/*$ http://blog.andrewhao.com/$1
 
 
 			<footer>
-				Copyright &copy; 2017
+				Copyright &copy; 2018
 
 	Andrew Hao
 

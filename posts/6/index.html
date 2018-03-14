@@ -68,6 +68,165 @@
 		<!-- START OF _includes/article.html -->
 <article>
 	<header>
+		<h1><a href="/2012/12/26/decomposing-fat-models/">Decomposing Fat Models</a></h1>
+		<time>26 December 2012</time>
+	</header>
+		<div class="content">
+			<p>Heard an awesome Ruby Rogues podcast recently: <a href="http://rubyrogues.com/083-rr-decomposing-fat-models-with-bryan-helmkamp/">“Decomposing Fat Models”</a>.</p>
+
+<p>Essentially, they’re talking through Bryan Helmkamp’s <a href="http://blog.codeclimate.com/blog/2012/10/17/7-ways-to-decompose-fat-activerecord-models/">Code Climate blog entry “7 ways to decompose fat ActiveRecord models”</a>, which sums up a few strategies that mainly involve extracting objects from your existing code, value, service, policy, decorator objects and the like. Give the entry a read-through, it’s opened my eyes a lot to rethinking my architecture of my Rails models.</p>
+
+<p>A few interesting thoughts that came up in the podcast:</p>
+
+<ul>
+  <li>
+    <p>The “Skinny Controller, Fat Model” mantra has hurt the Rails community because we start getting these bloated AR classes. “‘fat-‘ anything is bad” one of the hosts mentions in the blog. The smaller your models, the more manageable, readable and testable they become.</p>
+  </li>
+  <li>
+    <p>Rubyists don’t like the term “Factory”, even though in Helmkamp’s opinion, Ruby classes <em>are</em> factories. “We call them “builders”” one of the hosts jokes.</p>
+  </li>
+  <li>
+    <p>The Open/Closed Principle as applied to Ruby: using delegators, decorators.</p>
+  </li>
+</ul>
+
+
+			
+			
+		</div>
+	<footer>
+		
+
+
+		
+			andrewhao 
+		
+
+
+
+  
+		
+			on
+		
+    <a class='category' href='/category/rails/'>rails</a>, <a class='category' href='/category/ruby/'>ruby</a>, <a class='category' href='/category/software-design/'>software design</a>
+	
+
+
+	
+	
+	</footer>
+	
+</article>
+<!-- END OF _includes/article.html -->
+
+	
+		
+		<!-- START OF _includes/article.html -->
+<article>
+	<header>
+		<h1><a href="/2012/10/04/deploying-janky-on-ubuntu/">Deploying Janky on Ubuntu</a></h1>
+		<time>04 October 2012</time>
+	</header>
+		<div class="content">
+			<p><a href="https://github.com/blog/1013-janky">Janky</a> is a Github-developed <a href="https://github.com/github/hubot">Hubot</a> + Jenkins control interface. It’s developed to be deployed on Heroku. However, what if you need it to live on an internal VM? Here’s how I got it running on a Ubuntu (12.04 Precise) VM.</p>
+
+<h2 id="make-sure-you-have-the-correct-mysql-libs-installed">Make sure you have the correct MySQL libs installed:</h2>
+
+<pre><code>sudo apt-get install mysql-server libmysqlclient-dev
+</code></pre>
+
+<h2 id="clone-janky-from-the-github-repositoryhttpsgithubcomgithubjanky">Clone janky from the <a href="https://github.com/github/janky">Github repository</a></h2>
+
+<pre><code>git clone https://github.com/github/janky.git
+cd janky
+</code></pre>
+
+<h2 id="bootstrap-your-environment">Bootstrap your environment</h2>
+
+<p>The following steps are taken nearly verbatim from the “Hacking” section on the Janky README:</p>
+
+<pre><code>script/bootstrap
+
+mysqladmin -uroot create janky_development
+mysqladmin -uroot create janky_test
+
+RACK_ENV=development bin/rake db:migrate
+RACK_ENV=test bin/rake db:migrate
+
+RACK_ENV=development bundle exec rake db:seed
+</code></pre>
+
+<h2 id="configure-thin">Configure Thin</h2>
+
+<p>Open <code>Gemfile</code> in your text editor and add:</p>
+
+<pre><code>gem "foreman"
+</code></pre>
+
+<p>Then install it:</p>
+
+<pre><code>bundle install
+</code></pre>
+
+<p>Then create a Procfile:</p>
+
+<pre><code>touch Procfile
+</code></pre>
+
+<p>Open the Procfile in your text editor and add the following line:</p>
+
+<pre><code>web: bundle exec thin start -p $PORT
+</code></pre>
+
+<p>Add the JANKY_* variables to your environment according to the janky README. I use zsh, so I added these as export statements in my ~/.zshenv</p>
+
+<h2 id="start-your-server">Start your server</h2>
+
+<pre><code>bundle exec foreman start
+</code></pre>
+
+<p>Note that the server starts on port 5000 by default, and you can override it like so:</p>
+
+<pre><code>PORT=8080 bundle exec foreman start
+</code></pre>
+
+<h2 id="thats-it">That’s it!</h2>
+
+<p>Let me know how that works for you!</p>
+
+			
+			
+		</div>
+	<footer>
+		
+
+
+		
+			andrewhao 
+		
+
+
+
+  
+		
+			on
+		
+    <a class='category' href='/category/andrew-2-dot-0/'>andrew 2.0</a>
+	
+
+
+	
+	
+	</footer>
+	
+</article>
+<!-- END OF _includes/article.html -->
+
+	
+		
+		<!-- START OF _includes/article.html -->
+<article>
+	<header>
 		<h1><a href="/2012/06/20/updating-max-file-limit-on-osx-lion/">Updating max file limit on OSX Lion</a></h1>
 		<time>20 June 2012</time>
 	</header>
@@ -240,115 +399,6 @@ View more <a href="http://www.slideshare.net/">presentations</a> from <a href="h
 <!-- END OF _includes/article.html -->
 
 	
-		
-		<!-- START OF _includes/article.html -->
-<article>
-	<header>
-		<h1><a href="/2012/04/12/haml-object-references/">HAML object references</a></h1>
-		<time>12 April 2012</time>
-	</header>
-		<div class="content">
-			<p>Did you guys know that you can use the ‘[ ]’ brackets in HAML to automatically set the id and class on a tag, kind of like Rails’ <a href="http://api.rubyonrails.org/classes/ActionView/Helpers/TagHelper.html#method-i-tag">tag</a> helper?</p>
-
-<pre><code># file: app/controllers/users_controller.rb
-
-def show
-  @user = CrazyUser.find(15)
-end
-
--# file: app/views/users/show.haml
-
-%div[@user, :greeting]
-  %bar[290]/
-  Hello!
-</code></pre>
-
-<p>is compiled to:</p>
-
-<pre><code>&lt;div class='greeting_crazy_user' id='greeting_crazy_user_15'&gt;
-  &lt;bar class='fixnum' id='fixnum_581' /&gt;
-  Hello!
-&lt;/div&gt;
-</code></pre>
-
-<p>Keeps things nice, concise and DRY. See the <a href="http://haml-lang.com/docs/yardoc/file.HAML_REFERENCE.html#object_reference_">HAML documentation</a>.</p>
-
-
-			
-			
-		</div>
-	<footer>
-		
-
-
-		
-			andrewhao 
-		
-
-
-
-  
-		
-			on
-		
-    <a class='category' href='/category/haml/'>haml</a>, <a class='category' href='/category/rails/'>rails</a>, <a class='category' href='/category/ruby/'>ruby</a>, <a class='category' href='/category/web/'>web</a>
-	
-
-
-	
-	
-	</footer>
-	
-</article>
-<!-- END OF _includes/article.html -->
-
-	
-		
-		<!-- START OF _includes/article.html -->
-<article>
-	<header>
-		<h1><a href="/2012/03/23/rspec-order-agnostic-array-matching/">RSpec order-agnostic array matching</a></h1>
-		<time>23 March 2012</time>
-	</header>
-		<div class="content">
-			<p>What’s that? <a href="http://stackoverflow.com/questions/2978922/rspec-array-should-another-array-but-without-concern-for-order">You want to write an expectation for an array but your method returns the Array in a nondeterministic ordering</a>?</p>
-
-<p>Simple. Write:</p>
-
-<pre><code>my_method.should =~ &lt;my_expectation&gt;
-</code></pre>
-
-<p>See the <a href="https://github.com/dchelimsky/rspec/blob/master/lib/spec/matchers/match_array.rb">source</a>.</p>
-
-			
-			
-		</div>
-	<footer>
-		
-
-
-		
-			andrewhao 
-		
-
-
-
-  
-		
-			on
-		
-    <a class='category' href='/category/andrew-2-dot-0/'>andrew 2.0</a>, <a class='category' href='/category/rails/'>rails</a>, <a class='category' href='/category/ruby/'>ruby</a>
-	
-
-
-	
-	
-	</footer>
-	
-</article>
-<!-- END OF _includes/article.html -->
-
-	
 	
 <div class="pagination">
 	
@@ -365,7 +415,7 @@ end
 
 
 			<footer>
-				Copyright &copy; 2017
+				Copyright &copy; 2018
 
 	Andrew Hao
 

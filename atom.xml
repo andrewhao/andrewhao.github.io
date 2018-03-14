@@ -4,7 +4,7 @@
 	<title><![CDATA[The Sweet Spot]]></title>
 	<link href="http://www.g9labs.com/atom.xml" rel="self"/>
 	<link href="http://www.g9labs.com/"/>
-	<updated>2017-09-21T10:31:26-07:00</updated>
+	<updated>2018-03-13T21:12:28-07:00</updated>
 	<id>http://www.g9labs.com/</id>
 	<author>
 		<name><![CDATA[Andrew Hao]]></name>
@@ -12,6 +12,30 @@
 	</author>
 	<generator uri="http://octopress.org/">Octopress</generator>
 
+	
+	<entry>
+		
+			<title type="html"><![CDATA[Elixir and Elm things I've written about elsewhere]]></title>
+		
+		<link href="http://www.g9labs.com/2018/03/13/elixir-and-elm-things-ive-written-elsewhere/"/>
+		<updated>2018-03-13T20:52:23-07:00</updated>
+		<id>http://www.g9labs.com/2018/03/13/elixir-and-elm-things-ive-written-elsewhere</id>
+		<content type="html">
+			<![CDATA[
+				
+					<p></p>
+				
+			]]>
+			<![CDATA[<p>While it’s been pretty quiet around these parts, I’ve kept the technical blogging up over on <a href="https://blog.carbonfive.com">my employer’s blog</a>. I’ve got quite a few posts around Elixir:</p>
+
+<p><a href="https://blog.carbonfive.com/2018/01/16/functional-mocks-with-mox-in-elixir/">Functional Mocks with Mox in Elixir</a>: This post discusses a mocking library in Elixir called <a href="https://github.com/plataformatec/mox">mox</a> that adheres to the Elixir Way(tm) of mocking (that is, the usage of fakes or doubles).</p>
+
+<p><a href="https://blog.carbonfive.com/2018/01/30/comparing-dynamic-supervision-strategies-in-elixir-1-5-and-1-6/">Comparing Dynamic Supervision Strategies in Elixir 1.5 and 1.6</a>: In this blog post, I discuss the benefits of the new <code>DynamicSupervisor</code> module in Elixir 1.6 and how it makes the supervision of a dynamically-scaled supervision tree easier to set up.</p>
+
+<p>Finally, I wrote <a href="https://blog.carbonfive.com/2017/10/25/taking-elm-for-a-test-drive/">“Taking Elm for a Test Drive”</a> about playing around with Elm, giving my take on the trajectory of the language.</p>
+]]>
+		</content>
+	</entry>
 	
 	<entry>
 		
@@ -85,6 +109,56 @@
 </ol>
 
 <p>The scale of this subject is large and is under active research in the field of computer science. A good book to pick up that discusses this topic is <a href="https://www.amazon.com/Service-Oriented-Design-Rails-Addison-Wesley-Professional/dp/0321659368">Service-Oriented Design with Ruby on Rails</a>. The popular <a href="http://www.enterpriseintegrationpatterns.com/">Enterprise Integration Patterns</a> book also has a great topic on consistency (and is accompanied by a very helpful <a href="http://www.enterpriseintegrationpatterns.com/patterns/conversation/EnsuringConsistencyIntro.html">online guide</a> as well).</p>
+]]>
+		</content>
+	</entry>
+	
+	<entry>
+		
+			<title type="html"><![CDATA[JHipster &amp; Spring Boot for Rails developers]]></title>
+		
+		<link href="http://www.g9labs.com/2016/10/14/jhipster-and-spring-boot-for-rails-developers/"/>
+		<updated>2016-10-14T14:24:39-07:00</updated>
+		<id>http://www.g9labs.com/2016/10/14/jhipster-and-spring-boot-for-rails-developers</id>
+		<content type="html">
+			<![CDATA[
+				
+					<p></p>
+				
+			]]>
+			<![CDATA[<p>The first question you may be asking is - <em>why would I want to go from Rails to Java</em>?</p>
+
+<p>Maybe you don’t have a choice. Maybe you started a new job. Maybe you heard Java was the new, old hotness. In any case, you’re a Ruby on Rails developer and you’re staring Java in the face.</p>
+
+<h3 id="the-languages">The languages</h3>
+
+<p>First off, Rails and Java share similar philosophies.</p>
+
+<p>You may argue that Java is the One True Language for old-fashioned Object-Oriented Programming. The existence of strong types lead to powerful expressions around OOP concepts like inheritance, polymorphism, and the like.</p>
+
+<p>Java and Ruby share similar philosophies - in that Everything Is An Object. In Ruby, the <code>nil</code> value is modeled as a <code>NilClass</code>. In Java, objects abound everywhere.</p>
+
+<h3 id="the-frameworks">The frameworks</h3>
+
+<p>I can’t speak from firsthand experience, but Java developers will tell you that developing Java apps in the early 2000s was like configuration soup. Everything was explicit and configured in XML.</p>
+
+<p>Spring Boot arguable moves the state of the art in Java frameworks more towards’ Rails’ philosophies - that convention trumps configuration. It accomplishes this through <em>annotations</em> - more on this later.</p>
+
+<p>Rails was precisely so groundbreaking and exciting in 2005 because it was everything Java was not - terse, expressive, and unapologetically convention-driven. Where in Java, everything was explicitly traceable through system calls, Rails used magic methods of dynamically-defined methods, monkey-patching and big ol’ global God Objects to accomplish its magic.</p>
+
+<h3 id="liquibase-vs-active-record">Liquibase vs Active Record</h3>
+
+<p>In Active Record, database changes are called <em>migrations</em>.</p>
+
+<p>Migrations are only run from migration files, and may optionally be generated from the CLI.</p>
+
+<p>In Liquibase, these are called <em>changesets</em>, and the files are called <em>changelogs</em>.</p>
+
+<p>These migrations are either generated from the Liquibase CLI, or there is a nifty tool that reads Hibernate persistence entities and generates a “diff” against a known database, writing the migration to a file.</p>
+
+<p>Rails checks in a <code>schema.rb</code> file, encompassing the canonical definition of the DB schema. There is no such equivalent in Liquibase (* I may be wrong).</p>
+
+<p><strong>To be continued…</strong></p>
 ]]>
 		</content>
 	</entry>
@@ -3300,149 +3374,6 @@ finding myself having problems compiling from Coffeescript -&gt; ES5 JS -&gt; ES
 </span></code></pre></td></tr></table></div></figure>
 
 <p>Let me know if you have any questions!</p>
-]]>
-		</content>
-	</entry>
-	
-	<entry>
-		
-			<title type="html"><![CDATA[Implementing DDD: Domains, Subdomains and Bounded Contexts]]></title>
-		
-		<link href="http://www.g9labs.com/2014/04/26/implementing-ddd-chapter-2/"/>
-		<updated>2014-04-26T08:43:00-07:00</updated>
-		<id>http://www.g9labs.com/2014/04/26/implementing-ddd-chapter-2</id>
-		<content type="html">
-			<![CDATA[
-				
-					<p></p>
-				
-			]]>
-			<![CDATA[<h2 id="chapter-2-domains-subdomains-and-bounded-contexts">Chapter 2: Domains, Subdomains, and Bounded Contexts</h2>
-
-<p>A <em>Domain</em> is what a business does and the surrounding context of how it does business. It is important to model out its supported <em>Subdomains</em> – that is, the smaller components of the business that collaborate in real, day-to-day operations of the business. The book describes these as <em>Core Domains</em>.</p>
-
-<p>Finally, a <em>Bounded Context</em> is the physical manifestation of the solution space as software – models living in a real application. Its key feature in the context of DDD is as a linguistic barrier between different domains.</p>
-
-<p>In an ideal world, each <em>Subdomain</em> maps directly to one <em>Bounded Context</em>. In the real world, this is less common since we tend to build things into monolithic systems. Still – many monolithic applications have several components that could in themselves be bounded contexts.</p>
-
-<h6 id="side-note-in-rails-one-could-think-of-engines-as-a-bounded-context-but-that-might-be-a-blog-post-for-another-time">Side note: In Rails, one could think of Engines as a <em>Bounded Context</em>. But that might be a blog post for another time.</h6>
-
-<p>It is important to get these ideas and concepts down correctly because we need correct modeling of our systems to determine what they do.</p>
-
-<h3 id="bounded-contexts-and-terms">Bounded Contexts and terms</h3>
-
-<p>It’s not usually realistic to get the entire organization agreeing on a universal linguistic definition for every term. Instead, DDD assumes that different terms have different meanings in different contexts.</p>
-
-<p>The author then dives into the an example of a book, where a <em>book</em> means several different things to different people in different contexts. A book is touched upon by authors, graphic designers, editors, marketing folks. In each of these contexts, the features of a book mean different things at different times. It is impossible to develop an all-knowing Book model without disagreement between stakeholders. DDD, instead, acknowledges these differences and allows stakeholders to use linguistic terms from within their unique Bounded Contexts.</p>
-
-<p>Bounded Contexts may include things like:</p>
-
-<ul>
-  <li>Object models</li>
-  <li>A database schema / persistence layer</li>
-  <li>A SOAP or REST API</li>
-  <li>A user interface</li>
-</ul>
-
-<h3 id="bounded-context-antipatterns">Bounded context antipatterns</h3>
-
-<p>You may be tempted to divide up a bounded context by architectural concerns, or because you want to assign smaller tasks to developers (resource allocation). Beware that this kind of work tends to fragment the language.</p>
-
-<p>DDD operates on <em>linquistic drivers</em>. The unity, cohesion and domain-adherence of the bounded context should be the first priority in the design.</p>
-
-<p>Assigning two teams to the same bounded context results in fragmentation of the bounded context.</p>
-
-<p>Ideally: we strive to assign one team to work on one Bounded Context with one Ubiquitous Language at a time.</p>
-
-<h6 id="in-rails-what-are-the-bounded-contexts-it-could-be-the-top-level-rails-application-or-an-engine-or-a-gem-that-define-the-context-boundaries">In Rails, what are the bounded contexts? It could be the top-level Rails application, or an engine, or a gem, that define the context boundaries._</h6>
-
-<h3 id="a-story">A story…</h3>
-
-<p>The chapter then goes on to describe their fictional team designing through three iterations off their DDD strategy:</p>
-
-<p>A system in which all domains live within the same bounded context. They see the folly of this and refactor with some tactical patterns, like creating services.</p>
-
-<p>This is, however, missing the point. They realized they needed to listen to business and their domain experts to find out exactly where the right places were to segregate the contexts. The team discovers that the business has a desire to go in a new direction which allows them to segregate the domain in such a way that would enable future directions for the business.</p>
-
-<h6 id="how-often-are-we-as-developers-in-conversation-with-our-product-owners-and-asking-where-the-business-wants-to-go-in-the-future">How often are we as developers in conversation with our product owners and asking where the business <em>wants</em> to go in the future?</h6>
-
-<p>Conversations with the business reveal an intention to develop an add-on product to the core product. This implies the development of two subdomains. However, further investigation reveals that the shared overlap of certain domain models (like users, roles, and access management) cannot simply be identically shared between two systems, since their <em>linguistic meanings</em> in the two systems differ slightly. Instead, the developers use the linguistic problem to develop a third bounded context.</p>
-
-<p>The developers separate their app into three bounded contexts built as three software systems.</p>
-]]>
-		</content>
-	</entry>
-	
-	<entry>
-		
-			<title type="html"><![CDATA[Six months as a manager]]></title>
-		
-		<link href="http://www.g9labs.com/2014/03/08/six-months-as-a-manager/"/>
-		<updated>2014-03-08T16:15:00-08:00</updated>
-		<id>http://www.g9labs.com/2014/03/08/six-months-as-a-manager</id>
-		<content type="html">
-			<![CDATA[
-				
-					<p></p>
-				
-			]]>
-			<![CDATA[<p>It’s been approximately six months since I’ve entered engineering management. Here are some thoughts reflecting back on that season now.</p>
-
-<h2 id="i-didnt-like-it-at-first">I didn’t like it at first.</h2>
-
-<p>Let’s face it: I didn’t like the feeling of being a “manager” now. It comes with too much baggage of pointy-haired bosses or ineffective waste layers. Why do we need managers anyways?</p>
-
-<p>More to the point: I love coding. I love working on rewarding projects. I hated the thought of being tied up in meetings while day by day getting more and more disconnected from code.</p>
-
-<p>So I struggled a lot in those first few months (still do), trying to maintain the balance of working with product management to get a strategic vision communicated, or with other engineering teams to get a tactical vision in place, versus trying to be deeply involved with the code base and doing code reviews.</p>
-
-<h3 id="you-cant-code-anymore">You can’t code anymore.</h3>
-
-<p>In the end? I had to come to grips with the reality that my team needed me in a different role – a strategic role, helping them see the big picture, sniffing out dependencies and destroying blockers before they got to them.</p>
-
-<p>But I still needed to be spot-on with the code – I still needed to be in the know with new product features as they are being developed. So it’s my priority to be in design discussions, but I can’t be the implementer anymore.</p>
-
-<p>So I’ve started a change in mindset – how can offload all the random codebase knowledge I’ve acquired over the years to the team? How can I effectively share my expertise so I’m out of a (coding) job? I’m starting to be more convinced that the answer to that is pair programming.</p>
-
-<h3 id="pairing-your-way-out-of-a-job">Pairing your way out of a job</h3>
-
-<p>Nowadays if there’s a story or task in which I am the only one (or one of few) with domain knowledge about the feature, I’ll ask a team member to pair with me on the feature. That way we get a really effective teaching tool about the domain model, and the extra plus in that if I get pulled into a meeting, development can continue.</p>
-
-<h3 id="but-you-still-have-to-code">But you still have to code.</h3>
-
-<p>So I code on the weekends (not everybody can do this!)</p>
-
-<p>We’re a Rails team taking on a new Ember project. I need to get my chops up around Ember so I’ve decided to pull in a <a href="https://github.com/andrewhao/hendrix">side project</a> to hack on the weekends. My side work on <a href="http://www.wejoinin.com">Wejoinin</a> lets me do all the Rails things I don’t get to do anymore at work.</p>
-
-<p>And it works for me because I love to code, and to be honest, I don’t ever want to get weak in that area.</p>
-
-<p>To be honest, I’d love more feedback from other engineering managers in that area. How do you keep your chops sharp?</p>
-
-<h3 id="people-are-your-priority">People are your priority.</h3>
-
-<p>I’ve read often that <a href="http://firstround.com/article/My-Management-Lessons-from-Three-Failed-Startups-Google-Apple-Dropbox-Twitter-and-Square">empathy is everything</a> when it comes to management, and it still rings true. No matter how this product launch goes, in the end your team will remember how you treated them, how their thoughts and feelings were taken into account.</p>
-
-<p>One thing I’m trying to check myself is my tendency to jump in on other people’s sentences and cut them off. It sounds silly, but sometimes I realize I like to talk a lot more than listen. As a manager, sometimes you need to dwell on the feedback of a team member for some time before you write it off. There’s usually a core message in there that’s completely valid – a frustration, a desire for change. Empathy means communicating the message: “I heard you, and I respect your thoughts.”</p>
-
-<h3 id="its-your-attitude">It’s your attitude</h3>
-
-<p>And finally, here’s what I think: your attitude toward your company and the team make <em>ALL</em> the difference.</p>
-
-<ul>
-  <li>Is your orientation truly to support your team? How will it be clear in the long run that your supported someone in their career?</li>
-  <li>Where are places in your workday where you can connect and sympathize with people – share a joke, listen to someone’s frustration, or just simply go out to lunch?</li>
-  <li>How are you giving people something to work toward to: a vision of changing the world (for Blurb, it’s about transforming the publishing industry).</li>
-  <li>How are you addressing negativity? Grumbling is important to address head on in its own space, but how are you empowering people to take charge of issues of culture or organizational friction?</li>
-  <li>How are you checking your own negativity – sometimes we forget that we’re the solutions to our own problems, and I’ve found oftentimes that the very issues that you assume are impossible to change are crackable by having the right relationships with the right people.</li>
-</ul>
-
-<p>The little things matter.</p>
-
-<h3 id="growth-areas">Growth areas</h3>
-
-<p>Lord knows I have a lot to learn here. One area I’m learning to grow in is how to give honest and accurate feedback to team members, without fearing how they’re going to receive it.</p>
-
-<p>Another area? Delegation. I’m learning to delegate the little micro-responsibilities in my job that I just kind of expect that I’m supposed to do. Case in point: every week we accept a translation import from a third-party translation service. I realized that I was burning a lot of time reviewing hundreds of lines of translation keys every week, and the repetition of it was sapping a lot of my energy. I had to learn to ask a team member for help and give them responsibility to own that function of the process.</p>
 ]]>
 		</content>
 	</entry>

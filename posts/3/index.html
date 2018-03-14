@@ -68,6 +68,262 @@
 		<!-- START OF _includes/article.html -->
 <article>
 	<header>
+		<h1><a href="/2015/06/29/notes-on-performance-tuning-a-puma-server/">Notes on performance tuning a Puma server</a></h1>
+		<time>29 June 2015</time>
+	</header>
+		<div class="content">
+			<p>A couple of months ago, I was tuning a Rails app for one of our clients.<br />
+This client wanted to know how performant their app would be under load.</p>
+
+<p>To do that, you can do several different things:</p>
+
+<ol>
+  <li>Tune the thread/process balance within the VM</li>
+  <li>Horizontally scale with your cloud platform.</li>
+</ol>
+
+<p>This is a discussion of the former (#1):</p>
+
+<h2 id="set-up-the-test">1) Set up the test</h2>
+
+<h3 id="drive-with-a-synthetic-script">Drive with a synthetic script</h3>
+
+<p>Our application had a synthetic load driver that would run Selenium to<br />
+execute various app tasks. This synthetic driver could be parallelized<br />
+across many notes via Rainforest QA, Sauce Labs or Browserify.</p>
+
+<p>In our case, I only needed to run our synthetic load script on a single<br />
+node in multiple processes, which simulated enough load to anticipate<br />
+another order of magnitude of traffic.</p>
+
+<h3 id="know-how-to-inspect-the-server-under-load">Know how to inspect the server under load.</h3>
+
+<p>Commands you will want to know:</p>
+
+<pre><code>$ free -m # Find the total amount of free memory on your machine
+$ ps uH p &lt;pid&gt; # List out process threads
+$ kill -TTIN &lt;puma_master_pid&gt; # Add a puma worker
+$ kill -TTOU &lt;puma_master_pid&gt; # Remove a puma worker
+$ kill -USR2 &lt;puma_master_pid&gt; # Kill the puma master &amp; workers
+</code></pre>
+
+<h2 id="generating-more-load-use-external-load-testing-services-or-plain-tools">Generating more load: use external load testing services, or plain tools.</h2>
+
+<p>Try using <a href="http://www.flood.io">Flood.io</a> or JMeter for performance load.</p>
+
+<p>I tried looking into the <a href="https://github.com/schneems/puma_auto_tune">puma_auto_tune</a> gem, but it required a higher level of production instrumentation than I was ready to give it.</p>
+
+<h2 id="analysis-new-relic-scalability-analysis">Analysis: New Relic scalability analysis</h2>
+
+<p>New Relic gave us a scalability analysis scatter plot, plotting<br />
+throughput against average application response time. In essence, it<br />
+allows you to see spikes in response times as correlated to throughput.</p>
+
+<h2 id="process">Process:</h2>
+
+<p>My approach was to use the synthetic script to generate productionlike<br />
+node and ramp up the # of load actors in 5m increments. Each run would<br />
+test the following Puma process/thread balance:</p>
+
+<p>Run #1: Single-process, multi threads.<br />
+Run #2: Multiple processes, single threaded.<br />
+Run #3: Multiple processes, multiple threads.</p>
+
+<blockquote>
+  <h3 id="aside-how-many-of-these-threadsprocesses-should-i-be-using">Aside: <em>how many</em> of these threads/processes should I be using?</h3>
+
+  <p>Note that your numbers will be different on the execution<br />
+characteristics of your app and your server environment. Tweak it for<br />
+yourself. You’re designing an experiment.</p>
+
+  <p>If you’re curious, our Rails app started out with 4 threads on 2<br />
+workers. We made the # of Puma workers (both min and max) environment<br />
+variables so we could tweak the variables easily without deploying.</p>
+</blockquote>
+
+<p>The strategy was then to look at the perf characteristics of each run in<br />
+the scatter plot. If there were any spikes in the graph with the<br />
+increase of load, then that would be noted. Even minor features like an<br />
+increase in slope would be noted - at that point, the incremental cost<br />
+of each request increases with overall system load.</p>
+
+<h2 id="results">Results</h2>
+
+<p>I don’t have the New Relic data on hand to show, now, but in our case we<br />
+discovered two things:</p>
+
+<ol>
+  <li>The server easily scaled from ~10 -&gt; ~500 rpm with a virtually flat<br />
+line for all runs.</li>
+  <li>The app exhibited no noticeable performance differences when flipped<br />
+between uniprocess-multithreaded, multiprocess-unithreaded, and<br />
+multiprocess-multithreaded modes. Any performance gains were under a<br />
+tolerable threshold.</li>
+</ol>
+
+<p>How do we parse these results?</p>
+
+<ul>
+  <li>We note that we didn’t really push the performance threshold on this<br />
+app (it’s not meant to be a public web site and 95% of it is behind a<br />
+login wall to a specialized group of users). Thus, if we pushed the<br />
+concurrent connections even more, we may have seen more of a pronounced<br />
+difference.</li>
+  <li>The <em>absence</em> of any major red flags was itself a validation. The<br />
+question we wanted answered coming into this experiment was “how close<br />
+are we to maxing out our single-node EC2 configuration such that we will<br />
+have to begin configuring horizontal scaling?”? The answer was: we can<br />
+safely scale further out in the near-term future, and cross the bridge<br />
+of horizontal scaling/bursting when we get there.</li>
+  <li>We did not have enough statistically significant differences in<br />
+performance for #threads/#processes in Puma. However, if we wanted to<br />
+truly find the optimal performance in our app, we would have turned to<br />
+tools like <a href="https://github.com/schneems/puma_auto_tune">puma_auto_tune</a> to answer those questions.</li>
+</ul>
+
+<p>Let me know in the comments if you have any questions!</p>
+
+			
+			
+		</div>
+	<footer>
+		
+
+
+		
+
+
+
+  
+		
+			Tagged under
+		
+    <a class='category' href='/category/performance-tuning/'>performance tuning</a>, <a class='category' href='/category/puma/'>puma</a>, <a class='category' href='/category/rails/'>rails</a>
+	
+
+
+	
+	
+	</footer>
+	
+</article>
+<!-- END OF _includes/article.html -->
+
+	
+		
+		<!-- START OF _includes/article.html -->
+<article>
+	<header>
+		<h1><a href="/2015/06/01/toolbox-learning-swift-and-viper/">Toolbox: learning Swift and VIPER</a></h1>
+		<time>01 June 2015</time>
+	</header>
+		<div class="content">
+			<p>The following are some notes I’m compiling as I’m beginning a journey<br />
+down the rabbit hole, writing an app in Swift utilizing the <a href="http://www.objc.io/issue-13/viper.html">VIPER app development methodology</a></p>
+
+<ul>
+  <li>
+    <p>I had trouble importing nested source code into XCode before realizing that I<br />
+needed to import the folder with corresponding Groups. This is done by<br />
+clicking the checkbox “Create Groups for any Added Folders”</p>
+
+    <p><em>Reference</em>: https://developer.apple.com/library/ios/technotes/iOSStaticLibraries/Articles/configuration.html</p>
+
+    <p>Without doing this, the compiler was not able to build the project.</p>
+
+    <ul>
+      <li>Since there is no way to do method swizzling in Swift, there are no real easy ways to do mocking/stubbing the way we used to do so in Ruby. Instead, this is forcing me to rely on plain old Swift structs. There are some simple ways to stub, but it ends up looking kind of awkward and very wiring-intensive like this:</li>
+    </ul>
+  </li>
+</ul>
+
+<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">class NewRidePresenterSpec: QuickSpec {
+</span><span class="line">  override func spec() {
+</span><span class="line">    describe("#startRecordingGpsTrack") {
+</span><span class="line">      class MockInteractor: NewRideInteractor {
+</span><span class="line">        var wasCalled: Bool = false
+</span><span class="line">
+</span><span class="line">        @objc private override func startRecordingGpsTrack() {
+</span><span class="line">          wasCalled = true
+</span><span class="line">        }
+</span><span class="line">      }
+</span><span class="line">
+</span><span class="line">      var subject = NewRidePresenter()
+</span><span class="line">
+</span><span class="line">      it("tells the interactor to start recording") {
+</span><span class="line">        let mockInteractor = MockInteractor()
+</span><span class="line">        subject.interactor = mockInteractor
+</span><span class="line">        subject.startRecordingGpsTrack()
+</span><span class="line">
+</span><span class="line">        expect(mockInteractor.wasCalled).to(beTrue())
+</span><span class="line">      }
+</span><span class="line">    }
+</span><span class="line">  }
+</span><span class="line">}</span></code></pre></td></tr></table></div></figure>
+
+<ul>
+  <li>Using the <a href="https://github.com/teambox/viper-module-generator"><code>vipergen</code></a> and <a href="https://github.com/team-supercharge/boa"><code>boa</code></a> scaffolding generators helped me understand the concepts behind the view.</li>
+  <li>Tip: Build a VIPER module, but don’t build it all at once. Just focus on the Presenter-Interactor-Wireframe component, or the DataStore-Entity-Interactor component. This will keep your head from exploding.</li>
+  <li>Dude. I miss vim. <a href="http://alcatraz.io/">Alcatraz</a> + xvim helped a little…</li>
+  <li>xcodebuild + <a href="https://github.com/supermarin/xcpretty">xcpretty</a> + Guard-shell == some sort of CI feedback loop.</li>
+  <li>Manually creating mocks in Swift = kind of painful. If you override (subclass) a NSObject in Swift, <a href="http://stackoverflow.com/a/30530308/993929">you must provide it with the <code>@objc</code> pragma, otherwise it throws a segfault error</a></li>
+  <li>You must contact CircleCI manually if you want to activate an iOS build (it’s still in beta). What are some other good CI tools to use with iOS?</li>
+</ul>
+
+			
+			
+		</div>
+	<footer>
+		
+
+
+		
+
+
+
+  
+		
+			Tagged under
+		
+    <a class='category' href='/category/ios/'>ios</a>, <a class='category' href='/category/swift/'>swift</a>, <a class='category' href='/category/viper/'>viper</a>
+	
+
+
+	
+	
+	</footer>
+	
+</article>
+<!-- END OF _includes/article.html -->
+
+	
+		
+		<!-- START OF _includes/article.html -->
+<article>
+	<header>
 		<h1><a href="/2015/04/30/building-gpx-stats-through-frp-principles-on-bacon-dot-js/">Building GPX stats through FRP principles with Bacon.js</a></h1>
 		<time>30 April 2015</time>
 	</header>
@@ -822,159 +1078,6 @@ each container. You should see output that indicates that both our <code>web</co
 <!-- END OF _includes/article.html -->
 
 	
-		
-		<!-- START OF _includes/article.html -->
-<article>
-	<header>
-		<h1><a href="/2014/11/15/my-own-robot-training-buddy/">My own robot training buddy.</a></h1>
-		<time>15 November 2014</time>
-	</header>
-		<div class="content">
-			<p>As an ultra runner, I am really into the mountains. As a software engineer, I’m really into data. So naturally, I’m interested in the intersection of both.</p>
-
-<p>I’ve particularly been interested in how systems like <a href="http://www.strava.com">Strava</a> work, especially when they quantify what is known as a “Suffer Score”, a single number denoting the amount of training stress (a.k.a. suffering) you put yourself through in a workout.</p>
-
-<p>How does a track workout compare to a long day on the trails? Which is tougher: a 5m tempo road run in and around my neighborhood, or a tough 2m climb into a local regional park?</p>
-
-<h2 id="data-in">Data in…</h2>
-
-<p>I first attacked the problem of getting data off of my phone. I record my GPX tracks in <a href="http://runmeter.com/">Runmeter</a>, a fantastic iPhone application with all sorts of metrics and data export capabilities. What I wanted was a seamless way to get the data off my phone without fuss after a hard workout.</p>
-
-<p>The application has a nifty feature in which it can automatically send an email to an email address after a workout is completed.</p>
-
-<p>I wrote an <a href="https://github.com/andrewhao/velocitas">email ingester, Velocitas</a>, with the help of <a href="http://cloudmailin.com/">Cloudmailin</a>, which fires off a POST request to the Node application. Velocitas does the following:</p>
-
-<ul>
-  <li><code>curl</code>s and downloads the GPX link embedded in the email.</li>
-  <li>Saves the GPX file to a linked Dropbox account.</li>
-  <li>Republishes the GPX file to a linked Strava account.</li>
-</ul>
-
-<h2 id="deriving-the-training-stress-score">Deriving the Training Stress Score</h2>
-
-<p>Next up: I wanted to do a quick and dirty implementation of the (run-based) Training Stress Score. <a href="https://github.com/andrewhao/stressfactor">Stressfactor</a>, a Ruby gem, is what came out of it.</p>
-
-<p>It implements the rTSS as detailed in <a href="http://home.trainingpeaks.com/blog/article/running-training-stress-score-rtss-explained">this article</a>.</p>
-
-<figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-</pre></td><td class="code"><pre><code class="ruby"><span class="line"><span class="p">(</span><span class="n">duration_seconds</span> <span class="o">*</span> <span class="n">normalized_graded_pace</span> <span class="o">*</span> <span class="n">intensity_factor</span><span class="p">)</span> <span class="o">/</span>
-</span><span class="line"><span class="p">(</span><span class="n">functional_threshold_pace</span> <span class="o">*</span> <span class="mi">3600</span><span class="p">)</span> <span class="o">*</span> <span class="mi">100</span>
-</span></code></pre></td></tr></table></div></figure>
-
-<p>Stressfactor is a higher-order tookit for deriving meaning from GPX tracks, so it, at the moment, attempts to calculate the stress score and grade adjusted pace.</p>
-
-<p>The data still needs validation, so I’m eager to run it on my data set of GPX tracks from the past years.</p>
-
-<h2 id="generating-reports">Generating reports</h2>
-
-<p>I’m working on this part right now – I need to nicely display a report from my workout history in Dropbox and display per-GPX. I’ve started the project – <a href="https://github.com/andrewhao/stressreport">Stressreport</a>.</p>
-
-<h2 id="some-things-ive-learned-and-am-learning">Some things I’ve learned and am learning</h2>
-
-<ul>
-  <li>The human body is complex, and cannot be <a href="http://fellrnr.com/wiki/Modeling_Human_Performance">easily modeled</a> without sufficient data. That said, what I’m doing now may be sufficient for basic training data.</li>
-  <li>The nature of parsing and generating higher-order stats from raw data may lend itself well to experimentation with functional languages. I’m interested in trying to reimplement Stressfactor in Scala, or a functional equivalent.</li>
-  <li>Deploying all my apps on Heroku’s free tier may actually be an interesting start to building a microservice architecture – with the space limitations on Heroku, I’m forced to build new features on new services. Call it cheapskate architecture.</li>
-</ul>
-
-			
-			
-		</div>
-	<footer>
-		
-
-
-		
-
-
-
-  
-		
-			Tagged under
-		
-    <a class='category' href='/category/open-source/'>open source</a>, <a class='category' href='/category/running/'>running</a>, <a class='category' href='/category/software/'>software</a>
-	
-
-
-	
-	
-	</footer>
-	
-</article>
-<!-- END OF _includes/article.html -->
-
-	
-		
-		<!-- START OF _includes/article.html -->
-<article>
-	<header>
-		<h1><a href="/2014/11/05/qcon-sf-2014/">Recap: QCon SF 2014</a></h1>
-		<time>05 November 2014</time>
-	</header>
-		<div class="content">
-			<p>Blurb sent me off to QCon SF 2014 for three days.</p>
-
-<h2 id="notes">Notes</h2>
-
-<p>I took a series of notes each day in attendance:</p>
-
-<ul>
-  <li><a href="/notes/2014-11-03-qconsf-day-one.html">Day One: Architectures, Functional</a></li>
-  <li><a href="/notes/2014-11-04-qconsf-day-two.html">Day Two: Rx Systems, API Platforms</a></li>
-  <li><a href="/notes/2014-11-05-qconsf-day-three.html">Day Three: Microservices, Culture</a></li>
-</ul>
-
-<h2 id="summary">Summary</h2>
-
-<ul>
-  <li>Big trends in continuous delivery and deployment – deploy more often, smaller feedback loops</li>
-  <li>A lot of emphasis on event driven architectures + microservices. Lots of emphasis on DDD as a design tool.</li>
-  <li>Reactive systems with functional implementations were widely discussed as a scaling tool (backpressure-sensitive) and as a coordination tool between multiple async services.</li>
-  <li>Big data/realtime streaming talks were interesting – my personal experience with them is limited, but it seems there is a debate over the merits of existing Lambda architecture practice.</li>
-  <li>A lot of talk about microservice orchestration tools – acknowledging the pain of configuration and management of many services.</li>
-  <li>Scala got a lotttt of attention. Probably because of its presence in bigger companies like Netflix, Twitter, LinkedIn. Wonder what smaller startups are using.</li>
-  <li>Web Components were a big upcoming trend in frontend technologies. Strong modularization of views + behaviors in HTML documents.</li>
-</ul>
-
-<h2 id="questions">Questions</h2>
-
-<ul>
-  <li>If I could do a startup over again, would I begin an app in Rails? Where is the sweet spot for that sort of application architecture?</li>
-  <li>How can I design systems such that they can be extractible into focused components/services as early as possible?</li>
-  <li>How can we plan for failures (<a href="http://en.wikipedia.org/wiki/Fault_injection">fault injection</a>)?</li>
-  <li>How does one implement change in software engineering organizations? Bottom-up (organic initiatives bubbling up through management) vs top-down (management/software leaders direct org to implement).</li>
-  <li>How are we doing with encouraging women and minorities who traditionally are underrepresented in our industry?</li>
-  <li>What are places in our hiring funnels that, unbeknownst to us, may be turning away or detracting women and minorities?</li>
-</ul>
-
-			
-			
-		</div>
-	<footer>
-		
-
-
-		
-
-
-
-  
-		
-			Tagged under
-		
-    <a class='category' href='/category/conference/'>conference</a>, <a class='category' href='/category/qconsf/'>qconsf</a>, <a class='category' href='/category/software/'>software</a>
-	
-
-
-	
-	
-	</footer>
-	
-</article>
-<!-- END OF _includes/article.html -->
-
-	
 	
 <div class="pagination">
 	
@@ -991,7 +1094,7 @@ each container. You should see output that indicates that both our <code>web</co
 
 
 			<footer>
-				Copyright &copy; 2017
+				Copyright &copy; 2018
 
 	Andrew Hao
 

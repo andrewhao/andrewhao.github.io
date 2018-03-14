@@ -68,6 +68,127 @@
 		<!-- START OF _includes/article.html -->
 <article>
 	<header>
+		<h1><a href="/2011/02/01/the-making-of-sos-intro/">The making of SOS: Intro</a></h1>
+		<time>01 February 2011</time>
+	</header>
+		<div class="content">
+			<p><a href="http://www.flickr.com/photos/andrewhao/5408231821/"><img src="http://farm6.static.flickr.com/5095/5408231821_b4d0fd6837.jpg" alt="Save Our Souls - Logo" /></a></p>
+
+<p>I’m starting a project for my church’s art show that integrates Twitter, print design and light. I’m titling it “Save Our Souls”.</p>
+
+<p>The theme of the art show is “Instead of Ashes”, a reference from of <a href="http://www.esvonline.org/search/isaiah+61/">Isaiah 61</a> which highlights of God’s promises of redemption for the world’s suffering through Jesus.</p>
+
+<h2 id="what-does-it-do">What does it do?</h2>
+
+<p>Essentially, what I want it to do is parse the global Twitter firehose and display a live stream of tweets that highlight brokenness and pain: tweets about the world’s injustices, breakups, deaths, disappointments, and even ennui. This is inspired by <a href="http://twistori.com">twistori</a>.</p>
+
+<p>At the same time these tweets are floating across the screen, I want to illuminate a part of the printed verse in physical space that corresponds to the tweet.</p>
+
+<p>Imagine:</p>
+
+<p>Tweet: <em>I just want everyone to understand something……I’m SEVERELY depressed right now……my (ex)girlfriend is one of the greatest things to happen to me and she’s gone.</em></p>
+
+<p>At the same time, the LED array behind “he has sent me to bind up the brokenhearted” from Isaiah 61:1 would light up and pulse.</p>
+
+<p>And so on, for each tweet that flies across the screen.</p>
+
+<h2 id="architecture">Architecture</h2>
+<p><a href="http://www.flickr.com/photos/andrewhao/5408232737/"><img src="http://farm6.static.flickr.com/5020/5408232737_0ba8545d4e.jpg" alt="Isaiah 61 Architecture" /></a></p>
+
+<p>node.js would process messages from the Twitter streaming API keyed off of certain keywords and filter them by (negative) sentiment, and pushed onto queues. Queues would be drained in a fair manner and pushed out to a browser frontend, while a socket connection to an Arduino script would be responsible for pulsing the LED array.</p>
+
+<p>Of course, there’s a lot of questions left unanswered here: How do you make an LED array? How do you do (reliable) sentiment analysis? How big should the print graphic be? How far behind the print should the LED arrays be placed for the light to be sufficiently diffuse, yet bright enough to be visible? I’m not sure yet.</p>
+
+<h2 id="first-steps">First steps</h2>
+
+<p>So I just bought an Arduino and a ton of LEDs off of eBay. I’m trying to relearn all the EE40 I tried so hard to forget way back in my undergrad days.</p>
+
+<p>[caption id=”” align=”alignnone” width=”500” caption=”Arduinos are cool. I had to do my fair share of head-scratching to figure out resistor values.”]<a href="http://www.flickr.com/photos/andrewhao/5408162241/"><img src="http://farm6.static.flickr.com/5096/5408162241_201f757ddd.jpg" alt="Arduino is hooked up" /></a>[/caption]</p>
+
+<p>[caption id=”” align=”alignnone” width=”500” caption=”A conceptual design for the print graphic.”]<a href="http://www.flickr.com/photos/andrewhao/5408870750/"><img src="http://farm6.static.flickr.com/5098/5408870750_9fa4951f0d.jpg" alt="Print Concepts" /></a>[/caption]</p>
+
+<p>[caption id=”” align=”alignnone” width=”500” caption=”Basic node.js backend with a rudimentary frontend streams live tweets.”]<a href="http://www.flickr.com/photos/andrewhao/5408765510/"><img src="http://farm6.static.flickr.com/5137/5408765510_3381c46945.jpg" alt="Testing backend." /></a>[/caption]</p>
+
+<p>See the (rudimentary) nodejs/client code at <a href="https://github.com/andrewhao/isaiah-61-project">github</a>.</p>
+
+<p>See the <a href="http://www.flickr.com/photos/andrewhao/sets/72157625956085386/with/5408765510/">rest of the photos</a>.</p>
+
+<p>More to come!</p>
+
+			
+			
+		</div>
+	<footer>
+		
+
+
+		
+			andrewhao 
+		
+
+
+
+  
+		
+			on
+		
+    <a class='category' href='/category/andrew-2-dot-0/'>andrew 2.0</a>, <a class='category' href='/category/art/'>art</a>, <a class='category' href='/category/geek/'>geek</a>, <a class='category' href='/category/god/'>god</a>, <a class='category' href='/category/software/'>software</a>, <a class='category' href='/category/web/'>web</a>
+	
+
+
+	
+	
+	</footer>
+	
+</article>
+<!-- END OF _includes/article.html -->
+
+	
+		
+		<!-- START OF _includes/article.html -->
+<article>
+	<header>
+		<h1><a href="/2011/01/28/using-37signals-shorthand-for-ux-flows/">Using 37signals shorthand for UX flows</a></h1>
+		<time>28 January 2011</time>
+	</header>
+		<div class="content">
+			<p><a href="http://37signals.com/svn/posts/1926-a-shorthand-for-designing-ui-flows">http://37signals.com/svn/posts/1926-a-shorthand-for-designing-ui-flows</a></p>
+
+<p>I’ve found this technique useful for illustrating workflows quickly, particularly when brainstorming in teams.</p>
+
+			
+			
+		</div>
+	<footer>
+		
+
+
+		
+			andrewhao 
+		
+
+
+
+  
+		
+			on
+		
+    <a class='category' href='/category/andrew-2-dot-0/'>andrew 2.0</a>
+	
+
+
+	
+	
+	</footer>
+	
+</article>
+<!-- END OF _includes/article.html -->
+
+	
+		
+		<!-- START OF _includes/article.html -->
+<article>
+	<header>
 		<h1><a href="/2011/01/28/appstoreconnect-ux/">AppStoreConnect UX</a></h1>
 		<time>28 January 2011</time>
 	</header>
@@ -257,166 +378,6 @@
 <!-- END OF _includes/article.html -->
 
 	
-		
-		<!-- START OF _includes/article.html -->
-<article>
-	<header>
-		<h1><a href="/2010/06/02/post-review-git-svn-and-review-board/">post-review, git-svn and Review Board</a></h1>
-		<time>02 June 2010</time>
-	</header>
-		<div class="content">
-			<p>Here’s how to set up the excellent VMware-developed open-source <a href="http://www.reviewboard.org/">Review Board</a> and its <code>[post-review](http://www.reviewboard.org/docs/releasenotes/dev/rbtools/0.2/)</code> command line review creation utility to work with git and git-svn on your computer.</p>
-
-<p>My assumption is that you’re working with a local Git repository that is remotely linked to an SVN repository via the <a href="http://utsl.gen.nz/talks/git-svn/intro.html">git-svn</a> bridge. Let’s assume that your master branch is synced with the SVN repository, and you’re working on <code>bug_12345_branch</code>.</p>
-
-<ol>
-  <li>
-    <p>Make sure you have RBTools installed (<code>sudo easy_install rbtools</code> for me on Ubuntu Linux), and Review Board set up elsewhere.</p>
-  </li>
-  <li>
-    <p>Add a link to your Review Board URL in .git/config:</p>
-  </li>
-</ol>
-
-<blockquote>
-
-</blockquote>
-
-<blockquote>
-
-  <pre><code>[reviewboard]
- url = &lt;a href="#"&gt;https://(url_for_review_board)/&lt;/a&gt;
-</code></pre>
-
-</blockquote>
-
-<ol>
-  <li>
-    <p>Make sure all your changes in <code>bug_12345_branch</code> have been locally committed.</p>
-  </li>
-  <li>
-    <p><code>post-review -o</code>, and…</p>
-  </li>
-  <li>
-    <p>Voila! You should have a new review up on your Review Board instance.</p>
-  </li>
-  <li>
-    <p>(After you get reviews, you can modify <code>bug_12345_branch</code>, pull the changes into master, and then <code>git svn dcommit</code>, blah, blah, blah.)</p>
-  </li>
-</ol>
-
-
-			
-			
-		</div>
-	<footer>
-		
-
-
-		
-			andrewhao 
-		
-
-
-
-  
-		
-			on
-		
-    <a class='category' href='/category/andrew-2-dot-0/'>andrew 2.0</a>, <a class='category' href='/category/geek/'>geek</a>, <a class='category' href='/category/linux/'>linux</a>, <a class='category' href='/category/programming/'>programming</a>
-	
-
-
-	
-	
-	</footer>
-	
-</article>
-<!-- END OF _includes/article.html -->
-
-	
-		
-		<!-- START OF _includes/article.html -->
-<article>
-	<header>
-		<h1><a href="/2010/04/26/yui-widget-lazy-instantiation/">YUI 3 Widget lazy instantiation</a></h1>
-		<time>26 April 2010</time>
-	</header>
-		<div class="content">
-			<p>At work, we make good use of <a href="http://developer.yahoo.com/yui/">YUI 3</a>. It’s a really well-thought-out framework, from sandboxing and deep namespaces to CSS3 selector support and lazy-loading modules through the Yahoo! CDN. One of YUI 3’s biggest features is the Widget framework, which specifies an object on the page that the user can tweak to his or her whims.</p>
-
-<p>Now typically, a YUI widget must be instantiated, then rendered onto the page. The render method is responsible for:</p>
-
-<ol>
-  <li>
-    <p>Writing the widget’s DOM elements out to the page</p>
-  </li>
-  <li>
-    <p>Binding handlers onto the DOM object.</p>
-  </li>
-  <li>
-    <p>Updating the widget state to match the JS object state.</p>
-  </li>
-</ol>
-
-<p>(This information didn’t come easily. I had to dig around in some YUI slides and found this in <a href="http://developer.yahoo.com/yui/theater/video.php?v=desai-yuiconf2009-widgets">Satyen Desai’s “A Widget Walkthrough” presentation</a> at YUIConf 2009.)</p>
-
-<p><a href="http://www.g9labs.com/2010/04/27/yui-widget-lazy-instantiation/screenshot5/"><img src="http://www.g9labs.com/wp-content/uploads/2010/04/screenshot5-499x374.png" alt="" /></a></p>
-
-<p>Now we have a page that generates hundreds if not thousands of these tooltips. Instantiating each tooltip, rendering them into the DOM and generating event handlers for each was wasteful and slowed IE browsers down to a crawl. So this brought us to the decision to lazily instantiate each Tooltip instance. My first thought was that I should be able to overwrite the render() method to write to the DOM only after a mouseover onto the Tooltip trigger.</p>
-
-<p>Here’s the folly: note that in the previous slide, the event handlers don’t go live until after the widget HTML is rendered into the DOM. Rats. Is there any way I can get around this?</p>
-
-<p>Here’s some peculiar code for the Tooltip wrapper:</p>
-
-<pre><code>function ttWrapper(triggerNode) {
-  this.tt = null;
-  /* First mouseover will instantiate the real TooltipWidget. */
-  var mOver = Y.on('mouseover', function (e) {
-    this.tt = new TooltipWidget(/*config*/).render();
-    /* Detach this listener so it won't intercept any more mouseovers */
-    mOver.detach();
-    /* A second mouseover must be simulated on the real TooltipWidget */
-    Y.Event.simulate(triggerNode, 'mouseover'); 
-  }, triggerNode);
-
-
-
-
-}
-</code></pre>
-
-<p>The code installs a mouseover listener on the trigger node, then swaps itself out for the real mouseover listener that gets attached to the triggerNode when TooltipWidget gets instantiated. Event.simulate() is a strange, yet smart way to solve this problem.</p>
-
-			
-			
-		</div>
-	<footer>
-		
-
-
-		
-			andrewhao 
-		
-
-
-
-  
-		
-			on
-		
-    <a class='category' href='/category/andrew-2-dot-0/'>andrew 2.0</a>, <a class='category' href='/category/javascript/'>javascript</a>
-	
-
-
-	
-	
-	</footer>
-	
-</article>
-<!-- END OF _includes/article.html -->
-
-	
 	
 <div class="pagination">
 	
@@ -433,7 +394,7 @@
 
 
 			<footer>
-				Copyright &copy; 2017
+				Copyright &copy; 2018
 
 	Andrew Hao
 
