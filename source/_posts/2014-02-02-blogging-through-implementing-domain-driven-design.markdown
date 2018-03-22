@@ -9,6 +9,7 @@ categories:
 - Domain-Driven Design
 - DDD
 ---
+
 In recent conversations with coworkers, the topic of Domain-Driven Design has
 arisen on more than a few occasions in design and architecture meetings.
 "Have you read it?" a coworker asked, "I think it'd help us a lot."
@@ -23,11 +24,12 @@ hopefully once a week.
 ## Chapter 1: Getting Started with DDD
 
 ### Can I DDD?
+
 * DDD helps us design software models where "our design is exactly how
-  the software works" (1). 
+  the software works" (1).
 * DDD isn't a technology, it's a set of principles that involve
-  discussion, listening, and business value so you can *centralize
-  knowledge*.
+  discussion, listening, and business value so you can _centralize
+  knowledge_.
 * The main principle here is that we must "understand the business in
   which our software works" (3). This means we learn from domain experts
   in our field.
@@ -66,6 +68,7 @@ hopefully once a week.
   should stay away.
 
 #### Domain model health
+
 * As time passes, our domain models can become
   [anemic](http://www.martinfowler.com/bliki/AnemicDomainModel.html),
   and lose their expressive capabilities and clean boundaries. This can
@@ -86,14 +89,14 @@ hopefully once a week.
 
 #### How to do DDD
 
-* Have a [*Ubiquitous Language*](http://martinfowler.com/bliki/UbiquitousLanguage.html)
+* Have a [_Ubiquitous Language_](http://martinfowler.com/bliki/UbiquitousLanguage.html)
   where the team of domain experts share the language together, from
   domain experts to programmers.
 * Steps to coming up with a language:
 
-   1. Draw out the domain and label it.
-   2. Make a glossary of terms and definitions.
-   3. Have the team review the language document.
+  1. Draw out the domain and label it.
+  2. Make a glossary of terms and definitions.
+  3. Have the team review the language document.
 
 * Note that a Ubiquitous Language is specific to the context it is
   implemented in. In other words, there is one Ubiquitous Language per
@@ -122,7 +125,7 @@ hopefully once a week.
 
 #### Tactical modeling
 
-* The *Core Domain* is the part of your application that has key and
+* The _Core Domain_ is the part of your application that has key and
   important business value -- and may require high thought and attention
   to design.
 * Sometimes DDD may not be the right fit for you -- if you have a lot of
@@ -137,4 +140,3 @@ hopefully once a week.
 * DDD promotes lightweight development. As domain experts read the code, they
   are able to provide in-flight feedback to the development of the
   system.
-
