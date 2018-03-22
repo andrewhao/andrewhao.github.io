@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Tensorflow For Tears: Part 1"
+title: "TensorFlow For Tears: Part 1"
 date: 2018-03-21 18:56:34 -0700
 comments: true
 categories: 
