@@ -68,6 +68,184 @@
 		<!-- START OF _includes/article.html -->
 <article>
 	<header>
+		<h1><a href="/2013/12/27/ember-data-rails-cors-and-you/">Ember Data, Rails, CORS, and you!</a></h1>
+		<time>27 December 2013</time>
+	</header>
+		<div class="content">
+			<p>I’m starting up a new personal project involving Ember-Data and Rails<br />
+(more to come). The gist of it is that it’s a pure frontend app engine<br />
+built in Yeoman and Grunt, and designed to talk to a remote API service<br />
+built on Rails.</p>
+
+<p>So since it’s a remote API, I’ve got to enable CORS, right?</p>
+
+<h2 id="install-cors-via-rack-cors">Install CORS via rack-cors</h2>
+
+<figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class="ruby"><span class="line"><span class="c1"># Gemfile</span>
+</span><span class="line"><span class="n">gem</span> <span class="s2">&quot;rack-cors&quot;</span><span class="p">,</span> <span class="ss">:require</span> <span class="o">=&gt;</span> <span class="s2">&quot;rack/cors&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+<figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+</pre></td><td class="code"><pre><code class="ruby"><span class="line"><span class="c1"># config/application.rb</span>
+</span><span class="line"><span class="n">config</span><span class="o">.</span><span class="n">middleware</span><span class="o">.</span><span class="n">use</span> <span class="no">Rack</span><span class="o">::</span><span class="no">Cors</span> <span class="k">do</span>
+</span><span class="line">  <span class="n">allow</span> <span class="k">do</span>
+</span><span class="line">    <span class="n">origins</span> <span class="s2">&quot;*&quot;</span>
+</span><span class="line">
+</span><span class="line">    <span class="n">resource</span> <span class="s2">&quot;*&quot;</span><span class="p">,</span>
+</span><span class="line">      <span class="ss">:headers</span> <span class="o">=&gt;</span> <span class="ss">:any</span><span class="p">,</span>
+</span><span class="line">      <span class="ss">:methods</span> <span class="o">=&gt;</span> <span class="o">[</span><span class="ss">:get</span><span class="p">,</span> <span class="ss">:post</span><span class="p">,</span> <span class="ss">:put</span><span class="p">,</span> <span class="ss">:delete</span><span class="p">,</span> <span class="ss">:options</span><span class="p">,</span> <span class="ss">:patch</span><span class="o">]</span>
+</span><span class="line">    <span class="k">end</span>
+</span><span class="line">
+</span><span class="line">  <span class="n">allow</span> <span class="k">do</span>
+</span><span class="line">    <span class="n">origins</span> <span class="s2">&quot;*&quot;</span>
+</span><span class="line">    <span class="n">resource</span> <span class="s2">&quot;/public/*&quot;</span><span class="p">,</span>
+</span><span class="line">      <span class="ss">:headers</span> <span class="o">=&gt;</span> <span class="ss">:any</span><span class="p">,</span>
+</span><span class="line">      <span class="ss">:methods</span> <span class="o">=&gt;</span> <span class="ss">:get</span>
+</span><span class="line">  <span class="k">end</span>
+</span><span class="line"><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+<p>A very naive implementation with zero security whatsoever. Anyways.<br />
+Onward!</p>
+
+<h2 id="get-ember-data-dsrestadapter-talkin-cors">Get Ember-Data DS.RESTAdapter talkin’ CORS</h2>
+
+<p>I saw conflicting documentation on Ember-Data and CORS – it seemed like<br />
+it should support CORS out of the box. Apparently this is not so.</p>
+
+<p>In my ember app’s <code>store.js</code> (or anywhere your app loads before the<br />
+application adapter is defined, do this:</p>
+
+<figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+</pre></td><td class="code"><pre><code class="javascript"><span class="line"><span class="err">#</span> <span class="nx">store</span><span class="p">.</span><span class="nx">js</span>
+</span><span class="line"><span class="nx">$</span><span class="p">.</span><span class="nx">ajaxSetup</span><span class="p">({</span>
+</span><span class="line">  <span class="nx">crossDomain</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+</span><span class="line">  <span class="nx">xhrFields</span><span class="o">:</span> <span class="p">{</span>
+</span><span class="line">    <span class="nx">withCredentials</span><span class="o">:</span> <span class="kc">true</span>
+</span><span class="line">  <span class="p">}</span>
+</span><span class="line"><span class="p">});</span>
+</span><span class="line">
+</span><span class="line"><span class="nx">Hendrix</span><span class="p">.</span><span class="nx">Store</span> <span class="o">=</span> <span class="nx">DS</span><span class="p">.</span><span class="nx">Store</span><span class="p">.</span><span class="nx">extend</span><span class="p">();</span>
+</span><span class="line"><span class="nx">Hendrix</span><span class="p">.</span><span class="nx">ApplicationAdapter</span> <span class="o">=</span> <span class="nx">DS</span><span class="p">.</span><span class="nx">RESTAdapter</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
+</span><span class="line">  <span class="nx">host</span><span class="o">:</span> <span class="s2">&quot;http://localhost:3000&quot;</span><span class="p">,</span>
+</span><span class="line"><span class="p">})</span>
+</span></code></pre></td></tr></table></div></figure>
+
+<p><a href="http://api.jquery.com/jQuery.ajaxSetup/"><code>$.ajaxSetup</code></a>, though its<br />
+usage is not recommended, is designed to set global options on the<br />
+jQuery <code>ajax</code> object. It provides some information on the options you can modify.</p>
+
+<p>Why doesn’t Ember support this out of the box? I think it’s because they<br />
+cannot support IE, where one must use an XDR object to support CORS.</p>
+
+<p>I’ve posted an <a href="http://discuss.emberjs.com/t/ember-data-and-cors/3690">Ember follow-up question in the<br />
+forums</a> for discussion.</p>
+
+<h2 id="get-rails-talking-json-out-of-its-mimetype-confusion">Get Rails talking JSON out of its mimetype confusion.</h2>
+
+<p>Did you know that if you rely on the <code>Accepts:</code> header in HTTP that<br />
+Rails does not obey its ordering<code>*</code>? I was trying to figure out why my<br />
+Rails controllers were trying to render HTML instead of JSON when the<br />
+headers were:</p>
+
+<p><code>'Accept: application/json, text/javascript, */*; q=0.01'</code></p>
+
+<p>A <a href="https://github.com/rails/rails/issues/9940">very long winded<br />
+discussion</a> on the Rails<br />
+project reveals that, well, nobody has it figured out yet. Most modern<br />
+browsers do obey <code>Accepts:</code> specificity, but for the sake of older<br />
+browser compatibility, the best practice for browsers is still to return<br />
+HTML when <code>*/*</code> is specified.</p>
+
+<p>What does this mean for Rails developers who want to use <code>Accepts:</code><br />
+mimetype lists? Well, we either wait for the Rails projects to support<br />
+mimetype specificity (and for older browsers to die out), or we are<br />
+encouraged to include the format explicitly in the URI.</p>
+
+<p>I chose to have Ember append the <code>.json</code> suffix to the URL, thanks to<br />
+this <a href="http://stackoverflow.com/questions/13648807/ds-model-url-not-working-in-ember-js">SO<br />
+post</a></p>
+
+<figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+</pre></td><td class="code"><pre><code class="javascript"><span class="line"><span class="err">#</span> <span class="nx">store</span><span class="p">.</span><span class="nx">js</span>
+</span><span class="line"><span class="nx">Hendrix</span><span class="p">.</span><span class="nx">ApplicationAdapter</span> <span class="o">=</span> <span class="nx">DS</span><span class="p">.</span><span class="nx">RESTAdapter</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
+</span><span class="line">  <span class="nx">host</span><span class="o">:</span> <span class="s2">&quot;http://localhost:3000&quot;</span><span class="p">,</span>
+</span><span class="line">  <span class="c1">// Force ember-data to append the `json` suffix</span>
+</span><span class="line">  <span class="nx">buildURL</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">record</span><span class="p">,</span> <span class="nx">suffix</span><span class="p">)</span> <span class="p">{</span>
+</span><span class="line">    <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">_super</span><span class="p">(</span><span class="nx">record</span><span class="p">,</span> <span class="nx">suffix</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;.json&quot;</span><span class="p">;</span>
+</span><span class="line">  <span class="p">}</span>
+</span><span class="line"><span class="p">})</span>
+</span></code></pre></td></tr></table></div></figure>
+
+<p>More to come how how this app works.</p>
+
+			
+			
+		</div>
+	<footer>
+		
+
+
+		
+
+
+
+  
+		
+			Tagged under
+		
+    <a class='category' href='/category/ajax/'>ajax</a>, <a class='category' href='/category/api/'>api</a>, <a class='category' href='/category/cors/'>cors</a>, <a class='category' href='/category/crossdomain/'>crossdomain</a>, <a class='category' href='/category/ember/'>ember</a>, <a class='category' href='/category/ember-data/'>ember data</a>, <a class='category' href='/category/json/'>json</a>, <a class='category' href='/category/rails/'>rails</a>
+	
+
+
+	
+	
+	</footer>
+	
+</article>
+<!-- END OF _includes/article.html -->
+
+	
+		
+		<!-- START OF _includes/article.html -->
+<article>
+	<header>
 		<h1><a href="/2012/12/26/decomposing-fat-models/">Decomposing Fat Models</a></h1>
 		<time>26 December 2012</time>
 	</header>
@@ -341,71 +519,13 @@ View more <a href="http://www.slideshare.net/">presentations</a> from <a href="h
 <!-- END OF _includes/article.html -->
 
 	
-		
-		<!-- START OF _includes/article.html -->
-<article>
-	<header>
-		<h1><a href="/2012/04/23/backup-backup-backup/">Backup, backup, backup</a></h1>
-		<time>23 April 2012</time>
-	</header>
-		<div class="content">
-			<p>Well, the inevitable happened: I finally experienced a hard drive failure. It’s pretty incredible that in the twenty-odd years I’ve been around computers I’ve never had the horror of losing a drive.</p>
-
-<p>Friday rolls around and my Macbook Pro decides to freeze up on me. _Strange, _I think to myself. It’s making a clicking noise. Crap.</p>
-
-<p>Luckily, I’ve been fairly good about making backups and copies of my work. Here’s my general strategy:</p>
-
-<ul>
-  <li>
-    <p>Work/code: keeping local changes on a separate branch and pushing it to a remote Git branch every so often.</p>
-  </li>
-  <li>
-    <p>Everything else: I keep one local copy here with me in Oakland, and have another copy offsite. I rsync my files out to my server at home, which has a cronjob set up to sync with the offsite copy at my parents’ home (I run a <a href="http://pogoplug.com/">Pogoplug</a> with <a href="http://archlinuxarm.org/platforms/armv6/pogoplug-provideov3">Archlinux</a> and a couple of external drives connected to it – fantastic and totally recommended for a cheap and low-power server setup).</p>
-  </li>
-</ul>
-
-<p>There was a minor scare this time around though – I had some photography work (and an engagement photoshoot!) lying around that almost didn’t make it to the first stage rsync with my local server. Fortunately, I had the foresight to keep my photos backed up to a random local hard disk, and the rest remained on the memory cards (and some even on a shared Dropbox folder that saved my butt!). Most frustrating thing was learning that I had forgotten to back up my Lightroom catalog, so all my edits were lost. At least I have the original shots.</p>
-
-<p>One thing I think I’ll try doing from here on out – saving my Develop settings/presets directly to the DNGs themselves before backing up. That way if I ever lose my LR catalog, the edit settings are still embedded in the original files.</p>
-
-<p>Jeff Atwood reminds us to <a href="http://www.codinghorror.com/blog/2008/01/whats-your-backup-strategy.html">keep backups around on multiple disks</a>. With the price of storage so low, what’s your data worth to you? How are you keeping your backups?</p>
-
-			
-			
-		</div>
-	<footer>
-		
-
-
-		
-			andrewhao 
-		
-
-
-
-  
-		
-			on
-		
-    <a class='category' href='/category/andrew-2-dot-0/'>andrew 2.0</a>, <a class='category' href='/category/geek/'>geek</a>, <a class='category' href='/category/linux/'>linux</a>
-	
-
-
-	
-	
-	</footer>
-	
-</article>
-<!-- END OF _includes/article.html -->
-
-	
 	
 <div class="pagination">
 	
 		<a class="older" href="/posts/7">Older</a>
 	
 	
-	<span class="total">6 of 20</span>
+	<span class="total">6 of 21</span>
 	
 	
 		<a class="newer" href="/posts/5">Newer</a>

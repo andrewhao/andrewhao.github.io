@@ -68,6 +68,65 @@
 		<!-- START OF _includes/article.html -->
 <article>
 	<header>
+		<h1><a href="/2010/03/14/upgrading-wejoinin-to-unicorn/">Upgrading Wejoinin to unicorn</a></h1>
+		<time>14 March 2010</time>
+	</header>
+		<div class="content">
+			<p>(Reposted from the <a href="http://blog.wejoinin.com/2010/03/14/server-transition-nuts-and-bolts/">Wejoinin Blog</a>)</p>
+
+<p>When you run a Web app like Wejoinin on minimal VPS resources (read: we’re too poor to get a beefy server), it forces you to go lean. We started to realize a year ago that our out-of-the-box Rails and nginx/Mongrel setup was starting to show its age; resource utilization would climb every so often and we’d have to kill and restart a Mongrel thread.</p>
+
+<p>Well, with last night’s Wejoinin push, we’ve upgraded our server environment a few ways:</p>
+
+<ol>
+  <li>
+    <p>We’ve switched to <a href="http://prgmr.com/xen/">prgmr.com with a killer deal</a> on a 512MiB VPS. This is a step up from the 256 slice we used to hold at <a href="www.slicehost.com">Slicehost</a> at almost half the price.</p>
+  </li>
+  <li>
+    <p>We’ve switched from vanilla Ruby to <a href="http://www.rubyenterpriseedition.com/">Ruby Enterprise Edition </a>– advertised to take “33% less memory [when used with Passenger]”. It’s got a tweaked garbage collector, memory allocator and the ability to go in a tweak memory usage settings for yourself.</p>
+  </li>
+  <li>
+    <p>We’ve set up <a href="http://unicorn.bogomips.org/">Unicorn</a>, the new HTTP server on the block. It’s special in that each worker is in its own process, meaning that the load balancing is done natively by the OS. Also, this means that should a worker process start to get bloated, we can take it down gracefully without touching the others. Really. <a href="http://tomayko.com/writings/unicorn-is-unix">We can trust the OS</a>. Plus, <a href="http://github.com/blog/517-unicorn">Git’s doing it</a>.</p>
+  </li>
+</ol>
+
+<p>With all these tweaks, we should be seeing Wejoinin rarin’ to go. Let us know what you think!</p>
+
+<p>-Andrew</p>
+
+			
+			
+		</div>
+	<footer>
+		
+
+
+		
+			andrewhao 
+		
+
+
+
+  
+		
+			on
+		
+    <a class='category' href='/category/andrew-2-dot-0/'>andrew 2.0</a>
+	
+
+
+	
+	
+	</footer>
+	
+</article>
+<!-- END OF _includes/article.html -->
+
+	
+		
+		<!-- START OF _includes/article.html -->
+<article>
+	<header>
 		<h1><a href="/2010/03/12/shiny-font-overhaul/">Shiny font overhaul!</a></h1>
 		<time>12 March 2010</time>
 	</header>
@@ -405,101 +464,13 @@
 <!-- END OF _includes/article.html -->
 
 	
-		
-		<!-- START OF _includes/article.html -->
-<article>
-	<header>
-		<h1><a href="/2008/10/01/gwt-vs-sproutcore-vs-cappuccino/">GWT vs. SproutCore vs. Cappuccino</a></h1>
-		<time>01 October 2008</time>
-	</header>
-		<div class="content">
-			<p>I’m looking to develop a Web application with a full-stack Javascript framework like <a href="http://code.google.com/webtoolkit/">GWT</a>, <a href="http://www.sproutcore.com">SproutCore</a> or <a href="http://www.cappuccino.org">Cappuccino</a>. I’m making the decision to go with a Javascript framework over a traditional full-stack framework (like Rails) because:</p>
-
-<ul>
-  <li>
-    <p>I get richer, desktop-like functionality in the browser.</p>
-  </li>
-  <li>
-    <p>I can offload much of the work from the server onto the client.</p>
-  </li>
-  <li>
-    <p>There’s less Javascript hand-coding so I don’t reinvent the wheel.</p>
-  </li>
-  <li>
-    <p>I can bring the desktop app programming paradigm straight to the client.</p>
-  </li>
-</ul>
-
-<p>I’ve been taking a look at <a href="http://code.google.com/webtoolkit/">GWT</a> (Google Web Toolkit), <a href="http://www.sproutcore.com">SproutCore</a> and <a href="http://www.cappuccino.org">Cappuccino</a>, and here’s some of my observations so far:</p>
-
-<ul>
-  <li>
-    <p>GWT is the most mature framework out of the three at 2 years. SproutCore and Cappuccino have emerged only in the last three months.</p>
-  </li>
-  <li>
-    <p>SproutCore is really, really, beautiful. Just look at MobileMe. I’m sure Cappuccino looks much the same. It’s probably because both emulate Cocoa, and so take on the same icon set, window chrome, pane behaviors, and so on.</p>
-  </li>
-  <li>
-    <p>Objective-J sounds cool. I picked up Cocoa over the summer, and to have it on a Web browser is going to be phenomenal.</p>
-  </li>
-  <li>
-    <p>Cappuccino is so new that there aren’t that many apps out there (asides from the storied <a href="http://280slides.com/">280 Slides app</a>). I’m worried that it could be buggy and docs are too sparse.</p>
-  </li>
-  <li>
-    <p>Something about Java in GWT makes me cringe. Maybe it’s just because I’m not used to that extra compilation step. Maybe it’s because I’ve been mucking in dynamic languages for too long of a time.</p>
-  </li>
-  <li>
-    <p>I’m a big sucker for looks. GWT looks pretty frumpy. Honestly, it doesn’t get me excited like SproutCore applications do in all their Aqua-like goodness.</p>
-  </li>
-  <li>
-    <p>The Ext widgets from <a href="http://extjs.com/products/gxt/">Ext-GWT</a> are only slightly better. I guess I shouldn’t complain… but gosh, I really like OS X-looking widgets. What can I say, I was brainwashed :)</p>
-  </li>
-  <li>
-    <p>SproutCore and Cappuccino are slower: they simply can’t beat the compiler optimizations of compiled and optimized JS in GWT. Then again… we’re going to have crazy fast JS engines in the next year or so.</p>
-  </li>
-  <li>
-    <p>I considered <a href="http://dojotoolkit.org/">Dojo</a>. Sort of. I like it because it’s more mature than SC, but it’s slower than GWT and doesn’t have as many widgets as Ext.</p>
-  </li>
-</ul>
-
-<p>Honestly, even though my “ooh-shiny” sense wants to use SproutCore, my objective reasoning tells me to go for GWT for its stronger support, more maturity, better performance and a fuller set of widgets. Anybody else want to weigh in?</p>
-
-			
-			
-		</div>
-	<footer>
-		
-
-
-		
-			andrewhao 
-		
-
-
-
-  
-		
-			on
-		
-    <a class='category' href='/category/geek/'>geek</a>, <a class='category' href='/category/javascript/'>javascript</a>, <a class='category' href='/category/web/'>web</a>
-	
-
-
-	
-	
-	</footer>
-	
-</article>
-<!-- END OF _includes/article.html -->
-
-	
 	
 <div class="pagination">
 	
 		<a class="older" href="/posts/13">Older</a>
 	
 	
-	<span class="total">12 of 20</span>
+	<span class="total">12 of 21</span>
 	
 	
 		<a class="newer" href="/posts/11">Newer</a>

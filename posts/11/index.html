@@ -68,6 +68,113 @@
 		<!-- START OF _includes/article.html -->
 <article>
 	<header>
+		<h1><a href="/2010/08/03/on-selling-my-soul-and-switching-to-mac/">On selling my soul and switching to Mac</a></h1>
+		<time>03 August 2010</time>
+	</header>
+		<div class="content">
+			<p>A month ago I bought an ‘07 MacBook on Craigslist. No, it’s not one of those sexy aluminum hot rods, but it sure is pretty.</p>
+
+<p>I was full of mixed emotions. I had finally joined the Tribe! I had sold my soul. I can now develop iPhone apps! I am property of SJ. Yes, I had interned at Apple in the summer of ‘08, but I haven’t really paid much attention to OS X until I’ve owned one of these suckers for myself.</p>
+
+<p>It’s not easy making the switch. Here are some of my gripes with OSX and some stopgap replacements I’ve found:</p>
+
+<ul>
+  <li>
+    <p>No keyboard shortcut to maximize windows. (Solved with <a href="http://www.blazingtools.com/downloads.html#RightZoom">RightZoom</a>)</p>
+  </li>
+  <li>
+    <p>MacPorts really sucks (that is, having to compile everything from source is really slow). (Still outstanding)</p>
+  </li>
+  <li>
+    <p>Switching windows between spaces is really clunky. (Sorta solved with <a href="http://thecocoabots.com/hyperspaces/">Hyperspaces</a>)</p>
+  </li>
+  <li>
+    <p>No keyboard shortcut to “move active window to space”. (Still outstanding)</p>
+  </li>
+  <li>
+    <p>No way to force windows to a grid. (Solved with <a href="http://www.mizage.com/divvy/">Divvy</a>)</p>
+  </li>
+  <li>
+    <p>No right Ctrl key makes things really painful in Emacs. (Remapped right “Enter” with <a href="http://doublecommand.sourceforge.net/">DoubleCommand</a>)</p>
+  </li>
+  <li>
+    <p>Aero Snap is cool. (Check out <a href="http://www.irradiatedsoftware.com/cinch/">Cinch</a>)</p>
+  </li>
+  <li>
+    <p>The MacBook keyboard keys feel cheap compared to a Thinkpad. (Still outstanding)</p>
+  </li>
+  <li>
+    <p>Really annoyed with Command-Tab switching. I just want to switch to a different window! (Still outstanding).</p>
+  </li>
+  <li>
+    <p>Expose feels limited compared to Compiz’ Scale plugin. Cannot Expose all windows in all spaces. (Still outstanding)</p>
+  </li>
+  <li>
+    <p>Closing window doesn’t kill the process. I suspect this is just a design philosophy I have to deal with. (Still outstanding)</p>
+  </li>
+  <li>
+    <p>Not sure why, but my wrists generally tend to hurt more after using the MB rather than my work Thinkpad.</p>
+  </li>
+</ul>
+
+<p>Okay, I’m not going to do all complaining. Some things I really enjoy:</p>
+
+<ul>
+  <li>
+    <p>Drag-and-drop installation is totally elegant.</p>
+  </li>
+  <li>
+    <p>Time Machine just works, and the zoomable interface is totally slick.</p>
+  </li>
+  <li>
+    <p>Helvetica Neue, I love you.</p>
+  </li>
+  <li>
+    <p>Something about the font rendering is just amazing.</p>
+  </li>
+  <li>
+    <p>I get to look cool (and slightly cliche…) at coffee shops</p>
+  </li>
+  <li>
+    <p>Desktop graphics &amp; animations render smoothly with CoreAnimation. This stuff just looks slick.</p>
+  </li>
+</ul>
+
+<p>I guess it’s not as bad as I’ve made it out to be. Well here I am. Swore I’d never do it, but you got me with all that shiny, Mr. Jobs. You got me.</p>
+
+			
+			
+		</div>
+	<footer>
+		
+
+
+		
+			andrewhao 
+		
+
+
+
+  
+		
+			on
+		
+    <a class='category' href='/category/andrew-2-dot-0/'>andrew 2.0</a>, <a class='category' href='/category/apple/'>apple</a>, <a class='category' href='/category/geek/'>geek</a>
+	
+
+
+	
+	
+	</footer>
+	
+</article>
+<!-- END OF _includes/article.html -->
+
+	
+		
+		<!-- START OF _includes/article.html -->
+<article>
+	<header>
 		<h1><a href="/2010/06/02/post-review-git-svn-and-review-board/">post-review, git-svn and Review Board</a></h1>
 		<time>02 June 2010</time>
 	</header>
@@ -312,72 +419,13 @@
 <!-- END OF _includes/article.html -->
 
 	
-		
-		<!-- START OF _includes/article.html -->
-<article>
-	<header>
-		<h1><a href="/2010/03/14/upgrading-wejoinin-to-unicorn/">Upgrading Wejoinin to unicorn</a></h1>
-		<time>14 March 2010</time>
-	</header>
-		<div class="content">
-			<p>(Reposted from the <a href="http://blog.wejoinin.com/2010/03/14/server-transition-nuts-and-bolts/">Wejoinin Blog</a>)</p>
-
-<p>When you run a Web app like Wejoinin on minimal VPS resources (read: we’re too poor to get a beefy server), it forces you to go lean. We started to realize a year ago that our out-of-the-box Rails and nginx/Mongrel setup was starting to show its age; resource utilization would climb every so often and we’d have to kill and restart a Mongrel thread.</p>
-
-<p>Well, with last night’s Wejoinin push, we’ve upgraded our server environment a few ways:</p>
-
-<ol>
-  <li>
-    <p>We’ve switched to <a href="http://prgmr.com/xen/">prgmr.com with a killer deal</a> on a 512MiB VPS. This is a step up from the 256 slice we used to hold at <a href="www.slicehost.com">Slicehost</a> at almost half the price.</p>
-  </li>
-  <li>
-    <p>We’ve switched from vanilla Ruby to <a href="http://www.rubyenterpriseedition.com/">Ruby Enterprise Edition </a>– advertised to take “33% less memory [when used with Passenger]”. It’s got a tweaked garbage collector, memory allocator and the ability to go in a tweak memory usage settings for yourself.</p>
-  </li>
-  <li>
-    <p>We’ve set up <a href="http://unicorn.bogomips.org/">Unicorn</a>, the new HTTP server on the block. It’s special in that each worker is in its own process, meaning that the load balancing is done natively by the OS. Also, this means that should a worker process start to get bloated, we can take it down gracefully without touching the others. Really. <a href="http://tomayko.com/writings/unicorn-is-unix">We can trust the OS</a>. Plus, <a href="http://github.com/blog/517-unicorn">Git’s doing it</a>.</p>
-  </li>
-</ol>
-
-<p>With all these tweaks, we should be seeing Wejoinin rarin’ to go. Let us know what you think!</p>
-
-<p>-Andrew</p>
-
-			
-			
-		</div>
-	<footer>
-		
-
-
-		
-			andrewhao 
-		
-
-
-
-  
-		
-			on
-		
-    <a class='category' href='/category/andrew-2-dot-0/'>andrew 2.0</a>
-	
-
-
-	
-	
-	</footer>
-	
-</article>
-<!-- END OF _includes/article.html -->
-
-	
 	
 <div class="pagination">
 	
 		<a class="older" href="/posts/12">Older</a>
 	
 	
-	<span class="total">11 of 20</span>
+	<span class="total">11 of 21</span>
 	
 	
 		<a class="newer" href="/posts/10">Newer</a>

@@ -68,6 +68,64 @@
 		<!-- START OF _includes/article.html -->
 <article>
 	<header>
+		<h1><a href="/2012/04/23/backup-backup-backup/">Backup, backup, backup</a></h1>
+		<time>23 April 2012</time>
+	</header>
+		<div class="content">
+			<p>Well, the inevitable happened: I finally experienced a hard drive failure. It’s pretty incredible that in the twenty-odd years I’ve been around computers I’ve never had the horror of losing a drive.</p>
+
+<p>Friday rolls around and my Macbook Pro decides to freeze up on me. _Strange, _I think to myself. It’s making a clicking noise. Crap.</p>
+
+<p>Luckily, I’ve been fairly good about making backups and copies of my work. Here’s my general strategy:</p>
+
+<ul>
+  <li>
+    <p>Work/code: keeping local changes on a separate branch and pushing it to a remote Git branch every so often.</p>
+  </li>
+  <li>
+    <p>Everything else: I keep one local copy here with me in Oakland, and have another copy offsite. I rsync my files out to my server at home, which has a cronjob set up to sync with the offsite copy at my parents’ home (I run a <a href="http://pogoplug.com/">Pogoplug</a> with <a href="http://archlinuxarm.org/platforms/armv6/pogoplug-provideov3">Archlinux</a> and a couple of external drives connected to it – fantastic and totally recommended for a cheap and low-power server setup).</p>
+  </li>
+</ul>
+
+<p>There was a minor scare this time around though – I had some photography work (and an engagement photoshoot!) lying around that almost didn’t make it to the first stage rsync with my local server. Fortunately, I had the foresight to keep my photos backed up to a random local hard disk, and the rest remained on the memory cards (and some even on a shared Dropbox folder that saved my butt!). Most frustrating thing was learning that I had forgotten to back up my Lightroom catalog, so all my edits were lost. At least I have the original shots.</p>
+
+<p>One thing I think I’ll try doing from here on out – saving my Develop settings/presets directly to the DNGs themselves before backing up. That way if I ever lose my LR catalog, the edit settings are still embedded in the original files.</p>
+
+<p>Jeff Atwood reminds us to <a href="http://www.codinghorror.com/blog/2008/01/whats-your-backup-strategy.html">keep backups around on multiple disks</a>. With the price of storage so low, what’s your data worth to you? How are you keeping your backups?</p>
+
+			
+			
+		</div>
+	<footer>
+		
+
+
+		
+			andrewhao 
+		
+
+
+
+  
+		
+			on
+		
+    <a class='category' href='/category/andrew-2-dot-0/'>andrew 2.0</a>, <a class='category' href='/category/geek/'>geek</a>, <a class='category' href='/category/linux/'>linux</a>
+	
+
+
+	
+	
+	</footer>
+	
+</article>
+<!-- END OF _includes/article.html -->
+
+	
+		
+		<!-- START OF _includes/article.html -->
+<article>
+	<header>
 		<h1><a href="/2012/04/12/haml-object-references/">HAML object references</a></h1>
 		<time>12 April 2012</time>
 	</header>
@@ -315,153 +373,13 @@ end
 <!-- END OF _includes/article.html -->
 
 	
-		
-		<!-- START OF _includes/article.html -->
-<article>
-	<header>
-		<h1><a href="/2011/10/02/mmtss-a-collaborative-loop-station/">mmtss, a collaborative loop station</a></h1>
-		<time>02 October 2011</time>
-	</header>
-		<div class="content">
-			<h2 id="mmtss-is-a-loop-station-built-for-live-performances">mmtss is a loop station built for live performances.</h2>
-
-<p>Let’s make music together! This project simplifies a traditional loop tracking station and is designed for interactive collaborative music performances.</p>
-
-<p>The idea: Everybody adds or modifies one “part” of a 32-bar loop. The user gets to play an instrument over the existing mix and record the 32-bar phrase when she or he is ready. Once the person is finished, the project selects another instrument at random for the next viewer to record.</p>
-
-<p>It’s an Ableton Live controller serving a Webkit view, backed by node.js on the backend and socket.io + RaphaelJS on the front. Communication is done through a LiveOSC Live plugin via sockets.</p>
-
-<p>Displayed at the Regeneration “We Collaborate” art show in Oakland, CA. 9/24/2011.</p>
-
-<h3 id="screenshots">Screenshots</h3>
-
-<p><img src="https://a248.e.akamai.net/assets.github.com/img/64abaefb0d10744dda42f362b6cd991522a88da4/687474703a2f2f6661726d372e7374617469632e666c69636b722e636f6d2f363136392f363138383336363537375f376261343864333864315f7a2e6a7067" alt="Practice mode" /></p>
-
-<p>mmtss in practice/playback mode. Here the user is able to practice/mess around with the current instrument to prepare to record the next track.</p>
-
-<p><img src="https://a248.e.akamai.net/assets.github.com/img/3f0c633b9b8d9d35970efe73f84c0f67bf68c6a8/687474703a2f2f6661726d372e7374617469632e666c69636b722e636f6d2f363132312f363138383838363131345f396436643531393937325f7a2e6a7067" alt="Cued mode" /></p>
-
-<p>Pressing “record” puts the user in a wait state. They are prompted to begin recording when all the black boxes count down and disappear.</p>
-
-<p><img src="https://a248.e.akamai.net/assets.github.com/img/650dc62a52d8ca6441eff57e697307325390caaa/687474703a2f2f6661726d372e7374617469632e666c69636b722e636f6d2f363137372f363138383336373135315f636135623738323733355f7a2e6a7067" alt="Record mode" /></p>
-
-<p>mmtss in record mode.</p>
-
-<p>More screenshots: http://www.flickr.com/photos/andrewhao/sets/72157627640840853/</p>
-
-<h3 id="source-code">Source code</h3>
-
-<p>Github: http://www.github.com/andrewhao/mmtss.</p>
-
-<p>MIT/GPL-sourced for your coding pleasure.</p>
-
-<h3 id="installation">Installation</h3>
-
-<ul>
-  <li>
-    <p>Make sure you have npm installed: <a href="http://www.npmjs.org/">http://www.npmjs.org</a></p>
-  </li>
-  <li>
-    <p>Copy <code>lib/LiveOSC</code> into <code>/Applications/Live x.y.z OS X/Live.app/Contents/App-Resources/MIDI\ Remote\ Scripts/</code> folder</p>
-  </li>
-  <li>
-    <p>Set it as your MIDI remote in the Ableton Live Preferences pane, in the “MIDI Remote” tab.</p>
-  </li>
-</ul>
-
-<h3 id="running-it">Running it</h3>
-
-<ul>
-  <li>
-    <p>Open <code>Mmtss_0.als</code> as a sample Live project.</p>
-  </li>
-  <li>
-    <p>Install all project dependencies with <code>npm install</code> from the project root.</p>
-  </li>
-  <li>
-    <p>Start the Node server with <code>node app.js</code> from the root directory.</p>
-  </li>
-  <li>
-    <p>Open a Web browser and visit <code>localhost:3000</code></p>
-  </li>
-</ul>
-
-<h3 id="modifying-the-sample-project">Modifying the sample project</h3>
-
-<p>You can modify this project to suit your own needs. Note that there are two sets of tracks; instrument (MIDI input) tracks and loop tracks that actually store clips.</p>
-
-<p>For <code>n</code> tracks, you can add or remove your own instruments. Just make sure that instrument at track <code>x</code> corresponds to track <code>x</code> + <code>n</code>.</p>
-
-<h3 id="credits">Credits</h3>
-
-<ul>
-  <li>
-    <p>Design and architectural inspiration taken from <a href="http://github.com/vnoise/vtouch">vtouch</a>, a HTML5/Node/Canvas Ableton controller.</p>
-  </li>
-  <li>
-    <p>Original LiveOSC source is found at: <a href="http://monome.q3f.org/browser/trunk/LiveOSC">http://monome.q3f.org/browser/trunk/LiveOSC</a>. We use a different fork of the project at:<a href="http://github.com/vnoise/vtouch">http://github.com/vnoise/vtouch</a>.</p>
-  </li>
-  <li>
-    <p>Super sweet CSS3 rocker widgets courtesy of <a href="http://www.simurai.com/">Simurai</a>: <a href="http://lab.simurai.com/css/umbrui/">UmbrUI</a></p>
-  </li>
-</ul>
-
-<h3 id="license">License</h3>
-
-<p><a href="http://www.opensource.org/licenses/mit-license.php">MIT</a> and <a href="http://www.gnu.org/copyleft/gpl.html">GPLv3</a> licensed. Go for it.</p>
-
-<p>You will, however, need to get a license for <a href="http://www.ableton.com/live">Ableton Live</a> yourself.</p>
-
-<h3 id="the-handsome-collaborators">The handsome collaborators</h3>
-
-<ul>
-  <li>
-    <p>Andrew Hao: <a href="http://www.g9labs.com/">http://www.g9labs.com</a></p>
-  </li>
-  <li>
-    <p>David Luoh: <a href="http://www.inkproj.com/">http://www.inkproj.com</a></p>
-  </li>
-</ul>
-
-<p>###</p>
-
-
-			
-			
-		</div>
-	<footer>
-		
-
-
-		
-			andrewhao 
-		
-
-
-
-  
-		
-			on
-		
-    <a class='category' href='/category/art/'>art</a>, <a class='category' href='/category/design/'>design</a>, <a class='category' href='/category/geek/'>geek</a>, <a class='category' href='/category/javascript/'>javascript</a>, <a class='category' href='/category/programming/'>programming</a>, <a class='category' href='/category/software/'>software</a>
-	
-
-
-	
-	
-	</footer>
-	
-</article>
-<!-- END OF _includes/article.html -->
-
-	
 	
 <div class="pagination">
 	
 		<a class="older" href="/posts/8">Older</a>
 	
 	
-	<span class="total">7 of 20</span>
+	<span class="total">7 of 21</span>
 	
 	
 		<a class="newer" href="/posts/6">Newer</a>

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: development | The Sweet Spot]]></title>
   <link href="http://www.g9labs.com/category/development/atom.xml" rel="self"/>
   <link href="http://www.g9labs.com/"/>
-  <updated>2018-03-13T21:12:28-07:00</updated>
+  <updated>2018-03-21T20:47:56-07:00</updated>
   <id>http://www.g9labs.com/</id>
   <author>
     <name><![CDATA[Andrew Hao]]></name>
@@ -19,6 +19,8 @@
     <updated>2018-03-13T20:52:23-07:00</updated>
     <id>http://www.g9labs.com/2018/03/13/elixir-and-elm-things-ive-written-elsewhere</id>
     <content type="html"><![CDATA[<p>While it’s been pretty quiet around these parts, I’ve kept the technical blogging up over on <a href="https://blog.carbonfive.com">my employer’s blog</a>. I’ve got quite a few posts around Elixir:</p>
+
+<p><a href="https://blog.carbonfive.com/2018/03/19/lightweight-dependency-injection-in-elixir-without-the-tears/">Lightweight dependency injection in Elixir (without the tears)</a>: What are some ways we can use the language features of Elixir to apply small-scale dependency injection patterns, without a ton of ceremony?</p>
 
 <p><a href="https://blog.carbonfive.com/2018/01/16/functional-mocks-with-mox-in-elixir/">Functional Mocks with Mox in Elixir</a>: This post discusses a mocking library in Elixir called <a href="https://github.com/plataformatec/mox">mox</a> that adheres to the Elixir Way(tm) of mocking (that is, the usage of fakes or doubles).</p>
 

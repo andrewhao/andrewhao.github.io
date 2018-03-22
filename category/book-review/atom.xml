@@ -4,7 +4,7 @@
   <title><![CDATA[Category: book review | The Sweet Spot]]></title>
   <link href="http://www.g9labs.com/category/book-review/atom.xml" rel="self"/>
   <link href="http://www.g9labs.com/"/>
-  <updated>2018-03-13T21:12:28-07:00</updated>
+  <updated>2018-03-21T20:47:56-07:00</updated>
   <id>http://www.g9labs.com/</id>
   <author>
     <name><![CDATA[Andrew Hao]]></name>
@@ -92,6 +92,7 @@ hopefully once a week.</p>
 <h2 id="chapter-1-getting-started-with-ddd">Chapter 1: Getting Started with DDD</h2>
 
 <h3 id="can-i-ddd">Can I DDD?</h3>
+
 <ul>
   <li>DDD helps us design software models where “our design is exactly how<br />
 the software works” (1).</li>
@@ -143,6 +144,7 @@ should stay away.</li>
 </ul>
 
 <h4 id="domain-model-health">Domain model health</h4>
+
 <ul>
   <li>As time passes, our domain models can become<br />
 <a href="http://www.martinfowler.com/bliki/AnemicDomainModel.html">anemic</a>,<br />
@@ -229,7 +231,6 @@ other existing models. You go through the red-green-refactor cycle.</li>
 are able to provide in-flight feedback to the development of the<br />
 system.</li>
 </ul>
-
 ]]></content>
   </entry>
   

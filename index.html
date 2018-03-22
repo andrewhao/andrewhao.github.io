@@ -68,11 +68,158 @@
 		<!-- START OF _includes/article.html -->
 <article>
 	<header>
+		<h1><a href="/2018/03/21/tensorflow-for-tears-part-1/">Tensorflow For Tears: Part 1</a></h1>
+		<time>21 March 2018</time>
+	</header>
+		<div class="content">
+			<h3 id="an-introduction-to-every-parents-trial-and-travails">An introduction to every parent’s trial and travails</h3>
+
+<p>When our son was born early last year, I admit I wasn’t ready for it. Fatherhood was not the kind of thing I was ready for (and who really can ever be ready for parenthood, anyways?).</p>
+
+<p>It so turns out that the vast majority of the first year of parenting is simply enduring the gut-wrenching cries of your little one. And cry they do - crying when they are too tired, screaming when they are too energetic, crying when they are gassy, screaming when they are bored, and crying when they just pooped.</p>
+
+<p>The trials that Annie and I went through with our little guy was particularly difficult on us (you can ask me in person if we ever get to chat). The little guy was a prolific screamer and absolutely. hated. sleep.</p>
+
+<p>What’s a geeky dad to do? Quantify household suffering by leveraging machine learning, of course.</p>
+
+<p>I set out to build a system that would in the end determine how well our little guy slept through (or didn’t sleep through) the night. I started by building a system that naively parsed audio samples from his nursery, and then trained a TensorFlow model to do more accurate detection of his cries. Here’s how it worked:</p>
+
+<h3 id="act-1-the-misery-meter">Act 1: The Misery Meter</h3>
+
+<p>In version 1 of the system, I bought <a href="https://www.amazon.com/Kinobo-Microphone-Desktop-Recognition-Software/dp/B00IR8R7WQ">a cheap USB microphone</a> and hooked it up to a Raspberry Pi 3.</p>
+
+<p>In it, I loaded up a script to record a 30-second audio sample, using the <code>arecord</code> UNIX command line tool:</p>
+
+<figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+</pre></td><td class="code"><pre><code class="bash"><span class="line"><span class="c">#!/usr/bin/env bash</span>
+</span><span class="line">
+</span><span class="line"><span class="nb">set</span> -euxo pipefail
+</span><span class="line">
+</span><span class="line"><span class="nv">DIR</span><span class="o">=</span><span class="s2">&quot;$( cd &quot;</span><span class="k">$(</span> dirname <span class="s2">&quot;${BASH_SOURCE[0]}&quot;</span> <span class="k">)</span><span class="s2">&quot; &amp;&amp; pwd )&quot;</span>
+</span><span class="line"><span class="nv">RECORDING_FILE</span><span class="o">=</span><span class="s2">&quot;${DIR}/recordings/sample.wav&quot;</span>
+</span><span class="line"><span class="nv">DATE</span><span class="o">=</span><span class="k">$(</span>date <span class="s2">&quot;+%Y-%m-%d %H:%M:%S&quot;</span><span class="k">)</span>
+</span><span class="line"><span class="nv">UPLOAD_RECORDING_FILENAME</span><span class="o">=</span><span class="k">$(</span><span class="nb">printf</span> %q <span class="s2">&quot;${DATE}.wav&quot;</span><span class="k">)</span>
+</span><span class="line">arecord --device<span class="o">=</span>hw:1,0 --format S16_LE --rate <span class="m">48000</span> -c1 -d <span class="m">30</span> --quiet <span class="s2">&quot;${RECORDING_FILE}&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+<p>…then I ran the <code>sox</code> command-line tool to grab some simple loudness statistics out from it:</p>
+
+<figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="bash"><span class="line">sox -V3 <span class="k">${</span><span class="nv">RECORDING_FILE</span><span class="k">}</span> -n stats 2&gt;<span class="p">&amp;</span><span class="m">1</span> <span class="p">|</span> grep dB
+</span></code></pre></td></tr></table></div></figure>
+
+<p>In case you’re curious, here’s the full output from <code>sox -V3 FILE -n stats</code>. Pretty nifty:</p>
+
+<figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+</pre></td><td class="code"><pre><code class="bash"><span class="line">➜ sox -V3 sample.wav -n stats
+</span><span class="line"><span class="c"># ... Truncated for brevity ...</span>
+</span><span class="line">
+</span><span class="line">sox INFO sox: effects chain: input        48000Hz  <span class="m">1</span> channels
+</span><span class="line">sox INFO sox: effects chain: stats        48000Hz  <span class="m">1</span> channels
+</span><span class="line">sox INFO sox: effects chain: output       48000Hz  <span class="m">1</span> channels
+</span><span class="line">DC offset   0.000017
+</span><span class="line">Min level  -0.141083
+</span><span class="line">Max level   0.135651
+</span><span class="line">Pk lev dB     -17.01
+</span><span class="line">RMS lev dB    -29.32
+</span><span class="line">RMS Pk dB     -27.37
+</span><span class="line">RMS Tr dB     -30.83
+</span><span class="line">Crest factor    4.12
+</span><span class="line">Flat factor     0.00
+</span><span class="line">Pk count           2
+</span><span class="line">Bit-depth      14/16
+</span><span class="line">Num samples     480k
+</span><span class="line">Length s      10.000
+</span><span class="line">Scale max   1.000000
+</span><span class="line">Window s       0.050
+</span></code></pre></td></tr></table></div></figure>
+
+<p>Here, we’re really only interested in <code>RMS dB</code>, which is the relative loudness levels within this 30-second sample. I chose to push these three stats up to a web service which I use to aggregate and graph these metrics. <code>RMS lev</code> is the average, <code>RMS Pk</code> is the peak, and <code>RMS Tr</code> is the trough (the floor).</p>
+
+<p>I’m not showing the entirety of the script, but the last thing it does is parse and push the results of the analysis of this audio sample to a Web-based metrics aggregation service! In case you were wondering, I have an API service sitting between the Raspberry Pi and a time-series API supplied by <a href="https://www.keen.io">Keen.io</a>. But the main point is that now I can load up a cute JS widget that graphs these data points!</p>
+
+<p><img src="/images/tensorflow-for-tears/audio-graph.png" alt="Audio crying graph" /></p>
+
+<p>Now, how does one read this graph?</p>
+
+<ul>
+  <li>We can follow the peaks of the audio signal and assume that any noise over a certain dB threshold is the little dude’s screaming.</li>
+  <li>We can follow the troughs of the graph and assume that if the trough jumps, then man there is some serious crying going on, since the audio floor of the soundscape has been bumped up!</li>
+  <li>Or we can follow the average RMS reading and assume some combination of the two?</li>
+</ul>
+
+<p>The truth of the matter, none of the readings from the Misery Meter (so I called it) were particularly reliable indicators of “the little buddy is crying his little head off”. Sometimes, his crying was at the same volume level as other ambient noises in the house (say, when he’s playing in the other room and someone shuts a door). So it turns out that using volume as a proxy for crying is insufficient to give us reliable results.</p>
+
+<h3 id="act-2-enter-tensorflow-next">Act 2: Enter TensorFlow… next!</h3>
+
+<p>In my next post, I’ll discuss how I modified this script to use TensorFlow to train a model that could then be used to enhance the accuracy of little dude’s crying. Stick around, it’ll be fun!</p>
+
+			
+			
+		</div>
+	<footer>
+		
+
+
+		
+
+
+
+  
+		
+			Tagged under
+		
+    <a class='category' href='/category/audio-processing/'>audio processing</a>, <a class='category' href='/category/machine-learning/'>machine learning</a>, <a class='category' href='/category/parenting/'>parenting</a>, <a class='category' href='/category/tensorflow/'>tensorflow</a>
+	
+
+
+	
+	
+	</footer>
+	
+</article>
+<!-- END OF _includes/article.html -->
+
+	
+		
+		<!-- START OF _includes/article.html -->
+<article>
+	<header>
 		<h1><a href="/2018/03/13/elixir-and-elm-things-ive-written-elsewhere/">Elixir and Elm things I've written about elsewhere</a></h1>
 		<time>13 March 2018</time>
 	</header>
 		<div class="content">
 			<p>While it’s been pretty quiet around these parts, I’ve kept the technical blogging up over on <a href="https://blog.carbonfive.com">my employer’s blog</a>. I’ve got quite a few posts around Elixir:</p>
+
+<p><a href="https://blog.carbonfive.com/2018/03/19/lightweight-dependency-injection-in-elixir-without-the-tears/">Lightweight dependency injection in Elixir (without the tears)</a>: What are some ways we can use the language features of Elixir to apply small-scale dependency injection patterns, without a ton of ceremony?</p>
 
 <p><a href="https://blog.carbonfive.com/2018/01/16/functional-mocks-with-mox-in-elixir/">Functional Mocks with Mox in Elixir</a>: This post discusses a mocking library in Elixir called <a href="https://github.com/plataformatec/mox">mox</a> that adheres to the Elixir Way(tm) of mocking (that is, the usage of fakes or doubles).</p>
 
@@ -772,344 +919,13 @@
 <!-- END OF _includes/article.html -->
 
 	
-		
-		<!-- START OF _includes/article.html -->
-<article>
-	<header>
-		<h1><a href="/2016/06/23/rails-pub-slash-sub-with-wisper-and-sidekiq/">Evented Rails: Decoupling domains in Rails with Wisper pub/sub events</a></h1>
-		<time>23 June 2016</time>
-	</header>
-		<div class="content">
-			<p>One common pattern in Domain-Driven Design is the use of publish/subscribe messaging to communicate between domains. When <a href="http://martinfowler.com/eaaDev/DomainEvent.html">Domain Events</a> are created from within a domain, other domains are able to subscribe to these events and take action within their own domains, respectively.</p>
-
-<p>This is not a common pattern in Rails, particularly because of Ruby’s lack of language support for functional programming paradigms that exist in other languages. However, with a nifty framework and the help of Sidekiq, we can get just a little bit closer.</p>
-
-<h3 id="what-is-a-domain-event">What is a Domain Event?</h3>
-
-<p>A domain event is a recorded property in the system that tracks an action that the system performs, and the factors/properties that lead to its creation.</p>
-
-<p>In the following examples, we are going to use the <a href="https://github.com/krisleech/wisper">Wisper</a> gem to implement domain events in our sample <a href="http://github.com/andrewhao/delorean">Delorean</a> app.</p>
-
-<p>Imagine that we are writing an endpoint that our users will hit, indicating that they want to hail a time-traveling cab. Now the logic to hail a cab is rather complicated and lives in an entirely different area of the codebase, perhaps even in another application. How should we call the other code and ensure that our code is cleanly decoupled?</p>
-
-<p>With our Domain-Driven powers, we’ve been smart enough to segregate our code into different subdomains and bounded contexts, denoted by these two Ruby modules <code>Ridesharing</code> and <code>DriverRouting</code>.</p>
-
-<h2 id="example-1-in-process-pub-sub-event-modeling-with-a-service-object">Example 1: In-process pub-sub event modeling, with a service object.</h2>
-
-<p>A simple way to use Wisper is to use it to implement your service objects with Wisper, calling the service from the controller.</p>
-
-<figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-<span class="line-number">9</span>
-<span class="line-number">10</span>
-<span class="line-number">11</span>
-<span class="line-number">12</span>
-<span class="line-number">13</span>
-<span class="line-number">14</span>
-<span class="line-number">15</span>
-</pre></td><td class="code"><pre><code class="ruby"><span class="line"><span class="k">module</span> <span class="nn">Ridesharing</span>
-</span><span class="line">  <span class="k">class</span> <span class="nc">RidesController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>
-</span><span class="line">    <span class="k">def</span> <span class="nf">post</span>
-</span><span class="line">      <span class="c1"># Hail a time-traveling Delorean:</span>
-</span><span class="line">      <span class="n">command</span> <span class="o">=</span> <span class="no">HailDelorean</span><span class="o">.</span><span class="n">new</span>
-</span><span class="line">      <span class="n">command</span><span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="s1">&#39;hailed&#39;</span><span class="p">)</span> <span class="p">{</span> <span class="o">|</span><span class="n">driver</span><span class="o">|</span>
-</span><span class="line">        <span class="n">render</span> <span class="ss">text</span><span class="p">:</span> <span class="s2">&quot;Hailed you a cab: </span><span class="si">#{</span><span class="n">driver</span><span class="si">}</span><span class="s2"> is arriving!&quot;</span>
-</span><span class="line">      <span class="p">}</span>
-</span><span class="line">      <span class="o">.</span><span class="n">on</span><span class="p">(</span><span class="s1">&#39;could_not_hail&#39;</span><span class="p">)</span> <span class="p">{</span>
-</span><span class="line">        <span class="n">render</span> <span class="ss">text</span><span class="p">:</span> <span class="s2">&quot;Sorry, no dice.&quot;</span>
-</span><span class="line">      <span class="p">}</span>
-</span><span class="line">      <span class="n">command</span><span class="o">.</span><span class="n">hail!</span><span class="p">(</span><span class="n">current_user</span><span class="p">)</span>
-</span><span class="line">    <span class="k">end</span>
-</span><span class="line">  <span class="k">end</span>
-</span><span class="line"><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-<p>Note that the <code>HailDelorean</code> class has powers of event subscriptions now. Our calling code does not have to concern itself with the implementation details of the <code>HailDelorean</code> service - it merely needs to register handlers for the two possible outcomes, <code>hailed</code> and <code>could_not_hail</code>. Here’s how the service class is implemented:</p>
-
-<figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-<span class="line-number">9</span>
-<span class="line-number">10</span>
-<span class="line-number">11</span>
-<span class="line-number">12</span>
-<span class="line-number">13</span>
-<span class="line-number">14</span>
-<span class="line-number">15</span>
-<span class="line-number">16</span>
-<span class="line-number">17</span>
-<span class="line-number">18</span>
-<span class="line-number">19</span>
-</pre></td><td class="code"><pre><code class="ruby"><span class="line"><span class="k">module</span> <span class="nn">Ridesharing</span>
-</span><span class="line">  <span class="k">class</span> <span class="nc">HailDelorean</span>
-</span><span class="line">    <span class="kp">include</span> <span class="no">Wisper</span><span class="o">::</span><span class="no">Publisher</span>
-</span><span class="line">
-</span><span class="line">    <span class="k">def</span> <span class="nf">hail!</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
-</span><span class="line">      <span class="c1"># broadcast() is a Wisper method to fire an event</span>
-</span><span class="line">      <span class="n">driver</span> <span class="o">=</span> <span class="n">find_driver</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
-</span><span class="line">      <span class="k">if</span> <span class="n">driver</span>
-</span><span class="line">        <span class="n">broadcast</span><span class="p">(</span><span class="s1">&#39;hailed&#39;</span><span class="p">,</span> <span class="n">driver</span><span class="p">)</span>
-</span><span class="line">      <span class="k">else</span>
-</span><span class="line">        <span class="n">broadcast</span><span class="p">(</span><span class="s1">&#39;could_not_hail&#39;</span><span class="p">)</span>
-</span><span class="line">      <span class="k">end</span>
-</span><span class="line">
-</span><span class="line">    <span class="k">def</span> <span class="nf">find_driver</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
-</span><span class="line">      <span class="c1"># Here lies slow, complex domain logic</span>
-</span><span class="line">      <span class="no">DriverRouting</span><span class="o">::</span><span class="no">FindDriver</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
-</span><span class="line">    <span class="k">end</span>
-</span><span class="line">  <span class="k">end</span>
-</span><span class="line"><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-<h3 id="handling-side-effects-in-subscriber-classes">Handling side effects in subscriber classes</h3>
-
-<p>Other side-effects can subscribe to the <code>HailDelorean</code> events. Let’s say we want to fire an event to Segment analytics tracking. I can create a plain Ruby object that simply needs to implement a method with the same name as the event.</p>
-
-<p>Let’s implement <code>hailed</code> and <code>could_not_hail</code> methods on this subscriber class:</p>
-
-<figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-<span class="line-number">9</span>
-</pre></td><td class="code"><pre><code class="ruby"><span class="line"><span class="k">class</span> <span class="nc">TrackSegmentAnalytics</span>
-</span><span class="line">  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">hailed</span><span class="p">(</span><span class="n">driver</span><span class="p">)</span>
-</span><span class="line">    <span class="c1"># fire analytics event to Segment</span>
-</span><span class="line">  <span class="k">end</span>
-</span><span class="line">
-</span><span class="line">  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">could_not_hail</span>
-</span><span class="line">    <span class="c1"># fire analytics event to Segment</span>
-</span><span class="line">  <span class="k">end</span>
-</span><span class="line"><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-<p>And we hook it up by subscribing it to the command handler:</p>
-
-<figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-<span class="line-number">9</span>
-<span class="line-number">10</span>
-<span class="line-number">11</span>
-<span class="line-number">12</span>
-</pre></td><td class="code"><pre><code class="ruby"><span class="line"><span class="k">module</span> <span class="nn">Ridesharing</span>
-</span><span class="line">  <span class="k">class</span> <span class="nc">RidesController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>
-</span><span class="line">    <span class="k">def</span> <span class="nf">post</span>
-</span><span class="line">      <span class="c1"># snip</span>
-</span><span class="line">      <span class="n">command</span> <span class="o">=</span> <span class="no">HailDelorean</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">current_user</span><span class="p">)</span>
-</span><span class="line">
-</span><span class="line">      <span class="c1"># register the subscriber to the triggering action</span>
-</span><span class="line">      <span class="n">command</span><span class="o">.</span><span class="n">subscribe</span><span class="p">(</span><span class="no">TrackSegmentAnalytics</span><span class="p">)</span>
-</span><span class="line">      <span class="c1"># snip</span>
-</span><span class="line">    <span class="k">end</span>
-</span><span class="line">  <span class="k">end</span>
-</span><span class="line"><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-<p>OK, that was a little awkward, doing all that wiring up in the controller. What if we did the wiring globally, within an app initializer?</p>
-
-<figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-</pre></td><td class="code"><pre><code class="ruby"><span class="line"><span class="c1"># config/initializers/domain_event_subscriptions.rb</span>
-</span><span class="line"><span class="no">Wisper</span><span class="o">.</span><span class="n">subscribe</span><span class="p">(</span><span class="no">TrackSegmentAnalytics</span><span class="p">,</span> <span class="ss">scope</span><span class="p">:</span> <span class="s2">&quot;HailDelorean&quot;</span><span class="p">)</span>
-</span><span class="line">
-</span><span class="line"><span class="c1"># alternate form:</span>
-</span><span class="line"><span class="no">HailDelorean</span><span class="o">.</span><span class="n">subscribe</span><span class="p">(</span><span class="no">TrackSegmentAnalytics</span><span class="p">)</span>
-</span></code></pre></td></tr></table></div></figure>
-
-<p>This registers a global subscriber for all future instances of <code>HailDelorean</code>.</p>
-
-<h2 id="example-2-asynchronous-events-with-subscription-handlers-and-sidekiq">Example 2: Asynchronous events with subscription handlers and Sidekiq</h2>
-
-<p>Here’s the real power of Wisper - we can decouple our application domain responsibilities by modeling effects as subscription objects and do them out-of-band of the primary web request thread.</p>
-
-<p>Note that with the <a href="https://github.com/krisleech/wisper-sidekiq"><code>wisper-sidekiq</code></a> gem, all subscriptions given with an <code>async: true</code> option flag will automatically execute in an external thread as a Sidekiq job. Let’s take advantage of that now.</p>
-
-<figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-<span class="line-number">9</span>
-<span class="line-number">10</span>
-<span class="line-number">11</span>
-<span class="line-number">12</span>
-<span class="line-number">13</span>
-<span class="line-number">14</span>
-<span class="line-number">15</span>
-<span class="line-number">16</span>
-<span class="line-number">17</span>
-<span class="line-number">18</span>
-<span class="line-number">19</span>
-<span class="line-number">20</span>
-<span class="line-number">21</span>
-<span class="line-number">22</span>
-<span class="line-number">23</span>
-<span class="line-number">24</span>
-<span class="line-number">25</span>
-<span class="line-number">26</span>
-<span class="line-number">27</span>
-<span class="line-number">28</span>
-<span class="line-number">29</span>
-<span class="line-number">30</span>
-<span class="line-number">31</span>
-<span class="line-number">32</span>
-<span class="line-number">33</span>
-<span class="line-number">34</span>
-<span class="line-number">35</span>
-</pre></td><td class="code"><pre><code class="ruby"><span class="line"><span class="k">module</span> <span class="nn">Ridesharing</span>
-</span><span class="line">  <span class="k">class</span> <span class="nc">RidesController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>
-</span><span class="line">    <span class="k">def</span> <span class="nf">post</span>
-</span><span class="line">      <span class="c1"># Hail a time-traveling Delorean:</span>
-</span><span class="line">      <span class="no">HailDelorean</span><span class="o">.</span><span class="n">hail</span><span class="p">(</span><span class="n">current_user</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
-</span><span class="line">      <span class="n">render</span> <span class="ss">text</span><span class="p">:</span> <span class="s1">&#39;Hailing a cab, please wait for a response...&#39;</span>
-</span><span class="line">    <span class="k">end</span>
-</span><span class="line">  <span class="k">end</span>
-</span><span class="line">
-</span><span class="line">  <span class="k">class</span> <span class="nc">HailDelorean</span>
-</span><span class="line">    <span class="kp">include</span> <span class="no">Wisper</span><span class="o">::</span><span class="no">Broadcaster</span>
-</span><span class="line">
-</span><span class="line">    <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">hail</span><span class="p">(</span><span class="n">passenger_id</span><span class="p">)</span>
-</span><span class="line">      <span class="n">broadcast</span><span class="p">(</span><span class="ss">:hail</span><span class="p">,</span> <span class="n">passenger_id</span><span class="p">)</span>
-</span><span class="line">    <span class="k">end</span>
-</span><span class="line">  <span class="k">end</span>
-</span><span class="line"><span class="k">end</span>
-</span><span class="line">
-</span><span class="line"><span class="k">module</span> <span class="nn">DriverRouting</span>
-</span><span class="line">  <span class="c1"># Note that this class is both a subscriber and a publisher</span>
-</span><span class="line">  <span class="k">class</span> <span class="nc">FindDriver</span>
-</span><span class="line">    <span class="kp">include</span> <span class="no">Wisper</span><span class="o">::</span><span class="no">Publisher</span>
-</span><span class="line">
-</span><span class="line">    <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">hail</span><span class="p">(</span><span class="n">passenger_id</span><span class="p">)</span>
-</span><span class="line">      <span class="c1"># Do slow, complex hairy routefinding/optimization/messaging behind the scenes:</span>
-</span><span class="line">      <span class="n">driver</span> <span class="o">=</span> <span class="n">find_driver_for</span><span class="p">(</span><span class="n">passenger_id</span><span class="p">)</span>
-</span><span class="line">
-</span><span class="line">      <span class="k">if</span> <span class="n">driver</span>
-</span><span class="line">        <span class="n">broadcast</span><span class="p">(</span><span class="s1">&#39;driver_found&#39;</span><span class="p">,</span> <span class="n">passenger_id</span><span class="p">,</span> <span class="n">driver</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
-</span><span class="line">      <span class="k">else</span>
-</span><span class="line">        <span class="n">broadcast</span><span class="p">(</span><span class="s1">&#39;driver_not_found&#39;</span><span class="p">,</span> <span class="n">passenger_id</span><span class="p">)</span>
-</span><span class="line">      <span class="k">end</span>
-</span><span class="line">    <span class="k">end</span>
-</span><span class="line">  <span class="k">end</span>
-</span><span class="line"><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-<p>Finally, we add handlers (subscribers) to these domain objects:</p>
-
-<figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-<span class="line-number">9</span>
-<span class="line-number">10</span>
-<span class="line-number">11</span>
-</pre></td><td class="code"><pre><code class="ruby"><span class="line"><span class="k">module</span> <span class="nn">Ridesharing</span>
-</span><span class="line">  <span class="k">class</span> <span class="nc">NotifyPassengerWithDriverStatus</span>
-</span><span class="line">    <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">driver_found</span>
-</span><span class="line">      <span class="c1"># send them a text message :)</span>
-</span><span class="line">    <span class="k">end</span>
-</span><span class="line">
-</span><span class="line">    <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">driver_not_found</span>
-</span><span class="line">      <span class="c1"># send them a text message :(</span>
-</span><span class="line">    <span class="k">end</span>
-</span><span class="line">  <span class="k">end</span>
-</span><span class="line"><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-<p>Now let’s link it together with subscriptions:</p>
-
-<figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-</pre></td><td class="code"><pre><code class="ruby"><span class="line"><span class="c1"># config/initializers/domain_event_subscriptions.rb</span>
-</span><span class="line"><span class="no">Ridesharing</span><span class="o">::</span><span class="no">HailDelorean</span><span class="o">.</span><span class="n">subscribe</span><span class="p">(</span><span class="no">DriverRouting</span><span class="o">::</span><span class="no">FindDriver</span><span class="p">,</span> <span class="ss">async</span><span class="p">:</span> <span class="kp">true</span><span class="p">)</span>
-</span><span class="line"><span class="no">DriverRouting</span><span class="o">::</span><span class="no">FindDriver</span><span class="o">.</span><span class="n">subscribe</span><span class="p">(</span><span class="no">Ridesharing</span><span class="o">::</span><span class="no">NotifyPassengerWithDriverStatus</span><span class="p">,</span> <span class="ss">async</span><span class="p">:</span> <span class="kp">true</span><span class="p">)</span>
-</span><span class="line"><span class="no">Wisper</span><span class="o">.</span><span class="n">subscribe</span><span class="p">(</span><span class="no">AnalyticsListener</span><span class="p">,</span> <span class="ss">scope</span><span class="p">:</span> <span class="s2">&quot;Ridesharing::NotifyPassengerWithDriverStatus&quot;</span><span class="p">,</span> <span class="s2">&quot;DriverRouting::FindDriver&quot;</span><span class="o">]</span><span class="p">,</span> <span class="ss">async</span><span class="p">:</span> <span class="kp">true</span><span class="p">)</span>
-</span></code></pre></td></tr></table></div></figure>
-
-<p>Now our messages between our domains are pulled out of the main request thread, and operate in an asynchronous fashion with Sidekiq as the runner.</p>
-
-<p>Code in our domains are kept clean - note that there are no direct references to the other subdomains within each subdomain. Our app more cleanly segregates the responsibilities between each app, heavy workloads are naturally balanced as they move to worker threads.</p>
-
-<h2 id="caveats-beware-of-overbuilding">Caveats: Beware of overbuilding</h2>
-
-<p>If you are on a small app, you probably should go with approach #1. The weight of indirection can be a cognitive load on development, unless you truly need to build async code in #2. The overhead and conceptual complexities of the approach can only be justified with large codebases, or in apps where a domain-centric view (and segregation) of code is present.</p>
-
-<h2 id="caveats-event-subscriptions-can-be-a-tangled-mess">Caveats: Event subscriptions can be a tangled mess</h2>
-
-<p>Note that the act of wiring can quickly fan out into a spidery mess of handlers - you could even further decouple your handlers by modeling a global event bus as a publisher, and having each domain tap into the bus’ events and figure out how to handle each event on its own.</p>
-
-<h2 id="caveats-transactional-consistency">Caveats: transactional consistency!</h2>
-
-<p>If you implement this asynchronously, you’ll have to think about how to deal with transactional consistency. Can you design your data models (and database schema) to support independent updates without any dependencies? How will you handle the case when one domain action fails and the other completes?</p>
-
-<p>You may have to roll your own two-phase commit here, the specifics of which I won’t delve into. However, for most of our applications, we may want to skip the asynchronous and keep our events synchronous.</p>
-
-			
-			
-		</div>
-	<footer>
-		
-
-
-		
-
-
-
-  
-		
-			Tagged under
-		
-    <a class='category' href='/category/ddd/'>ddd</a>, <a class='category' href='/category/domain-driven-design/'>domain-driven design</a>, <a class='category' href='/category/pub-slash-sub/'>pub/sub</a>, <a class='category' href='/category/wisper/'>wisper</a>
-	
-
-
-	
-	
-	</footer>
-	
-</article>
-<!-- END OF _includes/article.html -->
-
-	
 	
 <div class="pagination">
 	
 		<a class="older" href="/posts/2">Older</a>
 	
 	
-	<span class="total">1 of 20</span>
+	<span class="total">1 of 21</span>
 	
 	
 </div>
