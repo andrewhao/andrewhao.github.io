@@ -89,3 +89,5 @@ The truth of the matter, none of the readings from the Misery Meter (so I called
 ### Act 2: Enter TensorFlow... next!
 
 In my next post, I'll discuss how I modified this script to use TensorFlow to train a model that could then be used to enhance the accuracy of little dude's crying. Stick around, it'll be fun!
+
+[Read on for the next post!]({% post_url 2018-08-27-tensorflow-for-tears-part-2 %})

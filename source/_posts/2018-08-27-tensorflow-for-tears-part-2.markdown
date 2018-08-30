@@ -114,8 +114,47 @@ _Note how quickly cross entropy dives._
 
 We can use these graphs to tune our models if we really cared. In this case, I say it's good enough (accuracy is up to 99% by the end).
 
-### Fourth: Running the model
+### Fourth: Saving and exporting the model
 
 OK, but enough already. We have a trained model and, like [Chekhov's Gun](https://en.wikipedia.org/wiki/Chekhov%27s_gun), that means we've gotta use it!
 
-Where's that model? Oh, it's waiting for us in ``.
+Where's that model? Oh, it needs a few more steps before it can emerge. At this point, TensorFlow has developed a neural network, but the neuron graph (is that the right term?) is not yet in a usable state to be used by applications. To that point, we need to dump the model into a binary format that can be used by TensorFlow applications in the future.
+
+Once again, I claim no smarts in all this, but instead point to the TensorFlow script to do this in `app/freeze.py`:
+
+    $ python app/freeze.py --start_checkpoint=./training/conv.ckpt-1200 --output_file=./graph.pb --clip_duration_ms=5000 --sample_rate=22050 --wanted_words=silence,crying --data_dir=./data
+
+What did we specify here?
+
+We said we wanted the model at `--start_checkpoint` of 1200, saving the `--output_file` to `graph.pb`, and mentioning that the sample rate of each audio sample should be `22050 hz` and `5` seconds long. We then specified that the labels we wanted to classify are `silence` and `crying`. Finally, the data set from the prior run can be found in `./data` dir.
+
+When we run this script, we get a `graph.pb` protobuf binary file that we can then ship to various TensorFlow programs.
+
+### Fifth: Using the model
+
+Now here's the fun part!
+
+Onboard a Raspberry Pi, we are now going to play back current samples in the nursery:
+
+Every 1 minute (with cron), we record audio samples from the system mic in the baby's nursery. We then massage, crop and downsample it into a WAV file. We then point a script at this WAV file and run the TF graph on it. Running the graph will return a list of labels and their probabilities. We choose the first label with the highest probability, and ship it off to a timeseries API, in this case powered by Keen.io.
+
+Voila:
+
+![I present: the Misery Meter](/images/tensorflow-for-tears/miserymeter.png)
+_A fun graph displaying the timeseries data for this little dude's episodes. On the top was the original RMS volume graph, and the bottom is the result of the trained TF model. Note how much easier to read and understand the latter graph is._
+
+#### Show me the code!
+
+Much of this code has been adapted from [Google's TensorFlow Audio Recognition tutorial](https://www.tensorflow.org/tutorials/sequences/audio_recognition).
+
+My scripts have been collected on this GitHub repository: https://github.com/andrewhao/babblefish
+
+And my repository with audio sampling and archiving: https://github.com/andrewhao/miserymeter
+
+## Conclusion
+
+Wow, that was a quick dive through TensorFlow. Note that I didn't get too deep into the theory of convolutional neural networks, which may be a topic of discussion for another time. Instead, we talked a little bit about the mechanics of building and training a TF model with audio data and a finite set of classes. It was fairly straightforward to get this script then loaded up on a Raspberry Pi and have a dashboard that could finally quantify the pain and suffering of baby... and parent.
+
+### Epilogue
+
+The months that went into developing this app were fully and knowingly an escape from the very real stressors of parent life. I want to acknowledge the love, the grit and the patience of my wife in this very trying time. There is so much more to say about babies other than their crying and fussing - life these days is filled with laughter and giggles and joy, too - but these are words that I'll save for another blog entry on a different blog for another time.
