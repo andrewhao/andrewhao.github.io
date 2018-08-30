@@ -68,6 +68,51 @@
 		<!-- START OF _includes/article.html -->
 <article>
 	<header>
+		<h1><a href="/2008/08/14/work-series-graphics-good-shepherd-christian-church/">Work Series Graphics - Good Shepherd Christian Church</a></h1>
+		<time>14 August 2008</time>
+	</header>
+		<div class="content">
+			<p>Part 2 of a summer series:</p>
+
+<p><a href="http://www.flickr.com/photos/andrewhao/2764222573/"><img src="http://farm4.static.flickr.com/3184/2764222573_62576684e8.jpg" alt="Work Series" /></a></p>
+
+<p><a href="http://www.flickr.com/photos/andrewhao/2765067628/"><img src="http://farm4.static.flickr.com/3237/2765067628_f8e05a66d8.jpg" alt="Work Series" /></a></p>
+
+<p><a href="http://www.flickr.com/photos/andrewhao/2764221737/"><img src="http://farm4.static.flickr.com/3117/2764221737_3f4b6ee146.jpg" alt="Work Series" /></a></p>
+
+			
+			
+		</div>
+	<footer>
+		
+
+
+		
+			andrewhao 
+		
+
+
+
+  
+		
+			on
+		
+    <a class='category' href='/category/andrew-2-dot-0/'>andrew 2.0</a>, <a class='category' href='/category/design/'>design</a>
+	
+
+
+	
+	
+	</footer>
+	
+</article>
+<!-- END OF _includes/article.html -->
+
+	
+		
+		<!-- START OF _includes/article.html -->
+<article>
+	<header>
 		<h1><a href="/2008/07/01/wisdom-series-graphic-good-shepherd-christian-church/">Wisdom Series Graphic - Good Shepherd Christian Church</a></h1>
 		<time>01 July 2008</time>
 	</header>
@@ -252,101 +297,6 @@
 <p>Here’s to the ones who nevertheless press on. Here’s to the ones who will rather take a bullet than give up on your rig. Here’s to the ones who scoff at light and food and warmth and human companionship. Here’s to you, True Geek. You’ve got your scars, now here’s your reward: Dual Cores of Computing Sweetness. It’s rather worth it, won’t you say? Right?</p>
 
 <p>Hey, you still there?</p>
-
-			
-			
-		</div>
-	<footer>
-		
-
-
-		
-			andrewhao 
-		
-
-
-
-  
-		
-			on
-		
-    <a class='category' href='/category/andrew-2-dot-0/'>andrew 2.0</a>, <a class='category' href='/category/geek/'>geek</a>
-	
-
-
-	
-	
-	</footer>
-	
-</article>
-<!-- END OF _includes/article.html -->
-
-	
-		
-		<!-- START OF _includes/article.html -->
-<article>
-	<header>
-		<h1><a href="/2008/03/12/after-site-duplication-an-htaccess-redirect-for-old-wordpress-posts/">After site duplication, an .htaccess redirect for old Wordpress posts</a></h1>
-		<time>12 March 2008</time>
-	</header>
-		<div class="content">
-			<p>I think I must preface this post with a bit of context:</p>
-
-<p>A month ago I added a new blog (<a href="http://blog.andrewhao.com">blog.andrewhao.com</a>). I wanted that blog to become my personal blog and let this blog (<a href="http://blog.g9labs.com">blog.g9labs.com</a>) transition into a technical blog.</p>
-
-<p>Here comes a technical post about transforming a personal blog into a technical blog.</p>
-
-<p>So here were the problem(s) I faced:</p>
-
-<ul>
-  <li>
-    <p>Most of my posts here at blog.g9labs.com were of personal nature, many which dated all the way back to 2002, my sophomore year of high school!</p>
-  </li>
-  <li>
-    <p>However, I had begun to write technical posts for a year or two–some thoughts on interface design, an occasional programming trick, cool regex expressions, et cetera.</p>
-  </li>
-  <li>
-    <p>Many of my posts have been linked all around the Internet.</p>
-  </li>
-</ul>
-
-<p>Essentially, I wanted to:</p>
-
-<ul>
-  <li>
-    <p>Move the personal contents of the g9labs blog to the andrewhao blog,</p>
-  </li>
-  <li>
-    <p>While keeping all in-links to old g9labs content alive.</p>
-  </li>
-</ul>
-
-<p>My solution was two-fold:</p>
-
-<ol>
-  <li>
-    <p>I made a copy of my g9Labs* blog to the andrewhao blog. This was harder than I anticipated–I initially expected to simply use the WP export plugin to dump data from g9Labs* and import into andrewhao. However, this lost much of my metadata–comments, categories, tags. So I just decided to completely copy my g9Labs* WP database and WP directory into andrewhao. Yeah, hacky, I know. I’m not very proud of it.</p>
-  </li>
-  <li>
-    <p>I added an .htaccess file to blog.g9labs.com that did some magic. It identifies requests for posts that are earlier than the date of the blog fork and redirects those requests to andrewhao.com, which is hosting a mirror of the post.</p>
-  </li>
-</ol>
-
-<pre><code># redirecting requests to posts older than 2008-02-02 to blog.andrewhao.com
-# pass the requester a 301 code (permanently removed)
-# @author: Andrew Hao
-
-# Lexically compare regex groups $1-$3 with the date: Feb. 03, 2008.
-# Note that the RewriteRule below is reached only if the condition is true.
-# Finally, note that $1-$3 are regex groups from the RewriteRule regex below.
-RewriteCond $1$2$3 &lt;20080203
-
-# Match the incoming request: /YYYY/MM/DD/post-title and redirect the browser
-# to http://blog.andrewhao.com/YYYY/MM/DD/post-title
-RewriteRule ^([0-9]+)/([0-9]+)/([0-9]+)/([^/]+)/*$ http://blog.andrewhao.com/$1
-/$2/$3/$4/ [L,R=301]
-... rest of .htaccess ...
-</code></pre>
 
 			
 			

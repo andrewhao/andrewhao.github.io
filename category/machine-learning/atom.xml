@@ -4,7 +4,7 @@
   <title><![CDATA[Category: machine learning | The Sweet Spot]]></title>
   <link href="http://www.g9labs.com/category/machine-learning/atom.xml" rel="self"/>
   <link href="http://www.g9labs.com/"/>
-  <updated>2018-03-21T20:49:31-07:00</updated>
+  <updated>2018-08-29T22:53:33-07:00</updated>
   <id>http://www.g9labs.com/</id>
   <author>
     <name><![CDATA[Andrew Hao]]></name>
@@ -12,6 +12,170 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Tensorflow for Tears: Part 2]]></title>
+    <link href="http://www.g9labs.com/2018/08/27/tensorflow-for-tears-part-2/"/>
+    <updated>2018-08-27T20:44:34-07:00</updated>
+    <id>http://www.g9labs.com/2018/08/27/tensorflow-for-tears-part-2</id>
+    <content type="html"><![CDATA[<p>The <a href="/2018/03/21/tensorflow-for-tears-part-1/">last time we met</a>, we had a lively discussion about the ins and outs and joys and terrors of parenting. I talked about how I started building a Raspberry Pi project with a USB mic and wrote a simple parsing script that measured the mean amplitude of recordings of the current state of the nursery. And when that guy wailed, he really WAILED.</p>
+
+<p>Well that naive approach got us so far, but the system would still trip up due to random loud noises in the house. Music, or doors closing or opening, or loud conversation would all cause the system to think the kid was crying but no - it was just ambient noise.</p>
+
+<h3 id="getting-started-with-tensorflow">Getting started with TensorFlow</h3>
+
+<p>Let’s start our dive into machine learning!</p>
+
+<p>I had already gotten pretty far with <a href="https://www.udacity.com/course/intro-to-machine-learning--ud120">Udacity’s Machine Learning</a> course and had vague recollections of AI theory floating around from the cobwebs of undergrad CS courses past. So I had <em>some</em> background in AI and machine learning. But training neural networks was a completely new thing to me.</p>
+
+<p>Luckily, I came across the <a href="https://www.tensorflow.org/tutorials/sequences/audio_recognition">Simple Audio Recognition Tutorial</a> example right there on the TF homepage. This was exactly what I was looking for. The objective was: given a training set of audio clips of crying babies and “empty rooms”, classify an audio clip as one or the other.</p>
+
+<h3 id="first-getting-the-dataset">First: getting the dataset</h3>
+
+<p>I had oversimplified in my mind what made a great training data set. After all, I figured that I just had to record my kid crying a bunch, then get a few minutes of quiet room sounds, and then we were good, right?</p>
+
+<p>Wrong.</p>
+
+<p>Training data must be exactly matched. Sample rates must be consistent, and audio samples must either be highly randomized or at least normalized to the same rates. To wit, here’s how I gathered my sample data:</p>
+
+<ol>
+  <li>I set up the Raspberry Pi to continuously record 30-second samples at 22.05kHz through the onboard microphone.</li>
+  <li>When my son started a crying episode, I’d make note of the start time and end times, and then go back and gather those clips of the cries and dump them in the <code>crying</code> folder.</li>
+  <li>Once I had collected enough of those (maybe 30 minutes total), I then gathered a bunch of the “other” clips of quiet sleep in his nursery and threw these in the <code>silence</code> folder.</li>
+  <li>Once I had moved these samples off the Raspberry Pi and onto my laptop, I then sliced these recordings into 5-second clips using <code>sox</code>. I also applied a few amplification filters to overcome the weak pickup on the mic.</li>
+</ol>
+
+<p><code>$ sox FILENAME FILENAME_OUTPUT trim 0 5 vol 45 dB rate 22050</code></p>
+
+<p>I then placed each of these trained samples in the folders corresponding to their label: <code>crying</code> and <code>silence</code>.</p>
+
+<h3 id="second-training-the-network">Second: training the network</h3>
+
+<p>I modified the <code>train.py</code> script nearly verbatim from TF docs. We’ll dissect it here, beginning with the command to begin training:</p>
+
+<div class="language-bash highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n1" name="n1">1</a></span>    $ python app/train.py --data_url= --data_dir=./data --wanted_words=silence,crying --sample_rate=22050 --clip_duration_ms=5000 --how_many_training_steps=1000,200 --learning_rate=0.001,0.0001 --train_dir=./training
+</pre></div>
+</div>
+</div>
+
+<ul>
+  <li><code>--wanted_words=silence,crying</code>: This specifies which labels should be considered for training purposes.</li>
+  <li><code>--sample_rate</code>: The sample rate of the audio files provided</li>
+  <li><code>--clip_duration_ms</code>: Duration of each training clip in milliseconds</li>
+  <li><code>--how_many_training_steps</code>: This is a comma-separated list of n numbers that specify the number of steps per phase.</li>
+  <li><code>--learning_rate</code>: This is the rate at which the system can adjust its current learnings to match its new inputs. A higher learning rate means the faster the system can change to learn new inputs. A lower number ensures the stability of a system’s learning. We specify a higher training rate for the first phase and lower the training rate in the latter phase as our precision increases.</li>
+</ul>
+
+<p>Let’s run the script!</p>
+
+<div class="language-bash highlighter-coderay"><div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"> <a href="#n1" name="n1">1</a></span>$ python app/train.py --data_url= --data_dir=./data --wanted_words=silence,crying --sample_rate=22050 --clip_duration_ms=5000 --how_many_training_steps=1000,200 --train_dir=./training
+<span class="line-numbers"> <a href="#n2" name="n2">2</a></span>2018-08-27 22:15:33.195894: I tensorflow/core/platform/cpu_feature_guard.cc:140] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
+<span class="line-numbers"> <a href="#n3" name="n3">3</a></span>Tensor(&quot;Placeholder:0&quot;, shape=(), dtype=string)
+<span class="line-numbers"> <a href="#n4" name="n4">4</a></span>INFO:tensorflow:Training from step: 1
+<span class="line-numbers"> <a href="#n5" name="n5">5</a></span>INFO:tensorflow:Step #1: rate 0.001000, accuracy 26.0%, cross entropy 2.674081
+<span class="line-numbers"> <a href="#n6" name="n6">6</a></span>INFO:tensorflow:Step #2: rate 0.001000, accuracy 23.0%, cross entropy 1.593786
+<span class="line-numbers"> <a href="#n7" name="n7">7</a></span>INFO:tensorflow:Step #3: rate 0.001000, accuracy 64.0%, cross entropy 1.067298
+<span class="line-numbers"> <a href="#n8" name="n8">8</a></span>INFO:tensorflow:Step #4: rate 0.001000, accuracy 73.0%, cross entropy 0.843605
+<span class="line-numbers"> <a href="#n9" name="n9">9</a></span>...
+</pre></div>
+</div>
+</div>
+
+<h3 id="third-parsing-the-results">Third: parsing the results</h3>
+
+<p>The output in each step reveals the current state of the neural network as trained. <em>Accuracy</em> reflects the correctness of the model as the validation set is tested against the network (during each step of training, samples in the validation set are run against the model and checked if they line up with their specified labels).</p>
+
+<p><a href="https://www.tensorflow.org/api_docs/python/tf/losses/softmax_cross_entropy"><em>Cross entropy</em></a> is, as I understand it, the <a href="https://deepnotes.io/softmax-crossentropy">squared error factor</a> in the result network from the actual results (lower is better).</p>
+
+<p>This would proceed for several hours for 1200 total steps. On a 2013-era Macbook Pro, this took approximately 6 hours. I had 350 clips of crying and 500 clips of silence. (Too much or not enough? This tired parent says “too much”.)</p>
+
+<p>One more thing - every few hundred steps during training, we would get this sort of output:</p>
+
+<pre><code>INFO:tensorflow:Confusion Matrix:
+ [[ 9  0  0  0]
+ [ 0  0  0  0]
+ [ 0  0 55  0]
+ [ 0  0  1 30]]
+</code></pre>
+
+<p>What’s a <a href="https://www.tensorflow.org/api_docs/python/tf/confusion_matrix">confusion matrix</a>? It’s, according to <a href="https://www.dataschool.io/simple-guide-to-confusion-matrix-terminology/">this helpful article</a>, another way to visualize the accuracy of a machine learning model.</p>
+
+<p>Here’s how to read this confusion matrix. Given the following labels:</p>
+
+<pre><code># conv_labels.txt
+_silence_
+_unknown_
+silence
+crying
+</code></pre>
+
+<p><em>(Where did these come from? More on that later…)</em></p>
+
+<p>Imagine these labels go left-to-right, and top-to-bottom. The x-axis represents the labels that have been predicted (i.e. that have been verified) to be a certain label. So the first column represents the percentages of samples that have been predicted to be <code>_silence_</code>.</p>
+
+<p>The labels that go top-to-bottom are the actual results from the trained model. So in this case, if we take the top-left number <code>9</code>, that means that in 9 runs of the model where the prediction was <code>_silence_</code>, the actual result was <code>_silence_</code>. Moving one cell down, that represents the # of samples where the predicted result was <code>_silence_</code>, but the actual result was <code>_unknown_</code>. Fortunately for our model, there are <code>0</code> results in this cell. So on and so forth. So the ideal confusion matrix is a matrix that has a “diagonal line” running from top-left to bottom-right, and <code>0</code>s everywhere else, because all predictions would equal actuals.</p>
+
+<p>tl;dr: Confusion matrices are a way to visualize and report the accuracy of a machine learning model. You want a clear and convincing diagonal line in the matrix.</p>
+
+<p>Oh, and here are the results from the training data. I’m using <code>tensorboard</code> to visualize the training steps:</p>
+
+<p><img src="/images/tensorflow-for-tears/tensorboard-accuracy.png" alt="Accuracy data" /><br />
+<em>Accuracy modeling. Note how quickly the model jumps to be fairly accurate.</em></p>
+
+<p><img src="/images/tensorflow-for-tears/tensorboard-cross-entropy.png" alt="Cross entropy data" /><br />
+<em>Note how quickly cross entropy dives.</em></p>
+
+<p>We can use these graphs to tune our models if we really cared. In this case, I say it’s good enough (accuracy is up to 99% by the end).</p>
+
+<h3 id="fourth-saving-and-exporting-the-model">Fourth: Saving and exporting the model</h3>
+
+<p>OK, but enough already. We have a trained model and, like <a href="https://en.wikipedia.org/wiki/Chekhov%27s_gun">Chekhov’s Gun</a>, that means we’ve gotta use it!</p>
+
+<p>Where’s that model? Oh, it needs a few more steps before it can emerge. At this point, TensorFlow has developed a neural network, but the neuron graph (is that the right term?) is not yet in a usable state to be used by applications. To that point, we need to dump the model into a binary format that can be used by TensorFlow applications in the future.</p>
+
+<p>Once again, I claim no smarts in all this, but instead point to the TensorFlow script to do this in <code>app/freeze.py</code>:</p>
+
+<pre><code>$ python app/freeze.py --start_checkpoint=./training/conv.ckpt-1200 --output_file=./graph.pb --clip_duration_ms=5000 --sample_rate=22050 --wanted_words=silence,crying --data_dir=./data
+</code></pre>
+
+<p>What did we specify here?</p>
+
+<p>We said we wanted the model at <code>--start_checkpoint</code> of 1200, saving the <code>--output_file</code> to <code>graph.pb</code>, and mentioning that the sample rate of each audio sample should be <code>22050 hz</code> and <code>5</code> seconds long. We then specified that the labels we wanted to classify are <code>silence</code> and <code>crying</code>. Finally, the data set from the prior run can be found in <code>./data</code> dir.</p>
+
+<p>When we run this script, we get a <code>graph.pb</code> protobuf binary file that we can then ship to various TensorFlow programs.</p>
+
+<h3 id="fifth-using-the-model">Fifth: Using the model</h3>
+
+<p>Now here’s the fun part!</p>
+
+<p>Onboard a Raspberry Pi, we are now going to play back current samples in the nursery:</p>
+
+<p>Every 1 minute (with cron), we record audio samples from the system mic in the baby’s nursery. We then massage, crop and downsample it into a WAV file. We then point a script at this WAV file and run the TF graph on it. Running the graph will return a list of labels and their probabilities. We choose the first label with the highest probability, and ship it off to a timeseries API, in this case powered by Keen.io.</p>
+
+<p>Voila:</p>
+
+<p><img src="/images/tensorflow-for-tears/miserymeter.png" alt="I present: the Misery Meter" /><br />
+<em>A fun graph displaying the timeseries data for this little dude’s episodes. On the top was the original RMS volume graph, and the bottom is the result of the trained TF model. Note how much easier to read and understand the latter graph is.</em></p>
+
+<h4 id="show-me-the-code">Show me the code!</h4>
+
+<p>Much of this code has been adapted from <a href="https://www.tensorflow.org/tutorials/sequences/audio_recognition">Google’s TensorFlow Audio Recognition tutorial</a>.</p>
+
+<p>My scripts have been collected on this GitHub repository: https://github.com/andrewhao/babblefish</p>
+
+<p>And my repository with audio sampling and archiving: https://github.com/andrewhao/miserymeter</p>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>Wow, that was a quick dive through TensorFlow. Note that I didn’t get too deep into the theory of convolutional neural networks, which may be a topic of discussion for another time. Instead, we talked a little bit about the mechanics of building and training a TF model with audio data and a finite set of classes. It was fairly straightforward to get this script then loaded up on a Raspberry Pi and have a dashboard that could finally quantify the pain and suffering of baby… and parent.</p>
+
+<h3 id="epilogue">Epilogue</h3>
+
+<p>The months that went into developing this app were fully and knowingly an escape from the very real stressors of parent life. I want to acknowledge the love, the grit and the patience of my wife in this very trying time. There is so much more to say about babies other than their crying and fussing - life these days is filled with laughter and giggles and joy, too - but these are words that I’ll save for another blog entry on a different blog for another time.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[TensorFlow For Tears: Part 1]]></title>
@@ -99,6 +263,8 @@ Window s       0.050
 <h3 id="act-2-enter-tensorflow-next">Act 2: Enter TensorFlow… next!</h3>
 
 <p>In my next post, I’ll discuss how I modified this script to use TensorFlow to train a model that could then be used to enhance the accuracy of little dude’s crying. Stick around, it’ll be fun!</p>
+
+<p><a href="/2018/08/27/tensorflow-for-tears-part-2/">Read on for the next post!</a></p>
 ]]></content>
   </entry>
   

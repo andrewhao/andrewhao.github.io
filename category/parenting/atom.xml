@@ -4,7 +4,7 @@
   <title><![CDATA[Category: parenting | The Sweet Spot]]></title>
   <link href="http://www.g9labs.com/category/parenting/atom.xml" rel="self"/>
   <link href="http://www.g9labs.com/"/>
-  <updated>2018-03-21T20:49:31-07:00</updated>
+  <updated>2018-08-29T22:53:33-07:00</updated>
   <id>http://www.g9labs.com/</id>
   <author>
     <name><![CDATA[Andrew Hao]]></name>
@@ -99,6 +99,8 @@ Window s       0.050
 <h3 id="act-2-enter-tensorflow-next">Act 2: Enter TensorFlow… next!</h3>
 
 <p>In my next post, I’ll discuss how I modified this script to use TensorFlow to train a model that could then be used to enhance the accuracy of little dude’s crying. Stick around, it’ll be fun!</p>
+
+<p><a href="/2018/08/27/tensorflow-for-tears-part-2/">Read on for the next post!</a></p>
 ]]></content>
   </entry>
   

@@ -68,6 +68,59 @@
 		<!-- START OF _includes/article.html -->
 <article>
 	<header>
+		<h1><a href="/2008/01/27/wordpress-bughunt/">Wordpress Bughunt</a></h1>
+		<time>27 January 2008</time>
+	</header>
+		<div class="content">
+			<p>I spent a good four hours today digging through <a href="http://www.wordpress.org">Wordpress</a> code, trying to get our <a href="http://www.ocf.berkeley.edu/~ccf">Cal Christian Fellowship</a> Web site back up.</p>
+
+<p>The problem: the page seemed to freeze when loading page content. The request would time out, leaving a half-loaded page sans content. I dug into the theme at first, trying to track down which function call could have barfed. I tracked it into the apply_filters() call in the the post.</p>
+
+<p>Wordpress uses a filtering system to manage content. This lets us add filters over all kinds of content. I realize that the problem was stemming from the <a href="http://dev.wp-plugins.org/wiki/TextControl">Text Control</a> plugin, where something had barfed!</p>
+
+<p>I disabled the plugin and voila! We were good to go again.</p>
+
+<p>Since we only really used Textile markup on the CCF site, I just re-enabled the default Textile plugin and we were back in business.</p>
+
+<p>I don’t know for the life of me what went wrong over the weekend in the Text Control plugin, but I don’t have the cajones or the time to dig through server logs, et. al. and find out.</p>
+
+<p>Geeking out like nobody’s business,</p>
+
+<p>-Andrew</p>
+
+			
+			
+		</div>
+	<footer>
+		
+
+
+		
+			andrewhao 
+		
+
+
+
+  
+		
+			on
+		
+    <a class='category' href='/category/andrew-2-dot-0/'>andrew 2.0</a>, <a class='category' href='/category/geek/'>geek</a>
+	
+
+
+	
+	
+	</footer>
+	
+</article>
+<!-- END OF _includes/article.html -->
+
+	
+		
+		<!-- START OF _includes/article.html -->
+<article>
+	<header>
 		<h1><a href="/2007/12/11/im-ready-for-the-winter/">I'm ready for the winter.</a></h1>
 		<time>11 December 2007</time>
 	</header>
@@ -263,45 +316,6 @@
 			on
 		
     <a class='category' href='/category/andrew-2-dot-0/'>andrew 2.0</a>, <a class='category' href='/category/geek/'>geek</a>
-	
-
-
-	
-	
-	</footer>
-	
-</article>
-<!-- END OF _includes/article.html -->
-
-	
-		
-		<!-- START OF _includes/article.html -->
-<article>
-	<header>
-		<h1><a href="/2007/10/25/sensations-6/">Sensations</a></h1>
-		<time>25 October 2007</time>
-	</header>
-		<div class="content">
-			<p><a href="http://www.flickr.com/photos/andrewhao/1756742112/"><img src="http://farm3.static.flickr.com/2379/1756742112_a54cf5e9a8.jpg" alt="Sensations - Awaken the Dawn" /></a></p>
-
-			
-			
-		</div>
-	<footer>
-		
-
-
-		
-			andrewhao 
-		
-
-
-
-  
-		
-			on
-		
-    <a class='category' href='/category/andrew-2-dot-0/'>andrew 2.0</a>, <a class='category' href='/category/design/'>design</a>, <a class='category' href='/category/sensations/'>sensations</a>
 	
 
 

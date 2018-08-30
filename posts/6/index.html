@@ -68,6 +68,139 @@
 		<!-- START OF _includes/article.html -->
 <article>
 	<header>
+		<h1><a href="/2014/01/26/moving-to-ember-app-kit/">Moving to Ember App Kit</a></h1>
+		<time>26 January 2014</time>
+	</header>
+		<div class="content">
+			<p>I’ve noticed a bit of the buzz around <a href="https://github.com/stefanpenner/ember-app-kit">Ember App Kit</a><br />
+recently and decided to move Hendrix, my music management app, over from<br />
+a <a href="http://yeoman.io/">Yeoman</a>-generated Ember app to EAK with all its<br />
+bells and whistles.</p>
+
+<h3 id="whats-the-difference">What’s the difference?</h3>
+
+<p>Well on the surface, the two frameworks aren’t very different. The<br />
+standard Yeoman build tool sets you up with Grunt and Bower, which is<br />
+what EAK provides you out of the box. The cool stuff happens when you<br />
+dive under the hood: ES6 module transpilation and an AMD-compatible<br />
+Ember Resolver, built-in Karma integration and a built-in API stub<br />
+framework for development and test environments.</p>
+
+<h3 id="the-joys-of-modules">The joys of modules</h3>
+
+<p>What I didn’t realize was that compiling to ES6 modules required that my<br />
+filenames be renamed exactly how the modules were going to be placed,<br />
+with the extra caveat that resource actions needed to live in their own<br />
+directories. Recall that in the old way of doing things with globals and<br />
+namespaces, you could get away with throwing a route file like this in<br />
+your app directory:</p>
+
+<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">routes/
+</span><span class="line">  songs_index_controller.js</span></code></pre></td></tr></table></div></figure>
+
+<p>And inside:</p>
+
+<figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="javascript"><span class="line"><span class="nx">MyApp</span><span class="p">.</span><span class="nx">SongsIndexRoute</span> <span class="o">=</span> <span class="nx">Ember</span><span class="p">.</span><span class="nx">Route</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
+</span><span class="line">  <span class="c1">//...</span>
+</span><span class="line"><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+<p>In EAK’s world, you need to nest the file under the <code>songs/</code> directory,<br />
+and strip the type from the filename, like so:</p>
+
+<figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="javascript"><span class="line"><span class="nx">routes</span><span class="o">/</span>
+</span><span class="line">  <span class="nx">songs</span><span class="o">/</span>
+</span><span class="line">    <span class="nx">index</span><span class="p">.</span><span class="nx">js</span>
+</span></code></pre></td></tr></table></div></figure>
+
+<p>Inside the file, you assign the function to a variable and let it be<br />
+exported in the default namespace.</p>
+
+<figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+</pre></td><td class="code"><pre><code class="javascript"><span class="line"><span class="kd">var</span> <span class="nx">SongsIndexRoute</span> <span class="o">=</span> <span class="nx">Ember</span><span class="p">.</span><span class="nx">Route</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
+</span><span class="line">  <span class="c1">//...</span>
+</span><span class="line"><span class="p">});</span>
+</span><span class="line"><span class="kr">export</span> <span class="k">default</span> <span class="nx">SongsIndexRoute</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+<h3 id="file-name-matters">File name matters</h3>
+
+<p>The <a href="https://github.com/stefanpenner/ember-jj-abrams-resolver/">new Ember resolver</a> <br />
+loads modules in a smart way – according to how the framework<br />
+structures resources, controllers and their corresponding actions. So<br />
+visiting <code>#/songs</code> from my app caused the app to look up and load<br />
+<code>appkit/routes/songs/index</code>. What I didn’t realize was <em>this module must<br />
+live at a very specific place in the file directory structure</em>.<br />
+I realized that I left the module type in the file name the first time<br />
+around, like this:</p>
+
+<figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="javascript"><span class="line"><span class="nx">routes</span><span class="o">/</span>
+</span><span class="line">  <span class="nx">songs</span><span class="o">/</span>
+</span><span class="line">    <span class="nx">index_route</span><span class="p">.</span><span class="nx">js</span>
+</span></code></pre></td></tr></table></div></figure>
+
+<p>There are no types in the module names – or the filenames, for that<br />
+matter. I had not realized this (I’m also an AMD newbie) – so I had<br />
+left my files un-renamed as <code>songs_index_route</code>, which meant that<br />
+the module loader had stored the SongsIndexRoute module under<br />
+<code>appkit/routes/songs/index_route</code>, but was doing a route lookup through<br />
+the Resolver for: <code>appkit/routes/songs/index</code>. Renaming the file to:</p>
+
+<figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="javascript"><span class="line"><span class="nx">routes</span><span class="o">/</span>
+</span><span class="line">  <span class="nx">songs</span><span class="o">/</span>
+</span><span class="line">    <span class="nx">index</span><span class="p">.</span><span class="nx">js</span>
+</span></code></pre></td></tr></table></div></figure>
+
+<p>did the trick.</p>
+
+			
+			
+		</div>
+	<footer>
+		
+
+
+		
+
+
+
+  
+		
+			Tagged under
+		
+    <a class='category' href='/category/development/'>development</a>, <a class='category' href='/category/ember/'>ember</a>, <a class='category' href='/category/ember-app-kit/'>ember app kit</a>, <a class='category' href='/category/programming/'>programming</a>
+	
+
+
+	
+	
+	</footer>
+	
+</article>
+<!-- END OF _includes/article.html -->
+
+	
+		
+		<!-- START OF _includes/article.html -->
+<article>
+	<header>
 		<h1><a href="/2013/12/27/ember-data-rails-cors-and-you/">Ember Data, Rails, CORS, and you!</a></h1>
 		<time>27 December 2013</time>
 	</header>
@@ -456,58 +589,6 @@ RACK_ENV=development bundle exec rake db:seed
 			on
 		
     <a class='category' href='/category/andrew-2-dot-0/'>andrew 2.0</a>, <a class='category' href='/category/apple/'>apple</a>, <a class='category' href='/category/os-x/'>os x</a>, <a class='category' href='/category/tips/'>tips</a>
-	
-
-
-	
-	
-	</footer>
-	
-</article>
-<!-- END OF _includes/article.html -->
-
-	
-		
-		<!-- START OF _includes/article.html -->
-<article>
-	<header>
-		<h1><a href="/2012/04/27/speeding-up-rspeccucumber-feedback-times-without-sacrificing-coverage/">Speeding up Rspec/Cucumber feedback times without sacrificing coverage</a></h1>
-		<time>27 April 2012</time>
-	</header>
-		<div class="content">
-			<iframe src="http://www.slideshare.net/slideshow/embed_code/4479466" width="512" height="421" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:1px solid #CCC;border-width:1px 1px 0;margin-bottom:5px" allowfullscreen="">
-</iframe>
-<p><a href="http://www.slideshare.net/josephwilk/rocket-fuelled-cucumbers">Rocket Fuelled Cucumbers</a><br />
-View more <a href="http://www.slideshare.net/">presentations</a> from <a href="http://www.slideshare.net/josephwilk">Joseph Wilk</a></p>
-
-<p>One thing the Blurb devs have been discussing is how we can speed up our test feedback cycles without sacrificing coverage. There’s some good tips (mainly Rails+Rspec/Cucumber) in the presentation such as:</p>
-
-<ul>
-  <li>Don’t run all the tests when developing (tag your tests by function)</li>
-  <li>Parallelize, chunk tests over machines/cores using Testjour/<a href="https://github.com/sandro/specjour">Specjour</a>, <a href="https://github.com/ngauthier/hydra">Hydra</a></li>
-  <li>Don’t run all the tests at once. Tests that never fail should nightly.</li>
-  <li>Instead of spinning up a browser for acceptance tests, can you use a js/DOM simulator (e.g. <a href="https://github.com/thatcher/env-js">envjs</a> via <a href="https://github.com/smparkes/capybara-envjs">capybara-envjs</a>, or <a href="https://github.com/jarib/celerity">celerity</a>)</li>
-</ul>
-
-
-			
-			
-		</div>
-	<footer>
-		
-
-
-		
-			andrewhao 
-		
-
-
-
-  
-		
-			on
-		
-    <a class='category' href='/category/rails/'>rails</a>, <a class='category' href='/category/ruby/'>ruby</a>, <a class='category' href='/category/software/'>software</a>, <a class='category' href='/category/tdd/'>tdd</a>
 	
 
 

@@ -68,6 +68,181 @@
 		<!-- START OF _includes/article.html -->
 <article>
 	<header>
+		<h1><a href="/2014/06/21/mocks-arent-stubs/">Mocks aren't stubs: mockist & classic testing</a></h1>
+		<time>21 June 2014</time>
+	</header>
+		<div class="content">
+			<p>With the famed “TDD is dead” debate around the Rails community largely<br />
+coming to an end, I found myself referencing Martin Fowler’s article,<br />
+<a href="http://martinfowler.com/articles/mocksArentStubs.html">Mocks Aren’t Stubs</a> a good deal, trying to make sense of it in terms of how I write tests and code.</p>
+
+<p>In this post I’m going to talk about mocking and stubbing and their<br />
+roots, paraphrase Fowler in an attempt to explain their differences, and<br />
+walk through a couple of code examples. In each case, I’m going to<br />
+attempt to build this example out in Ruby and RSpec 3.</p>
+
+<p>Let’s assume this implementation in our code for a <code>BookUpdater</code> object in Ruby. Its job is to call through its collaborating <code>ApiClient</code>, which wraps some aspect of an API that we want to call.</p>
+
+<figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+</pre></td><td class="code"><pre><code class="ruby"><span class="line"><span class="c1"># Update a book&#39;s metadata in our systems.</span>
+</span><span class="line"><span class="k">class</span> <span class="nc">BookUpdater</span>
+</span><span class="line">  <span class="kp">attr_accessor</span> <span class="ss">:book</span><span class="p">,</span> <span class="ss">:api_client</span><span class="p">,</span> <span class="ss">:response</span>
+</span><span class="line">
+</span><span class="line">  <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">book</span><span class="p">,</span> <span class="n">api_client</span><span class="p">)</span>
+</span><span class="line">    <span class="vi">@book</span> <span class="o">=</span> <span class="n">book</span>
+</span><span class="line">    <span class="vi">@api_client</span> <span class="o">=</span> <span class="n">api_client</span>
+</span><span class="line">  <span class="k">end</span>
+</span><span class="line">
+</span><span class="line">  <span class="k">def</span> <span class="nf">updated?</span>
+</span><span class="line">    <span class="o">!!</span><span class="n">response</span><span class="o">.</span><span class="n">success?</span>
+</span><span class="line">  <span class="k">end</span>
+</span><span class="line">
+</span><span class="line">  <span class="k">def</span> <span class="nf">update!</span>
+</span><span class="line">    <span class="n">response</span> <span class="o">=</span> <span class="n">api_client</span><span class="o">.</span><span class="n">call_update_api</span><span class="p">(</span><span class="n">book</span><span class="p">)</span>
+</span><span class="line">  <span class="k">end</span>
+</span><span class="line"><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+<h2 id="what-they-are">What they are</h2>
+
+<h3 id="mocks">Mocks</h3>
+
+<p>Mocks are fake objects that verify that they have received messages. In<br />
+RSpec, we traditionally use the <code>mock</code> object utility to create these objects.</p>
+
+<figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+</pre></td><td class="code"><pre><code class="ruby"><span class="line"><span class="n">api_client</span> <span class="o">=</span> <span class="n">mock</span><span class="p">(</span><span class="s1">&#39;api client&#39;</span><span class="p">)</span>
+</span><span class="line"><span class="n">book</span> <span class="o">=</span> <span class="no">Book</span><span class="o">.</span><span class="n">new</span>
+</span><span class="line">
+</span><span class="line"><span class="n">expect</span><span class="p">(</span><span class="n">api_client</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">receive</span><span class="p">(</span><span class="ss">:call_update_api</span><span class="p">)</span><span class="o">.</span><span class="n">with</span><span class="p">(</span><span class="n">book</span><span class="p">)</span><span class="o">.</span><span class="n">and_return</span><span class="p">(</span><span class="kp">true</span><span class="p">)</span>
+</span><span class="line">
+</span><span class="line"><span class="n">subject</span> <span class="o">=</span> <span class="no">BookUpdater</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">api_client</span><span class="p">,</span> <span class="n">book</span><span class="p">)</span>
+</span><span class="line"><span class="n">subject</span><span class="o">.</span><span class="n">list!</span>
+</span></code></pre></td></tr></table></div></figure>
+
+<p>What’s happening here? RSpec creates a mock <code>api_client</code> object that will verify that, after the test case executes, it has received the <code>:call_update_api</code> message with the correct arguments.</p>
+
+<p>The main point of this style of testing is <em>behavior verification</em> – that is, that your object is behaving correctly in relation with its collaborators.</p>
+
+<h3 id="double">Double</h3>
+
+<p>Let’s take a look at a <code>double</code> – also known as a <code>stub</code>. A <code>double</code> is a fake object that is set up to respond to a certain message with a pre-canned response, each time. Let’s take a look at how I would set up a test using doubles:</p>
+
+<figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+</pre></td><td class="code"><pre><code class="ruby"><span class="line"><span class="n">api_client</span> <span class="o">=</span> <span class="n">double</span><span class="p">(</span><span class="s1">&#39;api client&#39;</span><span class="p">)</span>
+</span><span class="line"><span class="n">response</span> <span class="o">=</span> <span class="n">double</span><span class="p">(</span><span class="s1">&#39;response&#39;</span><span class="p">,</span> <span class="ss">:success?</span> <span class="o">=&gt;</span> <span class="kp">true</span><span class="p">)</span>
+</span><span class="line"><span class="n">book</span> <span class="o">=</span> <span class="no">Book</span><span class="o">.</span><span class="n">new</span>
+</span><span class="line">
+</span><span class="line"><span class="n">allow</span><span class="p">(</span><span class="n">api_client</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">receive</span><span class="p">(</span><span class="ss">:call_update_api</span><span class="p">)</span><span class="o">.</span><span class="n">with</span><span class="p">(</span><span class="n">book</span><span class="p">)</span><span class="o">.</span><span class="n">and_return</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+</span><span class="line"><span class="n">expect</span><span class="p">(</span><span class="n">subject</span><span class="o">.</span><span class="n">update!</span><span class="p">)</span><span class="o">.</span><span class="n">to</span> <span class="n">change</span><span class="p">(</span><span class="n">subject</span><span class="p">,</span> <span class="ss">:updated?</span><span class="p">)</span><span class="o">.</span><span class="n">from</span><span class="p">(</span><span class="kp">false</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="kp">true</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+<p>Okay, so what’s the big deal here? My test case still passes. Note that<br />
+I had to change my code to focus its expectation on the <code>subject</code>’s<br />
+state instead of the <code>api_client</code>.</p>
+
+<p>The focus of using doubles is for <em>state verification</em> – that is, that so long as everybody around me is behaving according to their contracts, the test merely has to verify that internal object state changes correctly.</p>
+
+<h3 id="a-third-way----real-objects">A third way – real objects</h3>
+
+<p>I won’t cover this very much in depth, but with sufficiently simple objects, one could actually instantiate real objects instead of doubles, and test an object against all its collaborators. This is, in my experience, the most common experience of working in Rails + ActiveRecord applications.</p>
+
+<h2 id="classic-vs-mockist-testing-different-strokes-for-different-folks">Classic vs Mockist testing: different strokes for different folks</h2>
+
+<p>As we saw above, the key difference between the mock and the stub (the <code>double</code>). The focus of the test in the mock case is on the messages being sent to the collaborators. The focus of the test when using the double is on the the <code>subject</code> under test (SUT).</p>
+
+<p>Mocks and stubs/doubles are tools that we can use under the larger umbrellas of two TDD philosophical styles: <em>classic</em> vs <em>mockist</em> styles.</p>
+
+<h3 id="classic-tdd">Classic TDD</h3>
+
+<ul>
+  <li>Classic TDDists like using <code>double</code>s or real objects to test collaborators.</li>
+  <li>From personal experience, testing classicly is oftentimes the path of least resistance. There isn’t expectation setup and verification that mockist testing requires of you.</li>
+  <li>Classic TDD sometimes results in creating objects that reveal state – note how the <code>BookUpdater</code> needed to expose an <code>updated?</code> method.</li>
+  <li>Setting up the state of the world prior to your test may be complex, requiring setting up all the objects in your universe. This can be a huge pain (has anybody ever had this problem with overcomplicated Rails models with spidery associations? Raise your hands…). Classicists may argue that the root cause here is not paying attention to your model architecture, and having too many associations is an antipattern. Alternatively, classicists oftentimes generate test factories (e.g. Rails’ FactoryGirl gem) to manage test setup.</li>
+  <li>Tests tend to be treatable more like black boxes, testable under isolation (due to verifications on object state) and are more resistant to refactoring.</li>
+</ul>
+
+<h3 id="mockist-tdd">Mockist TDD</h3>
+
+<ul>
+  <li>Mockist TDD utilizes <code>mock</code>s to verify behavior between objects and collaborators.</li>
+  <li>It can be argued to develop “purer” objects, that are mainly concerned with objects passing messages to each other. Fowler refers to these objects as preferring role-interfaces.</li>
+  <li>These tests are easier to set up, as they don’t require setting up the state of the world prior to test invocation.</li>
+  <li>Tests tend to be more coupled to implementation, and may be more difficult to refactor due to very specific requirements for message passing between collaborators.</li>
+  <li>Fowler brings up a point where being a mockist means that your objects prefer to <a href="https://pragprog.com/articles/tell-dont-ask">Tell Don’t Ask</a>. A nice side effect of TDA is you generally can avoid Demeter violations.</li>
+</ul>
+
+<h2 id="in-conclusion">In conclusion</h2>
+
+<p>In coming from a classic TDD background, I’ve oftentimes viewed mockist testing with some suspicion, particularly around how much work is involved to bring them about. Over the years, I’ve warmed up to the usage of mockist testing, but have not been diligent enough at doing pure driving TDD with mocks. In reviewing Fowler’s comments, I’m intruiged at the possibilities of mockist TDD in affecting system design, particularly in their natural inclinations toward <a href="http://martinfowler.com/bliki/RoleInterface.html">role interfaces</a>. I look forward to trying pure mockist TDD in a future project.</p>
+
+<h4 id="further-reading">Further reading:</h4>
+<ul>
+  <li><a href="http://dannorth.net/introducing-bdd/">Dan North: “Introducing BDD”</a></li>
+  <li><a href="http://jamesgolick.com/2010/3/10/on-mocks-and-mockist-testing.html">James Golick: “On Mocks and Mockist Testing”</a></li>
+  <li><a href="http://jmock.org/oopsla2004.pdf">OOPSLA 2004: “Mock Roles, Not Objects”</a></li>
+  <li><a href="http://www.amazon.com/Growing-Object-Oriented-Software-Guided-Tests/dp/0321503627">Amazon: “Growing Object Oriented Software, Guided by Tests”</a></li>
+</ul>
+
+			
+			
+		</div>
+	<footer>
+		
+
+
+		
+
+
+
+  
+		
+			Tagged under
+		
+    <a class='category' href='/category/mocks/'>mocks</a>, <a class='category' href='/category/stubs/'>stubs</a>, <a class='category' href='/category/tdd/'>tdd</a>
+	
+
+
+	
+	
+	</footer>
+	
+</article>
+<!-- END OF _includes/article.html -->
+
+	
+		
+		<!-- START OF _includes/article.html -->
+<article>
+	<header>
 		<h1><a href="/2014/06/06/running-mocha-tests-with-es6-amd-modules/">Running Mocha tests with ES6/AMD modules</a></h1>
 		<time>06 June 2014</time>
 	</header>
@@ -685,139 +860,6 @@ system.</li>
 			Tagged under
 		
     <a class='category' href='/category/blog-a-book/'>blog a book</a>, <a class='category' href='/category/book-review/'>book review</a>, <a class='category' href='/category/ddd/'>ddd</a>, <a class='category' href='/category/domain-driven-design/'>domain-driven design</a>
-	
-
-
-	
-	
-	</footer>
-	
-</article>
-<!-- END OF _includes/article.html -->
-
-	
-		
-		<!-- START OF _includes/article.html -->
-<article>
-	<header>
-		<h1><a href="/2014/01/26/moving-to-ember-app-kit/">Moving to Ember App Kit</a></h1>
-		<time>26 January 2014</time>
-	</header>
-		<div class="content">
-			<p>I’ve noticed a bit of the buzz around <a href="https://github.com/stefanpenner/ember-app-kit">Ember App Kit</a><br />
-recently and decided to move Hendrix, my music management app, over from<br />
-a <a href="http://yeoman.io/">Yeoman</a>-generated Ember app to EAK with all its<br />
-bells and whistles.</p>
-
-<h3 id="whats-the-difference">What’s the difference?</h3>
-
-<p>Well on the surface, the two frameworks aren’t very different. The<br />
-standard Yeoman build tool sets you up with Grunt and Bower, which is<br />
-what EAK provides you out of the box. The cool stuff happens when you<br />
-dive under the hood: ES6 module transpilation and an AMD-compatible<br />
-Ember Resolver, built-in Karma integration and a built-in API stub<br />
-framework for development and test environments.</p>
-
-<h3 id="the-joys-of-modules">The joys of modules</h3>
-
-<p>What I didn’t realize was that compiling to ES6 modules required that my<br />
-filenames be renamed exactly how the modules were going to be placed,<br />
-with the extra caveat that resource actions needed to live in their own<br />
-directories. Recall that in the old way of doing things with globals and<br />
-namespaces, you could get away with throwing a route file like this in<br />
-your app directory:</p>
-
-<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-</pre></td><td class="code"><pre><code class=""><span class="line">routes/
-</span><span class="line">  songs_index_controller.js</span></code></pre></td></tr></table></div></figure>
-
-<p>And inside:</p>
-
-<figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-</pre></td><td class="code"><pre><code class="javascript"><span class="line"><span class="nx">MyApp</span><span class="p">.</span><span class="nx">SongsIndexRoute</span> <span class="o">=</span> <span class="nx">Ember</span><span class="p">.</span><span class="nx">Route</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
-</span><span class="line">  <span class="c1">//...</span>
-</span><span class="line"><span class="p">});</span>
-</span></code></pre></td></tr></table></div></figure>
-
-<p>In EAK’s world, you need to nest the file under the <code>songs/</code> directory,<br />
-and strip the type from the filename, like so:</p>
-
-<figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-</pre></td><td class="code"><pre><code class="javascript"><span class="line"><span class="nx">routes</span><span class="o">/</span>
-</span><span class="line">  <span class="nx">songs</span><span class="o">/</span>
-</span><span class="line">    <span class="nx">index</span><span class="p">.</span><span class="nx">js</span>
-</span></code></pre></td></tr></table></div></figure>
-
-<p>Inside the file, you assign the function to a variable and let it be<br />
-exported in the default namespace.</p>
-
-<figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-</pre></td><td class="code"><pre><code class="javascript"><span class="line"><span class="kd">var</span> <span class="nx">SongsIndexRoute</span> <span class="o">=</span> <span class="nx">Ember</span><span class="p">.</span><span class="nx">Route</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
-</span><span class="line">  <span class="c1">//...</span>
-</span><span class="line"><span class="p">});</span>
-</span><span class="line"><span class="kr">export</span> <span class="k">default</span> <span class="nx">SongsIndexRoute</span><span class="p">;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-<h3 id="file-name-matters">File name matters</h3>
-
-<p>The <a href="https://github.com/stefanpenner/ember-jj-abrams-resolver/">new Ember resolver</a> <br />
-loads modules in a smart way – according to how the framework<br />
-structures resources, controllers and their corresponding actions. So<br />
-visiting <code>#/songs</code> from my app caused the app to look up and load<br />
-<code>appkit/routes/songs/index</code>. What I didn’t realize was <em>this module must<br />
-live at a very specific place in the file directory structure</em>.<br />
-I realized that I left the module type in the file name the first time<br />
-around, like this:</p>
-
-<figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-</pre></td><td class="code"><pre><code class="javascript"><span class="line"><span class="nx">routes</span><span class="o">/</span>
-</span><span class="line">  <span class="nx">songs</span><span class="o">/</span>
-</span><span class="line">    <span class="nx">index_route</span><span class="p">.</span><span class="nx">js</span>
-</span></code></pre></td></tr></table></div></figure>
-
-<p>There are no types in the module names – or the filenames, for that<br />
-matter. I had not realized this (I’m also an AMD newbie) – so I had<br />
-left my files un-renamed as <code>songs_index_route</code>, which meant that<br />
-the module loader had stored the SongsIndexRoute module under<br />
-<code>appkit/routes/songs/index_route</code>, but was doing a route lookup through<br />
-the Resolver for: <code>appkit/routes/songs/index</code>. Renaming the file to:</p>
-
-<figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-</pre></td><td class="code"><pre><code class="javascript"><span class="line"><span class="nx">routes</span><span class="o">/</span>
-</span><span class="line">  <span class="nx">songs</span><span class="o">/</span>
-</span><span class="line">    <span class="nx">index</span><span class="p">.</span><span class="nx">js</span>
-</span></code></pre></td></tr></table></div></figure>
-
-<p>did the trick.</p>
-
-			
-			
-		</div>
-	<footer>
-		
-
-
-		
-
-
-
-  
-		
-			Tagged under
-		
-    <a class='category' href='/category/development/'>development</a>, <a class='category' href='/category/ember/'>ember</a>, <a class='category' href='/category/ember-app-kit/'>ember app kit</a>, <a class='category' href='/category/programming/'>programming</a>
 	
 
 
