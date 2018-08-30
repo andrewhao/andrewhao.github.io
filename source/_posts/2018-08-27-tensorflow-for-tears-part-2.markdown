@@ -147,9 +147,9 @@ _A fun graph displaying the timeseries data for this little dude's episodes. On 
 
 Much of this code has been adapted from [Google's TensorFlow Audio Recognition tutorial](https://www.tensorflow.org/tutorials/sequences/audio_recognition).
 
-My scripts have been collected on this GitHub repository: https://github.com/andrewhao/babblefish
+My scripts have been collected on this GitHub repository: [https://github.com/andrewhao/babblefish](https://github.com/andrewhao/babblefish)
 
-And my repository with audio sampling and archiving: https://github.com/andrewhao/miserymeter
+And my repository with audio sampling and archiving: [https://github.com/andrewhao/miserymeter](https://github.com/andrewhao/miserymeter)
 
 ## Conclusion
 
