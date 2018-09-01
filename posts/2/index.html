@@ -68,6 +68,75 @@
 		<!-- START OF _includes/article.html -->
 <article>
 	<header>
+		<h1><a href="/2016/10/14/jhipster-and-spring-boot-for-rails-developers/">JHipster &amp; Spring Boot for Rails developers</a></h1>
+		<time>14 October 2016</time>
+	</header>
+		<div class="content">
+			<p>The first question you may be asking is - <em>why would I want to go from Rails to Java</em>?</p>
+
+<p>Maybe you don’t have a choice. Maybe you started a new job. Maybe you heard Java was the new, old hotness. In any case, you’re a Ruby on Rails developer and you’re staring Java in the face.</p>
+
+<h3 id="the-languages">The languages</h3>
+
+<p>First off, Rails and Java share similar philosophies.</p>
+
+<p>You may argue that Java is the One True Language for old-fashioned Object-Oriented Programming. The existence of strong types lead to powerful expressions around OOP concepts like inheritance, polymorphism, and the like.</p>
+
+<p>Java and Ruby share similar philosophies - in that Everything Is An Object. In Ruby, the <code>nil</code> value is modeled as a <code>NilClass</code>. In Java, objects abound everywhere.</p>
+
+<h3 id="the-frameworks">The frameworks</h3>
+
+<p>I can’t speak from firsthand experience, but Java developers will tell you that developing Java apps in the early 2000s was like configuration soup. Everything was explicit and configured in XML.</p>
+
+<p>Spring Boot arguable moves the state of the art in Java frameworks more towards’ Rails’ philosophies - that convention trumps configuration. It accomplishes this through <em>annotations</em> - more on this later.</p>
+
+<p>Rails was precisely so groundbreaking and exciting in 2005 because it was everything Java was not - terse, expressive, and unapologetically convention-driven. Where in Java, everything was explicitly traceable through system calls, Rails used magic methods of dynamically-defined methods, monkey-patching and big ol’ global God Objects to accomplish its magic.</p>
+
+<h3 id="liquibase-vs-active-record">Liquibase vs Active Record</h3>
+
+<p>In Active Record, database changes are called <em>migrations</em>.</p>
+
+<p>Migrations are only run from migration files, and may optionally be generated from the CLI.</p>
+
+<p>In Liquibase, these are called <em>changesets</em>, and the files are called <em>changelogs</em>.</p>
+
+<p>These migrations are either generated from the Liquibase CLI, or there is a nifty tool that reads Hibernate persistence entities and generates a “diff” against a known database, writing the migration to a file.</p>
+
+<p>Rails checks in a <code>schema.rb</code> file, encompassing the canonical definition of the DB schema. There is no such equivalent in Liquibase (* I may be wrong).</p>
+
+<p><strong>To be continued…</strong></p>
+
+			
+			
+		</div>
+	<footer>
+		
+
+
+		
+
+
+
+  
+		
+			Tagged under
+		
+    <a class='category' href='/category/java/'>java</a>, <a class='category' href='/category/liquibase/'>liquibase</a>, <a class='category' href='/category/ruby-on-rails/'>ruby on rails</a>, <a class='category' href='/category/spring-boot/'>spring boot</a>
+	
+
+
+	
+	
+	</footer>
+	
+</article>
+<!-- END OF _includes/article.html -->
+
+	
+		
+		<!-- START OF _includes/article.html -->
+<article>
+	<header>
 		<h1><a href="/2016/06/24/migrating-to-phoenix-with-rails-session-sharing/">Rails, meet Phoenix: Migrating to Phoenix with Rails session sharing</a></h1>
 		<time>24 June 2016</time>
 	</header>
@@ -1441,84 +1510,6 @@
 			Tagged under
 		
     <a class='category' href='/category/javascript/'>javascript</a>, <a class='category' href='/category/knex-dot-js/'>knex.js</a>, <a class='category' href='/category/postgis/'>postgis</a>
-	
-
-
-	
-	
-	</footer>
-	
-</article>
-<!-- END OF _includes/article.html -->
-
-	
-		
-		<!-- START OF _includes/article.html -->
-<article>
-	<header>
-		<h1><a href="/2016/03/21/lossless-rate-limiting-with-rxjs/">Lossless rate limiting with RxJS</a></h1>
-		<time>21 March 2016</time>
-	</header>
-		<div class="content">
-			<p>Much of RxJS involves working with <a href="http://reactivex.io/documentation/operators/backpressure.html">backpressure</a> - how to reconcile streams that emit/process data at different rates, without overloading the system. Much of that model is built with lossy handling in mind - it makes sense that when your system is under duress, that you design your streams to degrade gracefully (e.g. drop certain events, or rate limit them by chunking into windows, etc).</p>
-
-<p>However, there are times when it is appropriate to have a lossless approach to backpressure - e.g., to store every chunk of data that comes through a stream in memory, and not drop things. These use cases may come about when:</p>
-
-<ul>
-  <li>You have a short-lived, or bounded set of data you know will come over the pipe. You understand the bounds of the data that will ever come over the pipe.</li>
-  <li>You have a processing script you want to run, which is not part of a large system.</li>
-  <li>You have a honkin’ large system that can handle the load.</li>
-</ul>
-
-<p>In my case, I had a script that called the Google Geocoding API for a set of GPS coordinates. Now for a set of several hundred coordinates, I would end up calling the API several hundred times all at once with this naive implementation:</p>
-
-<figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-</pre></td><td class="code"><pre><code class="javascript"><span class="line"><span class="c1">// address$: [ &quot;1234 Widget Way, Promiseland, WV&quot; ] -- [...] -- [...]</span>
-</span><span class="line"><span class="kr">const</span> <span class="nx">geocoded$</span> <span class="o">=</span> <span class="nx">addresses$</span>
-</span><span class="line"><span class="p">.</span><span class="nx">flatMap</span><span class="p">(</span><span class="nx">address</span> <span class="o">=&gt;</span> <span class="nx">Rx</span><span class="p">.</span><span class="nx">Observable</span><span class="p">.</span><span class="nx">fromPromise</span><span class="p">(</span><span class="nx">callGoogleGeocodingService</span><span class="p">(</span><span class="nx">address</span><span class="p">)))</span>
-</span><span class="line"><span class="c1">// geocoded$: [ { latitude: 89.99, longitude: 90.00, ... } ] -- [...] -- [...]</span>
-</span></code></pre></td></tr></table></div></figure>
-
-<p>I searched all over for a lossless throttling mechanism, but all I could find was references to RxJS’s lossy <a href="">throttle</a> behavior.</p>
-
-<p>Other frameworks, like <a href="https://github.com/baconjs/bacon.js/#observable-bufferingthrottle">Bacon.js’s bufferingThrottle()</a> and <a href="http://highlandjs.org/#ratelimit">Highland.js ratelimit()</a> seemed attractive. Where was RxJS’s equivalent?</p>
-
-<p>Thanks to a <a href="http://stackoverflow.com/questions/34955842/rate-limiting-http-calls-made-by-rxjs">helpful StackOverflow post</a>, I found the answer: the use of <a href="https://github.com/Reactive-Extensions/RxJS/blob/master/doc/api/core/operators/concatmap.md">concatMap()</a> and <a href="https://github.com/Reactive-Extensions/RxJS/blob/master/doc/api/core/operators/delay.md">delay()</a> forces the incoming stream to execute serially over artificial time delayed streams.</p>
-
-<figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-</pre></td><td class="code"><pre><code class="javascript"><span class="line"><span class="kr">const</span> <span class="nx">geocoded$</span> <span class="o">=</span> <span class="nx">addresses$</span>
-</span><span class="line"><span class="p">.</span><span class="nx">concatMap</span><span class="p">(</span><span class="nx">address</span> <span class="o">=&gt;</span> <span class="nx">Rx</span><span class="p">.</span><span class="nx">Observable</span><span class="p">.</span><span class="nx">just</span><span class="p">(</span><span class="nx">address</span><span class="p">).</span><span class="nx">delay</span><span class="p">(</span><span class="nx">TIME_INTERVAL</span><span class="p">))</span>
-</span><span class="line"><span class="p">.</span><span class="nx">flatMap</span><span class="p">(</span><span class="nx">address</span> <span class="o">=&gt;</span> <span class="nx">Rx</span><span class="p">.</span><span class="nx">Observable</span><span class="p">.</span><span class="nx">fromPromise</span><span class="p">(</span><span class="nx">callGoogleGeocodingService</span><span class="p">(</span><span class="nx">address</span><span class="p">)))</span>
-</span></code></pre></td></tr></table></div></figure>
-
-<p>Thanks to:</p>
-
-<ul>
-  <li>http://stackoverflow.com/questions/34955842/rate-limiting-http-calls-made-by-rxjs</li>
-  <li>http://stackoverflow.com/questions/30876361/rxjs-rate-limit-requests-per-second-and-concurrency?rq=1</li>
-</ul>
-
-			
-			
-		</div>
-	<footer>
-		
-
-
-		
-
-
-
-  
-		
-			Tagged under
-		
-    <a class='category' href='/category/frp/'>frp</a>, <a class='category' href='/category/rate-limiting/'>rate limiting</a>, <a class='category' href='/category/reactive-programming/'>reactive programming</a>, <a class='category' href='/category/rxjs/'>rxjs</a>
 	
 
 

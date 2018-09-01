@@ -68,6 +68,84 @@
 		<!-- START OF _includes/article.html -->
 <article>
 	<header>
+		<h1><a href="/2016/03/21/lossless-rate-limiting-with-rxjs/">Lossless rate limiting with RxJS</a></h1>
+		<time>21 March 2016</time>
+	</header>
+		<div class="content">
+			<p>Much of RxJS involves working with <a href="http://reactivex.io/documentation/operators/backpressure.html">backpressure</a> - how to reconcile streams that emit/process data at different rates, without overloading the system. Much of that model is built with lossy handling in mind - it makes sense that when your system is under duress, that you design your streams to degrade gracefully (e.g. drop certain events, or rate limit them by chunking into windows, etc).</p>
+
+<p>However, there are times when it is appropriate to have a lossless approach to backpressure - e.g., to store every chunk of data that comes through a stream in memory, and not drop things. These use cases may come about when:</p>
+
+<ul>
+  <li>You have a short-lived, or bounded set of data you know will come over the pipe. You understand the bounds of the data that will ever come over the pipe.</li>
+  <li>You have a processing script you want to run, which is not part of a large system.</li>
+  <li>You have a honkin’ large system that can handle the load.</li>
+</ul>
+
+<p>In my case, I had a script that called the Google Geocoding API for a set of GPS coordinates. Now for a set of several hundred coordinates, I would end up calling the API several hundred times all at once with this naive implementation:</p>
+
+<figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+</pre></td><td class="code"><pre><code class="javascript"><span class="line"><span class="c1">// address$: [ &quot;1234 Widget Way, Promiseland, WV&quot; ] -- [...] -- [...]</span>
+</span><span class="line"><span class="kr">const</span> <span class="nx">geocoded$</span> <span class="o">=</span> <span class="nx">addresses$</span>
+</span><span class="line"><span class="p">.</span><span class="nx">flatMap</span><span class="p">(</span><span class="nx">address</span> <span class="o">=&gt;</span> <span class="nx">Rx</span><span class="p">.</span><span class="nx">Observable</span><span class="p">.</span><span class="nx">fromPromise</span><span class="p">(</span><span class="nx">callGoogleGeocodingService</span><span class="p">(</span><span class="nx">address</span><span class="p">)))</span>
+</span><span class="line"><span class="c1">// geocoded$: [ { latitude: 89.99, longitude: 90.00, ... } ] -- [...] -- [...]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+<p>I searched all over for a lossless throttling mechanism, but all I could find was references to RxJS’s lossy <a href="">throttle</a> behavior.</p>
+
+<p>Other frameworks, like <a href="https://github.com/baconjs/bacon.js/#observable-bufferingthrottle">Bacon.js’s bufferingThrottle()</a> and <a href="http://highlandjs.org/#ratelimit">Highland.js ratelimit()</a> seemed attractive. Where was RxJS’s equivalent?</p>
+
+<p>Thanks to a <a href="http://stackoverflow.com/questions/34955842/rate-limiting-http-calls-made-by-rxjs">helpful StackOverflow post</a>, I found the answer: the use of <a href="https://github.com/Reactive-Extensions/RxJS/blob/master/doc/api/core/operators/concatmap.md">concatMap()</a> and <a href="https://github.com/Reactive-Extensions/RxJS/blob/master/doc/api/core/operators/delay.md">delay()</a> forces the incoming stream to execute serially over artificial time delayed streams.</p>
+
+<figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="javascript"><span class="line"><span class="kr">const</span> <span class="nx">geocoded$</span> <span class="o">=</span> <span class="nx">addresses$</span>
+</span><span class="line"><span class="p">.</span><span class="nx">concatMap</span><span class="p">(</span><span class="nx">address</span> <span class="o">=&gt;</span> <span class="nx">Rx</span><span class="p">.</span><span class="nx">Observable</span><span class="p">.</span><span class="nx">just</span><span class="p">(</span><span class="nx">address</span><span class="p">).</span><span class="nx">delay</span><span class="p">(</span><span class="nx">TIME_INTERVAL</span><span class="p">))</span>
+</span><span class="line"><span class="p">.</span><span class="nx">flatMap</span><span class="p">(</span><span class="nx">address</span> <span class="o">=&gt;</span> <span class="nx">Rx</span><span class="p">.</span><span class="nx">Observable</span><span class="p">.</span><span class="nx">fromPromise</span><span class="p">(</span><span class="nx">callGoogleGeocodingService</span><span class="p">(</span><span class="nx">address</span><span class="p">)))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+<p>Thanks to:</p>
+
+<ul>
+  <li>http://stackoverflow.com/questions/34955842/rate-limiting-http-calls-made-by-rxjs</li>
+  <li>http://stackoverflow.com/questions/30876361/rxjs-rate-limit-requests-per-second-and-concurrency?rq=1</li>
+</ul>
+
+			
+			
+		</div>
+	<footer>
+		
+
+
+		
+
+
+
+  
+		
+			Tagged under
+		
+    <a class='category' href='/category/frp/'>frp</a>, <a class='category' href='/category/rate-limiting/'>rate limiting</a>, <a class='category' href='/category/reactive-programming/'>reactive programming</a>, <a class='category' href='/category/rxjs/'>rxjs</a>
+	
+
+
+	
+	
+	</footer>
+	
+</article>
+<!-- END OF _includes/article.html -->
+
+	
+		
+		<!-- START OF _includes/article.html -->
+<article>
+	<header>
 		<h1><a href="/2016/02/17/partitioning-rxjs-streams-adventures-in-nested-observables-with-groupby-and-flatmap/">Partitioning RxJS streams: adventures in nested Observables with groupBy() and flatMap()</a></h1>
 		<time>17 February 2016</time>
 	</header>
@@ -707,131 +785,6 @@ clicking the checkbox “Create Groups for any Added Folders”</p>
 			Tagged under
 		
     <a class='category' href='/category/ios/'>ios</a>, <a class='category' href='/category/swift/'>swift</a>, <a class='category' href='/category/viper/'>viper</a>
-	
-
-
-	
-	
-	</footer>
-	
-</article>
-<!-- END OF _includes/article.html -->
-
-	
-		
-		<!-- START OF _includes/article.html -->
-<article>
-	<header>
-		<h1><a href="/2015/04/30/building-gpx-stats-through-frp-principles-on-bacon-dot-js/">Building GPX stats through FRP principles with Bacon.js</a></h1>
-		<time>30 April 2015</time>
-	</header>
-		<div class="content">
-			<p>With my current fascination with <a href="http://github.com/andrewhao/stressfactor">tracking workouts and location-based-activities</a>, I have been interested in how I might be able to rewrite some of my stats logic with FRP principles.</p>
-
-<h3 id="what-is-frp">What is FRP?</h3>
-
-<p>FRP, or Functional Reactive Programming, is often defined as “functional programming over values that change over time”. It uses functional composition for streams of data that may appear in an infinite stream of data for some far indeterminate future - these types of use cases are served well by FRP which <a href="http://en.wikipedia.org/wiki/Functional_reactive_programming">“(simplifies) these problems by explicitly modeling time”</a>.</p>
-
-<h3 id="gps---your-location-varied-over-time">GPS - your location, varied over time.</h3>
-
-<p>A great application of this would be a workout. Let’s say I wanted to build an app that received realtime updates on a person’s position. Say the app was a Node server that received this JSON blob from a web API as a location update:</p>
-
-<figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-</pre></td><td class="code"><pre><code class="json"><span class="line"><span class="p">{</span> <span class="err">&#39;lat&#39;:</span> <span class="err">29.192414,</span>
-</span><span class="line">  <span class="err">&#39;lon&#39;:</span> <span class="err">148.113241,</span>
-</span><span class="line">  <span class="err">&#39;ele&#39;:</span> <span class="err">122.1,</span>
-</span><span class="line">  <span class="err">&#39;time&#39;:</span> <span class="err">&#39;2015-04-18T13:54:56Z&#39;</span> <span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-<p>Say that some time later, the API receives this JSON blob:</p>
-
-<figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-</pre></td><td class="code"><pre><code class="json"><span class="line"><span class="p">{</span> <span class="err">&#39;lat&#39;:</span> <span class="err">29.192424,</span>
-</span><span class="line">  <span class="err">&#39;lon&#39;:</span> <span class="err">148.113251,</span>
-</span><span class="line">  <span class="err">&#39;ele&#39;:</span> <span class="err">123.1,</span>
-</span><span class="line">  <span class="err">&#39;time&#39;:</span> <span class="err">&#39;2015-04-18T13:55:26Z&#39;</span> <span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-<p>So we have these data points, that the user has moved <code>+0.00001</code> latitude points and <code>+0.00001</code> longitude points, climbing a total of <code>+1.0</code> meters, over a period of <code>30</code> seconds.</p>
-
-<h4 id="exercise-get-my-instantaneous-velocity">Exercise: Get my instantaneous velocity</h4>
-
-<p>If we performed this imperatively, we would write it something like this:</p>
-
-<figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-</pre></td><td class="code"><pre><code class="javascript"><span class="line"><span class="kd">var</span> <span class="nx">locations</span> <span class="o">=</span> <span class="p">[{</span> <span class="cm">/*json*/</span> <span class="p">},</span> <span class="p">{</span> <span class="cm">/*json*/</span> <span class="p">}</span> <span class="cm">/*, ...*/</span><span class="p">];</span>
-</span><span class="line"><span class="kd">var</span> <span class="nx">last</span> <span class="o">=</span> <span class="nx">locations</span><span class="p">[</span><span class="nx">locations</span><span class="p">.</span><span class="nx">length</span><span class="o">-</span><span class="mi">1</span><span class="p">];</span>
-</span><span class="line"><span class="kd">var</span> <span class="nx">secondToLast</span> <span class="o">=</span> <span class="nx">locations</span><span class="p">[</span><span class="nx">locations</span><span class="p">.</span><span class="nx">length</span><span class="o">-</span><span class="mi">2</span><span class="p">];</span>
-</span><span class="line"><span class="kd">var</span> <span class="nx">timeDelta</span> <span class="o">=</span> <span class="nx">last</span><span class="p">.</span><span class="nx">time</span> <span class="o">-</span> <span class="nx">secondToLast</span><span class="p">.</span><span class="nx">time</span><span class="p">;</span>
-</span><span class="line"><span class="kd">var</span> <span class="nx">distanceDelta</span> <span class="o">=</span> <span class="nx">getDistance</span><span class="p">(</span><span class="nx">last</span><span class="p">.</span><span class="nx">lon</span><span class="p">,</span> <span class="nx">last</span><span class="p">.</span><span class="nx">lat</span><span class="p">,</span> <span class="nx">secondToLast</span><span class="p">.</span><span class="nx">lon</span><span class="p">,</span> <span class="nx">secondToLast</span><span class="p">.</span><span class="nx">lat</span><span class="p">);</span>
-</span><span class="line"><span class="kd">var</span> <span class="nx">velocity</span> <span class="o">=</span> <span class="nx">distanceDelta</span> <span class="o">/</span> <span class="nx">timeDelta</span><span class="p">;</span>
-</span><span class="line"><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">velocity</span><span class="p">);</span>
-</span></code></pre></td></tr></table></div></figure>
-
-<p>With FRP, it might look more like this:</p>
-
-<figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-<span class="line-number">9</span>
-<span class="line-number">10</span>
-</pre></td><td class="code"><pre><code class="javascript"><span class="line"><span class="kd">var</span> <span class="nx">locationStream</span> <span class="o">=</span> <span class="p">[{</span> <span class="cm">/*json*/</span> <span class="p">},</span> <span class="p">{</span> <span class="cm">/*json*/</span> <span class="p">}</span> <span class="cm">/*, ...some JSON objects that might appear in the future */</span><span class="p">];</span>
-</span><span class="line"><span class="nx">locationStream</span><span class="p">.</span><span class="nx">slidingWindow</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-</span><span class="line">              <span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">pairs</span><span class="p">)</span> <span class="p">{</span>
-</span><span class="line">                <span class="kd">var</span> <span class="nx">timeDelta</span> <span class="o">=</span> <span class="nx">pairs</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="nx">time</span> <span class="o">-</span> <span class="nx">pairs</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">time</span><span class="p">;</span>
-</span><span class="line">                <span class="kd">var</span> <span class="nx">distanceDelta</span> <span class="o">=</span> <span class="nx">getDistance</span><span class="p">(</span><span class="nx">pairs</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="nx">lon</span><span class="p">,</span> <span class="nx">pairs</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="nx">lat</span><span class="p">,</span> <span class="nx">pairs</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">lon</span><span class="p">,</span> <span class="nx">pairs</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">lat</span><span class="p">);</span>
-</span><span class="line">                <span class="k">return</span> <span class="nx">distanceDelta</span> <span class="o">/</span> <span class="nx">timeDelta</span>
-</span><span class="line">              <span class="p">})</span>
-</span><span class="line">              <span class="p">.</span><span class="nx">onValue</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">velocity</span><span class="p">)</span> <span class="p">{</span>
-</span><span class="line">                <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">velocity</span><span class="p">);</span>
-</span><span class="line">              <span class="p">});</span>
-</span></code></pre></td></tr></table></div></figure>
-
-<p>There is a key difference that is not easily demonstrated here - that the former imperative example requires that all JSON arrays be materialized at once - via db query, in-memory store, etc. It doesn’t account for change in time.</p>
-
-<p>However, the latter functional example accounts for changing values of time as they appear over the stream - as soon as a new value shows up in the stream, the velocity is changed instantly.</p>
-
-<h3 id="some-more-location-based-experiments-rxlocation">Some more location-based experiments: rxlocation</h3>
-
-<p>I wrote up a library to parse various facts from a changing stream of GPS events, from instantaneous velocity, average velocity, moving/stopped status, etc.</p>
-
-<p>I investigated different reactive frameworks, mainly <a href="https://github.com/Reactive-Extensions/RxJS/">RxJS</a> and <a href="https://github.com/baconjs/bacon.js/">Bacon.js</a>. My takeaways were that RxJS does everything and the kitchen sink, but I got lost trying to reconcile Node streams with RxJS cold streams. Bacon.js just seemed to work for me, out of the box. I’m still learning, so I hope to have a better understanding of the core issues here.</p>
-
-<p>You can check it out here: <a href="https://github.com/andrewhao/rxlocation">rxlocation</a>.</p>
-
-			
-			
-		</div>
-	<footer>
-		
-
-
-		
-
-
-
-  
-		
-			Tagged under
-		
-    <a class='category' href='/category/functional-reactive-programming/'>functional reactive programming</a>, <a class='category' href='/category/javascript/'>javascript</a>, <a class='category' href='/category/node/'>node</a>
 	
 
 

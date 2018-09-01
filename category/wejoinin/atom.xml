@@ -4,7 +4,7 @@
   <title><![CDATA[Category: wejoinin | The Sweet Spot]]></title>
   <link href="http://www.g9labs.com/category/wejoinin/atom.xml" rel="self"/>
   <link href="http://www.g9labs.com/"/>
-  <updated>2018-08-29T22:55:55-07:00</updated>
+  <updated>2018-08-31T19:59:45-07:00</updated>
   <id>http://www.g9labs.com/</id>
   <author>
     <name><![CDATA[Andrew Hao]]></name>
@@ -12,6 +12,17 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Wejoinin at Ten]]></title>
+    <link href="http://www.g9labs.com/2017/09/28/wejoinin-at-ten/"/>
+    <updated>2017-09-28T19:57:43-07:00</updated>
+    <id>http://www.g9labs.com/2017/09/28/wejoinin-at-ten</id>
+    <content type="html"><![CDATA[<p>I posted an article on Medium titled <a href="https://medium.com/wejoinin/wejoinin-at-ten-34efeaff6e03">“Wejoinin at Ten”</a> describing our experience developing Wejoinin over the past ten years as a long-running passion project - and talk about the directions we hope to be taking it in the next ten.</p>
+
+<p>Give it a read and let me know what you think!</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Crusher website]]></title>
