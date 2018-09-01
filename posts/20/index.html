@@ -52,7 +52,7 @@
 
 				<div class="navi">
 					<ul>
-						<li><a href="/blog/archives">Articles</a></li>
+						<li><a href="/">Articles</a></li>
 						<li><a href="/talks">Talks</a></li>
 						<li><a href="/notes">Conference Notes</a></li>
 						<li><a href="https://www.github.com/andrewhao">Github</a></li>
@@ -63,299 +63,1909 @@
 
 				<!-- START OF index.html -->
 
-	
-		
-		<!-- START OF _includes/article.html -->
-<article>
-	<header>
-		<h1><a href="/2007/03/28/verilogical/">Verilogical</a></h1>
-		<time>28 March 2007</time>
-	</header>
-		<div class="content">
-			<p>Oftentimes in <a href="http://en.wikipedia.org/wiki/Verilog">Verilog</a> code, we build testbenches (test fixtures). A common thing to do is to instantiate a module and plug in wires of the same names.</p>
 
-<p>Now a common hack is to copy and paste the module declaration line (the “prototype,” if you will). The prototype looks like this:</p>
-
-<blockquote>
-  <p>module 	Foo(	bar,<br />&lt;/br&gt;		baz,<br />&lt;/br&gt;		…<br />&lt;/br&gt;	);	<br />&lt;/br&gt;</p>
-</blockquote>
-
-<p>The HDL synthesizer can correctly wire inputs, regardless of instantiated order, by surrounding the names of the local wires with the input names as declared in the prototype in a format such as:</p>
-
-<blockquote>
-  <p>Foo foo_instance (	.bar(bar),<br />&lt;/br&gt;			.baz(baz),<br />&lt;/br&gt;			…<br />&lt;/br&gt;		);<br />&lt;/br&gt;</p>
-</blockquote>
-
-<p>So to do so is a rather painful matter of adding a period before the input name, copy and pasting the input name and pasting it after the name, bracketed by parentheses.</p>
-
-<p>But what do you do if your module has thirty inputs? Our previous solution was to surrender our wrists to inevitable Repetitive Stress Injuries. Today, I realized that I should have used a freakin’ elementary <a href="http://en.wikipedia.org/wiki/Regular_expression">regular expression</a>.</p>
-
-<blockquote>
-  <p>Search:		(.*),<br />&lt;/br&gt;Replace:	.$1($1),<br />&lt;/br&gt;</p>
-</blockquote>
-
-<p>Wah-lah! I’m kicking myself for not thinking of this earlier. And it has taken me 10 minutes to tell you how I saved forty-five seconds and my poor wrists. Anything to avoid more work (shh, don’t tell Alex) :)</p>
-
-<p><a href="http://www.xanga.com/Amazon/Click.aspx?asin=B00004XONN&amp;user=378399"><img src="http://ec1.images-amazon.com/images/P/B00004XONN.01._SCTHUMBZZZ_.jpg" alt="" /></a><br />
-<strong>Currently Listening</strong>  <br />
-<a href="http://www.xanga.com/Amazon/Click.aspx?asin=B00004XONN&amp;user=378399"><strong>Kid A</strong></a>  <br />
-By Radiohead  <br />
-<a href="http://www.xanga.com/Amazon/Click.aspx?asin=B00004XONN&amp;user=378399&amp;related=1">see related</a></p>
-
-			
-			
-		</div>
-	<footer>
-		
-
-
-		
-			andrewhao 
-		
 
 
 
   
-		
-			on
-		
-    <a class='category' href='/category/andrew-2-dot-0/'>andrew 2.0</a>
-	
-
-
-	
-	
-	</footer>
-	
-</article>
-<!-- END OF _includes/article.html -->
-
-	
-		
-		<!-- START OF _includes/article.html -->
-<article>
-	<header>
-		<h1><a href="/2007/03/10/sensations/">Sensations</a></h1>
-		<time>10 March 2007</time>
-	</header>
-		<div class="content">
-			<p><img src="http://www.g9labs.com/img/blogart/02-those-who-dreamed.jpg" alt="Sensations 02: Those Who Dreamed" /></p>
-
-			
-			
-		</div>
-	<footer>
-		
-
-
-		
-			andrewhao 
-		
+	<div class="cat-year">2018</div>
 
 
 
   
-		
-			on
-		
-    <a class='category' href='/category/andrew-2-dot-0/'>andrew 2.0</a>
-	
+	<div class="cat-month">August</div>
 
 
-	
-	
-	</footer>
-	
-</article>
-<!-- END OF _includes/article.html -->
+<!-- BEGIN _includes/archive_post.html -->
 
-	
-		
-		<!-- START OF _includes/article.html -->
-<article>
-	<header>
-		<h1><a href="/2007/02/27/liveblogging-from-the-stacks/">Liveblogging from: the Stacks</a></h1>
-		<time>27 February 2007</time>
-	</header>
-		<div class="content">
-			<p>I have friends who run a cost-benefit analysis on every decision. And they’re always measuring things up against Time. Freakin, Endless, Time. I think I’m one of them, too. May it never be so.</p>
-
-<hr />
-
-<p>I remember why I’ve never liked the stacks: these chairs are pretty much the least ergonomic chairs ever built, on par with medieval torture devices.</p>
-
-<p>I remember why I’ve missed the stacks: being here makes me feel smarter. And how time somehow seems to stands still, but that might be the artificial lighting and the fact I’m fifty feet underground.</p>
-
-<hr />
-
-<p>There was a study done a long time ago where a woman volunteered to live underground for like a month. And they measured her sleep cycles, and it went wack by about a week (can anybody name this study or correct me if I’m wrong?). I always wondered what kind of music you’d listen to if you were underground for that long. And if she ever figured out how to work a Rubik’s cube. Being underground for that long seems like a good way to determine cube optimization strategies.</p>
-
-<hr />
-
-<p>Oh, essay. The closer I get to the end, the harder it gets to write. 9 pages down, three to go and I’ll either finish in one hour or in six.</p>
-
-<hr />
-
-<p>Edit: it was six.</p>
-
-
-			
-			
-		</div>
-	<footer>
-		
-
-
-		
-			andrewhao 
-		
-
-
-
-  
-		
-			on
-		
-    <a class='category' href='/category/andrew-2-dot-0/'>andrew 2.0</a>
-	
-
-
-	
-	
-	</footer>
-	
-</article>
-<!-- END OF _includes/article.html -->
-
-	
-		
-		<!-- START OF _includes/article.html -->
-<article>
-	<header>
-		<h1><a href="/2007/02/25/taiwan-roundup/">Taiwan Roundup</a></h1>
-		<time>25 February 2007</time>
-	</header>
-		<div class="content">
-			<p>So I’m writing the first part of my International Media paper on the structures of the media systems in Taiwan. Just wanted to share with you what I’ve been coming across in my research so far:</p>
-
-<p>Here’s a <a href="http://taiwanfeed.com/">aggregate blog</a> of many of the main English blogs on/in Taiwan.</p>
-
-<p>Interestingly enough, many of the high-visibility English political <a href="http://michaelturton.blogspot.com/">blog</a>s have heavy DPP rhetoric where many of my 1.5-gen Taiwanese friends at school and back home lean blue. It’ll be interesting to discover where native Taiwanese political pundits/bloggers lean.</p>
-
-<p>A <a href="http://taiwanperspective.blogspot.com/index.html">photo blogger</a> posts photos from the perspective of a foreigner in Taiwan.</p>
-
-<p>Portnoy Zheng, a Taiwanese graduate student <a href="http://workingman.wordpress.com/">keeps a blog</a> (this is his lesser-updated English blog) on Taiwanese media with a particular Web emphasis.</p>
-
-<p>I am also following another interesting conversation regarding Taiwanese bloggers–the complaint that the English and Taiwanese blog communities are largely independent of one another. <a href="http://michaelturton.blogspot.com/">Michael Turton</a> describes the need to unify the two realms:</p>
-
-<blockquote>
-  <p>For me the major challenge is going to be bringing the Chinese-language and English language blogospheres together, because they have much to say to one another, and because Taiwanese bloggers need to get more recognition.</p>
-</blockquote>
-
-<p>Scott Sommers largely agrees <a href="http://scottsommers.blogs.com/taiwanweblog/2007/02/michael_turton_.html">in his post</a>, but more interesting is the meta section of his entry where there is a lively debate on who needs to take the first step: English- or Chinese-speaking bloggers. One commenter proposes considering the hegemonic properties of Western values:</p>
-
-<blockquote>
-  <p>In my opinion, if English readers can answer these two questions, then maybe they might understand.  <br />
-1. Why is it one can not export American-styled democracy anywhere, no matter how good the intention?  <br />
-2. Why is it certain missionaries, churches, or faiths are more accepted then others; even when their messages are the same?</p>
-</blockquote>
-
-<p>Portnoy Zheng (previously mentioned), believes the problem is <a href="http://workingman.wordpress.com/2006/04/23/about-regional-blogger-aggregator/#comments">less about hegemony than it is about language</a>:</p>
-
-<blockquote>
-  <p>It is nothing about English hegemony; it is about how to communicate<br />
-effectively,how to break the language divide, and how to enhance our<br />
-understanding of our neighbors.</p>
-</blockquote>
-
-<p>Interestingly enough, there is a movement towards an <a href="http://rconversation.blogs.com/rconversation/2007/02/join_the_open_s.html">Open Source Translation Project</a> which is calling for volunteers to translate Chinese blogs (not limited to TW) to English and vice versa. The implications here could be enormous, not just for Taiwanese blogs but for the Chinese web audience as well.</p>
-
-<p>Finally, Tony Chung is a composer, songwriter and <a href="http://tonelisten.com/">pop singer</a> in <a href="http://www.wretch.cc/blog/tonelisten">Taiwan</a>. He also happens to be from San Jose. He also happens to run a <a href="http://www.geekwhat.com">tech blog</a> and a <a href="http://www.talkmatic.com">Web 2.0 podcast show</a>, recently covered by tech blogger, <a href="http://scobleizer.com/2007/02/15/neat-meeting-of-the-day-tony-chung/">Robert Scoble</a>. Not to mention he also was ASB president my sophomore year in high school. Go check him out and support him. Best to you, Tony (er, Tone?).</p>
-
-<p>AND I need to get back to work (yunno, actually writing).</p>
-
-
-			
-			
-		</div>
-	<footer>
-		
-
-
-		
-			andrewhao 
-		
-
-
-
-  
-		
-			on
-		
-    <a class='category' href='/category/andrew-2-dot-0/'>andrew 2.0</a>
-	
-
-
-	
-	
-	</footer>
-	
-</article>
-<!-- END OF _includes/article.html -->
-
-	
-		
-		<!-- START OF _includes/article.html -->
-<article>
-	<header>
-		<h1><a href="/2007/02/21/extreme-editing/">eXtreme Editing</a></h1>
-		<time>21 February 2007</time>
-	</header>
-		<div class="content">
-			<p>I realized today (with a grin) that I wasn’t editing my essay as much as I was <a href="http://c2.com/xp/RefactorMercilessly.html">refactoring</a> it.</p>
-
-
-			
-			
-		</div>
-	<footer>
-		
-
-
-		
-			andrewhao 
-		
-
-
-
-  
-		
-			on
-		
-    <a class='category' href='/category/andrew-2-dot-0/'>andrew 2.0</a>
-	
-
-
-	
-	
-	</footer>
-	
-</article>
-<!-- END OF _includes/article.html -->
-
-	
-	
-<div class="pagination">
-	
-		<a class="older" href="/posts/21">Older</a>
-	
-	
-	<span class="total">20 of 21</span>
-	
-	
-		<a class="newer" href="/posts/19">Newer</a>
-	
+<div class="post-listing">
+  <a class="title-listing" href="/2018/08/27/tensorflow-for-tears-part-2/">Tensorflow for Tears: Part 2</a>
+  <p class="post-listing__preview">The last time we met, we had a lively discussion about the ins and outs and joys and terrors of parenting. I talked about how I started building a Raspberry &hellip;</p>
 </div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+  
+	<div class="cat-month">March</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2018/03/21/tensorflow-for-tears-part-1/">TensorFlow For Tears: Part 1</a>
+  <p class="post-listing__preview">An introduction to every parent’s trial and travails When our son was born early last year, I admit I wasn’t ready for it. Fatherhood was not the kind of thing &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2018/03/13/elixir-and-elm-things-ive-written-elsewhere/">Elixir and Elm things I've written about elsewhere</a>
+  <p class="post-listing__preview">While it’s been pretty quiet around these parts, I’ve kept the technical blogging up over on my employer’s blog. I’ve got quite a few posts around Elixir: Lightweight dependency injection &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+  
+	<div class="cat-year">2017</div>
+
+
+
+  
+	<div class="cat-month">September</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2017/09/28/wejoinin-at-ten/">Wejoinin at Ten</a>
+  <p class="post-listing__preview">I posted an article on Medium titled “Wejoinin at Ten” describing our experience developing Wejoinin over the past ten years as a long-running passion project - and talk about the &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+  
+	<div class="cat-month">July</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2017/07/19/pitfalls-to-avoid-when-moving-to-async-systems/">Pitfalls to avoid when moving to async systems</a>
+  <p class="post-listing__preview">I recently published a post on the Carbon Five blog titled “Evented Rails: Decoupling complex domains in Rails with Domain Events” that takes some of my thoughts about moving a &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+  
+	<div class="cat-year">2016</div>
+
+
+
+  
+	<div class="cat-month">October</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2016/10/14/jhipster-and-spring-boot-for-rails-developers/">JHipster &amp; Spring Boot for Rails developers</a>
+  <p class="post-listing__preview">The first question you may be asking is - why would I want to go from Rails to Java? Maybe you don’t have a choice. Maybe you started a new &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+  
+	<div class="cat-month">June</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2016/06/24/migrating-to-phoenix-with-rails-session-sharing/">Rails, meet Phoenix: Migrating to Phoenix with Rails session sharing</a>
+  <p class="post-listing__preview">You’ve resolved to build your company’s Next Big Thing in Phoenix and Elixir. That’s great! You’re facing a problem though - all user authentication and access concerns are performed on &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2016/06/23/rails-pub-slash-sub-with-wisper-and-sidekiq/">Evented Rails: Decoupling domains in Rails with Wisper pub/sub events</a>
+  <p class="post-listing__preview">One common pattern in Domain-Driven Design is the use of publish/subscribe messaging to communicate between domains. When Domain Events are created from within a domain, other domains are able to &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+  
+	<div class="cat-month">April</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2016/04/18/the-joy-of-naming-with-the-powers-of-domain-driven-design/">Domain-Driven Design & The Joy of Naming</a>
+  <p class="post-listing__preview">I want to discuss a topic near and dear to my heart, and what I believe is at the crux of effective software design. It’s not a new functional language, &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2016/04/08/knex-dot-js-and-bookshelf-dot-js-cheat-sheet/">Knex.js and PostGIS cheat sheet</a>
+  <p class="post-listing__preview">As follows are some code snippets for using Knex.js for executing Postgres and PostGIS queries. Execute raw SQL in migration I often find this useful for fancy SQL, like creating &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+  
+	<div class="cat-month">March</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2016/03/21/lossless-rate-limiting-with-rxjs/">Lossless rate limiting with RxJS</a>
+  <p class="post-listing__preview">Much of RxJS involves working with backpressure - how to reconcile streams that emit/process data at different rates, without overloading the system. Much of that model is built with lossy &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+  
+	<div class="cat-month">February</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2016/02/17/partitioning-rxjs-streams-adventures-in-nested-observables-with-groupby-and-flatmap/">Partitioning RxJS streams: adventures in nested Observables with groupBy() and flatMap()</a>
+  <p class="post-listing__preview">One of the confusing aspects about working with streams is diving into Rx operators that take a stream and fan out into multiple streams. Is your head exploding yet? The &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+  
+	<div class="cat-year">2015</div>
+
+
+
+  
+	<div class="cat-month">September</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2015/09/27/strange-loop-2015-reflections/">Strange Loop 2015: Notes & Reflections</a>
+  <p class="post-listing__preview">Going to Strange Loop was a huge check off my conference bucket list (lanyard?). I’d always heard about this slightly-weird, highly academic collision between academia and industry, skewing toward programming &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+  
+	<div class="cat-month">June</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2015/06/29/notes-on-performance-tuning-a-puma-server/">Notes on performance tuning a Puma server</a>
+  <p class="post-listing__preview">A couple of months ago, I was tuning a Rails app for one of our clients. This client wanted to know how performant their app would be under load. To &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2015/06/01/toolbox-learning-swift-and-viper/">Toolbox: learning Swift and VIPER</a>
+  <p class="post-listing__preview">The following are some notes I’m compiling as I’m beginning a journey down the rabbit hole, writing an app in Swift utilizing the VIPER app development methodology I had trouble &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+  
+	<div class="cat-month">April</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2015/04/30/building-gpx-stats-through-frp-principles-on-bacon-dot-js/">Building GPX stats through FRP principles with Bacon.js</a>
+  <p class="post-listing__preview">With my current fascination with tracking workouts and location-based-activities, I have been interested in how I might be able to rewrite some of my stats logic with FRP principles. What &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+  
+	<div class="cat-month">March</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2015/03/19/docker-rails-and-docker-compose-in-your-development-workflow/">Docker, Rails, and Docker Compose in your development workflow</a>
+  <p class="post-listing__preview">(This post originally appeared on the Carbon Five blog.) We’ve been trialing the usage of Docker and Docker Compose (previously known as fig) on a Rails project here at Carbon &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+  
+	<div class="cat-year">2014</div>
+
+
+
+  
+	<div class="cat-month">November</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2014/11/29/explorations-in-logic-programming/">Explorations in logic programming</a>
+  <p class="post-listing__preview">Out of Storybook, a side project I’ve been doing for a friend, I had the opportunity to model the problem domain as a constraint satisfaction problem (CSP). It goes: A &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2014/11/15/my-own-robot-training-buddy/">My own robot training buddy.</a>
+  <p class="post-listing__preview">As an ultra runner, I am really into the mountains. As a software engineer, I’m really into data. So naturally, I’m interested in the intersection of both. I’ve particularly been &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2014/11/05/qcon-sf-2014/">Recap: QCon SF 2014</a>
+  <p class="post-listing__preview">Blurb sent me off to QCon SF 2014 for three days. Notes I took a series of notes each day in attendance: Day One: Architectures, Functional Day Two: Rx Systems, &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2014/11/01/conways-law-for-humans/">Conway's Law for humans</a>
+  <p class="post-listing__preview">If you’re familiar with Conway’s Law, it states: Any organization that designs a system (defined broadly) will produce a design whose structure is a copy of the organization’s communication structure. &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+  
+	<div class="cat-month">June</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2014/06/21/mocks-arent-stubs/">Mocks aren't stubs: mockist & classic testing</a>
+  <p class="post-listing__preview">With the famed “TDD is dead” debate around the Rails community largely coming to an end, I found myself referencing Martin Fowler’s article, Mocks Aren’t Stubs a good deal, trying &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2014/06/06/running-mocha-tests-with-es6-amd-modules/">Running Mocha tests with ES6/AMD modules</a>
+  <p class="post-listing__preview">In one of my personal projects (Chordmeister), I’ve been trying to upgrade the code to be written in ES6 modules and transpile down to AMD modules with Square’s very excellent &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+  
+	<div class="cat-month">April</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2014/04/26/implementing-ddd-chapter-2/">Implementing DDD: Domains, Subdomains and Bounded Contexts</a>
+  <p class="post-listing__preview">Chapter 2: Domains, Subdomains, and Bounded Contexts A Domain is what a business does and the surrounding context of how it does business. It is important to model out its &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+  
+	<div class="cat-month">March</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2014/03/08/six-months-as-a-manager/">Six months as a manager</a>
+  <p class="post-listing__preview">It’s been approximately six months since I’ve entered engineering management. Here are some thoughts reflecting back on that season now. I didn’t like it at first. Let’s face it: I &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+  
+	<div class="cat-month">February</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2014/02/02/blogging-through-implementing-domain-driven-design/">Blogging through: Implementing Domain-Driven Design</a>
+  <p class="post-listing__preview">In recent conversations with coworkers, the topic of Domain-Driven Design has arisen on more than a few occasions in design and architecture meetings. “Have you read it?” a coworker asked, &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+  
+	<div class="cat-month">January</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2014/01/26/moving-to-ember-app-kit/">Moving to Ember App Kit</a>
+  <p class="post-listing__preview">I’ve noticed a bit of the buzz around Ember App Kit recently and decided to move Hendrix, my music management app, over from a Yeoman-generated Ember app to EAK with &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+  
+	<div class="cat-year">2013</div>
+
+
+
+  
+	<div class="cat-month">December</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2013/12/27/ember-data-rails-cors-and-you/">Ember Data, Rails, CORS, and you!</a>
+  <p class="post-listing__preview">I’m starting up a new personal project involving Ember-Data and Rails (more to come). The gist of it is that it’s a pure frontend app engine built in Yeoman and &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+  
+	<div class="cat-year">2012</div>
+
+
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2012/12/26/decomposing-fat-models/">Decomposing Fat Models</a>
+  <p class="post-listing__preview">Heard an awesome Ruby Rogues podcast recently: “Decomposing Fat Models”. Essentially, they’re talking through Bryan Helmkamp’s Code Climate blog entry “7 ways to decompose fat ActiveRecord models”, which sums up &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+  
+	<div class="cat-month">October</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2012/10/04/deploying-janky-on-ubuntu/">Deploying Janky on Ubuntu</a>
+  <p class="post-listing__preview">Janky is a Github-developed Hubot + Jenkins control interface. It’s developed to be deployed on Heroku. However, what if you need it to live on an internal VM? Here’s how &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+  
+	<div class="cat-month">June</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2012/06/20/updating-max-file-limit-on-osx-lion/">Updating max file limit on OSX Lion</a>
+  <p class="post-listing__preview">I’ve been hitting a lot of “Maximum file limit exceeded” dialogs after a long day at work – at any point in time I’ve got a kajillion Chrome tabs open, &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+  
+	<div class="cat-month">April</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2012/04/27/speeding-up-rspeccucumber-feedback-times-without-sacrificing-coverage/">Speeding up Rspec/Cucumber feedback times without sacrificing coverage</a>
+  <p class="post-listing__preview">Rocket Fuelled Cucumbers View more presentations from Joseph Wilk One thing the Blurb devs have been discussing is how we can speed up our test feedback cycles without sacrificing coverage. &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2012/04/23/backup-backup-backup/">Backup, backup, backup</a>
+  <p class="post-listing__preview">Well, the inevitable happened: I finally experienced a hard drive failure. It’s pretty incredible that in the twenty-odd years I’ve been around computers I’ve never had the horror of losing &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2012/04/12/haml-object-references/">HAML object references</a>
+  <p class="post-listing__preview">Did you guys know that you can use the ‘[ ]’ brackets in HAML to automatically set the id and class on a tag, kind of like Rails’ tag helper? # file: &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+  
+	<div class="cat-month">March</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2012/03/23/rspec-order-agnostic-array-matching/">RSpec order-agnostic array matching</a>
+  <p class="post-listing__preview">What’s that? You want to write an expectation for an array but your method returns the Array in a nondeterministic ordering?
+
+Simple. Write:
+
+my_method.should =~ &lt;my_expectation&gt;
+
+
+See the source.
+</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+  
+	<div class="cat-month">January</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2012/01/20/ohm-gotchas/">Ohm gotchas</a>
+  <p class="post-listing__preview">Here’s a list of things that have been annoying, or at least a bit frustrating using Ohm, the Redis ORM, in a Rails app. Beware to those who assume Ohm is &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+  
+	<div class="cat-year">2011</div>
+
+
+
+  
+	<div class="cat-month">November</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2011/11/21/now-at-blurb/">Now at Blurb</a>
+  <p class="post-listing__preview">I should have mentioned this long ago, but I started work at Blurb in early August. It’s been a quick ramp-up and I’m loving it there, surrounded by smart engineers &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+  
+	<div class="cat-month">October</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2011/10/02/mmtss-a-collaborative-loop-station/">mmtss, a collaborative loop station</a>
+  <p class="post-listing__preview">mmtss is a loop station built for live performances. Let’s make music together! This project simplifies a traditional loop tracking station and is designed for interactive collaborative music performances. The &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+  
+	<div class="cat-month">August</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2011/08/10/introducing-boink-a-photobooth-for-the-rest-of-us/">Introducing Boink, a photobooth for the rest of us.</a>
+  <p class="post-listing__preview">My friends were complaining that wedding photobooths were too expensive to rent. Could we make one for them? Glen and I from the Porkbuns Initiative stepped up in full armor, &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+  
+	<div class="cat-month">July</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2011/07/01/chat-app-frontend-prototype/">Chat App - Frontend Prototype</a>
+  <p class="post-listing__preview">Some UI work I did for a stealth startup in early ‘11. Responsible for look &amp; feel and frontend chat interactions. jQuery/UI communicating to a CakePHP/nodejs backend. We developed this &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+  
+	<div class="cat-month">June</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2011/06/15/brute-labs-ux-project-studentsconnect/">BRUTE LABS UX project: StudentsConnect</a>
+  <p class="post-listing__preview">I’m on a team with BRUTE LABS, a volunteer-led design agency working on StudentsConnect, a prototype project making chatroulette-style interactions connecting students from the global North and South. Here’s a &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2011/06/04/code-for-oakland-barcamp/">Code For Oakland Barcamp</a>
+  <p class="post-listing__preview">[caption id=”” align=”alignnone” width=”500” caption=”Is that Jon Chan I see? Yes it is. Photo credit Oakland Local.”][/caption] A few notes from this one-day barcamp/hackfest. The goal was to create mobile &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+  
+	<div class="cat-month">March</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2011/03/22/un-declaration-of-human-rights-visualization/">UN Declaration of Human Rights (Visualization)</a>
+  <p class="post-listing__preview">This design was created from a Processing sketch that breaks up the preamble to the UN Declaration of Human Rights and connects adjacent words together with lines. More frequent word &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2011/03/14/slavery-today-infographic/">Slavery Today (Infographic)</a>
+  <p class="post-listing__preview">
+
+An infographic for Freedom Sunday at Regeneration. Download as PDF.
+</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+  
+	<div class="cat-month">February</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2011/02/23/save-our-souls-a-twitter-art-installation/">Save our souls - a Twitter art installation</a>
+  <p class="post-listing__preview">Here’s how the installation looked on the day of the art show. [caption id=”” align=”alignnone” width=”333” caption=”We mounted the installation on the inside of the Regeneration cafe. The Arduino lies &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2011/02/14/arduino-and-python-firmata/">Arduino and python-firmata</a>
+  <p class="post-listing__preview">I just spent five hours trying to figure out why  none of the Firmata libraries for Python were working over my serial connection. I was wondering why the previous program &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2011/02/12/currently-frustrated/">Currently: frustrated</a>
+  <p class="post-listing__preview">So I got the poster printed, and the LEDs currently show through the board pretty well. This is good: But last night I spent a good chunk of my evening &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2011/02/10/update/">Update</a>
+  <p class="post-listing__preview">A quick update on the art project: I switched from my normal LEDs to “straw hat” wide-angle LEDs. The viewing angle is much better, meaning also that I can get &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2011/02/01/the-making-of-sos-intro/">The making of SOS: Intro</a>
+  <p class="post-listing__preview">I’m starting a project for my church’s art show that integrates Twitter, print design and light. I’m titling it “Save Our Souls”. The theme of the art show is “Instead &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+  
+	<div class="cat-month">January</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2011/01/28/using-37signals-shorthand-for-ux-flows/">Using 37signals shorthand for UX flows</a>
+  <p class="post-listing__preview">http://37signals.com/svn/posts/1926-a-shorthand-for-designing-ui-flows
+
+I’ve found this technique useful for illustrating workflows quickly, particularly when brainstorming in teams.
+</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2011/01/28/appstoreconnect-ux/">AppStoreConnect UX</a>
+  <p class="post-listing__preview">
+
+A series of UX workflow designs I did for AppStoreConnect, an overseas Android multi-market submission application. Completed November 2010.
+</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+  
+	<div class="cat-year">2010</div>
+
+
+
+  
+	<div class="cat-month">December</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2010/12/01/aristo-the-shiniest-jquery-ui-theme-of-them-all/">Aristo, the shiniest jQuery UI theme of them all.</a>
+  <p class="post-listing__preview">Let’s face it: jQuery UI skins suck. They’re flat, they’re boring, they don’t pop. Enter Aristo, a jQuery UI port of the Cappuccino Javascript framework theme. Much better. Clone the &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+  
+	<div class="cat-month">August</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2010/08/03/on-selling-my-soul-and-switching-to-mac/">On selling my soul and switching to Mac</a>
+  <p class="post-listing__preview">A month ago I bought an ‘07 MacBook on Craigslist. No, it’s not one of those sexy aluminum hot rods, but it sure is pretty. I was full of mixed &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+  
+	<div class="cat-month">June</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2010/06/02/post-review-git-svn-and-review-board/">post-review, git-svn and Review Board</a>
+  <p class="post-listing__preview">Here’s how to set up the excellent VMware-developed open-source Review Board and its [post-review](http://www.reviewboard.org/docs/releasenotes/dev/rbtools/0.2/) command line review creation utility to work with git and git-svn on your computer. My assumption &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+  
+	<div class="cat-month">April</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2010/04/26/yui-widget-lazy-instantiation/">YUI 3 Widget lazy instantiation</a>
+  <p class="post-listing__preview">At work, we make good use of YUI 3. It’s a really well-thought-out framework, from sandboxing and deep namespaces to CSS3 selector support and lazy-loading modules through the Yahoo! CDN. &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2010/04/16/its-official-web-site-becomes-website/">It's official: "Web site" becomes "website"</a>
+  <p class="post-listing__preview">
+
+File this under “Nobody is going to care”, but I’ve always been instructed to write “Web site” in my technical communications class. I found it grating. Hooray for change!
+</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2010/04/04/i-lovehate-marmite/">I Love/Hate Marmite</a>
+  <p class="post-listing__preview">I had my first taste of Marmite last year while in Botswana. My South African roommate loved it, and encouraged me to try it and spread it on my toast. &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+  
+	<div class="cat-month">March</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2010/03/14/upgrading-wejoinin-to-unicorn/">Upgrading Wejoinin to unicorn</a>
+  <p class="post-listing__preview">(Reposted from the Wejoinin Blog) When you run a Web app like Wejoinin on minimal VPS resources (read: we’re too poor to get a beefy server), it forces you to &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2010/03/12/shiny-font-overhaul/">Shiny font overhaul!</a>
+  <p class="post-listing__preview">A couple of months ago I switched over to TypeKit, a cloud-hosted font service (buzzword! “cloud” gets me all warm and fuzzy). They basically take your font stack and enhance &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+  
+	<div class="cat-year">2009</div>
+
+
+
+  
+	<div class="cat-month">February</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2009/02/15/thoughts-on-rural-computing-in-botswana/">Thoughts on rural computing in Botswana</a>
+  <p class="post-listing__preview">I’m currently in Botswana, doing volunteer work at a nonprofit Christian agency called Love Botswana Outreach Mission. Among my responsibilities are helping out with the organization’s IT needs. I was &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+  
+	<div class="cat-year">2008</div>
+
+
+
+  
+	<div class="cat-month">November</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2008/11/05/setting-up-a-multi-ap-wireless-network/">Setting up a multi-AP wireless network</a>
+  <p class="post-listing__preview">A few weeks ago, I couldn’t seem to connect my laptop to the wireless AP in my apartment. Additionally, I’d be getting weak signals from all these weird corners in &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+  
+	<div class="cat-month">October</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2008/10/02/first-look-at-sproutcore-and-cappuccino/">First look at SproutCore and Cappuccino</a>
+  <p class="post-listing__preview">One trend on the Web these days is to move away from traditional full-stack frameworks (like Rails) toward client-side, full-stack Javascript frameworks (among them Dojo, GWT, SproutCore, and Cappuccino). There’s &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2008/10/01/gwt-vs-sproutcore-vs-cappuccino/">GWT vs. SproutCore vs. Cappuccino</a>
+  <p class="post-listing__preview">I’m looking to develop a Web application with a full-stack Javascript framework like GWT, SproutCore or Cappuccino. I’m making the decision to go with a Javascript framework over a traditional &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+  
+	<div class="cat-month">September</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2008/09/24/updated-portfolio-sort-of/">Updated portfolio... sort of.</a>
+  <p class="post-listing__preview">Since I’m in the process of doing some housekeeping around the blog, I’ve begun moving my old design portfolio over to Flickr. This is sort of an intermediary step to &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2008/09/16/a-laymans-guide-to-the-oai-ore-data-aggregation-protocol/">A layman's guide to the OAI-ORE data aggregation protocol</a>
+  <p class="post-listing__preview">In Spring 2008, I took an information architecture course in the UC Berkeley School of Information, taught by Erik Wilde (disclaimer: I dropped the course after a month because of &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2008/09/03/i-like-google-chrome/">I Like Google Chrome</a>
+  <p class="post-listing__preview">I have to admit, I am an unabashed fan of Google Chrome, the new Web browser on the block. Why? UI design that shows attention to detail and a really &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+  
+	<div class="cat-month">August</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2008/08/14/work-series-graphics-good-shepherd-christian-church/">Work Series Graphics - Good Shepherd Christian Church</a>
+  <p class="post-listing__preview">Part 2 of a summer series:
+
+
+
+
+
+
+</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+  
+	<div class="cat-month">July</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2008/07/01/wisdom-series-graphic-good-shepherd-christian-church/">Wisdom Series Graphic - Good Shepherd Christian Church</a>
+  <p class="post-listing__preview">I was commissioned to create graphics for a sermon series titled “Wisdom” at my home church, Good Shepherd. Some of the artists and leaders decided to go with a lantern &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+  
+	<div class="cat-month">April</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2008/04/26/sensations-negotiating-noise/">Sensations - Negotiating Noise</a>
+  <p class="post-listing__preview">I’m showing this and a few more design pieces at Exposed, Cal Christian Fellowship’s art and performance extravaganza tonight. You can visit it today, April 26–the gallery will be open &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2008/04/07/designing-the-thinkanywhere-logo/">Designing the ThinkAnywhere Logo</a>
+  <p class="post-listing__preview">In my IEOR190A class (entrepreneurship), we’re developing a business plan of a company making a device that tracks gestures on any surface. Install it on a whiteboard or a chalkboard &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+  
+	<div class="cat-month">March</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2008/03/29/tales-from-the-crypt/">Tales from the crypt</a>
+  <p class="post-listing__preview">Now I remember why I love and hate assembling computers. You’ve got to love the rush of building something cool. The anticipation of the new BIOS screen–blue letters on black &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2008/03/12/after-site-duplication-an-htaccess-redirect-for-old-wordpress-posts/">After site duplication, an .htaccess redirect for old Wordpress posts</a>
+  <p class="post-listing__preview">I think I must preface this post with a bit of context: A month ago I added a new blog (blog.andrewhao.com). I wanted that blog to become my personal blog &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+  
+	<div class="cat-month">February</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2008/02/24/quad-core-and-the-nerd/">Quad Core and the Nerd</a>
+  <p class="post-listing__preview">My apartmentmate Mike just upgraded his computer to an Intel Core 2 Quad-core processor. Once he got it up and running, he opened up Task Manager and summoned me over &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2008/02/18/todays-geek-hijinks/">Today's Geek Hijinks</a>
+  <p class="post-listing__preview">Morning: Woke up and attempted to mount a Samba file share under Ubuntu. My Gutsy server in the living room is getting a second life as a backup file server. &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2008/02/17/noam-chomsky-is-the-man/">Noam Chomsky is The Man</a>
+  <p class="post-listing__preview">Why? The man is a respected thinker, theorist and activist. I’ve had several Mass Communications classes devote a couple of sections to his thoughts about mass media and its effect &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2008/02/03/a-new-blog-is-coming/">A new blog is coming!</a>
+  <p class="post-listing__preview">I’m forking this blog in two: a design/development blog and a personal blog. I’ll be keeping blog.g9labs.com as my technical blog: if you stay with me here, you’ll find me &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+  
+	<div class="cat-month">January</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2008/01/27/wordpress-bughunt/">Wordpress Bughunt</a>
+  <p class="post-listing__preview">I spent a good four hours today digging through Wordpress code, trying to get our Cal Christian Fellowship Web site back up. The problem: the page seemed to freeze when &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+  
+	<div class="cat-year">2007</div>
+
+
+
+  
+	<div class="cat-month">December</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2007/12/11/im-ready-for-the-winter/">I'm ready for the winter.</a>
+  <p class="post-listing__preview">Okay, I confess. I’ve been daydreaming about winter break: Sleeping in. The laughter of friends. Taking a day trip with a camera to Monterey/Carmel (or anywhere awesome). Working (uninterrupted) on &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2007/12/05/feeling-awesome-today/">Feeling awesome today</a>
+  <p class="post-listing__preview">So for our CS188 (Artificial Intelligence) project, Capture-the-Flag Pac-Man, I’m responsible for writing a script that does some processing and analysis on a game board, simulating a Pac-Man agent (my &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2007/12/03/meeting-joe-hewitt/">Meeting Joe Hewitt</a>
+  <p class="post-listing__preview">I shook Joe Hewitt’s hand today (psst, he’s the guy who did tons of Mozilla stuff but most notably built Firebug). I stammered a lot. But that’s okay, because I &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+  
+	<div class="cat-month">November</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2007/11/15/more-scenes/">More scenes</a>
+  <p class="post-listing__preview">Disclaimer: about 95% of you won’t get this. The other 5% should consider getting a life. So we’re in CS lecture (this is with Prof. Papadmitrou), and one student in &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+  
+	<div class="cat-month">October</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2007/10/25/sensations-6/">Sensations</a>
+  <p class="post-listing__preview">
+</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2007/10/24/sensations-5/">Sensations</a>
+  <p class="post-listing__preview">
+</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2007/10/19/yahoo-university-hack-day/">Yahoo! University Hack Day</a>
+  <p class="post-listing__preview">So Hsiu-fan and I had floated the idea of doing a hack for Yahoo! University Hack Day. We had even polled some of our friends about it, and the consensus &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2007/10/17/crusher-website/">Crusher website</a>
+  <p class="post-listing__preview">What gives you more geek fuzzies than seeing an Evite competitor with an ASCII logo? Crusher website ~ Send invites for free Fun, simple, bare-bones, everything you need and nothing &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2007/10/11/oh-well-lessons-learned-the-hard-way/">Oh well! Lessons learned the hard way</a>
+  <p class="post-listing__preview">I restored a database by hand from the Rails production log and the console. We had forgotten to run a backup cronjob (and good thing we’re stealth! Otherwise folks would &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+  
+	<div class="cat-month">September</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2007/09/11/hello-awesome/">Hello, awesome</a>
+  <p class="post-listing__preview">
+
+Only a geek could take a picture of his computer… and be proud of it.
+</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+  
+	<div class="cat-month">August</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2007/08/31/sensations-4/">Sensations</a>
+  <p class="post-listing__preview">
+</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2007/08/10/thinking-about-writing-a-rhapsody-scrobbler/">Thinking about writing a Rhapsody Scrobbler</a>
+  <p class="post-listing__preview">Filed under “Fun Ideas That Could Take Three Hours or Three Months” I want to write a Rhapsody scrobbler. It’s already been done as a desktop application, but I don’t &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2007/08/01/a-web-site-for-word-geeks/">A Web Site for Word Geeks</a>
+  <p class="post-listing__preview">Have you ever compiled long lists of words you thought were awesome (don’t lie, I’ve met two or three of you)? Do you love words such as “phthisis” and “tantamount” &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+  
+	<div class="cat-month">April</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2007/04/29/taiwan-roundup-ii/">Taiwan Roundup II</a>
+  <p class="post-listing__preview">After weeks of being stuck in a really deep rut, I’ve finally stumbled upon something that’s decently interesting with regards to the state of the Taiwanese blogsophere (this is an &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2007/04/22/blog-habits-evolution/">Blog habits & evolution</a>
+  <p class="post-listing__preview">Way back when I started blogging soph year of high school (it’s been five+ years!), I pointed out that the public act of blogging helped me “get my thoughts straight” &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2007/04/15/sensations-3/">Sensations</a>
+  <p class="post-listing__preview">
+
+
+
+
+</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2007/04/04/mixtaped/">Mixtaped</a>
+  <p class="post-listing__preview">Found over at “Tiny Mix Tapes” – a mixtape suggestion/request service. Surprisingly poetic (well, most). Gives you a good glimpse into music uses &amp; gratifications. after you left i had &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+  
+	<div class="cat-month">March</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2007/03/30/sensations-2/">Sensations</a>
+  <p class="post-listing__preview">Do you remember? We were freckle-faced high schoolers tumbling over China, our obnoxious American mannerisms betraying our origins despite our butter skin. We had agreed to stay in shape during &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2007/03/28/verilogical/">Verilogical</a>
+  <p class="post-listing__preview">Oftentimes in Verilog code, we build testbenches (test fixtures). A common thing to do is to instantiate a module and plug in wires of the same names. Now a common &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2007/03/10/sensations/">Sensations</a>
+  <p class="post-listing__preview">
+</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+  
+	<div class="cat-month">February</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2007/02/27/liveblogging-from-the-stacks/">Liveblogging from: the Stacks</a>
+  <p class="post-listing__preview">I have friends who run a cost-benefit analysis on every decision. And they’re always measuring things up against Time. Freakin, Endless, Time. I think I’m one of them, too. May &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2007/02/25/taiwan-roundup/">Taiwan Roundup</a>
+  <p class="post-listing__preview">So I’m writing the first part of my International Media paper on the structures of the media systems in Taiwan. Just wanted to share with you what I’ve been coming &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2007/02/21/extreme-editing/">eXtreme Editing</a>
+  <p class="post-listing__preview">I realized today (with a grin) that I wasn’t editing my essay as much as I was refactoring it.
+
+</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2007/02/19/sensations-i/">Sensations I</a>
+  <p class="post-listing__preview">
+</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+  
+	<div class="cat-year">2006</div>
+
+
+
+  
+	<div class="cat-month">September</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2006/09/02/geek-brief/">GTD-izing my Thunderbird client, and other productivity things</a>
+  <p class="post-listing__preview">Do any fellow geeks out there follow any GettingThingsDone (GTD) practices? (I’m trying to get my life organizedï¿½a futile attempt before the sledgehammer of school and responsibilities drops. Organized as &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+  
+	<div class="cat-month">July</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2006/07/31/the-faqqly-tour/">The FAQQLY Tour</a>
+  <p class="post-listing__preview">Many of you have wondered what it’s like daily indulging in the opulence that are the FAQQLY offices. Allow me to take you on a tour. These are known as &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
 <!-- END OF index.html -->
 
 

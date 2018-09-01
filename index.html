@@ -52,7 +52,7 @@
 
 				<div class="navi">
 					<ul>
-						<li><a href="/blog/archives">Articles</a></li>
+						<li><a href="/">Articles</a></li>
 						<li><a href="/talks">Talks</a></li>
 						<li><a href="/notes">Conference Notes</a></li>
 						<li><a href="https://www.github.com/andrewhao">Github</a></li>
@@ -63,549 +63,1909 @@
 
 				<!-- START OF index.html -->
 
-	
-		
-		<!-- START OF _includes/article.html -->
-<article>
-	<header>
-		<h1><a href="/2018/08/27/tensorflow-for-tears-part-2/">Tensorflow for Tears: Part 2</a></h1>
-		<time>27 August 2018</time>
-	</header>
-		<div class="content">
-			<p>The <a href="/2018/03/21/tensorflow-for-tears-part-1/">last time we met</a>, we had a lively discussion about the ins and outs and joys and terrors of parenting. I talked about how I started building a Raspberry Pi project with a USB mic and wrote a simple parsing script that measured the mean amplitude of recordings of the current state of the nursery. And when that guy wailed, he really WAILED.</p>
 
-<p>Well that naive approach got us so far, but the system would still trip up due to random loud noises in the house. Music, or doors closing or opening, or loud conversation would all cause the system to think the kid was crying but no - it was just ambient noise.</p>
-
-<h3 id="getting-started-with-tensorflow">Getting started with TensorFlow</h3>
-
-<p>Let’s start our dive into machine learning!</p>
-
-<p>I had already gotten pretty far with <a href="https://www.udacity.com/course/intro-to-machine-learning--ud120">Udacity’s Machine Learning</a> course and had vague recollections of AI theory floating around from the cobwebs of undergrad CS courses past. So I had <em>some</em> background in AI and machine learning. But training neural networks was a completely new thing to me.</p>
-
-<p>Luckily, I came across the <a href="https://www.tensorflow.org/tutorials/sequences/audio_recognition">Simple Audio Recognition Tutorial</a> example right there on the TF homepage. This was exactly what I was looking for. The objective was: given a training set of audio clips of crying babies and “empty rooms”, classify an audio clip as one or the other.</p>
-
-<h3 id="first-getting-the-dataset">First: getting the dataset</h3>
-
-<p>I had oversimplified in my mind what made a great training data set. After all, I figured that I just had to record my kid crying a bunch, then get a few minutes of quiet room sounds, and then we were good, right?</p>
-
-<p>Wrong.</p>
-
-<p>Training data must be exactly matched. Sample rates must be consistent, and audio samples must either be highly randomized or at least normalized to the same rates. To wit, here’s how I gathered my sample data:</p>
-
-<ol>
-  <li>I set up the Raspberry Pi to continuously record 30-second samples at 22.05kHz through the onboard microphone.</li>
-  <li>When my son started a crying episode, I’d make note of the start time and end times, and then go back and gather those clips of the cries and dump them in the <code>crying</code> folder.</li>
-  <li>Once I had collected enough of those (maybe 30 minutes total), I then gathered a bunch of the “other” clips of quiet sleep in his nursery and threw these in the <code>silence</code> folder.</li>
-  <li>Once I had moved these samples off the Raspberry Pi and onto my laptop, I then sliced these recordings into 5-second clips using <code>sox</code>. I also applied a few amplification filters to overcome the weak pickup on the mic.</li>
-</ol>
-
-<p><code>$ sox FILENAME FILENAME_OUTPUT trim 0 5 vol 45 dB rate 22050</code></p>
-
-<p>I then placed each of these trained samples in the folders corresponding to their label: <code>crying</code> and <code>silence</code>.</p>
-
-<h3 id="second-training-the-network">Second: training the network</h3>
-
-<p>I modified the <code>train.py</code> script nearly verbatim from TF docs. We’ll dissect it here, beginning with the command to begin training:</p>
-
-<figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-</pre></td><td class="code"><pre><code class="bash"><span class="line"><span class="nv">$ </span>python app/train.py --data_url<span class="o">=</span> --data_dir<span class="o">=</span>./data --wanted_words<span class="o">=</span>silence,crying --sample_rate<span class="o">=</span><span class="m">22050</span> --clip_duration_ms<span class="o">=</span><span class="m">5000</span> --how_many_training_steps<span class="o">=</span>1000,200 --learning_rate<span class="o">=</span>0.001,0.0001 --train_dir<span class="o">=</span>./training
-</span></code></pre></td></tr></table></div></figure>
-
-<ul>
-  <li><code>--wanted_words=silence,crying</code>: This specifies which labels should be considered for training purposes.</li>
-  <li><code>--sample_rate</code>: The sample rate of the audio files provided</li>
-  <li><code>--clip_duration_ms</code>: Duration of each training clip in milliseconds</li>
-  <li><code>--how_many_training_steps</code>: This is a comma-separated list of n numbers that specify the number of steps per phase.</li>
-  <li><code>--learning_rate</code>: This is the rate at which the system can adjust its current learnings to match its new inputs. A higher learning rate means the faster the system can change to learn new inputs. A lower number ensures the stability of a system’s learning. We specify a higher training rate for the first phase and lower the training rate in the latter phase as our precision increases.</li>
-</ul>
-
-<p>Let’s run the script!</p>
-
-<figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-<span class="line-number">9</span>
-</pre></td><td class="code"><pre><code class="bash"><span class="line"><span class="nv">$ </span>python app/train.py --data_url<span class="o">=</span> --data_dir<span class="o">=</span>./data --wanted_words<span class="o">=</span>silence,crying --sample_rate<span class="o">=</span><span class="m">22050</span> --clip_duration_ms<span class="o">=</span><span class="m">5000</span> --how_many_training_steps<span class="o">=</span>1000,200 --train_dir<span class="o">=</span>./training
-</span><span class="line">2018-08-27 22:15:33.195894: I tensorflow/core/platform/cpu_feature_guard.cc:140<span class="o">]</span> Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
-</span><span class="line">Tensor<span class="o">(</span><span class="s2">&quot;Placeholder:0&quot;</span>, <span class="nv">shape</span><span class="o">=()</span>, <span class="nv">dtype</span><span class="o">=</span>string<span class="o">)</span>
-</span><span class="line">INFO:tensorflow:Training from step: 1
-</span><span class="line">INFO:tensorflow:Step <span class="c">#1: rate 0.001000, accuracy 26.0%, cross entropy 2.674081</span>
-</span><span class="line">INFO:tensorflow:Step <span class="c">#2: rate 0.001000, accuracy 23.0%, cross entropy 1.593786</span>
-</span><span class="line">INFO:tensorflow:Step <span class="c">#3: rate 0.001000, accuracy 64.0%, cross entropy 1.067298</span>
-</span><span class="line">INFO:tensorflow:Step <span class="c">#4: rate 0.001000, accuracy 73.0%, cross entropy 0.843605</span>
-</span><span class="line">...
-</span></code></pre></td></tr></table></div></figure>
-
-<h3 id="third-parsing-the-results">Third: parsing the results</h3>
-
-<p>The output in each step reveals the current state of the neural network as trained. <em>Accuracy</em> reflects the correctness of the model as the validation set is tested against the network (during each step of training, samples in the validation set are run against the model and checked if they line up with their specified labels).</p>
-
-<p><a href="https://www.tensorflow.org/api_docs/python/tf/losses/softmax_cross_entropy"><em>Cross entropy</em></a> is, as I understand it, the <a href="https://deepnotes.io/softmax-crossentropy">squared error factor</a> in the result network from the actual results (lower is better).</p>
-
-<p>This would proceed for several hours for 1200 total steps. On a 2013-era Macbook Pro, this took approximately 6 hours. I had 350 clips of crying and 500 clips of silence. (Too much or not enough? This tired parent says “too much”.)</p>
-
-<p>One more thing - every few hundred steps during training, we would get this sort of output:</p>
-
-<figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-</pre></td><td class="code"><pre><code class="bash"><span class="line">INFO:tensorflow:Confusion Matrix:
-</span><span class="line"> <span class="o">[[</span> <span class="m">9</span>  <span class="m">0</span>  <span class="m">0</span>  0<span class="o">]</span>
-</span><span class="line"> <span class="o">[</span> <span class="m">0</span>  <span class="m">0</span>  <span class="m">0</span>  0<span class="o">]</span>
-</span><span class="line"> <span class="o">[</span> <span class="m">0</span>  <span class="m">0</span> <span class="m">55</span>  0<span class="o">]</span>
-</span><span class="line"> <span class="o">[</span> <span class="m">0</span>  <span class="m">0</span>  <span class="m">1</span> 30<span class="o">]]</span>
-</span></code></pre></td></tr></table></div></figure>
-
-<p>What’s a <a href="https://www.tensorflow.org/api_docs/python/tf/confusion_matrix">confusion matrix</a>? It’s, according to <a href="https://www.dataschool.io/simple-guide-to-confusion-matrix-terminology/">this helpful article</a>, another way to visualize the accuracy of a machine learning model.</p>
-
-<p>Here’s how to read this confusion matrix. Given the following labels:</p>
-
-<figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-</pre></td><td class="code"><pre><code class="bash"><span class="line"><span class="c"># conv_labels.txt</span>
-</span><span class="line">_silence_
-</span><span class="line">_unknown_
-</span><span class="line">silence
-</span><span class="line">crying
-</span></code></pre></td></tr></table></div></figure>
-
-<p><em>(Where did these come from? More on that later…)</em></p>
-
-<p>Imagine these labels go left-to-right, and top-to-bottom. The x-axis represents the labels that have been predicted (i.e. that have been verified) to be a certain label. So the first column represents the percentages of samples that have been predicted to be <code>_silence_</code>.</p>
-
-<p>The labels that go top-to-bottom are the actual results from the trained model. So in this case, if we take the top-left number <code>9</code>, that means that in 9 runs of the model where the prediction was <code>_silence_</code>, the actual result was <code>_silence_</code>. Moving one cell down, that represents the # of samples where the predicted result was <code>_silence_</code>, but the actual result was <code>_unknown_</code>. Fortunately for our model, there are <code>0</code> results in this cell. So on and so forth. So the ideal confusion matrix is a matrix that has a “diagonal line” running from top-left to bottom-right, and <code>0</code>s everywhere else, because all predictions would equal actuals.</p>
-
-<p>tl;dr: Confusion matrices are a way to visualize and report the accuracy of a machine learning model. You want a clear and convincing diagonal line in the matrix.</p>
-
-<p>Oh, and here are the results from the training data. I’m using <code>tensorboard</code> to visualize the training steps:</p>
-
-<p><img src="/images/tensorflow-for-tears/tensorboard-accuracy.png" alt="Accuracy data" /><br />
-<em>Accuracy modeling. Note how quickly the model jumps to be fairly accurate.</em></p>
-
-<p><img src="/images/tensorflow-for-tears/tensorboard-cross-entropy.png" alt="Cross entropy data" /><br />
-<em>Note how quickly cross entropy dives.</em></p>
-
-<p>We can use these graphs to tune our models if we really cared. In this case, I say it’s good enough (accuracy is up to 99% by the end).</p>
-
-<h3 id="fourth-saving-and-exporting-the-model">Fourth: Saving and exporting the model</h3>
-
-<p>OK, but enough already. We have a trained model and, like <a href="https://en.wikipedia.org/wiki/Chekhov%27s_gun">Chekhov’s Gun</a>, that means we’ve gotta use it!</p>
-
-<p>Where’s that model? Oh, it needs a few more steps before it can emerge. At this point, TensorFlow has developed a neural network, but the neuron graph (is that the right term?) is not yet in a usable state to be used by applications. To that point, we need to dump the model into a binary format that can be used by TensorFlow applications in the future.</p>
-
-<p>Once again, I claim no smarts in all this, but instead point to the TensorFlow script to do this in <code>app/freeze.py</code>:</p>
-
-<pre><code>$ python app/freeze.py --start_checkpoint=./training/conv.ckpt-1200 --output_file=./graph.pb --clip_duration_ms=5000 --sample_rate=22050 --wanted_words=silence,crying --data_dir=./data
-</code></pre>
-
-<p>What did we specify here?</p>
-
-<p>We said we wanted the model at <code>--start_checkpoint</code> of 1200, saving the <code>--output_file</code> to <code>graph.pb</code>, and mentioning that the sample rate of each audio sample should be <code>22050 hz</code> and <code>5</code> seconds long. We then specified that the labels we wanted to classify are <code>silence</code> and <code>crying</code>. Finally, the data set from the prior run can be found in <code>./data</code> dir.</p>
-
-<p>When we run this script, we get a <code>graph.pb</code> protobuf binary file that we can then ship to various TensorFlow programs.</p>
-
-<h3 id="fifth-using-the-model">Fifth: Using the model</h3>
-
-<p>Now here’s the fun part!</p>
-
-<p>Onboard a Raspberry Pi, we are now going to play back current samples in the nursery:</p>
-
-<p>Every 1 minute (with cron), we record audio samples from the system mic in the baby’s nursery. We then massage, crop and downsample it into a WAV file. We then point a script at this WAV file and run the TF graph on it. Running the graph will return a list of labels and their probabilities. We choose the first label with the highest probability, and ship it off to a timeseries API, in this case powered by Keen.io.</p>
-
-<p>Voila:</p>
-
-<p><img src="/images/tensorflow-for-tears/miserymeter.png" alt="I present: the Misery Meter" /><br />
-<em>A fun graph displaying the timeseries data for this little dude’s episodes. On the top was the original RMS volume graph, and the bottom is the result of the trained TF model. Note how much easier to read and understand the latter graph is.</em></p>
-
-<h4 id="show-me-the-code">Show me the code!</h4>
-
-<p>Much of this code has been adapted from <a href="https://www.tensorflow.org/tutorials/sequences/audio_recognition">Google’s TensorFlow Audio Recognition tutorial</a>.</p>
-
-<p>My scripts have been collected on this GitHub repository: <a href="https://github.com/andrewhao/babblefish">https://github.com/andrewhao/babblefish</a></p>
-
-<p>And my repository with audio sampling and archiving: <a href="https://github.com/andrewhao/miserymeter">https://github.com/andrewhao/miserymeter</a></p>
-
-<h2 id="conclusion">Conclusion</h2>
-
-<p>Wow, that was a quick dive through TensorFlow. Note that I didn’t get too deep into the theory of convolutional neural networks, which may be a topic of discussion for another time. Instead, we talked a little bit about the mechanics of building and training a TF model with audio data and a finite set of classes. It was fairly straightforward to get this script then loaded up on a Raspberry Pi and have a dashboard that could finally quantify the pain and suffering of baby… and parent.</p>
-
-<h3 id="epilogue">Epilogue</h3>
-
-<p>The months that went into developing this app were fully and knowingly an escape from the very real stressors of parent life. I want to acknowledge the love, the grit and the patience of my wife in this very trying time. There is so much more to say about babies other than their crying and fussing - life these days is filled with laughter and giggles and joy, too - but these are words that I’ll save for another blog entry on a different blog for another time.</p>
-
-			
-			
-		</div>
-	<footer>
-		
-
-
-		
 
 
 
   
-		
-			Tagged under
-		
-    <a class='category' href='/category/machine-learning/'>machine learning</a>, <a class='category' href='/category/parenthood/'>parenthood</a>, <a class='category' href='/category/tensorflow/'>tensorflow</a>
-	
-
-
-	
-	
-	</footer>
-	
-</article>
-<!-- END OF _includes/article.html -->
-
-	
-		
-		<!-- START OF _includes/article.html -->
-<article>
-	<header>
-		<h1><a href="/2018/03/21/tensorflow-for-tears-part-1/">TensorFlow For Tears: Part 1</a></h1>
-		<time>21 March 2018</time>
-	</header>
-		<div class="content">
-			<h3 id="an-introduction-to-every-parents-trial-and-travails">An introduction to every parent’s trial and travails</h3>
-
-<p>When our son was born early last year, I admit I wasn’t ready for it. Fatherhood was not the kind of thing I was ready for (and who really can ever be ready for parenthood, anyways?).</p>
-
-<p>It so turns out that the vast majority of the first year of parenting is simply enduring the gut-wrenching cries of your little one. And cry they do - crying when they are too tired, screaming when they are too energetic, crying when they are gassy, screaming when they are bored, and crying when they just pooped.</p>
-
-<p>The trials that Annie and I went through with our little guy was particularly difficult on us (you can ask me in person if we ever get to chat). The little guy was a prolific screamer and absolutely. hated. sleep.</p>
-
-<p>What’s a geeky dad to do? Quantify household suffering by leveraging machine learning, of course.</p>
-
-<p>I set out to build a system that would in the end determine how well our little guy slept through (or didn’t sleep through) the night. I started by building a system that naively parsed audio samples from his nursery, and then trained a TensorFlow model to do more accurate detection of his cries. Here’s how it worked:</p>
-
-<h3 id="act-1-the-misery-meter">Act 1: The Misery Meter</h3>
-
-<p>In version 1 of the system, I bought <a href="https://www.amazon.com/Kinobo-Microphone-Desktop-Recognition-Software/dp/B00IR8R7WQ">a cheap USB microphone</a> and hooked it up to a Raspberry Pi 3.</p>
-
-<p>In it, I loaded up a script to record a 30-second audio sample, using the <code>arecord</code> UNIX command line tool:</p>
-
-<figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-<span class="line-number">9</span>
-</pre></td><td class="code"><pre><code class="bash"><span class="line"><span class="c">#!/usr/bin/env bash</span>
-</span><span class="line">
-</span><span class="line"><span class="nb">set</span> -euxo pipefail
-</span><span class="line">
-</span><span class="line"><span class="nv">DIR</span><span class="o">=</span><span class="s2">&quot;$( cd &quot;</span><span class="k">$(</span> dirname <span class="s2">&quot;${BASH_SOURCE[0]}&quot;</span> <span class="k">)</span><span class="s2">&quot; &amp;&amp; pwd )&quot;</span>
-</span><span class="line"><span class="nv">RECORDING_FILE</span><span class="o">=</span><span class="s2">&quot;${DIR}/recordings/sample.wav&quot;</span>
-</span><span class="line"><span class="nv">DATE</span><span class="o">=</span><span class="k">$(</span>date <span class="s2">&quot;+%Y-%m-%d %H:%M:%S&quot;</span><span class="k">)</span>
-</span><span class="line"><span class="nv">UPLOAD_RECORDING_FILENAME</span><span class="o">=</span><span class="k">$(</span><span class="nb">printf</span> %q <span class="s2">&quot;${DATE}.wav&quot;</span><span class="k">)</span>
-</span><span class="line">arecord --device<span class="o">=</span>hw:1,0 --format S16_LE --rate <span class="m">48000</span> -c1 -d <span class="m">30</span> --quiet <span class="s2">&quot;${RECORDING_FILE}&quot;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-<p>…then I ran the <code>sox</code> command-line tool to grab some simple loudness statistics out from it:</p>
-
-<figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-</pre></td><td class="code"><pre><code class="bash"><span class="line">sox -V3 <span class="k">${</span><span class="nv">RECORDING_FILE</span><span class="k">}</span> -n stats 2&gt;<span class="p">&amp;</span><span class="m">1</span> <span class="p">|</span> grep dB
-</span></code></pre></td></tr></table></div></figure>
-
-<p>In case you’re curious, here’s the full output from <code>sox -V3 FILE -n stats</code>. Pretty nifty:</p>
-
-<figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-<span class="line-number">9</span>
-<span class="line-number">10</span>
-<span class="line-number">11</span>
-<span class="line-number">12</span>
-<span class="line-number">13</span>
-<span class="line-number">14</span>
-<span class="line-number">15</span>
-<span class="line-number">16</span>
-<span class="line-number">17</span>
-<span class="line-number">18</span>
-<span class="line-number">19</span>
-<span class="line-number">20</span>
-<span class="line-number">21</span>
-</pre></td><td class="code"><pre><code class="bash"><span class="line">➜ sox -V3 sample.wav -n stats
-</span><span class="line"><span class="c"># ... Truncated for brevity ...</span>
-</span><span class="line">
-</span><span class="line">sox INFO sox: effects chain: input        48000Hz  <span class="m">1</span> channels
-</span><span class="line">sox INFO sox: effects chain: stats        48000Hz  <span class="m">1</span> channels
-</span><span class="line">sox INFO sox: effects chain: output       48000Hz  <span class="m">1</span> channels
-</span><span class="line">DC offset   0.000017
-</span><span class="line">Min level  -0.141083
-</span><span class="line">Max level   0.135651
-</span><span class="line">Pk lev dB     -17.01
-</span><span class="line">RMS lev dB    -29.32
-</span><span class="line">RMS Pk dB     -27.37
-</span><span class="line">RMS Tr dB     -30.83
-</span><span class="line">Crest factor    4.12
-</span><span class="line">Flat factor     0.00
-</span><span class="line">Pk count           2
-</span><span class="line">Bit-depth      14/16
-</span><span class="line">Num samples     480k
-</span><span class="line">Length s      10.000
-</span><span class="line">Scale max   1.000000
-</span><span class="line">Window s       0.050
-</span></code></pre></td></tr></table></div></figure>
-
-<p>Here, we’re really only interested in <code>RMS dB</code>, which is the relative loudness levels within this 30-second sample. I chose to push these three stats up to a web service which I use to aggregate and graph these metrics. <code>RMS lev</code> is the average, <code>RMS Pk</code> is the peak, and <code>RMS Tr</code> is the trough (the floor).</p>
-
-<p>I’m not showing the entirety of the script, but the last thing it does is parse and push the results of the analysis of this audio sample to a Web-based metrics aggregation service! In case you were wondering, I have an API service sitting between the Raspberry Pi and a time-series API supplied by <a href="https://www.keen.io">Keen.io</a>. But the main point is that now I can load up a cute JS widget that graphs these data points!</p>
-
-<p><img src="/images/tensorflow-for-tears/audio-graph.png" alt="Audio crying graph" /></p>
-
-<p>Now, how does one read this graph?</p>
-
-<ul>
-  <li>We can follow the peaks of the audio signal and assume that any noise over a certain dB threshold is the little dude’s screaming.</li>
-  <li>We can follow the troughs of the graph and assume that if the trough jumps, then man there is some serious crying going on, since the audio floor of the soundscape has been bumped up!</li>
-  <li>Or we can follow the average RMS reading and assume some combination of the two?</li>
-</ul>
-
-<p>The truth of the matter, none of the readings from the Misery Meter (so I called it) were particularly reliable indicators of “the little buddy is crying his little head off”. Sometimes, his crying was at the same volume level as other ambient noises in the house (say, when he’s playing in the other room and someone shuts a door). So it turns out that using volume as a proxy for crying is insufficient to give us reliable results.</p>
-
-<h3 id="act-2-enter-tensorflow-next">Act 2: Enter TensorFlow… next!</h3>
-
-<p>In my next post, I’ll discuss how I modified this script to use TensorFlow to train a model that could then be used to enhance the accuracy of little dude’s crying. Stick around, it’ll be fun!</p>
-
-<p><a href="/2018/08/27/tensorflow-for-tears-part-2/">Read on for the next post!</a></p>
-
-			
-			
-		</div>
-	<footer>
-		
-
-
-		
+	<div class="cat-year">2018</div>
 
 
 
   
-		
-			Tagged under
-		
-    <a class='category' href='/category/audio-processing/'>audio processing</a>, <a class='category' href='/category/machine-learning/'>machine learning</a>, <a class='category' href='/category/parenting/'>parenting</a>, <a class='category' href='/category/tensorflow/'>tensorflow</a>
-	
+	<div class="cat-month">August</div>
 
 
-	
-	
-	</footer>
-	
-</article>
-<!-- END OF _includes/article.html -->
+<!-- BEGIN _includes/archive_post.html -->
 
-	
-		
-		<!-- START OF _includes/article.html -->
-<article>
-	<header>
-		<h1><a href="/2018/03/13/elixir-and-elm-things-ive-written-elsewhere/">Elixir and Elm things I've written about elsewhere</a></h1>
-		<time>13 March 2018</time>
-	</header>
-		<div class="content">
-			<p>While it’s been pretty quiet around these parts, I’ve kept the technical blogging up over on <a href="https://blog.carbonfive.com">my employer’s blog</a>. I’ve got quite a few posts around Elixir:</p>
-
-<p><a href="https://blog.carbonfive.com/2018/03/19/lightweight-dependency-injection-in-elixir-without-the-tears/">Lightweight dependency injection in Elixir (without the tears)</a>: What are some ways we can use the language features of Elixir to apply small-scale dependency injection patterns, without a ton of ceremony?</p>
-
-<p><a href="https://blog.carbonfive.com/2018/01/16/functional-mocks-with-mox-in-elixir/">Functional Mocks with Mox in Elixir</a>: This post discusses a mocking library in Elixir called <a href="https://github.com/plataformatec/mox">mox</a> that adheres to the Elixir Way(tm) of mocking (that is, the usage of fakes or doubles).</p>
-
-<p><a href="https://blog.carbonfive.com/2018/01/30/comparing-dynamic-supervision-strategies-in-elixir-1-5-and-1-6/">Comparing Dynamic Supervision Strategies in Elixir 1.5 and 1.6</a>: In this blog post, I discuss the benefits of the new <code>DynamicSupervisor</code> module in Elixir 1.6 and how it makes the supervision of a dynamically-scaled supervision tree easier to set up.</p>
-
-<p>Finally, I wrote <a href="https://blog.carbonfive.com/2017/10/25/taking-elm-for-a-test-drive/">“Taking Elm for a Test Drive”</a> about playing around with Elm, giving my take on the trajectory of the language.</p>
-
-			
-			
-		</div>
-	<footer>
-		
-
-
-		
-
-
-
-  
-		
-			Tagged under
-		
-    <a class='category' href='/category/development/'>development</a>, <a class='category' href='/category/elixir/'>elixir</a>, <a class='category' href='/category/elm/'>elm</a>
-	
-
-
-	
-	
-	</footer>
-	
-</article>
-<!-- END OF _includes/article.html -->
-
-	
-		
-		<!-- START OF _includes/article.html -->
-<article>
-	<header>
-		<h1><a href="/2017/09/28/wejoinin-at-ten/">Wejoinin at Ten</a></h1>
-		<time>28 September 2017</time>
-	</header>
-		<div class="content">
-			<p>I posted an article on Medium titled <a href="https://medium.com/wejoinin/wejoinin-at-ten-34efeaff6e03">“Wejoinin at Ten”</a> describing our experience developing Wejoinin over the past ten years as a long-running passion project - and talk about the directions we hope to be taking it in the next ten.</p>
-
-<p>Give it a read and let me know what you think!</p>
-
-			
-			
-		</div>
-	<footer>
-		
-
-
-		
-
-
-
-  
-		
-			Tagged under
-		
-    <a class='category' href='/category/wejoinin/'>wejoinin</a>
-	
-
-
-	
-	
-	</footer>
-	
-</article>
-<!-- END OF _includes/article.html -->
-
-	
-		
-		<!-- START OF _includes/article.html -->
-<article>
-	<header>
-		<h1><a href="/2017/07/19/pitfalls-to-avoid-when-moving-to-async-systems/">Pitfalls to avoid when moving to async systems</a></h1>
-		<time>19 July 2017</time>
-	</header>
-		<div class="content">
-			<p>I recently published a post on the <a href="http://blog.carbonfive.com">Carbon Five blog</a> titled <a href="http://blog.carbonfive.com/2017/07/18/evented-rails-decoupling-complex-domains-in-rails-with-domain-events/">“Evented Rails: Decoupling complex domains in Rails with Domain Events”</a> that takes some of my thoughts about moving a Rails app to use Domain Events - leveraging the power of Sidekiq (or your job runner of choice) to send async messages between different domains of your app.</p>
-
-<p>This approach always seems nice from the outset, but can hide some painful complexities if you go too far down the rabbit hole. Here is a repost of the latter half of that article, which is worth repeating:</p>
-
-<h2 id="big-wins-of-the-async-model-speed--scalability">Big win[s of the async model]: speed &amp; scalability</h2>
-
-<p>By splitting out domain logic into cohesive units, we’ve just designed our systems to farm out their workloads to a greater scalable number of workers. Imagine if you had a web request thread that would take 500ms to return, but 150ms of that time was spent doing a round trip to a different service. By decoupling that work from the main request thread and moving it to a background job – we’ve just sped up the responsiveness of our system for our end user, and we know that studies have shown that page speed performance equals money.</p>
-
-<p>Additionally, making our application calls asynchronous allows us to scale the number of processing power we allocate to our system. We now have the ability to horizontally scale workers according to the type of job, or the domain they are working from. This may result in cost and efficiency savings as we match processing power to the workload at hand.</p>
-
-<h2 id="big-challenge-dealing-with-asynchronous-data-flows">Big challenge: dealing with asynchronous data flows</h2>
-
-<p>Once things go async, we now have a fundamentally different data design. For example, say you implemented an HTTP API endpoint that performed some action in the system synchronously. However, now you’ve farmed out the effects of the action to background processes through domain events. While this is great for response times, you’ve now no longer got the guarantees to the caller that the desired side effect has been performed once the server responds back.</p>
-
-<h3 id="asynchronous-polling">Asynchronous polling</h3>
-
-<p>An option is to implement the Polling pattern. The API can return a request identifier back to the caller on first call, with which which the caller can now query the API for the result status. If the result is not ready, the API service will return with a Nack message, or negative Ack, implying that the result data has not arrived yet. As soon as the results in the HTTP API are ready, the API will correctly return the result.</p>
-
-<h3 id="pubsub-all-the-way-down">Pub/Sub all the way down</h3>
-
-<p>Another option is to embrace the asynchronous nature of the system wholly and transition the APIs to event-driven, message-based systems instead. In this paradigm, we would introduce an external message broker such as RabbitMQ to facilitate messages within our systems. Instead of providing an HTTP endpoint to perform an action, the API service could subscribe to a domain event from the calling system, perform its side effect, then fire off its own domain event, to which the calling system would subscribe to. The advantage of this approach is that this scheme makes more efficient use of the network (reducing chattiness), but we trade off the advantages of using HTTP (the ubiquity of the protocol, performance enhancements like layered caching).</p>
-
-<p>Browser-based clients can also get in on the asynchronous fun with the use of WebSockets to subscribe to server events. Instead of having a browser call an HTTP API, the browser could simply fire a WebSocket event, to which the service would asynchronously process (potentially also proxying the message downstream to other APIs with messages) and then responding via a WebSocket message when the data is done processing.</p>
-
-<h2 id="big-challenge-data-consistency">Big challenge: data consistency</h2>
-
-<p>When we choose an asynchronous evented approach, we now have to consider how to model asynchronous transactions. Imagine that one domain process charges a user’s credit card with a third party payment processor and another domain process is responsible for updating it in your database. There are now two processes updating two data stores. A central tenet in distributed systems design is to anticipate and expect failure. Let’s imagine any of the following scenarios happens:</p>
-
-<ol>
-  <li>An Amazon AWS partial outage takes down one of your services but not the other.</li>
-  <li>One of your services becomes backed up due to high traffic, and no longer can service new requests in a timely manner.</li>
-  <li>A new deployment has introduced a data bug in a downstream API that your teams are rushing to fix, but will requiring manual reconciling with the data in the upstream system.</li>
-</ol>
-
-<p>How will you build your domain and data models to account for failures in each processing step? What would happen if you have one operation occur in one domain that depends on data that has not yet appeared in another part of the system? Can you design your data models (and database schema) to support independent updates without any dependencies? How will you handle the case when one domain action fails and the other completes?</p>
-
-<h3 id="first-approach-avoid-it-by-choosing-noncritical-paths-to-decouple-first">First approach: avoid it by choosing noncritical paths to decouple, first</h3>
-
-<p>If you are implementing an asynchronous, evented paradigm for the first time, I suggest you carefully begin decoupling boundaries with domain events only for events that lie outside the critical business domain path. Begin with some noncritical aspect of the system — for example, you may have a third party analytics tracking service that you must publish certain business events to. That would be a nice candidate to decouple from the main request process and move to an async path.</p>
-
-<h3 id="second-approach-enforce-transactional-consistency-within-the-same-processdomain-boundary">Second approach: enforce transactional consistency within the same process/domain boundary</h3>
-
-<p>Although we won’t discuss specifics in this article, if you must enforce transactional consistency in some part of your system (say, the charging of a credit card with the crediting of money to a user’s account) then I suggest that you perform those operations within the same bounded context and same process, leaning on transactional consistency guarantees provided by your database layer.</p>
-
-<h3 id="third-approach-embrace-it-with-eventual-consistency">Third approach: embrace it with eventual consistency</h3>
-
-<p>Alternatively, you may be able to lean on “eventual consistency” semantics with your data. Maybe it’s less important that your data squares away with itself immediately — maybe it’s more important that the data, at some guaranteed point in time — eventually lines up. It may be OK for some aspect of your data (e.g. notifications in a news feed) and may not be appropriate for other data (e.g. a bank account balance).</p>
-
-<p>You may need to fortify your system to ensure that data eventually becomes consistent. This may involve building out the following pieces of infrastructure.</p>
-
-<ol>
-  <li>Messages need to be durable — make sure your job enqueuing system does not drop messages, or at least has a failure mode to re-process them when (not if!) your system fails.</li>
-  <li>Your jobs should be designed to be idempotent, so they can be retried multiple times and result in the correct outcome.</li>
-  <li>You should easily be able to recover from bad data scenarios. Should a service go down, it should be able to replay messages, logs, or the consumer should have a queue of retry-able messages it can send.</li>
-  <li>Eventual consistency means that you may need an external process to verify consistency. You may be doing this sort of verification process in a data warehouse, or in a different software system that has a full view of all the data in your distributed system. Be sure that this sort of verification is able to reveal to you holes in the data, and provide actionable insights so you can fix them.</li>
-  <li>You will need to add monitoring and logging to measure the failure modes of the system. When errors spike, or messages fail to send (events fail to fire), you need to be alerted. Once alerted, your logging must be good enough to be able to trace the source and the data that each request is firing.</li>
-</ol>
-
-<p>The scale of this subject is large and is under active research in the field of computer science. A good book to pick up that discusses this topic is <a href="https://www.amazon.com/Service-Oriented-Design-Rails-Addison-Wesley-Professional/dp/0321659368">Service-Oriented Design with Ruby on Rails</a>. The popular <a href="http://www.enterpriseintegrationpatterns.com/">Enterprise Integration Patterns</a> book also has a great topic on consistency (and is accompanied by a very helpful <a href="http://www.enterpriseintegrationpatterns.com/patterns/conversation/EnsuringConsistencyIntro.html">online guide</a> as well).</p>
-
-			
-			
-		</div>
-	<footer>
-		
-
-
-		
-
-
-
-  
-		
-			Tagged under
-		
-    <a class='category' href='/category/ddd/'>ddd</a>, <a class='category' href='/category/microservices/'>microservices</a>, <a class='category' href='/category/rails/'>rails</a>
-	
-
-
-	
-	
-	</footer>
-	
-</article>
-<!-- END OF _includes/article.html -->
-
-	
-	
-<div class="pagination">
-	
-		<a class="older" href="/posts/2">Older</a>
-	
-	
-	<span class="total">1 of 21</span>
-	
-	
+<div class="post-listing">
+  <a class="title-listing" href="/2018/08/27/tensorflow-for-tears-part-2/">Tensorflow for Tears: Part 2</a>
+  <p class="post-listing__preview">The last time we met, we had a lively discussion about the ins and outs and joys and terrors of parenting. I talked about how I started building a Raspberry &hellip;</p>
 </div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+  
+	<div class="cat-month">March</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2018/03/21/tensorflow-for-tears-part-1/">TensorFlow For Tears: Part 1</a>
+  <p class="post-listing__preview">An introduction to every parent’s trial and travails When our son was born early last year, I admit I wasn’t ready for it. Fatherhood was not the kind of thing &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2018/03/13/elixir-and-elm-things-ive-written-elsewhere/">Elixir and Elm things I've written about elsewhere</a>
+  <p class="post-listing__preview">While it’s been pretty quiet around these parts, I’ve kept the technical blogging up over on my employer’s blog. I’ve got quite a few posts around Elixir: Lightweight dependency injection &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+  
+	<div class="cat-year">2017</div>
+
+
+
+  
+	<div class="cat-month">September</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2017/09/28/wejoinin-at-ten/">Wejoinin at Ten</a>
+  <p class="post-listing__preview">I posted an article on Medium titled “Wejoinin at Ten” describing our experience developing Wejoinin over the past ten years as a long-running passion project - and talk about the &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+  
+	<div class="cat-month">July</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2017/07/19/pitfalls-to-avoid-when-moving-to-async-systems/">Pitfalls to avoid when moving to async systems</a>
+  <p class="post-listing__preview">I recently published a post on the Carbon Five blog titled “Evented Rails: Decoupling complex domains in Rails with Domain Events” that takes some of my thoughts about moving a &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+  
+	<div class="cat-year">2016</div>
+
+
+
+  
+	<div class="cat-month">October</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2016/10/14/jhipster-and-spring-boot-for-rails-developers/">JHipster &amp; Spring Boot for Rails developers</a>
+  <p class="post-listing__preview">The first question you may be asking is - why would I want to go from Rails to Java? Maybe you don’t have a choice. Maybe you started a new &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+  
+	<div class="cat-month">June</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2016/06/24/migrating-to-phoenix-with-rails-session-sharing/">Rails, meet Phoenix: Migrating to Phoenix with Rails session sharing</a>
+  <p class="post-listing__preview">You’ve resolved to build your company’s Next Big Thing in Phoenix and Elixir. That’s great! You’re facing a problem though - all user authentication and access concerns are performed on &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2016/06/23/rails-pub-slash-sub-with-wisper-and-sidekiq/">Evented Rails: Decoupling domains in Rails with Wisper pub/sub events</a>
+  <p class="post-listing__preview">One common pattern in Domain-Driven Design is the use of publish/subscribe messaging to communicate between domains. When Domain Events are created from within a domain, other domains are able to &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+  
+	<div class="cat-month">April</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2016/04/18/the-joy-of-naming-with-the-powers-of-domain-driven-design/">Domain-Driven Design & The Joy of Naming</a>
+  <p class="post-listing__preview">I want to discuss a topic near and dear to my heart, and what I believe is at the crux of effective software design. It’s not a new functional language, &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2016/04/08/knex-dot-js-and-bookshelf-dot-js-cheat-sheet/">Knex.js and PostGIS cheat sheet</a>
+  <p class="post-listing__preview">As follows are some code snippets for using Knex.js for executing Postgres and PostGIS queries. Execute raw SQL in migration I often find this useful for fancy SQL, like creating &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+  
+	<div class="cat-month">March</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2016/03/21/lossless-rate-limiting-with-rxjs/">Lossless rate limiting with RxJS</a>
+  <p class="post-listing__preview">Much of RxJS involves working with backpressure - how to reconcile streams that emit/process data at different rates, without overloading the system. Much of that model is built with lossy &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+  
+	<div class="cat-month">February</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2016/02/17/partitioning-rxjs-streams-adventures-in-nested-observables-with-groupby-and-flatmap/">Partitioning RxJS streams: adventures in nested Observables with groupBy() and flatMap()</a>
+  <p class="post-listing__preview">One of the confusing aspects about working with streams is diving into Rx operators that take a stream and fan out into multiple streams. Is your head exploding yet? The &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+  
+	<div class="cat-year">2015</div>
+
+
+
+  
+	<div class="cat-month">September</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2015/09/27/strange-loop-2015-reflections/">Strange Loop 2015: Notes & Reflections</a>
+  <p class="post-listing__preview">Going to Strange Loop was a huge check off my conference bucket list (lanyard?). I’d always heard about this slightly-weird, highly academic collision between academia and industry, skewing toward programming &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+  
+	<div class="cat-month">June</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2015/06/29/notes-on-performance-tuning-a-puma-server/">Notes on performance tuning a Puma server</a>
+  <p class="post-listing__preview">A couple of months ago, I was tuning a Rails app for one of our clients. This client wanted to know how performant their app would be under load. To &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2015/06/01/toolbox-learning-swift-and-viper/">Toolbox: learning Swift and VIPER</a>
+  <p class="post-listing__preview">The following are some notes I’m compiling as I’m beginning a journey down the rabbit hole, writing an app in Swift utilizing the VIPER app development methodology I had trouble &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+  
+	<div class="cat-month">April</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2015/04/30/building-gpx-stats-through-frp-principles-on-bacon-dot-js/">Building GPX stats through FRP principles with Bacon.js</a>
+  <p class="post-listing__preview">With my current fascination with tracking workouts and location-based-activities, I have been interested in how I might be able to rewrite some of my stats logic with FRP principles. What &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+  
+	<div class="cat-month">March</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2015/03/19/docker-rails-and-docker-compose-in-your-development-workflow/">Docker, Rails, and Docker Compose in your development workflow</a>
+  <p class="post-listing__preview">(This post originally appeared on the Carbon Five blog.) We’ve been trialing the usage of Docker and Docker Compose (previously known as fig) on a Rails project here at Carbon &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+  
+	<div class="cat-year">2014</div>
+
+
+
+  
+	<div class="cat-month">November</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2014/11/29/explorations-in-logic-programming/">Explorations in logic programming</a>
+  <p class="post-listing__preview">Out of Storybook, a side project I’ve been doing for a friend, I had the opportunity to model the problem domain as a constraint satisfaction problem (CSP). It goes: A &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2014/11/15/my-own-robot-training-buddy/">My own robot training buddy.</a>
+  <p class="post-listing__preview">As an ultra runner, I am really into the mountains. As a software engineer, I’m really into data. So naturally, I’m interested in the intersection of both. I’ve particularly been &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2014/11/05/qcon-sf-2014/">Recap: QCon SF 2014</a>
+  <p class="post-listing__preview">Blurb sent me off to QCon SF 2014 for three days. Notes I took a series of notes each day in attendance: Day One: Architectures, Functional Day Two: Rx Systems, &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2014/11/01/conways-law-for-humans/">Conway's Law for humans</a>
+  <p class="post-listing__preview">If you’re familiar with Conway’s Law, it states: Any organization that designs a system (defined broadly) will produce a design whose structure is a copy of the organization’s communication structure. &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+  
+	<div class="cat-month">June</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2014/06/21/mocks-arent-stubs/">Mocks aren't stubs: mockist & classic testing</a>
+  <p class="post-listing__preview">With the famed “TDD is dead” debate around the Rails community largely coming to an end, I found myself referencing Martin Fowler’s article, Mocks Aren’t Stubs a good deal, trying &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2014/06/06/running-mocha-tests-with-es6-amd-modules/">Running Mocha tests with ES6/AMD modules</a>
+  <p class="post-listing__preview">In one of my personal projects (Chordmeister), I’ve been trying to upgrade the code to be written in ES6 modules and transpile down to AMD modules with Square’s very excellent &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+  
+	<div class="cat-month">April</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2014/04/26/implementing-ddd-chapter-2/">Implementing DDD: Domains, Subdomains and Bounded Contexts</a>
+  <p class="post-listing__preview">Chapter 2: Domains, Subdomains, and Bounded Contexts A Domain is what a business does and the surrounding context of how it does business. It is important to model out its &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+  
+	<div class="cat-month">March</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2014/03/08/six-months-as-a-manager/">Six months as a manager</a>
+  <p class="post-listing__preview">It’s been approximately six months since I’ve entered engineering management. Here are some thoughts reflecting back on that season now. I didn’t like it at first. Let’s face it: I &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+  
+	<div class="cat-month">February</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2014/02/02/blogging-through-implementing-domain-driven-design/">Blogging through: Implementing Domain-Driven Design</a>
+  <p class="post-listing__preview">In recent conversations with coworkers, the topic of Domain-Driven Design has arisen on more than a few occasions in design and architecture meetings. “Have you read it?” a coworker asked, &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+  
+	<div class="cat-month">January</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2014/01/26/moving-to-ember-app-kit/">Moving to Ember App Kit</a>
+  <p class="post-listing__preview">I’ve noticed a bit of the buzz around Ember App Kit recently and decided to move Hendrix, my music management app, over from a Yeoman-generated Ember app to EAK with &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+  
+	<div class="cat-year">2013</div>
+
+
+
+  
+	<div class="cat-month">December</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2013/12/27/ember-data-rails-cors-and-you/">Ember Data, Rails, CORS, and you!</a>
+  <p class="post-listing__preview">I’m starting up a new personal project involving Ember-Data and Rails (more to come). The gist of it is that it’s a pure frontend app engine built in Yeoman and &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+  
+	<div class="cat-year">2012</div>
+
+
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2012/12/26/decomposing-fat-models/">Decomposing Fat Models</a>
+  <p class="post-listing__preview">Heard an awesome Ruby Rogues podcast recently: “Decomposing Fat Models”. Essentially, they’re talking through Bryan Helmkamp’s Code Climate blog entry “7 ways to decompose fat ActiveRecord models”, which sums up &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+  
+	<div class="cat-month">October</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2012/10/04/deploying-janky-on-ubuntu/">Deploying Janky on Ubuntu</a>
+  <p class="post-listing__preview">Janky is a Github-developed Hubot + Jenkins control interface. It’s developed to be deployed on Heroku. However, what if you need it to live on an internal VM? Here’s how &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+  
+	<div class="cat-month">June</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2012/06/20/updating-max-file-limit-on-osx-lion/">Updating max file limit on OSX Lion</a>
+  <p class="post-listing__preview">I’ve been hitting a lot of “Maximum file limit exceeded” dialogs after a long day at work – at any point in time I’ve got a kajillion Chrome tabs open, &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+  
+	<div class="cat-month">April</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2012/04/27/speeding-up-rspeccucumber-feedback-times-without-sacrificing-coverage/">Speeding up Rspec/Cucumber feedback times without sacrificing coverage</a>
+  <p class="post-listing__preview">Rocket Fuelled Cucumbers View more presentations from Joseph Wilk One thing the Blurb devs have been discussing is how we can speed up our test feedback cycles without sacrificing coverage. &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2012/04/23/backup-backup-backup/">Backup, backup, backup</a>
+  <p class="post-listing__preview">Well, the inevitable happened: I finally experienced a hard drive failure. It’s pretty incredible that in the twenty-odd years I’ve been around computers I’ve never had the horror of losing &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2012/04/12/haml-object-references/">HAML object references</a>
+  <p class="post-listing__preview">Did you guys know that you can use the ‘[ ]’ brackets in HAML to automatically set the id and class on a tag, kind of like Rails’ tag helper? # file: &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+  
+	<div class="cat-month">March</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2012/03/23/rspec-order-agnostic-array-matching/">RSpec order-agnostic array matching</a>
+  <p class="post-listing__preview">What’s that? You want to write an expectation for an array but your method returns the Array in a nondeterministic ordering?
+
+Simple. Write:
+
+my_method.should =~ &lt;my_expectation&gt;
+
+
+See the source.
+</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+  
+	<div class="cat-month">January</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2012/01/20/ohm-gotchas/">Ohm gotchas</a>
+  <p class="post-listing__preview">Here’s a list of things that have been annoying, or at least a bit frustrating using Ohm, the Redis ORM, in a Rails app. Beware to those who assume Ohm is &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+  
+	<div class="cat-year">2011</div>
+
+
+
+  
+	<div class="cat-month">November</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2011/11/21/now-at-blurb/">Now at Blurb</a>
+  <p class="post-listing__preview">I should have mentioned this long ago, but I started work at Blurb in early August. It’s been a quick ramp-up and I’m loving it there, surrounded by smart engineers &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+  
+	<div class="cat-month">October</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2011/10/02/mmtss-a-collaborative-loop-station/">mmtss, a collaborative loop station</a>
+  <p class="post-listing__preview">mmtss is a loop station built for live performances. Let’s make music together! This project simplifies a traditional loop tracking station and is designed for interactive collaborative music performances. The &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+  
+	<div class="cat-month">August</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2011/08/10/introducing-boink-a-photobooth-for-the-rest-of-us/">Introducing Boink, a photobooth for the rest of us.</a>
+  <p class="post-listing__preview">My friends were complaining that wedding photobooths were too expensive to rent. Could we make one for them? Glen and I from the Porkbuns Initiative stepped up in full armor, &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+  
+	<div class="cat-month">July</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2011/07/01/chat-app-frontend-prototype/">Chat App - Frontend Prototype</a>
+  <p class="post-listing__preview">Some UI work I did for a stealth startup in early ‘11. Responsible for look &amp; feel and frontend chat interactions. jQuery/UI communicating to a CakePHP/nodejs backend. We developed this &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+  
+	<div class="cat-month">June</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2011/06/15/brute-labs-ux-project-studentsconnect/">BRUTE LABS UX project: StudentsConnect</a>
+  <p class="post-listing__preview">I’m on a team with BRUTE LABS, a volunteer-led design agency working on StudentsConnect, a prototype project making chatroulette-style interactions connecting students from the global North and South. Here’s a &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2011/06/04/code-for-oakland-barcamp/">Code For Oakland Barcamp</a>
+  <p class="post-listing__preview">[caption id=”” align=”alignnone” width=”500” caption=”Is that Jon Chan I see? Yes it is. Photo credit Oakland Local.”][/caption] A few notes from this one-day barcamp/hackfest. The goal was to create mobile &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+  
+	<div class="cat-month">March</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2011/03/22/un-declaration-of-human-rights-visualization/">UN Declaration of Human Rights (Visualization)</a>
+  <p class="post-listing__preview">This design was created from a Processing sketch that breaks up the preamble to the UN Declaration of Human Rights and connects adjacent words together with lines. More frequent word &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2011/03/14/slavery-today-infographic/">Slavery Today (Infographic)</a>
+  <p class="post-listing__preview">
+
+An infographic for Freedom Sunday at Regeneration. Download as PDF.
+</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+  
+	<div class="cat-month">February</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2011/02/23/save-our-souls-a-twitter-art-installation/">Save our souls - a Twitter art installation</a>
+  <p class="post-listing__preview">Here’s how the installation looked on the day of the art show. [caption id=”” align=”alignnone” width=”333” caption=”We mounted the installation on the inside of the Regeneration cafe. The Arduino lies &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2011/02/14/arduino-and-python-firmata/">Arduino and python-firmata</a>
+  <p class="post-listing__preview">I just spent five hours trying to figure out why  none of the Firmata libraries for Python were working over my serial connection. I was wondering why the previous program &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2011/02/12/currently-frustrated/">Currently: frustrated</a>
+  <p class="post-listing__preview">So I got the poster printed, and the LEDs currently show through the board pretty well. This is good: But last night I spent a good chunk of my evening &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2011/02/10/update/">Update</a>
+  <p class="post-listing__preview">A quick update on the art project: I switched from my normal LEDs to “straw hat” wide-angle LEDs. The viewing angle is much better, meaning also that I can get &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2011/02/01/the-making-of-sos-intro/">The making of SOS: Intro</a>
+  <p class="post-listing__preview">I’m starting a project for my church’s art show that integrates Twitter, print design and light. I’m titling it “Save Our Souls”. The theme of the art show is “Instead &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+  
+	<div class="cat-month">January</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2011/01/28/using-37signals-shorthand-for-ux-flows/">Using 37signals shorthand for UX flows</a>
+  <p class="post-listing__preview">http://37signals.com/svn/posts/1926-a-shorthand-for-designing-ui-flows
+
+I’ve found this technique useful for illustrating workflows quickly, particularly when brainstorming in teams.
+</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2011/01/28/appstoreconnect-ux/">AppStoreConnect UX</a>
+  <p class="post-listing__preview">
+
+A series of UX workflow designs I did for AppStoreConnect, an overseas Android multi-market submission application. Completed November 2010.
+</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+  
+	<div class="cat-year">2010</div>
+
+
+
+  
+	<div class="cat-month">December</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2010/12/01/aristo-the-shiniest-jquery-ui-theme-of-them-all/">Aristo, the shiniest jQuery UI theme of them all.</a>
+  <p class="post-listing__preview">Let’s face it: jQuery UI skins suck. They’re flat, they’re boring, they don’t pop. Enter Aristo, a jQuery UI port of the Cappuccino Javascript framework theme. Much better. Clone the &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+  
+	<div class="cat-month">August</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2010/08/03/on-selling-my-soul-and-switching-to-mac/">On selling my soul and switching to Mac</a>
+  <p class="post-listing__preview">A month ago I bought an ‘07 MacBook on Craigslist. No, it’s not one of those sexy aluminum hot rods, but it sure is pretty. I was full of mixed &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+  
+	<div class="cat-month">June</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2010/06/02/post-review-git-svn-and-review-board/">post-review, git-svn and Review Board</a>
+  <p class="post-listing__preview">Here’s how to set up the excellent VMware-developed open-source Review Board and its [post-review](http://www.reviewboard.org/docs/releasenotes/dev/rbtools/0.2/) command line review creation utility to work with git and git-svn on your computer. My assumption &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+  
+	<div class="cat-month">April</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2010/04/26/yui-widget-lazy-instantiation/">YUI 3 Widget lazy instantiation</a>
+  <p class="post-listing__preview">At work, we make good use of YUI 3. It’s a really well-thought-out framework, from sandboxing and deep namespaces to CSS3 selector support and lazy-loading modules through the Yahoo! CDN. &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2010/04/16/its-official-web-site-becomes-website/">It's official: "Web site" becomes "website"</a>
+  <p class="post-listing__preview">
+
+File this under “Nobody is going to care”, but I’ve always been instructed to write “Web site” in my technical communications class. I found it grating. Hooray for change!
+</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2010/04/04/i-lovehate-marmite/">I Love/Hate Marmite</a>
+  <p class="post-listing__preview">I had my first taste of Marmite last year while in Botswana. My South African roommate loved it, and encouraged me to try it and spread it on my toast. &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+  
+	<div class="cat-month">March</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2010/03/14/upgrading-wejoinin-to-unicorn/">Upgrading Wejoinin to unicorn</a>
+  <p class="post-listing__preview">(Reposted from the Wejoinin Blog) When you run a Web app like Wejoinin on minimal VPS resources (read: we’re too poor to get a beefy server), it forces you to &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2010/03/12/shiny-font-overhaul/">Shiny font overhaul!</a>
+  <p class="post-listing__preview">A couple of months ago I switched over to TypeKit, a cloud-hosted font service (buzzword! “cloud” gets me all warm and fuzzy). They basically take your font stack and enhance &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+  
+	<div class="cat-year">2009</div>
+
+
+
+  
+	<div class="cat-month">February</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2009/02/15/thoughts-on-rural-computing-in-botswana/">Thoughts on rural computing in Botswana</a>
+  <p class="post-listing__preview">I’m currently in Botswana, doing volunteer work at a nonprofit Christian agency called Love Botswana Outreach Mission. Among my responsibilities are helping out with the organization’s IT needs. I was &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+  
+	<div class="cat-year">2008</div>
+
+
+
+  
+	<div class="cat-month">November</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2008/11/05/setting-up-a-multi-ap-wireless-network/">Setting up a multi-AP wireless network</a>
+  <p class="post-listing__preview">A few weeks ago, I couldn’t seem to connect my laptop to the wireless AP in my apartment. Additionally, I’d be getting weak signals from all these weird corners in &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+  
+	<div class="cat-month">October</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2008/10/02/first-look-at-sproutcore-and-cappuccino/">First look at SproutCore and Cappuccino</a>
+  <p class="post-listing__preview">One trend on the Web these days is to move away from traditional full-stack frameworks (like Rails) toward client-side, full-stack Javascript frameworks (among them Dojo, GWT, SproutCore, and Cappuccino). There’s &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2008/10/01/gwt-vs-sproutcore-vs-cappuccino/">GWT vs. SproutCore vs. Cappuccino</a>
+  <p class="post-listing__preview">I’m looking to develop a Web application with a full-stack Javascript framework like GWT, SproutCore or Cappuccino. I’m making the decision to go with a Javascript framework over a traditional &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+  
+	<div class="cat-month">September</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2008/09/24/updated-portfolio-sort-of/">Updated portfolio... sort of.</a>
+  <p class="post-listing__preview">Since I’m in the process of doing some housekeeping around the blog, I’ve begun moving my old design portfolio over to Flickr. This is sort of an intermediary step to &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2008/09/16/a-laymans-guide-to-the-oai-ore-data-aggregation-protocol/">A layman's guide to the OAI-ORE data aggregation protocol</a>
+  <p class="post-listing__preview">In Spring 2008, I took an information architecture course in the UC Berkeley School of Information, taught by Erik Wilde (disclaimer: I dropped the course after a month because of &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2008/09/03/i-like-google-chrome/">I Like Google Chrome</a>
+  <p class="post-listing__preview">I have to admit, I am an unabashed fan of Google Chrome, the new Web browser on the block. Why? UI design that shows attention to detail and a really &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+  
+	<div class="cat-month">August</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2008/08/14/work-series-graphics-good-shepherd-christian-church/">Work Series Graphics - Good Shepherd Christian Church</a>
+  <p class="post-listing__preview">Part 2 of a summer series:
+
+
+
+
+
+
+</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+  
+	<div class="cat-month">July</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2008/07/01/wisdom-series-graphic-good-shepherd-christian-church/">Wisdom Series Graphic - Good Shepherd Christian Church</a>
+  <p class="post-listing__preview">I was commissioned to create graphics for a sermon series titled “Wisdom” at my home church, Good Shepherd. Some of the artists and leaders decided to go with a lantern &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+  
+	<div class="cat-month">April</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2008/04/26/sensations-negotiating-noise/">Sensations - Negotiating Noise</a>
+  <p class="post-listing__preview">I’m showing this and a few more design pieces at Exposed, Cal Christian Fellowship’s art and performance extravaganza tonight. You can visit it today, April 26–the gallery will be open &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2008/04/07/designing-the-thinkanywhere-logo/">Designing the ThinkAnywhere Logo</a>
+  <p class="post-listing__preview">In my IEOR190A class (entrepreneurship), we’re developing a business plan of a company making a device that tracks gestures on any surface. Install it on a whiteboard or a chalkboard &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+  
+	<div class="cat-month">March</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2008/03/29/tales-from-the-crypt/">Tales from the crypt</a>
+  <p class="post-listing__preview">Now I remember why I love and hate assembling computers. You’ve got to love the rush of building something cool. The anticipation of the new BIOS screen–blue letters on black &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2008/03/12/after-site-duplication-an-htaccess-redirect-for-old-wordpress-posts/">After site duplication, an .htaccess redirect for old Wordpress posts</a>
+  <p class="post-listing__preview">I think I must preface this post with a bit of context: A month ago I added a new blog (blog.andrewhao.com). I wanted that blog to become my personal blog &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+  
+	<div class="cat-month">February</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2008/02/24/quad-core-and-the-nerd/">Quad Core and the Nerd</a>
+  <p class="post-listing__preview">My apartmentmate Mike just upgraded his computer to an Intel Core 2 Quad-core processor. Once he got it up and running, he opened up Task Manager and summoned me over &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2008/02/18/todays-geek-hijinks/">Today's Geek Hijinks</a>
+  <p class="post-listing__preview">Morning: Woke up and attempted to mount a Samba file share under Ubuntu. My Gutsy server in the living room is getting a second life as a backup file server. &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2008/02/17/noam-chomsky-is-the-man/">Noam Chomsky is The Man</a>
+  <p class="post-listing__preview">Why? The man is a respected thinker, theorist and activist. I’ve had several Mass Communications classes devote a couple of sections to his thoughts about mass media and its effect &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2008/02/03/a-new-blog-is-coming/">A new blog is coming!</a>
+  <p class="post-listing__preview">I’m forking this blog in two: a design/development blog and a personal blog. I’ll be keeping blog.g9labs.com as my technical blog: if you stay with me here, you’ll find me &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+  
+	<div class="cat-month">January</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2008/01/27/wordpress-bughunt/">Wordpress Bughunt</a>
+  <p class="post-listing__preview">I spent a good four hours today digging through Wordpress code, trying to get our Cal Christian Fellowship Web site back up. The problem: the page seemed to freeze when &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+  
+	<div class="cat-year">2007</div>
+
+
+
+  
+	<div class="cat-month">December</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2007/12/11/im-ready-for-the-winter/">I'm ready for the winter.</a>
+  <p class="post-listing__preview">Okay, I confess. I’ve been daydreaming about winter break: Sleeping in. The laughter of friends. Taking a day trip with a camera to Monterey/Carmel (or anywhere awesome). Working (uninterrupted) on &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2007/12/05/feeling-awesome-today/">Feeling awesome today</a>
+  <p class="post-listing__preview">So for our CS188 (Artificial Intelligence) project, Capture-the-Flag Pac-Man, I’m responsible for writing a script that does some processing and analysis on a game board, simulating a Pac-Man agent (my &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2007/12/03/meeting-joe-hewitt/">Meeting Joe Hewitt</a>
+  <p class="post-listing__preview">I shook Joe Hewitt’s hand today (psst, he’s the guy who did tons of Mozilla stuff but most notably built Firebug). I stammered a lot. But that’s okay, because I &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+  
+	<div class="cat-month">November</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2007/11/15/more-scenes/">More scenes</a>
+  <p class="post-listing__preview">Disclaimer: about 95% of you won’t get this. The other 5% should consider getting a life. So we’re in CS lecture (this is with Prof. Papadmitrou), and one student in &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+  
+	<div class="cat-month">October</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2007/10/25/sensations-6/">Sensations</a>
+  <p class="post-listing__preview">
+</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2007/10/24/sensations-5/">Sensations</a>
+  <p class="post-listing__preview">
+</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2007/10/19/yahoo-university-hack-day/">Yahoo! University Hack Day</a>
+  <p class="post-listing__preview">So Hsiu-fan and I had floated the idea of doing a hack for Yahoo! University Hack Day. We had even polled some of our friends about it, and the consensus &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2007/10/17/crusher-website/">Crusher website</a>
+  <p class="post-listing__preview">What gives you more geek fuzzies than seeing an Evite competitor with an ASCII logo? Crusher website ~ Send invites for free Fun, simple, bare-bones, everything you need and nothing &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2007/10/11/oh-well-lessons-learned-the-hard-way/">Oh well! Lessons learned the hard way</a>
+  <p class="post-listing__preview">I restored a database by hand from the Rails production log and the console. We had forgotten to run a backup cronjob (and good thing we’re stealth! Otherwise folks would &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+  
+	<div class="cat-month">September</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2007/09/11/hello-awesome/">Hello, awesome</a>
+  <p class="post-listing__preview">
+
+Only a geek could take a picture of his computer… and be proud of it.
+</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+  
+	<div class="cat-month">August</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2007/08/31/sensations-4/">Sensations</a>
+  <p class="post-listing__preview">
+</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2007/08/10/thinking-about-writing-a-rhapsody-scrobbler/">Thinking about writing a Rhapsody Scrobbler</a>
+  <p class="post-listing__preview">Filed under “Fun Ideas That Could Take Three Hours or Three Months” I want to write a Rhapsody scrobbler. It’s already been done as a desktop application, but I don’t &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2007/08/01/a-web-site-for-word-geeks/">A Web Site for Word Geeks</a>
+  <p class="post-listing__preview">Have you ever compiled long lists of words you thought were awesome (don’t lie, I’ve met two or three of you)? Do you love words such as “phthisis” and “tantamount” &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+  
+	<div class="cat-month">April</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2007/04/29/taiwan-roundup-ii/">Taiwan Roundup II</a>
+  <p class="post-listing__preview">After weeks of being stuck in a really deep rut, I’ve finally stumbled upon something that’s decently interesting with regards to the state of the Taiwanese blogsophere (this is an &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2007/04/22/blog-habits-evolution/">Blog habits & evolution</a>
+  <p class="post-listing__preview">Way back when I started blogging soph year of high school (it’s been five+ years!), I pointed out that the public act of blogging helped me “get my thoughts straight” &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2007/04/15/sensations-3/">Sensations</a>
+  <p class="post-listing__preview">
+
+
+
+
+</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2007/04/04/mixtaped/">Mixtaped</a>
+  <p class="post-listing__preview">Found over at “Tiny Mix Tapes” – a mixtape suggestion/request service. Surprisingly poetic (well, most). Gives you a good glimpse into music uses &amp; gratifications. after you left i had &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+  
+	<div class="cat-month">March</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2007/03/30/sensations-2/">Sensations</a>
+  <p class="post-listing__preview">Do you remember? We were freckle-faced high schoolers tumbling over China, our obnoxious American mannerisms betraying our origins despite our butter skin. We had agreed to stay in shape during &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2007/03/28/verilogical/">Verilogical</a>
+  <p class="post-listing__preview">Oftentimes in Verilog code, we build testbenches (test fixtures). A common thing to do is to instantiate a module and plug in wires of the same names. Now a common &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2007/03/10/sensations/">Sensations</a>
+  <p class="post-listing__preview">
+</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+  
+	<div class="cat-month">February</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2007/02/27/liveblogging-from-the-stacks/">Liveblogging from: the Stacks</a>
+  <p class="post-listing__preview">I have friends who run a cost-benefit analysis on every decision. And they’re always measuring things up against Time. Freakin, Endless, Time. I think I’m one of them, too. May &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2007/02/25/taiwan-roundup/">Taiwan Roundup</a>
+  <p class="post-listing__preview">So I’m writing the first part of my International Media paper on the structures of the media systems in Taiwan. Just wanted to share with you what I’ve been coming &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2007/02/21/extreme-editing/">eXtreme Editing</a>
+  <p class="post-listing__preview">I realized today (with a grin) that I wasn’t editing my essay as much as I was refactoring it.
+
+</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2007/02/19/sensations-i/">Sensations I</a>
+  <p class="post-listing__preview">
+</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+  
+	<div class="cat-year">2006</div>
+
+
+
+  
+	<div class="cat-month">September</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2006/09/02/geek-brief/">GTD-izing my Thunderbird client, and other productivity things</a>
+  <p class="post-listing__preview">Do any fellow geeks out there follow any GettingThingsDone (GTD) practices? (I’m trying to get my life organizedï¿½a futile attempt before the sledgehammer of school and responsibilities drops. Organized as &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
+
+
+
+
+
+
+  
+	<div class="cat-month">July</div>
+
+
+<!-- BEGIN _includes/archive_post.html -->
+
+<div class="post-listing">
+  <a class="title-listing" href="/2006/07/31/the-faqqly-tour/">The FAQQLY Tour</a>
+  <p class="post-listing__preview">Many of you have wondered what it’s like daily indulging in the opulence that are the FAQQLY offices. Allow me to take you on a tour. These are known as &hellip;</p>
+</div>
+<!-- END _includes/archive_post.html -->
+
+
 <!-- END OF index.html -->
 
 
