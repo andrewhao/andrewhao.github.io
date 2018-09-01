@@ -9,6 +9,28 @@ footer: true
 
 <h2 class="intro">The following are talks that I've given or presented at various events, meetups or conferences:</h2>
 
+### Fog City Ruby: The Slow-Cooked Side Project
+
+This was a fun talk about my experience building [Wejoinin](https://www.wejoinin.com) as a side project. Lots of pointers, especially for junior engineers and people looking to get started in the field.
+
+<script async class="speakerdeck-embed" data-id="a3ee821a8a0d45a19ebc1021a543a5d3" data-ratio="1.77469670710572" src="//speakerdeck.com/assets/embed.js"></script>
+
+### Elixir Daze 2018: Building Beautiful Systems with Phoenix Contexts and DDD
+
+A slightly tweaked version of my Empex talk. Discussing how Phoenix's Context modules have their design roots in DDD, and giving examples for how one can use DDD principles to design flexible systems!
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/l3VgbSgo71E" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+
+Slides:
+
+<script async class="speakerdeck-embed" data-id="dd435df81cf349b09f2eafd20bd061f6" data-ratio="1.77469670710572" src="//speakerdeck.com/assets/embed.js"></script>
+
+### Empex LA 2018: Building Beautiful Systems with Phoenix
+
+Taking the lessons learned from applying DDD bounded context design patterns in Rails, but applying it to Elixir's Phoenix framework.
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/oJghZB9sSuU" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+
 ### Railsconf 2017: Built to last: A domain-driven approach to beautiful systems
 
 In which I discuss the application of DDD techniques to break up a Rails monolith.
