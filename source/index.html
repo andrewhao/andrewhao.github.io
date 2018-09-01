@@ -3,21 +3,20 @@ layout: default
 ---
 
 <!-- START OF index.html -->
-{% assign index = true %}
-	{% for page in paginator.posts %}
-		{% assign content = page.content %}
-		{% include article.html %}
-	{% endfor %}
-	
-<div class="pagination">
-	{% if paginator.next_page %}
-		<a class="older" href="{{ paginator.next_page_path }}">Older</a>
-	{% endif %}
-	
-	<span class="total">{{ paginator.page }} of {{ paginator.total_pages }}</span>
-	
-	{% if paginator.previous_page %}
-		<a class="newer" href="{{ paginator.previous_page_path }}">Newer</a>
-	{% endif %}
-</div>
+{% for post in site.posts %}
+{% capture this_year %}{{ post.date | date: "%Y" }}{% endcapture %}
+{% capture this_month %}{{ post.date | date: "%B" }}{% endcapture %}
+
+{% unless year == this_year %}
+  {% assign year = this_year %}
+	<div class="cat-year">{{ year }}</div>
+{% endunless %}
+
+{% unless month == this_month %}
+  {% assign month = this_month %}
+	<div class="cat-month">{{ month }}</div>
+{% endunless %}
+
+{% include archive_post.html %}
+{% endfor %}
 <!-- END OF index.html -->
