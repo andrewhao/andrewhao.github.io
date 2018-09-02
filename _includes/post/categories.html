@@ -1,0 +1,12 @@
+<div class="article__categories">
+  Tagged under
+  {% if post %}
+    {% assign categories = post.categories %}
+  {% else %}
+    {% assign categories = page.categories %}
+  {% endif %}
+  {% for category in categories %}
+  <a class="article__category" href="{{site.baseurl}}/category/{{category | slugify}}">{{category}}</a>
+  {% unless forloop.last %}, {% endunless %}
+  {% endfor %}
+</div>

@@ -1,0 +1,7 @@
+<!-- BEGIN _includes/archive_post.html -->
+{% capture category %}{{ post.categories | size }}{% endcapture %}
+<div class="post-listing">
+  <a class="title-listing" href="{{ root_url }}{{ post.url }}">{{post.title}}</a>
+  <p class="post-listing__preview">{{ post.excerpt | strip_html }}</p>
+</div>
+<!-- END _includes/archive_post.html -->

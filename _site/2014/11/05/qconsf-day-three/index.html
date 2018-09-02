@@ -1,0 +1,467 @@
+
+<!doctype html>
+<!-- START OF _layouts/default.html -->
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" >
+		<meta content="width=device-width,initial-scale=1" name="viewport">
+		<meta content="Andrew Hao's thoughts on software engineering, team leadership & product design." name="description">
+		<meta content="The Sweet Spot" name="author">
+
+		<title>QConSF: Day Three &mdash; The Sweet Spot</title>
+
+		<!-- Styles -->
+		<link href="/stylesheets/main.css" rel="stylesheet">
+
+		<!-- Google webfonts -->
+    <link href="https://fonts.googleapis.com/css?family=Cousine|Suez+One|Yellowtail|Space+Mono|Alike+Angular" rel="stylesheet">
+
+		<!-- jQuery and plugins -->
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+		<script src="/js/jquery.zclip.min.js"></script>
+
+		<!-- Syntax highlighter -->
+		<link href="/stylesheets/prettify-hemisu.css" type="text/css" rel="stylesheet" />
+    <script type="text/javascript" src="/js/prettify.js"></script>
+
+    <link href="" rel="alternate" title="The Sweet Spot" type="application/atom+xml">
+    
+
+
+  </head>
+
+	<body onload="prettyPrint()">
+		<div class="wrap">
+
+			<header>
+        <a href="/"><div class="title">The Sweet Spot</div></a>
+				<div class="subtitle">On software, engineering leadership, and anything shiny.</div>
+
+				<div class="navi">
+					<ul>
+						<li><a href="/">Articles</a></li>
+						<li><a href="/talks">Talks</a></li>
+						<li><a href="/notes">Conference Notes</a></li>
+						<li><a href="https://www.github.com/andrewhao">Github</a></li>
+						<li><a href="https://twitter.com/andrewhao">Twitter</a></li>
+					</ul>
+				</div> <!-- // .navi -->
+			</header>
+
+				<!-- START OF _layouts/post.html -->
+
+<!-- START OF _includes/article.html -->
+<article>
+	<header>
+		<h1><a href="/2014/11/05/qconsf-day-three/">QConSF: Day Three</a></h1>
+		<time>05 November 2014</time>
+	</header>
+		<div class="content">
+			<h2 id="melody-meckfessel-googlecloud-engineering">Melody Meckfessel: Google/Cloud Engineering</h2>
+
+<ul>
+  <li>The world is changing. Mobile is up and coming. Cloud platform is a huge market opportunity.</li>
+  <li>Google DevOps platform: supports fast builds, caching.</li>
+  <li>Best cloud platform on the planet (MarketingSpeak?)</li>
+  <li>Every day, Google cranks out 800K builds, 2 petabytes of data…</li>
+  <li>Internally: single monolithic code tree</li>
+  <li>Code is open to any engineer</li>
+  <li>Variety of languages</li>
+  <li>Mandatory code review.</li>
+  <li>Need good tools to get information about system.</li>
+  <li>Deployment resource utilization</li>
+</ul>
+
+<h2 id="breaking-the-monolith-organizing-your-team-to-embrace-microservices">Breaking the Monolith: Organizing your team to embrace microservices</h2>
+
+<ul>
+  <li>what about microservices for startups? 500px is 40-person startup that embraced microservices</li>
+  <li>Ruby/Rails + Go architecture</li>
+  <li>Conway’s Law: reminds us that the core component of SE is humans!</li>
+  <li>Microservices: “hipster SOA”?! small services. cost of integration is lower than we once thought.</li>
+  <li>are SRP (single responsibility principle) at the codebase level</li>
+</ul>
+
+<h3 id="prior-architecture">Prior Architecture</h3>
+
+<ul>
+  <li>LB, app servers, db servers</li>
+  <li>many data stores, one monolithic code</li>
+  <li>lots of SPOFs</li>
+  <li>Large codebase. hard to enforce boundaries, leak over time.</li>
+  <li>lots of cascading failures</li>
+  <li>deployments were “get in line”</li>
+  <li>hosted datacenter</li>
+</ul>
+
+<h3 id="first-thing-changed-searchinfrastructure">First thing: changed search/infrastructure</h3>
+
+<ul>
+  <li>naturally asynchronous, off the critical path part of our infrastructure</li>
+  <li>rewrote the indexer in go</li>
+  <li>used to take 20hr to do a full build, now it takes 20m in Go</li>
+  <li>wrote search service layer - extracted out of app</li>
+</ul>
+
+<h3 id="next-uploads">Next: uploads</h3>
+
+<ul>
+  <li>EC2-based go uploaders</li>
+  <li>Natural pair with S3</li>
+</ul>
+
+<h3 id="activities-and-notifications">Activities and notifications</h3>
+
+<ul>
+  <li>Ongoing</li>
+  <li>Riak</li>
+  <li>Technologies?</li>
+</ul>
+
+<h3 id="lessons">Lessons</h3>
+
+<p>1) DevOps</p>
+
+<ul>
+  <li>Do 12-factor apps</li>
+  <li>Monitor everything. They use datadog – hosted graphite</li>
+  <li>Implement an on-call rotation</li>
+  <li>Measure MTTD (detect), MTTR (resolve). Work to implement changes</li>
+  <li>Test your failover scenarios</li>
+</ul>
+
+<p>2) Automation</p>
+
+<ul>
+  <li>Automation</li>
+  <li>Use circuit breakers</li>
+  <li>Michael Nygard: use circuit breakers. Try to recover from external failure scenarios.</li>
+</ul>
+
+<p>3) Design for business capabilities</p>
+
+<ul>
+  <li>Break app into biz capabilities (search, reco, uploads)</li>
+  <li>Tempting to design around tech layers. don’t</li>
+  <li>treat each biz capability as a team</li>
+</ul>
+
+<h3 id="teams">Teams</h3>
+
+<ul>
+  <li>API facades can unblock teams. Web Team owns an API facade that proxies requests from the browser to serve the internal services (Sinatra app).</li>
+  <li>Cute: BFFs - backend-for-frontend</li>
+  <li>Web team: frontend code, API facade</li>
+  <li>Media team: upload service, watermarking</li>
+  <li>search team: search infrastructure</li>
+  <li>Mobile team: mobile apps, mobile API facade</li>
+  <li>Platform: everything else incl release engineering</li>
+  <li>How to spread institutional knowledge? Swap developers.</li>
+</ul>
+
+<h2 id="deploying-microservices-with-docker-event-sourcing-cqrs">Deploying microservices with Docker, event sourcing, CQRS</h2>
+
+<p>@crichardson, http://microservices.io/</p>
+
+<ul>
+  <li>Using scala, functional immudatable domain models, microservices, event sourcing, CQRS and Docker</li>
+</ul>
+
+<h3 id="why-build-event-driven-microservices">Why build event-driven microservices?</h3>
+
+<ul>
+  <li>Traditional architecture: ACID+WAR-bundled monolith</li>
+  <li>Problem with monolith:
+    <ul>
+      <li>intimidates developers</li>
+      <li>infrequent deployments</li>
+      <li>overloads IDE</li>
+      <li>obstacle to scaling development</li>
+      <li>modules have different dependencies</li>
+      <li>long term commitment to architecture stack</li>
+    </ul>
+  </li>
+  <li>Apply functional decomposition</li>
+  <li>Problem with RDBMS
+    <ul>
+      <li>Scalability</li>
+      <li>distribution</li>
+      <li>schema updates</li>
+      <li>O/R impedance mismatch</li>
+      <li>handling semi-structured data</li>
+    </ul>
+  </li>
+  <li>Microservices = distributed data management
+    <ul>
+      <li>very painful, don’t try to do 2-phased commit</li>
+    </ul>
+  </li>
+  <li>NoSQL has no ACID guarantees, limited transactions, limited querying capabilities</li>
+</ul>
+
+<h3 id="event-based-architecture-to-the-rescue">Event-based architecture to the rescue</h3>
+
+<ul>
+  <li>Microservices publish events when state changes</li>
+  <li>Microservices subscribe to events</li>
+  <li>for this to work, you have to atomically publish an event when state changes</li>
+  <li>How to reliably generate events?
+    <ul>
+      <li>db triggers?</li>
+      <li>app code?</li>
+    </ul>
+  </li>
+  <li>How to atomically update the datastore and publish events?
+    <ul>
+      <li>use two-phased commit</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="event-sourcing">Event sourcing</h3>
+
+<ul>
+  <li>For each aggregate/entity:
+    <ul>
+      <li>identify all the state-changing domain events</li>
+      <li>define event classes</li>
+    </ul>
+  </li>
+  <li>
+    <p>That way you can reconstruct the current state of an entity by replaying events to get state.</p>
+  </li>
+  <li>Persisting events: use weak serialization, like JSON</li>
+  <li>For long-running aggregates, you can save a snapshot, discard old events.</li>
+</ul>
+
+<h3 id="biz-benefits-of-event-sourcing">Biz benefits of Event Sourcing</h3>
+
+<ul>
+  <li>reliable audit log</li>
+  <li>enables temporal queries</li>
+  <li>publishes events needed by logs/big data</li>
+  <li>solves data consistency issues. eventual consistency</li>
+</ul>
+
+<h3 id="drawbacks-of-event-sourcing">Drawbacks of event sourcing</h3>
+
+<ul>
+  <li>weird and unfamiliar</li>
+  <li>events = history of bad events</li>
+  <li>dupe events are tricky</li>
+  <li>app handles eventually consistent data</li>
+  <li>event store only supports PK-lookup of data</li>
+</ul>
+
+<h3 id="microservices">Microservices</h3>
+
+<ul>
+  <li>Corresponds to a DDD aggregate</li>
+  <li>requests from outside world =&gt; commands</li>
+  <li>Processed by svc, generates events</li>
+  <li>Can also subscribe to events over the bus</li>
+</ul>
+
+<h3 id="cqrs">CQRS</h3>
+
+<ul>
+  <li>commands process aggregates</li>
+  <li>queries build views from events
+    <ul>
+      <li>view is a store</li>
+      <li>view updater service syncs the view with events</li>
+      <li>view query service generates the view from the view store</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="how-to-deal-with-eventually-consistent-views">How to deal with eventually-consistent views?</h3>
+
+<ul>
+  <li>creation update response contains aggregate</li>
+  <li>out of date view compares version #s</li>
+  <li>Or just fake it in UI</li>
+</ul>
+
+<h3 id="docker">Docker</h3>
+
+<ul>
+  <li>Jenkins deploy pipeline: Build &amp; test code + build &amp; test docker image + deploy docker to registry</li>
+  <li>Smoke test the image:
+    <ul>
+      <li><code class="highlighter-rouge">POST /containers/create</code>, <code class="highlighter-rouge">POST /containers/{id}/start</code></li>
+      <li>ping <code class="highlighter-rouge">/health</code> URL</li>
+    </ul>
+  </li>
+  <li>tag image, then push image</li>
+  <li>takes seconds to build, deploy!</li>
+  <li>Jenkins is on Docker, too!</li>
+</ul>
+
+<h3 id="deployment-to-prod">Deployment to prod</h3>
+
+<ul>
+  <li>Diffs running dockers against build dockers, then deploys the changed containers.</li>
+  <li>Mesos + marathon + zookeeper</li>
+</ul>
+
+<h2 id="culture-of-careevolution">Culture of CareEvolution</h2>
+
+<ul>
+  <li>Completely decentralized. Decisions made by consensus</li>
+  <li>culture of overwork in silicon valley</li>
+  <li>Do we need Scrum masters? we don’t trust people to do things themselves</li>
+  <li>Self-directed teams can STILL apply to mission critical systems and important industries.</li>
+</ul>
+
+<ol>
+  <li>Individuals are center: process serves the individual. all individuals yearn to be <em>productive</em>.</li>
+  <li>Teams are nothing more than individuals working toward a common goal with trust in one another</li>
+  <li>if we can’t trust each other then we need to start over. Lack of trust is a mortal weakness.</li>
+  <li>Management is not a title or role, but an activity to be performed by the individual. We are all managers!</li>
+  <li>Work and life are not two opposing forces: it’s both.</li>
+  <li>size brings complexity</li>
+  <li>ambiguity and the need for juddgment: embrace ambiguity. with time, the org is less capable of doing things, instead of doing more</li>
+  <li>you can’t tie compensation to titles</li>
+  <li>Doing good is good business</li>
+  <li>Run the business as if it’ll be there for 100+ years. Beyond you. So be wary of professional investors who want to see short term gain. Question if there really <em>is</em> a first mover advantage.</li>
+</ol>
+
+<h3 id="netflix-responsible-person">Netflix: “Responsible person”</h3>
+
+<ul>
+  <li>Self-motivating</li>
+  <li>Self-aware</li>
+  <li>Self-disciplined</li>
+  <li>Self-improving</li>
+  <li>Acts like a leader</li>
+  <li>Doesn’t wait to be told what to do</li>
+  <li>Never feels “that’s not my job”</li>
+  <li>picks up the trash lying on the floor</li>
+  <li>Behaves like an owner</li>
+</ul>
+
+<h2 id="melissa-pierce-the-evolution-of-engineering-culture">Melissa Pierce: The Evolution of Engineering Culture</h2>
+
+<ul>
+  <li>Grace Hopper: Ph.D in mathematics at Yale</li>
+  <li>Babbage machine</li>
+  <li>1842-1843: she wrote elaborate set of notes</li>
+  <li>Look at ads and how they portray women. Women as commodities, cheap</li>
+  <li>women were strong in math. it wasn’t perceived as being professional enough. engineering was masculine. CS moved to be an “engineering” degree</li>
+  <li>the drop and decline in women in CS happened around the time of its alignment with engineering</li>
+</ul>
+
+<h3 id="takeaways">Takeaways:</h3>
+
+<ul>
+  <li>How can our field recognize the contributions of women in CS? How can we make our field more inclusive and accessible to women in tech?</li>
+</ul>
+
+			
+			
+		</div>
+	<footer>
+		<div class="article__categories">
+  Tagged under
+  
+  
+  <a class="article__category" href="/category/notes">notes</a>
+  , 
+  
+  <a class="article__category" href="/category/conference">conference</a>
+  , 
+  
+  <a class="article__category" href="/category/qconsf">qconsf</a>
+  
+  
+</div>
+
+	
+	
+	</footer>
+	
+</article>
+<!-- END OF _includes/article.html -->
+
+
+  <section class="comments">
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+
+<!-- END OF _/layouts/post.html -->
+
+
+			<footer>
+				Copyright &copy; 2018
+
+	The Sweet Spot
+
+
+				
+
+<script type="text/javascript">
+      var disqus_shortname = 'g9labs';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://localhost:4000/2014/11/05/qconsf-day-three/';
+        var disqus_url = 'http://localhost:4000/2014/11/05/qconsf-day-three/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+
+
+
+
+			</footer>
+
+		</div> <!-- // .wrap -->
+  </body>
+
+	<script>
+		$(document).ready(function() {
+			// Make images center
+			$('p:has(img)').css('text-align', 'center');
+
+			// Add the image's title attribute as a caption
+			$('p:has(img)').append(function () {
+				return '<div class="caption">' + ($('img', this).attr('title') || "") + '</div>';
+			});
+
+			// Prettify code
+			$('code').addClass('prettyprint');
+			$('pre code').addClass('linenums');
+
+			// Copy to clipboard with button
+			$('pre:has(code)').prepend(function(){
+				return '<div class="clip-btn">copy to clipboard</div>';
+      });
+
+			$('.clip-btn').zclip({
+				path:'/js/ZeroClipboard.swf',
+				copy: $(this).next('code').text(),
+				afterCopy: function(){
+					$(this).replaceWith('<div class="clip-btn">copied!');
+					}
+			});
+		});
+	</script>
+</html>
+<!-- END OF _layouts/default.html -->

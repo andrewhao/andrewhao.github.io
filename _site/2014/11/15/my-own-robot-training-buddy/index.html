@@ -1,0 +1,212 @@
+
+<!doctype html>
+<!-- START OF _layouts/default.html -->
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" >
+		<meta content="width=device-width,initial-scale=1" name="viewport">
+		<meta content="Andrew Hao's thoughts on software engineering, team leadership & product design." name="description">
+		<meta content="The Sweet Spot" name="author">
+
+		<title>My own robot training buddy. &mdash; The Sweet Spot</title>
+
+		<!-- Styles -->
+		<link href="/stylesheets/main.css" rel="stylesheet">
+
+		<!-- Google webfonts -->
+    <link href="https://fonts.googleapis.com/css?family=Cousine|Suez+One|Yellowtail|Space+Mono|Alike+Angular" rel="stylesheet">
+
+		<!-- jQuery and plugins -->
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+		<script src="/js/jquery.zclip.min.js"></script>
+
+		<!-- Syntax highlighter -->
+		<link href="/stylesheets/prettify-hemisu.css" type="text/css" rel="stylesheet" />
+    <script type="text/javascript" src="/js/prettify.js"></script>
+
+    <link href="" rel="alternate" title="The Sweet Spot" type="application/atom+xml">
+    
+
+
+  </head>
+
+	<body onload="prettyPrint()">
+		<div class="wrap">
+
+			<header>
+        <a href="/"><div class="title">The Sweet Spot</div></a>
+				<div class="subtitle">On software, engineering leadership, and anything shiny.</div>
+
+				<div class="navi">
+					<ul>
+						<li><a href="/">Articles</a></li>
+						<li><a href="/talks">Talks</a></li>
+						<li><a href="/notes">Conference Notes</a></li>
+						<li><a href="https://www.github.com/andrewhao">Github</a></li>
+						<li><a href="https://twitter.com/andrewhao">Twitter</a></li>
+					</ul>
+				</div> <!-- // .navi -->
+			</header>
+
+				<!-- START OF _layouts/post.html -->
+
+<!-- START OF _includes/article.html -->
+<article>
+	<header>
+		<h1><a href="/2014/11/15/my-own-robot-training-buddy/">My own robot training buddy.</a></h1>
+		<time>15 November 2014</time>
+	</header>
+		<div class="content">
+			<p>As an ultra runner, I am really into the mountains. As a software engineer, I’m really into data. So naturally, I’m interested in the intersection of both.</p>
+
+<p>I’ve particularly been interested in how systems like <a href="http://www.strava.com">Strava</a> work, especially when they quantify what is known as a “Suffer Score”, a single number denoting the amount of training stress (a.k.a. suffering) you put yourself through in a workout.</p>
+
+<p>How does a track workout compare to a long day on the trails? Which is tougher: a 5m tempo road run in and around my neighborhood, or a tough 2m climb into a local regional park?</p>
+
+<h2 id="data-in">Data in…</h2>
+
+<p>I first attacked the problem of getting data off of my phone. I record my GPX tracks in <a href="http://runmeter.com/">Runmeter</a>, a fantastic iPhone application with all sorts of metrics and data export capabilities. What I wanted was a seamless way to get the data off my phone without fuss after a hard workout.</p>
+
+<p>The application has a nifty feature in which it can automatically send an email to an email address after a workout is completed.</p>
+
+<p>I wrote an <a href="https://github.com/andrewhao/velocitas">email ingester, Velocitas</a>, with the help of <a href="http://cloudmailin.com/">Cloudmailin</a>, which fires off a POST request to the Node application. Velocitas does the following:</p>
+
+<ul>
+  <li><code class="highlighter-rouge">curl</code>s and downloads the GPX link embedded in the email.</li>
+  <li>Saves the GPX file to a linked Dropbox account.</li>
+  <li>Republishes the GPX file to a linked Strava account.</li>
+</ul>
+
+<h2 id="deriving-the-training-stress-score">Deriving the Training Stress Score</h2>
+
+<p>Next up: I wanted to do a quick and dirty implementation of the (run-based) Training Stress Score. <a href="https://github.com/andrewhao/stressfactor">Stressfactor</a>, a Ruby gem, is what came out of it.</p>
+
+<p>It implements the rTSS as detailed in <a href="http://home.trainingpeaks.com/blog/article/running-training-stress-score-rtss-explained">this article</a>.</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">(</span><span class="n">duration_seconds</span> <span class="o">*</span> <span class="n">normalized_graded_pace</span> <span class="o">*</span> <span class="n">intensity_factor</span><span class="p">)</span> <span class="o">/</span>
+<span class="p">(</span><span class="n">functional_threshold_pace</span> <span class="o">*</span> <span class="mi">3600</span><span class="p">)</span> <span class="o">*</span> <span class="mi">100</span>
+</code></pre></div></div>
+
+<p>Stressfactor is a higher-order tookit for deriving meaning from GPX tracks, so it, at the moment, attempts to calculate the stress score and grade adjusted pace.</p>
+
+<p>The data still needs validation, so I’m eager to run it on my data set of GPX tracks from the past years.</p>
+
+<h2 id="generating-reports">Generating reports</h2>
+
+<p>I’m working on this part right now – I need to nicely display a report from my workout history in Dropbox and display per-GPX. I’ve started the project – <a href="https://github.com/andrewhao/stressreport">Stressreport</a>.</p>
+
+<h2 id="some-things-ive-learned-and-am-learning">Some things I’ve learned and am learning</h2>
+
+<ul>
+  <li>The human body is complex, and cannot be <a href="http://fellrnr.com/wiki/Modeling_Human_Performance">easily modeled</a> without sufficient data. That said, what I’m doing now may be sufficient for basic training data.</li>
+  <li>The nature of parsing and generating higher-order stats from raw data may lend itself well to experimentation with functional languages. I’m interested in trying to reimplement Stressfactor in Scala, or a functional equivalent.</li>
+  <li>Deploying all my apps on Heroku’s free tier may actually be an interesting start to building a microservice architecture – with the space limitations on Heroku, I’m forced to build new features on new services. Call it cheapskate architecture.</li>
+</ul>
+
+			
+			
+		</div>
+	<footer>
+		<div class="article__categories">
+  Tagged under
+  
+  
+  <a class="article__category" href="/category/open-source">open source</a>
+  , 
+  
+  <a class="article__category" href="/category/software">software</a>
+  , 
+  
+  <a class="article__category" href="/category/running">running</a>
+  
+  
+</div>
+
+	
+	
+	</footer>
+	
+</article>
+<!-- END OF _includes/article.html -->
+
+
+  <section class="comments">
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+
+<!-- END OF _/layouts/post.html -->
+
+
+			<footer>
+				Copyright &copy; 2018
+
+	The Sweet Spot
+
+
+				
+
+<script type="text/javascript">
+      var disqus_shortname = 'g9labs';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://localhost:4000/2014/11/15/my-own-robot-training-buddy/';
+        var disqus_url = 'http://localhost:4000/2014/11/15/my-own-robot-training-buddy/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+
+
+
+
+			</footer>
+
+		</div> <!-- // .wrap -->
+  </body>
+
+	<script>
+		$(document).ready(function() {
+			// Make images center
+			$('p:has(img)').css('text-align', 'center');
+
+			// Add the image's title attribute as a caption
+			$('p:has(img)').append(function () {
+				return '<div class="caption">' + ($('img', this).attr('title') || "") + '</div>';
+			});
+
+			// Prettify code
+			$('code').addClass('prettyprint');
+			$('pre code').addClass('linenums');
+
+			// Copy to clipboard with button
+			$('pre:has(code)').prepend(function(){
+				return '<div class="clip-btn">copy to clipboard</div>';
+      });
+
+			$('.clip-btn').zclip({
+				path:'/js/ZeroClipboard.swf',
+				copy: $(this).next('code').text(),
+				afterCopy: function(){
+					$(this).replaceWith('<div class="clip-btn">copied!');
+					}
+			});
+		});
+	</script>
+</html>
+<!-- END OF _layouts/default.html -->

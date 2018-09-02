@@ -1,0 +1,497 @@
+
+<!doctype html>
+<!-- START OF _layouts/default.html -->
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" >
+		<meta content="width=device-width,initial-scale=1" name="viewport">
+		<meta content="Andrew Hao's thoughts on software engineering, team leadership & product design." name="description">
+		<meta content="The Sweet Spot" name="author">
+
+		<title>Domain-Driven Design & The Joy of Naming &mdash; The Sweet Spot</title>
+
+		<!-- Styles -->
+		<link href="/stylesheets/main.css" rel="stylesheet">
+
+		<!-- Google webfonts -->
+    <link href="https://fonts.googleapis.com/css?family=Cousine|Suez+One|Yellowtail|Space+Mono|Alike+Angular" rel="stylesheet">
+
+		<!-- jQuery and plugins -->
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+		<script src="/js/jquery.zclip.min.js"></script>
+
+		<!-- Syntax highlighter -->
+		<link href="/stylesheets/prettify-hemisu.css" type="text/css" rel="stylesheet" />
+    <script type="text/javascript" src="/js/prettify.js"></script>
+
+    <link href="" rel="alternate" title="The Sweet Spot" type="application/atom+xml">
+    
+
+
+  </head>
+
+	<body onload="prettyPrint()">
+		<div class="wrap">
+
+			<header>
+        <a href="/"><div class="title">The Sweet Spot</div></a>
+				<div class="subtitle">On software, engineering leadership, and anything shiny.</div>
+
+				<div class="navi">
+					<ul>
+						<li><a href="/">Articles</a></li>
+						<li><a href="/talks">Talks</a></li>
+						<li><a href="/notes">Conference Notes</a></li>
+						<li><a href="https://www.github.com/andrewhao">Github</a></li>
+						<li><a href="https://twitter.com/andrewhao">Twitter</a></li>
+					</ul>
+				</div> <!-- // .navi -->
+			</header>
+
+				<!-- START OF _layouts/post.html -->
+
+<!-- START OF _includes/article.html -->
+<article>
+	<header>
+		<h1><a href="/2016/04/18/the-joy-of-naming-with-the-powers-of-domain-driven-design/">Domain-Driven Design & The Joy of Naming</a></h1>
+		<time>18 April 2016</time>
+	</header>
+		<div class="content">
+			<p>I want to discuss a topic near and dear to my heart, and what I believe is at the crux of effective software design. It’s not a new functional language, it’s not a fancy new framework, a how-to guide to do microservices, nor a quantum leap in the field of machine learning.</p>
+
+<p>It’s much simpler.</p>
+
+<p>It’s about names.</p>
+
+<p><img src="http://3.bp.blogspot.com/_rL73HKlqbH0/TKhVHMbs2oI/AAAAAAAABEc/DiPbblM0R44/s1600/sistine-chapel-michelangelo-paintings-6.jpg" alt="In the beginning..." /></p>
+
+<p><em>Names define us</em>. They define concepts. They imbue a concept with shared understanding. They’re language concepts, but more than that, they’re units of meaning.</p>
+
+<p>Software development is a fundamentally human endeavour. No amount of technical computing breakthroughs will change the fact that software development is still the arduous task of getting a team together full of humans from a kaleidescope of different cultural, linguistic backgrounds - then throwing them together to build an arbitrarily complex product in a rapidly-shifting competitive landscape.</p>
+
+<p>Not only that, the thing to build is chock-full of systems that interact with other systems of unbounded complexity. Additionally, once your software system is out in the wild, you need to make sure that it was the right thing to build. Is the product you built correctly tuned to your market? Is it generating sufficient revenue?</p>
+
+<p>The landscape is littered with software projects that began ambitiously, but got lost in a towering mess of fragile code. It’s no wonder that developing reliable, successful software is more art than science.</p>
+
+<h3 id="crossing-our-linguistic-wires">Crossing our linguistic wires</h3>
+
+<p>Let’s rewind back to a scene from a typical day in the life of your software development team. Think back to the last time you discussed a story with your product owner, how did it unfold?</p>
+
+<p>Let’s imagine a scene at Delorean, the Uber for time travel, where you work. Your team is responsible for writing software systems that calculate the payment processing for your users who are hailing rides from your company’s time-traveling ridesharing service.</p>
+
+<blockquote>
+  <p>PO: Our next big project is to update our driver app to show rider locations on the timeline map.</p>
+</blockquote>
+
+<blockquote>
+  <p>You: And when do these riders show up on the timeline map?</p>
+</blockquote>
+
+<blockquote>
+  <p>PO: When the driver turns on the app and signals that she’s driving.</p>
+</blockquote>
+
+<blockquote>
+  <p>You: OK, so that means when the app boots up and the DriverStatus service receives a POST we’ll need to simultaneously fetch references from the HailingUser service based on time locality.</p>
+</blockquote>
+
+<blockquote>
+  <p>PO: Um… I guess so?</p>
+</blockquote>
+
+<p>Or how about your last iteration planning meeting, where you discussed the intricacies of a specific story?</p>
+
+<blockquote>
+  <p>PO: In this story, we’re going to add a coupon box to the checkout flow.</p>
+</blockquote>
+
+<blockquote>
+  <p>You: [Thinking out loud] Hm… would that mean we add a <code class="highlighter-rouge">/coupon</code> route to the checkout API?</p>
+</blockquote>
+
+<blockquote>
+  <p>Teammate: Wait - I think we call them <code class="highlighter-rouge">Discounts</code> in the backend. And the checkout flow is technically part of the <code class="highlighter-rouge">RideCommerce</code> service.</p>
+</blockquote>
+
+<blockquote>
+  <p>You: Right - I mean let’s call the route <code class="highlighter-rouge">/coupon</code> but it’ll create a <code class="highlighter-rouge">Discount</code> object. And in this story,    let’s just remember that the checkout API really refers to the <code class="highlighter-rouge">RideCommerce</code> service.</p>
+</blockquote>
+
+<blockquote>
+  <p>PO: I’ll add a note to the story.</p>
+</blockquote>
+
+<p>The implementing engineer, of course, doesn’t read the note in the story (who has time to, anyways?). In the course of implementation, he gets tripped up in semantics and spends the better part of a half day re-implementing the <code class="highlighter-rouge">Checkout</code> flow as an entirely new service, before realizing his mistake in code review and backing out his changes.</p>
+
+<p>Months later, a new colleague is tasked to fix the link in the checkout flow, but files an incomplete fix because she was not aware of the fact that <code class="highlighter-rouge">Coupons</code> actually had mappings back to <code class="highlighter-rouge">Discounts</code>. The bug makes its way to production, where it subtly lies dormant until a most inopportune time…</p>
+
+<h3 id="a-better-domain-driven-way">A better, Domain-Driven way</h3>
+
+<p>In Eric Evans’ book <a href="http://www.amazon.com/Domain-Driven-Design-Tackling-Complexity-Software/dp/0321125215"><strong>Domain-Driven Design</strong></a>, he describes the concept of a <a href="http://martinfowler.com/bliki/UbiquitousLanguage.html">Ubiquitous Language</a> - a shared, common vocabulary that the entire team shares when discussing software.</p>
+
+<p>When we say the “entire team”, we mean the combined team of designers, developers, the product owner and any other domain experts that might be at hand.</p>
+
+<p>Your product owner may be your domain expert (and typically is). However, you may have other domain experts such as:</p>
+
+<ul>
+  <li>Any team that builds reporting or analytics off of your software.</li>
+  <li>Upstream data providers</li>
+  <li>Anybody further up the reporting chain whose purview includes the software you’re building, or its effects. Think: the Director of Finance, the COO, the head of Customer Support.</li>
+  <li>The users of your software</li>
+</ul>
+
+<p>Side note: in XP, each team has an “onsite customer” - this is your domain expert!</p>
+
+<h4 id="developing-a-ubiquitous-language-with-a-glossary">Developing a Ubiquitous Language with a Glossary</h4>
+
+<p>Try this: keep a living document of all the terminology your team uses - along with all its definitions. This <strong>Glossary</strong> is exactly what it sounds - a list of terms and their definitions.</p>
+
+<blockquote>
+  <h2 id="delorean-team-glossary">Delorean Team Glossary</h2>
+
+  <ul>
+    <li><strong>Coupon</strong>: an applied discount to a BookingAmount. A coupon may take the form of a Fixed or a Percentage amount.
+      <ul>
+        <li><strong>Fixed-type</strong>: A coupon that applies a fixed amount of money - e.g. a $30 USD discount.</li>
+        <li><strong>Percentage-type</strong>: A coupon that applies a percentage savings off the total BookingAmount.</li>
+      </ul>
+    </li>
+    <li><strong>Driver</strong>: An employed driver who drives within the system, picking up passengers and driving Trips for payment.</li>
+    <li><strong>Trip</strong>: An itinerary of passenger pick-up and drop-off location and times.</li>
+    <li><strong>Rider</strong>: The passenger that books the trip and is transported by the <em>Driver</em>.</li>
+    <li><strong>Booking</strong>: A reservation for a Trip, as booked by the <em>Rider</em>.</li>
+    <li><strong>BookingAmount</strong>: The monetary amount of the Trip, accounting for the trip cost, surge pricing, coupons and taxes.</li>
+    <li><strong>Routing Engine:</strong> The software system that maps out the driving directions for a driver.</li>
+    <li><strong>Payment</strong>: A record of how a user paid.</li>
+    <li><strong>Charge</strong>: A financial transaction for a specific dollar amount, for a specific charge method to an institution.</li>
+    <li><strong>Checkout</strong>: A workflow in which a <em>Payment</em> is made for a <em>Booking</em>.</li>
+  </ul>
+</blockquote>
+
+<p>From now on, use only the term definitions listed here in your stories. Be explicit about how you use your language!</p>
+
+<p>I’ve been on many projects where the sloppy usage of a term from project inception led to the usage of that term in the code - codifying that messy, slippery term throughout the life of the project.</p>
+
+<p>Which leads us to our next point:</p>
+
+<h4 id="refactoring-your-team-to-use-the-right-terms">Refactoring your team to use the right terms</h4>
+
+<p>Your <strong>Glossary</strong> is a living document. It is meant to be living - either on a continually-updated Google Doc or a wiki page. It should be visible for all to see - you should print it out and post it on the walls!</p>
+
+<p>Meanwhile, in a planning meeting:</p>
+
+<blockquote>
+  <p>You: So when a user logs into the app and broadcasts that they’re ready to drive…</p>
+</blockquote>
+
+<blockquote>
+  <p>PO: You mean <em>Driver</em>. When a <em>Driver</em> logs in.</p>
+</blockquote>
+
+<blockquote>
+  <p>You: Right. Good catch.</p>
+</blockquote>
+
+<p>It seems a little silly (after all, you both know only Drivers use the broadcast feature of the app), but the laser focus on using the right words means that your team is always on the same page when talking about things.</p>
+
+<p>Later that afternoon, your teammate taps you on the shoulder:</p>
+
+<blockquote>
+  <p>Teammate: I’m about to implement the Coupon story. I suggest we rename the <code class="highlighter-rouge">Discount</code> class to <code class="highlighter-rouge">Coupon</code>.</p>
+</blockquote>
+
+<blockquote>
+  <p>You: Great idea. That way, we aren’t tripped up by the naming mismatches in the future.</p>
+</blockquote>
+
+<blockquote>
+  <p>Teammate: I do have a question about the coupon, though. Do you think it’s <em>applied</em> to the <strong>BookingAmount</strong>, or is it <em>added</em>?</p>
+</blockquote>
+
+<blockquote>
+  <p>PO: [Overhearing conversation] You had it right. It’s <em>applied</em>.</p>
+</blockquote>
+
+<p>You and your teammate then go and update the glossary, scribbling an addendum on the wall (or updating your wiki):</p>
+
+<blockquote>
+  <h2 id="delorean-team-glossary-1">Delorean Team Glossary</h2>
+  <ul>
+    <li><strong>Coupon</strong>: … Coupons may be <em>applied</em> to BookingAmounts to discount the total cost of the booking.</li>
+  </ul>
+</blockquote>
+
+<h4 id="refactoring-your-code-to-use-the-right-terms">Refactoring your code to use the right terms</h4>
+
+<p>Your teammate and you then walk over to her desk; as a pair you proceed to refactor the existing account code. We’ll use Ruby for the sake of this example.</p>
+
+<p>In the beginning, the code looks like this:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Checkout</span>
+  <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">booking_amount</span><span class="p">,</span> <span class="n">discount</span><span class="p">)</span>
+    <span class="vi">@booking_amount</span> <span class="o">=</span> <span class="n">booking_amount</span>
+    <span class="vi">@discount</span> <span class="o">=</span> <span class="n">discount</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">total</span>
+    <span class="vi">@booking_amount</span><span class="p">.</span><span class="nf">total</span> <span class="o">-</span> <span class="vi">@discount</span><span class="p">.</span><span class="nf">calculate_amount_for</span><span class="p">(</span><span class="ss">booking_amount: </span><span class="n">booking_amount</span><span class="p">)</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+
+<span class="k">class</span> <span class="nc">Discount</span>
+  <span class="no">STRATEGY_FIXED</span> <span class="o">=</span> <span class="s1">'STRATEGY_FIXED'</span>
+  <span class="no">STRATEGY_PERCENTAGE</span> <span class="o">=</span> <span class="s1">'STRATEGY_PERCENTAGE'</span>
+
+  <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">amount</span><span class="p">,</span> <span class="n">strategy</span><span class="p">)</span>
+    <span class="vi">@amount</span> <span class="o">=</span> <span class="n">amount</span>
+    <span class="vi">@strategy</span> <span class="o">=</span> <span class="n">strategy</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">calculate_amount_for</span><span class="p">(</span><span class="n">booking_amount</span><span class="p">:)</span>
+    <span class="c1"># Implementation...</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre></div></div>
+
+<p>You take a first pass and rename the <code class="highlighter-rouge">Discount</code> class to <code class="highlighter-rouge">Coupon</code>.</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Coupon</span>
+  <span class="no">STRATEGY_FIXED</span> <span class="o">=</span> <span class="s1">'STRATEGY_FIXED'</span>
+  <span class="no">STRATEGY_PERCENTAGE</span> <span class="o">=</span> <span class="s1">'STRATEGY_PERCENTAGE'</span>
+
+  <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">amount</span><span class="p">,</span> <span class="n">strategy</span><span class="p">)</span>
+    <span class="vi">@amount</span> <span class="o">=</span> <span class="n">amount</span>
+    <span class="vi">@strategy</span> <span class="o">=</span> <span class="n">strategy</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">calculate_amount_for</span><span class="p">(</span><span class="n">booking_amount</span><span class="p">:)</span>
+    <span class="c1"># Implementation...</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre></div></div>
+
+<p>Now there’s something funny here - your domain language suggests that a <strong>Coupon</strong> is <em>applied to</em> a <strong>BookingAmount</strong>. You pause, because the code reads the opposite - “A Coupon calculates its amount for a BookingAmount”.</p>
+
+<blockquote>
+  <p>You: How about we also refactor the <code class="highlighter-rouge">calculate_amount_for</code> method to reflect the language a little better?</p>
+</blockquote>
+
+<blockquote>
+  <p>Teammate: Yeah. It sounds like the action occurs the other way - the BookingAmount is responsible for applying a Coupon to itself.</p>
+</blockquote>
+
+<p>In your next refactoring pass, you move the <code class="highlighter-rouge">calculate_amount_for</code> method into the <code class="highlighter-rouge">BookingAmount</code>, calling it <code class="highlighter-rouge">applied_discount_total</code>:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">BookingAmount</span>
+  <span class="c1"># implementation details...</span>
+
+  <span class="k">def</span> <span class="nf">applied_coupon_amount</span><span class="p">(</span><span class="n">coupon</span><span class="p">:)</span>
+    <span class="c1"># Implementation...</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre></div></div>
+
+<p>Finally, you change your <code class="highlighter-rouge">Checkout</code> implementation to match:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Checkout</span>
+  <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">booking_amount</span><span class="p">,</span> <span class="n">coupon</span><span class="p">)</span>
+    <span class="vi">@booking_amount</span> <span class="o">=</span> <span class="n">booking_amount</span>
+    <span class="vi">@coupon</span> <span class="o">=</span> <span class="n">coupon</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">total_amount</span>
+    <span class="vi">@booking_amount</span><span class="p">.</span><span class="nf">price</span> <span class="o">-</span> <span class="vi">@booking_amount</span><span class="p">.</span><span class="nf">applied_coupon_amount</span><span class="p">(</span><span class="ss">coupon: </span><span class="vi">@coupon</span><span class="p">)</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre></div></div>
+
+<p>When you read the implementation in plain English, it reads:</p>
+
+<blockquote>
+  <p>The checkout’s total amount is calculated by subtracting the booking amount’s applied coupon amount from the booking amount price.</p>
+</blockquote>
+
+<p>Phew! Designing a strong <strong>Ubiquitous Language</strong> was hard work! In fact, you had spent a goodly amount of time debating and clarifying with your domain experts:</p>
+
+<ul>
+  <li>Is a Coupon <em>applied</em> to a BookingAmount, or is it <em>discounted from</em> one?</li>
+  <li>Should we call it a Coupon <em>amount</em>, or a Coupon <em>cost</em>?</li>
+  <li>Is the pre-tax, pre-discount amount in the BookingAmount called a <em>price</em>, or a <em>cost</em>?</li>
+</ul>
+
+<p>Whatever you agreed on, that’s what you changed your code to reflect.</p>
+
+<h4 id="continual-refinement">Continual refinement</h4>
+
+<p>Hm. Something still feels off.</p>
+
+<p>You and your teammate feel your OOP spidey senses going haywire.</p>
+
+<blockquote>
+  <p>Teammate: Hm. I guess that worked, but that’s still not exactly as clean as we wanted it. Isn’t it kind of weird how the Checkout owns the calculation for the calculation of a discount?</p>
+</blockquote>
+
+<blockquote>
+  <p>You: Yeah, I see where you’re coming from. That’s just not good OO design. Additionally, if we notice the language our domain experts were using, they didn’t mention that the checkout total was some subtraction of something from another thing. The Checkout’s total simply is the order amount, after application of a Coupon.</p>
+</blockquote>
+
+<p>Your partner and you take one last step:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Checkout</span>
+  <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">booking_amount</span><span class="p">,</span> <span class="n">coupon</span><span class="p">)</span>
+    <span class="vi">@booking_amount</span> <span class="o">=</span> <span class="n">booking_amount</span>
+    <span class="vi">@booking_amount</span><span class="p">.</span><span class="nf">apply!</span><span class="p">(</span><span class="n">coupon</span><span class="p">)</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">total_amount</span>
+    <span class="vi">@booking_amount</span><span class="p">.</span><span class="nf">amount</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+
+
+<span class="k">class</span> <span class="nc">BookingAmount</span>
+  <span class="c1"># Implementation...</span>
+
+  <span class="k">def</span> <span class="nf">apply!</span><span class="p">(</span><span class="n">coupon</span><span class="p">)</span>
+    <span class="vi">@coupons</span> <span class="o">+=</span> <span class="n">coupon</span>
+  <span class="k">end</span>
+  
+  <span class="k">def</span> <span class="nf">amount</span>
+    <span class="vi">@amount</span> <span class="o">-</span> <span class="vi">@coupons</span><span class="p">.</span><span class="nf">sum</span><span class="p">(</span><span class="o">&amp;</span><span class="ss">:amount</span><span class="p">)</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre></div></div>
+
+<p>You sit back and read it back, out loud:</p>
+
+<blockquote>
+  <p>The checkout’s total amount is the BookingAmount after a Coupon has been applied.</p>
+</blockquote>
+
+<p>You both smile. Much better.</p>
+
+<h3 id="in-closing">In closing…</h3>
+
+<p>In this brief time we had together,</p>
+
+<ul>
+  <li>We discussed why names are important - especially in a complex endeavour like software development.</li>
+  <li>We covered why it’s important to arrive at a shared understanding, together as a team, using the same words and vocabulary.</li>
+  <li>We discovered how to build and integrate a <strong>Glossary</strong> into the daily rhythm of our team</li>
+  <li>We refactored the code twice - illustrating how to get code in line with the domain language.</li>
+</ul>
+
+<h3 id="and-there-is-much-more">And there is much more!</h3>
+
+<p>In an upcoming post, we’ll investigate how the <strong>Ubiquitous Language</strong> applies to a core concept of Domain-Driven Design: the <strong>Bounded Context</strong>. Why is that important? Because Bounded Contexts give us tools to organize our code - and to do further advanced things like <a href="https://speakerdeck.com/andrewhao/ddd-rail-your-monorail">break up monoliths into services</a>.</p>
+
+<script async="" class="speakerdeck-embed" data-id="1e6dd8983891467381036a321cd274a9" data-ratio="1.77777777777778" src="//speakerdeck.com/assets/embed.js"></script>
+
+
+			
+			
+		</div>
+	<footer>
+		<div class="article__categories">
+  Tagged under
+  
+  
+  <a class="article__category" href="/category/domain-driven-design">Domain-Driven Design</a>
+  , 
+  
+  <a class="article__category" href="/category/architecture">Architecture</a>
+  , 
+  
+  <a class="article__category" href="/category/ddd">DDD</a>
+  
+  
+</div>
+
+	
+	
+	</footer>
+	
+</article>
+<!-- END OF _includes/article.html -->
+
+
+  <section class="comments">
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+
+<!-- END OF _/layouts/post.html -->
+
+
+			<footer>
+				Copyright &copy; 2018
+
+	The Sweet Spot
+
+
+				
+
+<script type="text/javascript">
+      var disqus_shortname = 'g9labs';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://localhost:4000/2016/04/18/the-joy-of-naming-with-the-powers-of-domain-driven-design/';
+        var disqus_url = 'http://localhost:4000/2016/04/18/the-joy-of-naming-with-the-powers-of-domain-driven-design/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+
+
+
+
+			</footer>
+
+		</div> <!-- // .wrap -->
+  </body>
+
+	<script>
+		$(document).ready(function() {
+			// Make images center
+			$('p:has(img)').css('text-align', 'center');
+
+			// Add the image's title attribute as a caption
+			$('p:has(img)').append(function () {
+				return '<div class="caption">' + ($('img', this).attr('title') || "") + '</div>';
+			});
+
+			// Prettify code
+			$('code').addClass('prettyprint');
+			$('pre code').addClass('linenums');
+
+			// Copy to clipboard with button
+			$('pre:has(code)').prepend(function(){
+				return '<div class="clip-btn">copy to clipboard</div>';
+      });
+
+			$('.clip-btn').zclip({
+				path:'/js/ZeroClipboard.swf',
+				copy: $(this).next('code').text(),
+				afterCopy: function(){
+					$(this).replaceWith('<div class="clip-btn">copied!');
+					}
+			});
+		});
+	</script>
+</html>
+<!-- END OF _layouts/default.html -->

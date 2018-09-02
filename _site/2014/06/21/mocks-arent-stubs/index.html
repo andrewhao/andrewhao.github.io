@@ -1,0 +1,276 @@
+
+<!doctype html>
+<!-- START OF _layouts/default.html -->
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" >
+		<meta content="width=device-width,initial-scale=1" name="viewport">
+		<meta content="Andrew Hao's thoughts on software engineering, team leadership & product design." name="description">
+		<meta content="The Sweet Spot" name="author">
+
+		<title>Mocks aren't stubs: mockist & classic testing &mdash; The Sweet Spot</title>
+
+		<!-- Styles -->
+		<link href="/stylesheets/main.css" rel="stylesheet">
+
+		<!-- Google webfonts -->
+    <link href="https://fonts.googleapis.com/css?family=Cousine|Suez+One|Yellowtail|Space+Mono|Alike+Angular" rel="stylesheet">
+
+		<!-- jQuery and plugins -->
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+		<script src="/js/jquery.zclip.min.js"></script>
+
+		<!-- Syntax highlighter -->
+		<link href="/stylesheets/prettify-hemisu.css" type="text/css" rel="stylesheet" />
+    <script type="text/javascript" src="/js/prettify.js"></script>
+
+    <link href="" rel="alternate" title="The Sweet Spot" type="application/atom+xml">
+    
+
+
+  </head>
+
+	<body onload="prettyPrint()">
+		<div class="wrap">
+
+			<header>
+        <a href="/"><div class="title">The Sweet Spot</div></a>
+				<div class="subtitle">On software, engineering leadership, and anything shiny.</div>
+
+				<div class="navi">
+					<ul>
+						<li><a href="/">Articles</a></li>
+						<li><a href="/talks">Talks</a></li>
+						<li><a href="/notes">Conference Notes</a></li>
+						<li><a href="https://www.github.com/andrewhao">Github</a></li>
+						<li><a href="https://twitter.com/andrewhao">Twitter</a></li>
+					</ul>
+				</div> <!-- // .navi -->
+			</header>
+
+				<!-- START OF _layouts/post.html -->
+
+<!-- START OF _includes/article.html -->
+<article>
+	<header>
+		<h1><a href="/2014/06/21/mocks-arent-stubs/">Mocks aren't stubs: mockist & classic testing</a></h1>
+		<time>21 June 2014</time>
+	</header>
+		<div class="content">
+			<p>With the famed “TDD is dead” debate around the Rails community largely
+coming to an end, I found myself referencing Martin Fowler’s article,
+<a href="http://martinfowler.com/articles/mocksArentStubs.html">Mocks Aren’t Stubs</a> a good deal, trying to make sense of it in terms of how I write tests and code.</p>
+
+<p>In this post I’m going to talk about mocking and stubbing and their
+roots, paraphrase Fowler in an attempt to explain their differences, and
+walk through a couple of code examples. In each case, I’m going to
+attempt to build this example out in Ruby and RSpec 3.</p>
+
+<p>Let’s assume this implementation in our code for a <code class="highlighter-rouge">BookUpdater</code> object in Ruby. Its job is to call through its collaborating <code class="highlighter-rouge">ApiClient</code>, which wraps some aspect of an API that we want to call.</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Update a book's metadata in our systems.</span>
+<span class="k">class</span> <span class="nc">BookUpdater</span>
+  <span class="nb">attr_accessor</span> <span class="ss">:book</span><span class="p">,</span> <span class="ss">:api_client</span><span class="p">,</span> <span class="ss">:response</span>
+
+  <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">book</span><span class="p">,</span> <span class="n">api_client</span><span class="p">)</span>
+    <span class="vi">@book</span> <span class="o">=</span> <span class="n">book</span>
+    <span class="vi">@api_client</span> <span class="o">=</span> <span class="n">api_client</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">updated?</span>
+    <span class="o">!!</span><span class="n">response</span><span class="p">.</span><span class="nf">success?</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">update!</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">api_client</span><span class="p">.</span><span class="nf">call_update_api</span><span class="p">(</span><span class="n">book</span><span class="p">)</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre></div></div>
+
+<h2 id="what-they-are">What they are</h2>
+
+<h3 id="mocks">Mocks</h3>
+
+<p>Mocks are fake objects that verify that they have received messages. In
+RSpec, we traditionally use the <code class="highlighter-rouge">mock</code> object utility to create these objects.</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">api_client</span> <span class="o">=</span> <span class="n">mock</span><span class="p">(</span><span class="s1">'api client'</span><span class="p">)</span>
+<span class="n">book</span> <span class="o">=</span> <span class="no">Book</span><span class="p">.</span><span class="nf">new</span>
+
+<span class="n">expect</span><span class="p">(</span><span class="n">api_client</span><span class="p">).</span><span class="nf">to</span> <span class="n">receive</span><span class="p">(</span><span class="ss">:call_update_api</span><span class="p">).</span><span class="nf">with</span><span class="p">(</span><span class="n">book</span><span class="p">).</span><span class="nf">and_return</span><span class="p">(</span><span class="kp">true</span><span class="p">)</span>
+
+<span class="n">subject</span> <span class="o">=</span> <span class="no">BookUpdater</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="n">api_client</span><span class="p">,</span> <span class="n">book</span><span class="p">)</span>
+<span class="n">subject</span><span class="p">.</span><span class="nf">list!</span>
+</code></pre></div></div>
+
+<p>What’s happening here? RSpec creates a mock <code class="highlighter-rouge">api_client</code> object that will verify that, after the test case executes, it has received the <code class="highlighter-rouge">:call_update_api</code> message with the correct arguments.</p>
+
+<p>The main point of this style of testing is <em>behavior verification</em> – that is, that your object is behaving correctly in relation with its collaborators.</p>
+
+<h3 id="double">Double</h3>
+
+<p>Let’s take a look at a <code class="highlighter-rouge">double</code> – also known as a <code class="highlighter-rouge">stub</code>. A <code class="highlighter-rouge">double</code> is a fake object that is set up to respond to a certain message with a pre-canned response, each time. Let’s take a look at how I would set up a test using doubles:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">api_client</span> <span class="o">=</span> <span class="n">double</span><span class="p">(</span><span class="s1">'api client'</span><span class="p">)</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">double</span><span class="p">(</span><span class="s1">'response'</span><span class="p">,</span> <span class="ss">:success?</span> <span class="o">=&gt;</span> <span class="kp">true</span><span class="p">)</span>
+<span class="n">book</span> <span class="o">=</span> <span class="no">Book</span><span class="p">.</span><span class="nf">new</span>
+
+<span class="n">allow</span><span class="p">(</span><span class="n">api_client</span><span class="p">).</span><span class="nf">to</span> <span class="n">receive</span><span class="p">(</span><span class="ss">:call_update_api</span><span class="p">).</span><span class="nf">with</span><span class="p">(</span><span class="n">book</span><span class="p">).</span><span class="nf">and_return</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+<span class="n">expect</span><span class="p">(</span><span class="n">subject</span><span class="p">.</span><span class="nf">update!</span><span class="p">).</span><span class="nf">to</span> <span class="n">change</span><span class="p">(</span><span class="n">subject</span><span class="p">,</span> <span class="ss">:updated?</span><span class="p">).</span><span class="nf">from</span><span class="p">(</span><span class="kp">false</span><span class="p">).</span><span class="nf">to</span><span class="p">(</span><span class="kp">true</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Okay, so what’s the big deal here? My test case still passes. Note that
+I had to change my code to focus its expectation on the <code class="highlighter-rouge">subject</code>’s
+state instead of the <code class="highlighter-rouge">api_client</code>.</p>
+
+<p>The focus of using doubles is for <em>state verification</em> – that is, that so long as everybody around me is behaving according to their contracts, the test merely has to verify that internal object state changes correctly.</p>
+
+<h3 id="a-third-way--real-objects">A third way – real objects</h3>
+
+<p>I won’t cover this very much in depth, but with sufficiently simple objects, one could actually instantiate real objects instead of doubles, and test an object against all its collaborators. This is, in my experience, the most common experience of working in Rails + ActiveRecord applications.</p>
+
+<h2 id="classic-vs-mockist-testing-different-strokes-for-different-folks">Classic vs Mockist testing: different strokes for different folks</h2>
+
+<p>As we saw above, the key difference between the mock and the stub (the <code class="highlighter-rouge">double</code>). The focus of the test in the mock case is on the messages being sent to the collaborators. The focus of the test when using the double is on the the <code class="highlighter-rouge">subject</code> under test (SUT).</p>
+
+<p>Mocks and stubs/doubles are tools that we can use under the larger umbrellas of two TDD philosophical styles: <em>classic</em> vs <em>mockist</em> styles.</p>
+
+<h3 id="classic-tdd">Classic TDD</h3>
+
+<ul>
+  <li>Classic TDDists like using <code class="highlighter-rouge">double</code>s or real objects to test collaborators.</li>
+  <li>From personal experience, testing classicly is oftentimes the path of least resistance. There isn’t expectation setup and verification that mockist testing requires of you.</li>
+  <li>Classic TDD sometimes results in creating objects that reveal state – note how the <code class="highlighter-rouge">BookUpdater</code> needed to expose an <code class="highlighter-rouge">updated?</code> method.</li>
+  <li>Setting up the state of the world prior to your test may be complex, requiring setting up all the objects in your universe. This can be a huge pain (has anybody ever had this problem with overcomplicated Rails models with spidery associations? Raise your hands…). Classicists may argue that the root cause here is not paying attention to your model architecture, and having too many associations is an antipattern. Alternatively, classicists oftentimes generate test factories (e.g. Rails’ FactoryGirl gem) to manage test setup.</li>
+  <li>Tests tend to be treatable more like black boxes, testable under isolation (due to verifications on object state) and are more resistant to refactoring.</li>
+</ul>
+
+<h3 id="mockist-tdd">Mockist TDD</h3>
+
+<ul>
+  <li>Mockist TDD utilizes <code class="highlighter-rouge">mock</code>s to verify behavior between objects and collaborators.</li>
+  <li>It can be argued to develop “purer” objects, that are mainly concerned with objects passing messages to each other. Fowler refers to these objects as preferring role-interfaces.</li>
+  <li>These tests are easier to set up, as they don’t require setting up the state of the world prior to test invocation.</li>
+  <li>Tests tend to be more coupled to implementation, and may be more difficult to refactor due to very specific requirements for message passing between collaborators.</li>
+  <li>Fowler brings up a point where being a mockist means that your objects prefer to <a href="https://pragprog.com/articles/tell-dont-ask">Tell Don’t Ask</a>. A nice side effect of TDA is you generally can avoid Demeter violations.</li>
+</ul>
+
+<h2 id="in-conclusion">In conclusion</h2>
+
+<p>In coming from a classic TDD background, I’ve oftentimes viewed mockist testing with some suspicion, particularly around how much work is involved to bring them about. Over the years, I’ve warmed up to the usage of mockist testing, but have not been diligent enough at doing pure driving TDD with mocks. In reviewing Fowler’s comments, I’m intruiged at the possibilities of mockist TDD in affecting system design, particularly in their natural inclinations toward <a href="http://martinfowler.com/bliki/RoleInterface.html">role interfaces</a>. I look forward to trying pure mockist TDD in a future project.</p>
+
+<h4 id="further-reading">Further reading:</h4>
+<ul>
+  <li><a href="http://dannorth.net/introducing-bdd/">Dan North: “Introducing BDD”</a></li>
+  <li><a href="http://jamesgolick.com/2010/3/10/on-mocks-and-mockist-testing.html">James Golick: “On Mocks and Mockist Testing”</a></li>
+  <li><a href="http://jmock.org/oopsla2004.pdf">OOPSLA 2004: “Mock Roles, Not Objects”</a></li>
+  <li><a href="http://www.amazon.com/Growing-Object-Oriented-Software-Guided-Tests/dp/0321503627">Amazon: “Growing Object Oriented Software, Guided by Tests”</a></li>
+</ul>
+
+			
+			
+		</div>
+	<footer>
+		<div class="article__categories">
+  Tagged under
+  
+  
+  <a class="article__category" href="/category/tdd">TDD</a>
+  , 
+  
+  <a class="article__category" href="/category/mocks">mocks</a>
+  , 
+  
+  <a class="article__category" href="/category/stubs">stubs</a>
+  
+  
+</div>
+
+	
+	
+	</footer>
+	
+</article>
+<!-- END OF _includes/article.html -->
+
+
+  <section class="comments">
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+
+<!-- END OF _/layouts/post.html -->
+
+
+			<footer>
+				Copyright &copy; 2018
+
+	The Sweet Spot
+
+
+				
+
+<script type="text/javascript">
+      var disqus_shortname = 'g9labs';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://localhost:4000/2014/06/21/mocks-arent-stubs/';
+        var disqus_url = 'http://localhost:4000/2014/06/21/mocks-arent-stubs/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+
+
+
+
+			</footer>
+
+		</div> <!-- // .wrap -->
+  </body>
+
+	<script>
+		$(document).ready(function() {
+			// Make images center
+			$('p:has(img)').css('text-align', 'center');
+
+			// Add the image's title attribute as a caption
+			$('p:has(img)').append(function () {
+				return '<div class="caption">' + ($('img', this).attr('title') || "") + '</div>';
+			});
+
+			// Prettify code
+			$('code').addClass('prettyprint');
+			$('pre code').addClass('linenums');
+
+			// Copy to clipboard with button
+			$('pre:has(code)').prepend(function(){
+				return '<div class="clip-btn">copy to clipboard</div>';
+      });
+
+			$('.clip-btn').zclip({
+				path:'/js/ZeroClipboard.swf',
+				copy: $(this).next('code').text(),
+				afterCopy: function(){
+					$(this).replaceWith('<div class="clip-btn">copied!');
+					}
+			});
+		});
+	</script>
+</html>
+<!-- END OF _layouts/default.html -->

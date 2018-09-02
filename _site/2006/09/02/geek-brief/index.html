@@ -1,0 +1,181 @@
+
+<!doctype html>
+<!-- START OF _layouts/default.html -->
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" >
+		<meta content="width=device-width,initial-scale=1" name="viewport">
+		<meta content="Andrew Hao's thoughts on software engineering, team leadership & product design." name="description">
+		<meta content="The Sweet Spot" name="author">
+
+		<title>GTD-izing my Thunderbird client, and other productivity things &mdash; The Sweet Spot</title>
+
+		<!-- Styles -->
+		<link href="/stylesheets/main.css" rel="stylesheet">
+
+		<!-- Google webfonts -->
+    <link href="https://fonts.googleapis.com/css?family=Cousine|Suez+One|Yellowtail|Space+Mono|Alike+Angular" rel="stylesheet">
+
+		<!-- jQuery and plugins -->
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+		<script src="/js/jquery.zclip.min.js"></script>
+
+		<!-- Syntax highlighter -->
+		<link href="/stylesheets/prettify-hemisu.css" type="text/css" rel="stylesheet" />
+    <script type="text/javascript" src="/js/prettify.js"></script>
+
+    <link href="" rel="alternate" title="The Sweet Spot" type="application/atom+xml">
+    
+
+
+  </head>
+
+	<body onload="prettyPrint()">
+		<div class="wrap">
+
+			<header>
+        <a href="/"><div class="title">The Sweet Spot</div></a>
+				<div class="subtitle">On software, engineering leadership, and anything shiny.</div>
+
+				<div class="navi">
+					<ul>
+						<li><a href="/">Articles</a></li>
+						<li><a href="/talks">Talks</a></li>
+						<li><a href="/notes">Conference Notes</a></li>
+						<li><a href="https://www.github.com/andrewhao">Github</a></li>
+						<li><a href="https://twitter.com/andrewhao">Twitter</a></li>
+					</ul>
+				</div> <!-- // .navi -->
+			</header>
+
+				<!-- START OF _layouts/post.html -->
+
+<!-- START OF _includes/article.html -->
+<article>
+	<header>
+		<h1><a href="/2006/09/02/geek-brief/">GTD-izing my Thunderbird client, and other productivity things</a></h1>
+		<time>02 September 2006</time>
+	</header>
+		<div class="content">
+			<p>Do any fellow geeks out there follow any <a href="http://en.wikipedia.org/wiki/Getting_things_done">GettingThingsDone</a> (GTD) practices?</p>
+
+<p>(I’m trying to get my life organizedï¿½a futile attempt before the sledgehammer of school and responsibilities drops. Organized as in… prioritizing, managing time, et cetera.) A couple things I’ve done:</p>
+
+<ul>
+  <li>
+    <p><a href="http://entropicprincipal.blogspot.com/2005/09/using-thunderbird-to-get-things-done.html">GTD-ized my Thunderbird client</a> (heck, I never knew labels could be so useful) and it seems to really help keep my mind on track when I field emails (I receive twenty to forty non-spam messages a day). The basic principle is to tag (label) your mail the instant it shows up in your inbox with its priority status. Then you run back through your mail and attack each piece according to its priority.</p>
+  </li>
+  <li>
+    <p>I’m syncing my Palm V to Yahoo Calendar. Using the Yahoo Widgets Day Planner widget as an interface, I’m basically able to access my calendar information anywhere, whether I have the Palm or not. I’m still debating whether this is useful because the sync is less-than-accurate and well, nothing beats pencil and paper (a la the <a href="http://www.43folders.com/2004/09/03/introducing-the-hipster-pda/">Hipster PDA</a>. Has anybody used it? What were your experiences?)</p>
+  </li>
+</ul>
+
+<p>Sorry, that was a quick break from our regularly scheduled programming. Geek, out.</p>
+
+			
+			
+		</div>
+	<footer>
+		<div class="article__categories">
+  Tagged under
+  
+  
+  <a class="article__category" href="/category/andrew-2-0">Andrew 2.0</a>
+  , 
+  
+  <a class="article__category" href="/category/geek">Geek</a>
+  , 
+  
+  <a class="article__category" href="/category/productivity">Productivity</a>
+  
+  
+</div>
+
+	
+	
+	</footer>
+	
+</article>
+<!-- END OF _includes/article.html -->
+
+
+  <section class="comments">
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+
+<!-- END OF _/layouts/post.html -->
+
+
+			<footer>
+				Copyright &copy; 2018
+
+	The Sweet Spot
+
+
+				
+
+<script type="text/javascript">
+      var disqus_shortname = 'g9labs';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://localhost:4000/2006/09/02/geek-brief/';
+        var disqus_url = 'http://localhost:4000/2006/09/02/geek-brief/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+
+
+
+
+			</footer>
+
+		</div> <!-- // .wrap -->
+  </body>
+
+	<script>
+		$(document).ready(function() {
+			// Make images center
+			$('p:has(img)').css('text-align', 'center');
+
+			// Add the image's title attribute as a caption
+			$('p:has(img)').append(function () {
+				return '<div class="caption">' + ($('img', this).attr('title') || "") + '</div>';
+			});
+
+			// Prettify code
+			$('code').addClass('prettyprint');
+			$('pre code').addClass('linenums');
+
+			// Copy to clipboard with button
+			$('pre:has(code)').prepend(function(){
+				return '<div class="clip-btn">copy to clipboard</div>';
+      });
+
+			$('.clip-btn').zclip({
+				path:'/js/ZeroClipboard.swf',
+				copy: $(this).next('code').text(),
+				afterCopy: function(){
+					$(this).replaceWith('<div class="clip-btn">copied!');
+					}
+			});
+		});
+	</script>
+</html>
+<!-- END OF _layouts/default.html -->

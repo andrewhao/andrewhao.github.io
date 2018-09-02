@@ -1,0 +1,198 @@
+
+<!doctype html>
+<!-- START OF _layouts/default.html -->
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" >
+		<meta content="width=device-width,initial-scale=1" name="viewport">
+		<meta content="Andrew Hao's thoughts on software engineering, team leadership & product design." name="description">
+		<meta content="The Sweet Spot" name="author">
+
+		<title>Currently: frustrated &mdash; The Sweet Spot</title>
+
+		<!-- Styles -->
+		<link href="/stylesheets/main.css" rel="stylesheet">
+
+		<!-- Google webfonts -->
+    <link href="https://fonts.googleapis.com/css?family=Cousine|Suez+One|Yellowtail|Space+Mono|Alike+Angular" rel="stylesheet">
+
+		<!-- jQuery and plugins -->
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+		<script src="/js/jquery.zclip.min.js"></script>
+
+		<!-- Syntax highlighter -->
+		<link href="/stylesheets/prettify-hemisu.css" type="text/css" rel="stylesheet" />
+    <script type="text/javascript" src="/js/prettify.js"></script>
+
+    <link href="" rel="alternate" title="The Sweet Spot" type="application/atom+xml">
+    
+
+
+  </head>
+
+	<body onload="prettyPrint()">
+		<div class="wrap">
+
+			<header>
+        <a href="/"><div class="title">The Sweet Spot</div></a>
+				<div class="subtitle">On software, engineering leadership, and anything shiny.</div>
+
+				<div class="navi">
+					<ul>
+						<li><a href="/">Articles</a></li>
+						<li><a href="/talks">Talks</a></li>
+						<li><a href="/notes">Conference Notes</a></li>
+						<li><a href="https://www.github.com/andrewhao">Github</a></li>
+						<li><a href="https://twitter.com/andrewhao">Twitter</a></li>
+					</ul>
+				</div> <!-- // .navi -->
+			</header>
+
+				<!-- START OF _layouts/post.html -->
+
+<!-- START OF _includes/article.html -->
+<article>
+	<header>
+		<h1><a href="/2011/02/12/currently-frustrated/">Currently: frustrated</a></h1>
+		<time>12 February 2011</time>
+	</header>
+		<div class="content">
+			<p>So I got the poster printed, and the LEDs currently show through the board pretty well. This is good:</p>
+
+<p><a href="http://www.flickr.com/photos/andrewhao/5437339409/"><img src="http://farm5.static.flickr.com/4134/5437339409_14b14199d0.jpg" alt="Printed poster, testing the light" /></a></p>
+
+<p>But last night I spent a good chunk of my evening and early morning hitting a lot of walls:</p>
+
+<ul>
+  <li>
+    <p>I might have to throw out the idea of using the Twitter Streaming API. For the kind of searches I need to do, I just can’t get enough granularity to use live information. Plus, I can only open one connection to the API at a time, which is not good if I need to run four listeners at a time.</p>
+  </li>
+  <li>
+    <p>I couldn’t get the <a href="http://classifier.rubyforge.org/">Classifier</a> Ruby gem to work; which looked like the easiest implementation of an LSI/naive Bayes classifier out there. The next closest thing was <a href="http://code.google.com/p/nltk/">nltk</a>, and there was no way in heck I had the time to figure that out. Plus, I realized that creating a training set was a LOT more work than I thought I had. So… scratch the machine intelligence out of this. I’m just going to manually search for specific search terms.</p>
+  </li>
+  <li>
+    <p>New solution: Periodically use the Search API to grab results. This allows more exact search results and gives me the ability to tweak the search terms while the demo loop is running.</p>
+  </li>
+  <li>
+    <p>Event-driven programming is throwing me for a loop (ha, get it?). After perusing the <a href="http://nodejs.org/docs/v0.4.0/api/">node.js docs</a> for the better part of an evening, I think I need to re-architect the code. I need to create a simple event-driven queue, which is confusing because it seems like something simple, yet support isn’t built in. node provides so little out of the box.</p>
+  </li>
+  <li>
+    <p>It could be more difficult to set up a socket connection to Arduino than I thought. I may have to set up a socket connection in python with <a href="https://github.com/lupeke/python-firmata">python-firmata</a> to interface with the Arduino. Other Arduino/serial proxies report not working well with Snow Leopard.</p>
+  </li>
+  <li>
+    <p>I haven’t yet thought about the Web interface.</p>
+  </li>
+  <li>
+    <p>I haven’t thought about how I’m going to hang the piece. I have some scrap wood and fishing wire, but I haven’t thought about whether it’s possible to hang all those LED arrays w/o some weird gravity issues.</p>
+  </li>
+  <li>
+    <p>Woodwork help? I need to figure out how to use a rotary saw.</p>
+  </li>
+</ul>
+
+<p>So uh, yeah, I’m getting nowhere but at least I know what I still need to do.</p>
+
+			
+			
+		</div>
+	<footer>
+		<div class="article__categories">
+  Tagged under
+  
+  
+  <a class="article__category" href="/category/art">Art</a>
+  , 
+  
+  <a class="article__category" href="/category/sos">SOS</a>
+  
+  
+</div>
+
+	
+	
+	</footer>
+	
+</article>
+<!-- END OF _includes/article.html -->
+
+
+  <section class="comments">
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+
+<!-- END OF _/layouts/post.html -->
+
+
+			<footer>
+				Copyright &copy; 2018
+
+	The Sweet Spot
+
+
+				
+
+<script type="text/javascript">
+      var disqus_shortname = 'g9labs';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://localhost:4000/2011/02/12/currently-frustrated/';
+        var disqus_url = 'http://localhost:4000/2011/02/12/currently-frustrated/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+
+
+
+
+			</footer>
+
+		</div> <!-- // .wrap -->
+  </body>
+
+	<script>
+		$(document).ready(function() {
+			// Make images center
+			$('p:has(img)').css('text-align', 'center');
+
+			// Add the image's title attribute as a caption
+			$('p:has(img)').append(function () {
+				return '<div class="caption">' + ($('img', this).attr('title') || "") + '</div>';
+			});
+
+			// Prettify code
+			$('code').addClass('prettyprint');
+			$('pre code').addClass('linenums');
+
+			// Copy to clipboard with button
+			$('pre:has(code)').prepend(function(){
+				return '<div class="clip-btn">copy to clipboard</div>';
+      });
+
+			$('.clip-btn').zclip({
+				path:'/js/ZeroClipboard.swf',
+				copy: $(this).next('code').text(),
+				afterCopy: function(){
+					$(this).replaceWith('<div class="clip-btn">copied!');
+					}
+			});
+		});
+	</script>
+</html>
+<!-- END OF _layouts/default.html -->

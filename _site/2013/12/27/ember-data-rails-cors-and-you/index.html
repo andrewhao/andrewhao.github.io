@@ -1,0 +1,285 @@
+
+<!doctype html>
+<!-- START OF _layouts/default.html -->
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" >
+		<meta content="width=device-width,initial-scale=1" name="viewport">
+		<meta content="Andrew Hao's thoughts on software engineering, team leadership & product design." name="description">
+		<meta content="The Sweet Spot" name="author">
+
+		<title>Ember Data, Rails, CORS, and you! &mdash; The Sweet Spot</title>
+
+		<!-- Styles -->
+		<link href="/stylesheets/main.css" rel="stylesheet">
+
+		<!-- Google webfonts -->
+    <link href="https://fonts.googleapis.com/css?family=Cousine|Suez+One|Yellowtail|Space+Mono|Alike+Angular" rel="stylesheet">
+
+		<!-- jQuery and plugins -->
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+		<script src="/js/jquery.zclip.min.js"></script>
+
+		<!-- Syntax highlighter -->
+		<link href="/stylesheets/prettify-hemisu.css" type="text/css" rel="stylesheet" />
+    <script type="text/javascript" src="/js/prettify.js"></script>
+
+    <link href="" rel="alternate" title="The Sweet Spot" type="application/atom+xml">
+    
+
+
+  </head>
+
+	<body onload="prettyPrint()">
+		<div class="wrap">
+
+			<header>
+        <a href="/"><div class="title">The Sweet Spot</div></a>
+				<div class="subtitle">On software, engineering leadership, and anything shiny.</div>
+
+				<div class="navi">
+					<ul>
+						<li><a href="/">Articles</a></li>
+						<li><a href="/talks">Talks</a></li>
+						<li><a href="/notes">Conference Notes</a></li>
+						<li><a href="https://www.github.com/andrewhao">Github</a></li>
+						<li><a href="https://twitter.com/andrewhao">Twitter</a></li>
+					</ul>
+				</div> <!-- // .navi -->
+			</header>
+
+				<!-- START OF _layouts/post.html -->
+
+<!-- START OF _includes/article.html -->
+<article>
+	<header>
+		<h1><a href="/2013/12/27/ember-data-rails-cors-and-you/">Ember Data, Rails, CORS, and you!</a></h1>
+		<time>27 December 2013</time>
+	</header>
+		<div class="content">
+			<p>I’m starting up a new personal project involving Ember-Data and Rails
+(more to come). The gist of it is that it’s a pure frontend app engine
+built in Yeoman and Grunt, and designed to talk to a remote API service
+built on Rails.</p>
+
+<p>So since it’s a remote API, I’ve got to enable CORS, right?</p>
+
+<h2 id="install-cors-via-rack-cors">Install CORS via rack-cors</h2>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Gemfile</span>
+<span class="n">gem</span> <span class="s2">"rack-cors"</span><span class="p">,</span> <span class="ss">:require</span> <span class="o">=&gt;</span> <span class="s2">"rack/cors"</span>
+</code></pre></div></div>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># config/application.rb</span>
+<span class="n">config</span><span class="p">.</span><span class="nf">middleware</span><span class="p">.</span><span class="nf">use</span> <span class="no">Rack</span><span class="o">::</span><span class="no">Cors</span> <span class="k">do</span>
+  <span class="n">allow</span> <span class="k">do</span>
+    <span class="n">origins</span> <span class="s2">"*"</span>
+
+    <span class="n">resource</span> <span class="s2">"*"</span><span class="p">,</span>
+      <span class="ss">:headers</span> <span class="o">=&gt;</span> <span class="ss">:any</span><span class="p">,</span>
+      <span class="ss">:methods</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="ss">:get</span><span class="p">,</span> <span class="ss">:post</span><span class="p">,</span> <span class="ss">:put</span><span class="p">,</span> <span class="ss">:delete</span><span class="p">,</span> <span class="ss">:options</span><span class="p">,</span> <span class="ss">:patch</span><span class="p">]</span>
+    <span class="k">end</span>
+
+  <span class="n">allow</span> <span class="k">do</span>
+    <span class="n">origins</span> <span class="s2">"*"</span>
+    <span class="n">resource</span> <span class="s2">"/public/*"</span><span class="p">,</span>
+      <span class="ss">:headers</span> <span class="o">=&gt;</span> <span class="ss">:any</span><span class="p">,</span>
+      <span class="ss">:methods</span> <span class="o">=&gt;</span> <span class="ss">:get</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre></div></div>
+
+<p>A very naive implementation with zero security whatsoever. Anyways.
+Onward!</p>
+
+<h2 id="get-ember-data-dsrestadapter-talkin-cors">Get Ember-Data DS.RESTAdapter talkin’ CORS</h2>
+
+<p>I saw conflicting documentation on Ember-Data and CORS – it seemed like
+it should support CORS out of the box. Apparently this is not so.</p>
+
+<p>In my ember app’s <code class="highlighter-rouge">store.js</code> (or anywhere your app loads before the
+application adapter is defined, do this:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="err">#</span> <span class="nx">store</span><span class="p">.</span><span class="nx">js</span>
+<span class="nx">$</span><span class="p">.</span><span class="nx">ajaxSetup</span><span class="p">({</span>
+  <span class="na">crossDomain</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+  <span class="na">xhrFields</span><span class="p">:</span> <span class="p">{</span>
+    <span class="na">withCredentials</span><span class="p">:</span> <span class="kc">true</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+
+<span class="nx">Hendrix</span><span class="p">.</span><span class="nx">Store</span> <span class="o">=</span> <span class="nx">DS</span><span class="p">.</span><span class="nx">Store</span><span class="p">.</span><span class="nx">extend</span><span class="p">();</span>
+<span class="nx">Hendrix</span><span class="p">.</span><span class="nx">ApplicationAdapter</span> <span class="o">=</span> <span class="nx">DS</span><span class="p">.</span><span class="nx">RESTAdapter</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
+  <span class="na">host</span><span class="p">:</span> <span class="s2">"http://localhost:3000"</span><span class="p">,</span>
+<span class="p">})</span>
+</code></pre></div></div>
+
+<p><a href="http://api.jquery.com/jQuery.ajaxSetup/"><code class="highlighter-rouge">$.ajaxSetup</code></a>, though its
+usage is not recommended, is designed to set global options on the
+jQuery <code class="highlighter-rouge">ajax</code> object. It provides some information on the options you can modify.</p>
+
+<p>Why doesn’t Ember support this out of the box? I think it’s because they
+cannot support IE, where one must use an XDR object to support CORS.</p>
+
+<p>I’ve posted an <a href="http://discuss.emberjs.com/t/ember-data-and-cors/3690">Ember follow-up question in the
+forums</a> for discussion.</p>
+
+<h2 id="get-rails-talking-json-out-of-its-mimetype-confusion">Get Rails talking JSON out of its mimetype confusion.</h2>
+
+<p>Did you know that if you rely on the <code class="highlighter-rouge">Accepts:</code> header in HTTP that
+Rails does not obey its ordering<code class="highlighter-rouge">*</code>? I was trying to figure out why my
+Rails controllers were trying to render HTML instead of JSON when the
+headers were:</p>
+
+<p><code class="highlighter-rouge">'Accept: application/json, text/javascript, */*; q=0.01'</code></p>
+
+<p>A <a href="https://github.com/rails/rails/issues/9940">very long winded
+discussion</a> on the Rails
+project reveals that, well, nobody has it figured out yet. Most modern
+browsers do obey <code class="highlighter-rouge">Accepts:</code> specificity, but for the sake of older
+browser compatibility, the best practice for browsers is still to return
+HTML when <code class="highlighter-rouge">*/*</code> is specified.</p>
+
+<p>What does this mean for Rails developers who want to use <code class="highlighter-rouge">Accepts:</code>
+mimetype lists? Well, we either wait for the Rails projects to support
+mimetype specificity (and for older browsers to die out), or we are
+encouraged to include the format explicitly in the URI.</p>
+
+<p>I chose to have Ember append the <code class="highlighter-rouge">.json</code> suffix to the URL, thanks to
+this <a href="http://stackoverflow.com/questions/13648807/ds-model-url-not-working-in-ember-js">SO
+post</a></p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="err">#</span> <span class="nx">store</span><span class="p">.</span><span class="nx">js</span>
+<span class="nx">Hendrix</span><span class="p">.</span><span class="nx">ApplicationAdapter</span> <span class="o">=</span> <span class="nx">DS</span><span class="p">.</span><span class="nx">RESTAdapter</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
+  <span class="na">host</span><span class="p">:</span> <span class="s2">"http://localhost:3000"</span><span class="p">,</span>
+  <span class="c1">// Force ember-data to append the `json` suffix</span>
+  <span class="na">buildURL</span><span class="p">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">record</span><span class="p">,</span> <span class="nx">suffix</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">_super</span><span class="p">(</span><span class="nx">record</span><span class="p">,</span> <span class="nx">suffix</span><span class="p">)</span> <span class="o">+</span> <span class="s2">".json"</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="p">})</span>
+</code></pre></div></div>
+
+<p>More to come how how this app works.</p>
+
+			
+			
+		</div>
+	<footer>
+		<div class="article__categories">
+  Tagged under
+  
+  
+  <a class="article__category" href="/category/rails">rails</a>
+  , 
+  
+  <a class="article__category" href="/category/ember-data">ember data</a>
+  , 
+  
+  <a class="article__category" href="/category/ember">ember</a>
+  , 
+  
+  <a class="article__category" href="/category/api">api</a>
+  , 
+  
+  <a class="article__category" href="/category/json">json</a>
+  , 
+  
+  <a class="article__category" href="/category/cors">cors</a>
+  , 
+  
+  <a class="article__category" href="/category/ajax">ajax</a>
+  , 
+  
+  <a class="article__category" href="/category/crossdomain">crossdomain</a>
+  
+  
+</div>
+
+	
+	
+	</footer>
+	
+</article>
+<!-- END OF _includes/article.html -->
+
+
+  <section class="comments">
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+
+<!-- END OF _/layouts/post.html -->
+
+
+			<footer>
+				Copyright &copy; 2018
+
+	The Sweet Spot
+
+
+				
+
+<script type="text/javascript">
+      var disqus_shortname = 'g9labs';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://localhost:4000/2013/12/27/ember-data-rails-cors-and-you/';
+        var disqus_url = 'http://localhost:4000/2013/12/27/ember-data-rails-cors-and-you/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+
+
+
+
+			</footer>
+
+		</div> <!-- // .wrap -->
+  </body>
+
+	<script>
+		$(document).ready(function() {
+			// Make images center
+			$('p:has(img)').css('text-align', 'center');
+
+			// Add the image's title attribute as a caption
+			$('p:has(img)').append(function () {
+				return '<div class="caption">' + ($('img', this).attr('title') || "") + '</div>';
+			});
+
+			// Prettify code
+			$('code').addClass('prettyprint');
+			$('pre code').addClass('linenums');
+
+			// Copy to clipboard with button
+			$('pre:has(code)').prepend(function(){
+				return '<div class="clip-btn">copy to clipboard</div>';
+      });
+
+			$('.clip-btn').zclip({
+				path:'/js/ZeroClipboard.swf',
+				copy: $(this).next('code').text(),
+				afterCopy: function(){
+					$(this).replaceWith('<div class="clip-btn">copied!');
+					}
+			});
+		});
+	</script>
+</html>
+<!-- END OF _layouts/default.html -->

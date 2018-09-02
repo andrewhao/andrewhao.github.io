@@ -1,0 +1,408 @@
+
+<!doctype html>
+<!-- START OF _layouts/default.html -->
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" >
+		<meta content="width=device-width,initial-scale=1" name="viewport">
+		<meta content="Andrew Hao's thoughts on software engineering, team leadership & product design." name="description">
+		<meta content="The Sweet Spot" name="author">
+
+		<title>QConSF: Day One &mdash; The Sweet Spot</title>
+
+		<!-- Styles -->
+		<link href="/stylesheets/main.css" rel="stylesheet">
+
+		<!-- Google webfonts -->
+    <link href="https://fonts.googleapis.com/css?family=Cousine|Suez+One|Yellowtail|Space+Mono|Alike+Angular" rel="stylesheet">
+
+		<!-- jQuery and plugins -->
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+		<script src="/js/jquery.zclip.min.js"></script>
+
+		<!-- Syntax highlighter -->
+		<link href="/stylesheets/prettify-hemisu.css" type="text/css" rel="stylesheet" />
+    <script type="text/javascript" src="/js/prettify.js"></script>
+
+    <link href="" rel="alternate" title="The Sweet Spot" type="application/atom+xml">
+    
+
+
+  </head>
+
+	<body onload="prettyPrint()">
+		<div class="wrap">
+
+			<header>
+        <a href="/"><div class="title">The Sweet Spot</div></a>
+				<div class="subtitle">On software, engineering leadership, and anything shiny.</div>
+
+				<div class="navi">
+					<ul>
+						<li><a href="/">Articles</a></li>
+						<li><a href="/talks">Talks</a></li>
+						<li><a href="/notes">Conference Notes</a></li>
+						<li><a href="https://www.github.com/andrewhao">Github</a></li>
+						<li><a href="https://twitter.com/andrewhao">Twitter</a></li>
+					</ul>
+				</div> <!-- // .navi -->
+			</header>
+
+				<!-- START OF _layouts/post.html -->
+
+<!-- START OF _includes/article.html -->
+<article>
+	<header>
+		<h1><a href="/2014/11/03/qconsf-day-one/">QConSF: Day One</a></h1>
+		<time>03 November 2014</time>
+	</header>
+		<div class="content">
+			<h2 id="bruce-schneier-security">Bruce Schneier: Security</h2>
+
+<ul>
+  <li>We don’t have control over our infrastructure. Handing more data to the cloud</li>
+  <li>THe future: we might see more vendor control over our OSes – app store updates, etc. Windows 8, Yosemite look more like mobile OSes.</li>
+  <li>Nowadays, there are a wider variety of attack(er)s. Hackers now have standard tools.</li>
+  <li>Advanced persistent threats: Hackers just trying to grab a block of credit cards. Targeted threats: politically motivated hacking.</li>
+  <li>IP theft as well as hacktivism</li>
+  <li>“The entire supply chain is now complete.” Stealing credentials -&gt; turning account control</li>
+</ul>
+
+<h3 id="increased-govt-involvment-in-cyberstates">Increased gov’t involvment in cyberstates</h3>
+
+<ul>
+  <li>infrastructure</li>
+  <li>legal involvement</li>
+  <li>cyber arms race: people building offensive weapons</li>
+</ul>
+
+<h3 id="economics-of-it">Economics of IT</h3>
+
+<h4 id="network-effects">Network effects</h4>
+
+<p>Value of a network is the number of connections that can be made.</p>
+
+<h4 id="fixed-vs-marginal-cost">Fixed vs marginal cost</h4>
+
+<p>fixed cost is the development of the tool.
+marginal cost is low. This is why it’s profitable to steal</p>
+
+<h4 id="switching-cost">Switching cost</h4>
+
+<p>Cost to switch from a competitive product</p>
+
+<p>(IR: Instant response)</p>
+
+<h4 id="describing-psychology-principle-prospect-theory">Describing psychology principle: <a href="http://en.wikipedia.org/wiki/Prospect_theory">prospect theory</a></h4>
+
+<p>We are risk averse when it comes to gains and we are risk seeking when it comes to losses. Evolutionary theory describes: short, guaranteed small gain is better for survival.</p>
+
+<p>This makes security hard to sell: we got by OK last time. Why do we need security now? This is the boss flipping the coin.</p>
+
+<p>If we get hacked, we all have to leave and get a new job. THe economics for prevention are hard to sell. See analogy to selling insurance.</p>
+
+<p>Principle: remove humans from the system as much as possible. Problem: humans cannot be completely eliminated from the process.</p>
+
+<h3 id="protection-detection-and-response">Protection, detection and response</h3>
+
+<ul>
+  <li>Response is the arena where better products can do better. This is because technology is in charge to enable humans to detect and respond.</li>
+  <li>Just like in public service: police, firemen, medical.</li>
+</ul>
+
+<h3 id="tools-and-ooda">Tools and OODA</h3>
+
+<ul>
+  <li>OODA loops: observe, orient, decide, act. Air Force captain. The faster you can eval this loop, the more advantage you have.</li>
+  <li>What I want in IR is tools to get into the attacker’s OODA loops.</li>
+</ul>
+
+<h4 id="observe">Observe</h4>
+
+<ul>
+  <li>we need</li>
+</ul>
+
+<p>tl;dr:
+We will always underspend on preventative security
+instant response tools is an arena of software tooling that the better products will beat out the worse</p>
+
+<h2 id="architecture-at-netflix">Architecture at Netflix</h2>
+
+<ul>
+  <li>20% of org is dedicated to maintaining platform – internal PaaS</li>
+  <li>Microservice architectures organized around teams</li>
+  <li>Automate everything you can: tools, builds, images.</li>
+  <li>You want your revenue to grow faster than your org</li>
+  <li>Continuous integration - code deployed as soon as possible.</li>
+  <li>Self service: Try to make everything as self-service as possible. Make it easy for engineers to set up their own deployments, their own monitoring.</li>
+  <li>Monitoring: Do it from the beginning! Emitting events. See Etsy. Open sourcing the system soon. Make sure that they own the dashboard, so they can</li>
+  <li>Break things on production: Embrace failure. See: Netflix Simian Army.</li>
+  <li>Incident review: Blameless culture</li>
+</ul>
+
+<h4 id="data-replication">Data replication</h4>
+
+<ul>
+  <li>Shared state should not be stored within a shared service. You need to make sure there are failovers of your data. Multi data centers across AWS availability zones.</li>
+  <li>Don’t keep your secret keys on an instance.</li>
+</ul>
+
+<h4 id="queues">Queues</h4>
+
+<p>Use queues for their operational value in helping you scale.</p>
+
+<p>They give you a buffer between your users and your systems. You don’t have to worry about the rate of change. They can buffer you from</p>
+
+<p>Monitor your queue lengths so you can scale.</p>
+
+<h4 id="caching">Caching</h4>
+
+<p>Huge way to give users best experience. Write data to cache + queue.</p>
+
+<h4 id="sharding">Sharding</h4>
+
+<p>Splitting writes across multi servers based on data coming in</p>
+
+<ul>
+  <li>Cassandra: used for consistent key hashing
+multi data center
+Think of SSD as cheap ram, not expensive disk</li>
+</ul>
+
+<h4 id="lambdakappa-architecture">Lambda/Kappa Architecture</h4>
+
+<ul>
+  <li>Lambda: Idea of having two parallel data streams. One is accurate, slow, one is approximate, fast. Have queries combine the two.</li>
+  <li>Kappa: Always use the correct stream</li>
+</ul>
+
+<h2 id="linkedin-software-devengineering">LinkedIn Software Dev/Engineering</h2>
+
+<h3 id="startup-mode">Startup mode</h3>
+
+<p>Systems built during startup lifetimes can’t stand public growth.</p>
+
+<p>300+ code projects in a single SVN repo</p>
+
+<p>Testing code locally meant deploy every service locally!</p>
+
+<p>24 hrs of integration testing - you find you broke master</p>
+
+<p>3 hours writing code, you check it in, 3 days to commit it.</p>
+
+<p>Do what the OSS does</p>
+
+<p>monolith =&gt; individual git repos</p>
+
+<h3 id="sdlc-changes">SDLC changes</h3>
+
+<ul>
+  <li>All code have owners</li>
+  <li>pre-push checks</li>
+</ul>
+
+<p>Canary builds - swaps one machine with new build with production traffic:</p>
+
+<p>CPU/memory increases
+fan-in fanout increases
+error rate increases</p>
+
+<h3 id="architectural-practices">Architectural practices</h3>
+
+<p>Kafka is realtime signal ranking
+HOw to solve for locality and multi data centers</p>
+
+<p>IP routing based on location
+How to solve data integrity? cassandra does it. linkedin used oracle + kafka.</p>
+
+<p>Keep a local Kafka in each DC. Kafka just broadcasts to a global kafka</p>
+
+<h3 id="linkedin-search">LinkedIn Search</h3>
+
+<ul>
+  <li>LinkedIn archives several indices</li>
+  <li>each search engine has its own search score</li>
+  <li>LI tries to guess your intent when you search and query the right indices.</li>
+  <li>query rewriting: “sr swe” can be “senior software eng” or “sr soft engineer”</li>
+  <li>Galene Architecture: built on lucene. real time indexer, updates indices between hadoop builds</li>
+</ul>
+
+<h2 id="tumblr-bits-to-gifs">Tumblr: bits to gifs</h2>
+
+<ul>
+  <li>sharding: jetpants</li>
+  <li>php, haproxy, hdfs</li>
+  <li>
+    <p>s3 for image storage</p>
+  </li>
+  <li>Scala services: 90% of the time. Built in a world where Go didn’t exist</li>
+  <li>finagle -&gt; colossus</li>
+  <li>Thrift</li>
+  <li>Protobuf</li>
+  <li>hbase stores notifications</li>
+  <li>firehose</li>
+  <li>
+    <p>job queue: gearman</p>
+  </li>
+  <li>Varnish caching: using DJB2 hashing for consistent hashes - balanced against</li>
+</ul>
+
+<h3 id="server-management">Server management</h3>
+
+<ul>
+  <li>source of truth: Central repository of active servers</li>
+  <li>Collins: self-serve servers. figure out what to provision</li>
+  <li>“provision me a new server”</li>
+</ul>
+
+<h3 id="deployment">Deployment</h3>
+
+<ul>
+  <li>deployment used to take an hour for 500 servers</li>
+  <li>DUI is deployment tool</li>
+  <li>Need 2 people from your team + staff/sr engineer</li>
+  <li>get into an IRC deploy queue</li>
+  <li>Deploy canary first</li>
+  <li>Tumblr deploys over 40x a day</li>
+  <li>Fibr is a graphing tool. so everyone can feel empowered to see root problems</li>
+  <li>your engineers need to be empowered to understand tools.</li>
+  <li>func is installed on any server at any point in time. “give me the server”</li>
+</ul>
+
+<h2 id="fp-at-twitter">FP at Twitter</h2>
+
+<ul>
+  <li>Key component is managing/reducing incidental complexity</li>
+  <li>(scala): Futures: containers for value. Use composition operations.</li>
+  <li>Presenter demonstrating how to build a search engine in scala with composable operations</li>
+  <li>FP helps in “separating mechanics from semantics” - the bind function</li>
+  <li>A service is an async function: takes a request and returns a Future reply.</li>
+  <li>“your server as a function”: http://monkey.org/~marius/funsrv.pdf</li>
+</ul>
+
+<h3 id="service-discovery">Service discovery</h3>
+
+<ul>
+  <li>backed by zookeeper</li>
+  <li>maintains a convergent view of the system</li>
+  <li>zookeeper is hard to deal with. has strong guarantees.</li>
+  <li>exploiting the declarative nature of these abstractions</li>
+</ul>
+
+<h3 id="by-modeling-apps-as-composable-services-you-can-reason-well-about-your-programs">By modeling apps as composable services, you can reason well about your programs.</h3>
+
+<p>Example is finagle, which is just a composition of services</p>
+
+<ul>
+  <li>“composability is one of the great ideas of functional”</li>
+  <li>Good tool for enforcing modularity</li>
+</ul>
+
+			
+			
+		</div>
+	<footer>
+		<div class="article__categories">
+  Tagged under
+  
+  
+  <a class="article__category" href="/category/qconsf">qconsf</a>
+  , 
+  
+  <a class="article__category" href="/category/conference">conference</a>
+  , 
+  
+  <a class="article__category" href="/category/functional-programming">functional programming</a>
+  
+  
+</div>
+
+	
+	
+	</footer>
+	
+</article>
+<!-- END OF _includes/article.html -->
+
+
+  <section class="comments">
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+
+<!-- END OF _/layouts/post.html -->
+
+
+			<footer>
+				Copyright &copy; 2018
+
+	The Sweet Spot
+
+
+				
+
+<script type="text/javascript">
+      var disqus_shortname = 'g9labs';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://localhost:4000/2014/11/03/qconsf-day-one/';
+        var disqus_url = 'http://localhost:4000/2014/11/03/qconsf-day-one/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+
+
+
+
+			</footer>
+
+		</div> <!-- // .wrap -->
+  </body>
+
+	<script>
+		$(document).ready(function() {
+			// Make images center
+			$('p:has(img)').css('text-align', 'center');
+
+			// Add the image's title attribute as a caption
+			$('p:has(img)').append(function () {
+				return '<div class="caption">' + ($('img', this).attr('title') || "") + '</div>';
+			});
+
+			// Prettify code
+			$('code').addClass('prettyprint');
+			$('pre code').addClass('linenums');
+
+			// Copy to clipboard with button
+			$('pre:has(code)').prepend(function(){
+				return '<div class="clip-btn">copy to clipboard</div>';
+      });
+
+			$('.clip-btn').zclip({
+				path:'/js/ZeroClipboard.swf',
+				copy: $(this).next('code').text(),
+				afterCopy: function(){
+					$(this).replaceWith('<div class="clip-btn">copied!');
+					}
+			});
+		});
+	</script>
+</html>
+<!-- END OF _layouts/default.html -->
