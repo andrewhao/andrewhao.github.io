@@ -9,6 +9,8 @@ categories:
   - Parenthood
 ---
 
+<h2 class="intro">In which we train an TensorFlow model with the tears of my little one, then deploy it on a Raspberry Pi.</h2>
+
 The [last time we met]({% post_url 2018-03-21-tensorflow-for-tears-part-1 %}), we had a lively discussion about the ins and outs and joys and terrors of parenting. I talked about how I started building a Raspberry Pi project with a USB mic and wrote a simple parsing script that measured the mean amplitude of recordings of the current state of the nursery. And when that guy wailed, he really WAILED.
 
 Well that naive approach got us so far, but the system would still trip up due to random loud noises in the house. Music, or doors closing or opening, or loud conversation would all cause the system to think the kid was crying but no - it was just ambient noise.

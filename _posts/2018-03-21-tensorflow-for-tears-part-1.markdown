@@ -10,6 +10,8 @@ categories:
 - Audio Processing
 ---
 
+<h2 class="intro">How do you deal with the travails of colic and new parenthood? You plunge yourself into an ML project, of course. Here, we discuss a naive solution to detecting baby cries via an onboard microphone on a Raspberry Pi.</h2>
+
 ### An introduction to every parent's trial and travails
 
 When our son was born early last year, I admit I wasn't ready for it. Fatherhood was not the kind of thing I was ready for (and who really can ever be ready for parenthood, anyways?).
