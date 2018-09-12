@@ -23,15 +23,16 @@ pagination:
 {% endfor %}
 <div class="paginator">
 {% if paginator.total_pages > 1 %}
-<ul>
-  {% if paginator.previous_page %}
-  <li>
-    <a href="{{ paginator.previous_page_path | prepend: site.baseurl }}">Newer</a>
+<ul class="paginator__pagination-items">
+  {% if paginator.next_page %}
+  <li class="paginator__pagination-item paginator__pagination-item--older">
+    <a href="{{ paginator.next_page_path | prepend: site.baseurl }}">&larr; Older posts</a>
   </li>
   {% endif %}
-  {% if paginator.next_page %}
-  <li>
-    <a href="{{ paginator.next_page_path | prepend: site.baseurl }}">Older</a>
+
+  {% if paginator.previous_page %}
+  <li class="paginator__pagination-item paginator__pagination-item--newer">
+    <a href="{{ paginator.previous_page_path | prepend: site.baseurl }}">Newer posts &rarr;</a>
   </li>
   {% endif %}
 </ul>
