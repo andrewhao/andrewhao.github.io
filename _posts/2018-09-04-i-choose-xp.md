@@ -23,17 +23,17 @@ We assigned stories to engineers at our planning meetings. "Oh, Jay is good at t
 
 Our project manager - bless her soul - would attempt to answer big questions through Scrum in a way that abused it. We were asked to estimate stories three sprints out so a delivery date could be given to upper management and other stakeholders. Of course, we would always miss these targets. (Once, we were asked to estimate the scope of an entire project by interring the entire team in a room and writing out six months' worth of stories!)
 
-It was clear that Scrum had brought some wins. Retrospectives really were introducing a feeling of continual improvement and shared accomplishment. Estimating stories was helpful in raising conversations to the fore that would help the team arrive at an accurate estimate. But there were still some pain points - Scrum was still leveraged by our project management structure to organize major efforts toward milestones and deadlines in ways that were pressure-filled and potentially harmful to the team. In short - Agile wasn't just for the sake of being Agile - Agile was still being deployed for the purposes of metrics, reporting and status updates.
+It was clear that Scrum had brought some wins. Retrospectives really were introducing a feeling of continual improvement and shared accomplishment. Estimating stories was helpful in raising conversations to the fore that would help the team arrive at an accurate estimate. But there were still some pain points - Scrum was still leveraged by our project management structure to organize major efforts toward milestones and deadlines in ways that were pressure-filled and potentially harmful to the team. In short - Agile process was implemented in a top-down manner that emphasized control, predictability and rigidity. And it didn't feel great<sup>[2]</sup>.
 
 ### A better way?
 
 Around the same time, I started attending an XP meetup (hosted by Pivotal Labs SF) and I met a ton of lovely folks who were happy to inform me that, yes, there was a better way to Agile. And in fact, the better way to Agile was to embrace uncertainty and chaos more, to trust teams to do their own thing, and to bake some solid technical practices in with the work, too.
 
-I was sold, and I ascertained that my next gig was going to be at a company that practiced XP. And so when the opportunity arose, I applied to and got a position at [Carbon Five](https://www.carbonfive.com), my current employer.
+I was sold, and I ascertained that my next gig was going to be at a company that practiced XP. And so when the opportunity arose to work at [Carbon Five](https://www.carbonfive.com), my current employer, I jumped.
 
 ### How I choose to work
 
-In my software consulting life at Carbon Five, I work on a lot of small-to-medium scale projects that ramp up quickly in domains and orgs fraught with uncertainty and (oftentimes) dysfunction. We practice what I call "lower-case xp" in nearly all of our projects. Meaning we don't force our clients to  do ALL the things in [by-the-book XP](https://www.amazon.com/Extreme-Programming-Explained-Embrace-Change/dp/0321278658), but we keep the important things. Those things are:
+In my software consulting life at Carbon Five, I work on projects that ramp up quickly in domains fraught with uncertainty and organizations (oftentimes) wrestling with dysfunction. We practice what I call "lower-case xp" in nearly all of our projects. Meaning we don't force our clients to do ALL the things in [by-the-book XP](https://www.amazon.com/Extreme-Programming-Explained-Embrace-Change/dp/0321278658), but we keep the important things. Those things are:
 
 * __Frequent pair-programming__: On stories and tasks that are fraught with unknowns, or for a team with knowledge silos, there's really nothing better than pairing through and sharing knowledge. This has been the number one way that I know how to level up developers on a team. My teams don't typically pair 100% of the team - the ratio has been closer to 40% to 60% of the time.
 
@@ -43,7 +43,7 @@ In my software consulting life at Carbon Five, I work on a lot of small-to-mediu
 
 * __Short iterations__: I have really enjoyed one-week iterations. Two is fine. Anything longer than that, and it feels like a slog.
 
-* __Craftsmanship practices - batteries included__: XP isn't particularly prescriptive, but it does recommend development practices like CI/CD, and test-driven development. I find that folks who buy into XP also tend to be a certain type of programmer that values software design and testability<sup>[2]</sup>.
+* __Craftsmanship practices - batteries included__: XP isn't particularly prescriptive, but it does recommend development practices like CI/CD, and test-driven development. I find that folks who buy into XP also tend to be a certain type of programmer that values software design and testability<sup>[3]</sup>.
 
 * __Continual improvement__: This is arguably the one thread that, no matter what Agile religion you follow, you should always prioritize. In XP, this would be our reflection (or retrospective), where the team has a space to reflect on what went well and what could be better, then make commitments to improve upon those things. There's nothing more empowering than a team that continually improves iteration over iteration again.
 
@@ -57,5 +57,6 @@ What about you?
 
 <small>
 [1] It wasn't _that_ long ago.
-[2] This is purely my observation, and is not meant to be a generalization!
+[2] Some would say this was a mis-execution of Scrum. I don't disagree - I actually like the core tenets of Scrum and believe it works well when it's understood to not be a silver bullet.
+[3] This is purely my observation, and is not meant to be a generalization!
 </small>
