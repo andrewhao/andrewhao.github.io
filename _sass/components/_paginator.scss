@@ -1,0 +1,21 @@
+.paginator {
+  margin-top: 4rem;
+  &__pagination-items {
+    display: flex;
+    margin: 0;
+    padding: 0;
+  }
+
+  &__pagination-item {
+    flex: 1;
+    list-style: none;
+
+    &--newer {
+      text-align: right;
+    }
+
+    &--older {
+      text-align: left;
+    }
+  }
+}

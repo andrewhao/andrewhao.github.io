@@ -2,6 +2,7 @@
 @import "typography";
 @import "variables";
 @import "responsive";
+@import "components/paginator";
 
 *::selection {
 	background: $main-color;
@@ -332,15 +333,23 @@ p > code {
   margin-bottom: 1rem;
 	margin-left: $month-indent;
 
-  > a {
+}
+
+.title-listing {
+  font-size: 1rem;
+
+  @include breakpoint(md) {
     font-size: 1.3rem;
   }
 }
 
-
 .post-listing__preview {
-  font-size: 1.3rem;
-  line-height: 1.75rem;
+  font-size: 1rem;
+
+  @include breakpoint(md) {
+    line-height: 1.75rem;
+    font-size: 1.2rem;
+  }
 }
 
 .title-listing {
