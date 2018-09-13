@@ -16,6 +16,7 @@
 title: The Sweet Spot
 email: andrewhao@gmail.com
 subtitle: On software, engineering leadership, and anything shiny.
+author: Andrew Hao
 description: >- # this means to ignore newlines until "baseurl:"
   Andrew Hao's thoughts on software engineering, team leadership & product design.
 baseurl: "" # the subpath of your site, e.g. /blog

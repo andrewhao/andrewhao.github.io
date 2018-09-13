@@ -1,6 +1,14 @@
-Copyright &copy; {{ site.time | date: "%Y" }}
-{% if site.author %}
-	{{ site.author }}
-{% else %}
-	{{ site.title }}
-{% endif %}
+<div class="footer__content">
+  <div class="footer__item">
+    Copyright &copy; {{ site.time | date: "%Y" }}
+    {% if site.author %}
+    	{{ site.author }}
+    {% else %}
+    	{{ site.title }}
+    {% endif %}
+  </div>
+  <div class="footer__item">
+    <a href="https://www.github.com/{{ site.github_username }}">Github</a>
+    <a href="https://www.twitter.com/{{ site.twitter_username }}">Twitter</a>
+  </div>
+</div>
