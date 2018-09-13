@@ -53,6 +53,8 @@ pagination:
 disqus_short_name: g9labs
 disqus_show_comment_count: true
 
+google_analytics_tracking_id: UA-2330913-9
+
 # Exclude from processing.
 # The following items will not be processed, by default. Create a custom list
 # to override the default setting.
