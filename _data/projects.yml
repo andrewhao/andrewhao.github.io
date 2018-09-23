@@ -1,6 +1,6 @@
 - name: Babblefish
   repo: https://github.com/andrewhao/babblefish
-  description: A TensorFlow-based baby cry detector
+  description: I built this TensorFlow-based baby cry detector to keep aggregate stats of how long it took the little one to cry himself to sleep. See my writeups about this project in the Articles section.
   tech:
     - TensorFlow
     - Python
@@ -9,7 +9,7 @@
 - name: Spendyvision
   repo: https://github.com/andrewhao/spendyvision
   url: https://www.spendyvision.com
-  description: Finally, a budget view for your Amazon purchases
+  description: Finally, a budget view for your Amazon purchases. I built this (nearing release) because it's really hard to get visibility into Amazon spending in your Mint reports. Come to think about it, that's probably what they want... 🤔
   tech:
     - Typescript
     - Ramda
@@ -17,24 +17,32 @@
 
 - name: Babygenius
   repo: https://github.com/andrewhao/babygenius
-  description: Alexa-powered baby stats logging.
+  description: Alexa-powered baby stats logging. If you're a parent, you know that it's a good idea to keep track of your newborn's diaper changes and feedings. You can say things like "Alexa, tell Babygenius to log a feeding at 9 PM yesterday" and Alexa dutifully records your baby lifelog.
   tech:
     - Elixir
     - Phoenix
 
 - name: Zipgenius
   repo: https://github.com/andrewhao/zipgenius
-  description: API mapping time zones to zip codes
+  description: API mapping time zones to zip codes. This was mainly a companion project to the Babygenius app above (I was curious how quickly one could build Phoenix APIs, and how performant they would be in The Real World)
   tech:
     - Elixir
     - Phoenix
 
 - name: Sweetcadence
   repo: https://github.com/andrewhao/sweetcadence
-  description: A running app on the Pebble Watch platform for tracking step cadences.
+  description: A running app on the Pebble Watch platform for tracking step cadences. Running cadence is important to keep track of so you know how you need to adjust your form for maximum running efficiency.
   tech:
     - RxJS
     - Pebble.js SDK
+
+- name: Quickcadence
+  repo: https://github.com/andrewhao/quickcadence
+  description: A npm package that takes accelerometer data and emits step events. Intended usage is for wearables. This project also includes a fun visualizer that allows the user to visualize realtime accelerometer data from the HTML5 devicemotion APIs, implemented in Cycle.js. This library was the basis for my talk "Reactive Programming for Couch Potatoes"
+  tech:
+    - RxJS
+    - Cycle.js
+    - BaconJS
 
 - name: Stoplight
   repo: https://github.com/andrewhao/stoplight
@@ -44,11 +52,17 @@
 
 - name: Cyclecity
   repo: https://github.com/andrewhao/cyclecity-core
-  description: A stoplight wait time map for your city, crowdsourced from bike commuter information from Strava.
+  description: A stoplight wait time map for your city, crowdsourced from bike commuter information from Strava. I was inspired on my bike commute to work one day, wondering if I could have a bike trip planner that took stoplight wait times under consideration. This project ingests bicycle commuter data from Strava into a PostGIS database and overlays it across a map in a heatmap-like visualization.
   tech:
     - RxJS
     - PostGIS
     - Rails
+
+- name: Stressfactor
+  repo: https://github.com/andrewhao/stressfactor
+  description: A Ruby gem calculating running training metrics from Strava GPS data. Training Stress Score and Grade Adjusted Pace are derived from reading a couple of papers and backing out an algorithm.
+  tech:
+    - Ruby
 
 - name: Chordmeister
   repo: https://github.com/andrewhao/chordmeister
