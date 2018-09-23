@@ -1,0 +1,16 @@
+---
+layout: default
+---
+
+<h2 class="intro">The following are pointers to side projects and libraries that I've built over the years. Some are still running, and others are no longer maintained. All of them have been super fun to build and learn from.</h2>
+
+<div class="project-container">
+{% for project in site.data.projects %}
+<div class="project">
+  <h4 class="project__title">{{ project.name }}</h4>
+  <p class="project__description">{{ project.description }}</p>
+  <p class="project__repo-link"><a href="{{ project.repo }}">{{ project.repo }}</a></p>
+  <p class="project__tech">{{ project.tech | join: ", " }}</p>
+</div>
+{% endfor %}
+</div>

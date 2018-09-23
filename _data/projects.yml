@@ -1,0 +1,77 @@
+- name: Babblefish
+  repo: https://github.com/andrewhao/babblefish
+  description: A TensorFlow-based baby cry detector
+  tech:
+    - TensorFlow
+    - Python
+    - Arduino
+
+- name: Spendyvision
+  repo: https://github.com/andrewhao/spendyvision
+  url: https://www.spendyvision.com
+  description: Finally, a budget view for your Amazon purchases
+  tech:
+    - Typescript
+    - Ramda
+    - React
+
+- name: Babygenius
+  repo: https://github.com/andrewhao/babygenius
+  description: Alexa-powered baby stats logging.
+  tech:
+    - Elixir
+    - Phoenix
+
+- name: Zipgenius
+  repo: https://github.com/andrewhao/zipgenius
+  description: API mapping time zones to zip codes
+  tech:
+    - Elixir
+    - Phoenix
+
+- name: Sweetcadence
+  repo: https://github.com/andrewhao/sweetcadence
+  description: A running app on the Pebble Watch platform for tracking step cadences.
+  tech:
+    - RxJS
+    - Pebble.js SDK
+
+- name: Stoplight
+  repo: https://github.com/andrewhao/stoplight
+  description: NPM package to detect pauses - stoplights - in GPX trackpoint streams.
+  tech:
+    - RxJS
+
+- name: Cyclecity
+  repo: https://github.com/andrewhao/cyclecity-core
+  description: A stoplight wait time map for your city, crowdsourced from bike commuter information from Strava.
+  tech:
+    - RxJS
+    - PostGIS
+    - Rails
+
+- name: Chordmeister
+  repo: https://github.com/andrewhao/chordmeister
+  description: A parser for guitar tabs pulled off of online tablature sites.
+
+- name: Bookplanner
+  repo: https://github.com/andrewhao/bookplanner
+  description: A web app for an education nonprofit that rotates books among classrooms. At its heart is a CSP solver.
+  tech:
+    - Rails
+    - Amb (CSP solver gem)
+
+- name: shmile
+  repo: https://github.com/porkbuns/shmile
+  description: A DIY DSLR photobooth for weddings and events. A Node driver coordinates a Web UI and a gphoto bridge, and prints out a fun keepsake at the end.
+  tech:
+    - Node
+    - SVG
+
+- name: mmtss
+  repo: https://github.com/andrewhao/mmtss
+  description: A collaborative music looping station (art installation). Audience members "play" a sample over a four bar loop, layering over previous audience member recordings.
+  tech:
+    - Node
+    - SVG
+    - Ableton Live/OSC
