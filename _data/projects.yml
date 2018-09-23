@@ -1,3 +1,12 @@
+- name: Wejoinin
+  url: https://www.wejoinin.com
+  repo: https://github.com/wejoinin/prejoinin
+  description: Wejoinin is an accidentally successful side project that creates and manages signup sheets. My co-founder and I launched over ten years ago as students, and it's slowly and steadily grown year over year. In peak months, it averages 75,000 MAU and supports businesses, non-profits and volunteer groups.
+  tech:
+    - Rails
+    - React
+    - Elm
+
 - name: Babblefish
   repo: https://github.com/andrewhao/babblefish
   description: I built this TensorFlow-based baby cry detector to keep aggregate stats of how long it took the little one to cry himself to sleep. See my writeups about this project in the Articles section.
