@@ -1,8 +1,18 @@
 .project-container {
-  // display: flex;
-  // justify-content: center;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 .project {
-  // flex: 1 1 50%;
+  flex: 1 1 300px;
+  margin: 1rem 1rem 1rem 0;
+
+  @include breakpoint(lg) {
+    flex-basis: 400px;
+  }
+
+  &__tech {
+    font-family: 'sorts-mill-goudy-italic';
+  }
 }
