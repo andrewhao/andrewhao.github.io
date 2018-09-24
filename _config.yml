@@ -24,6 +24,8 @@ url: "https://www.g9labs.com" # the base hostname & protocol for your site, e.g.
 twitter_username: andrewhao
 github_username:  andrewhao
 medium_username: andrewhao
+linkedin_username: andrewhao
+speakerdeck_username: andrewhao
 
 timezone: America/Los_Angeles
 
