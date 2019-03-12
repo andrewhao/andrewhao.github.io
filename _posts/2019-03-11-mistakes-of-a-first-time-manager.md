@@ -1,6 +1,6 @@
 ---
 layout: post
-title: The Mistakes of a First-Time Manager
+title: My Biggest Three Mistakes as a Manager
 categories:
 - Management
 - Leadership
