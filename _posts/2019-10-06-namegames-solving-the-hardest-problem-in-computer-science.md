@@ -8,7 +8,7 @@ categories:
   - DDD
   - Domain-Driven Design
   - Linguistics
-publish: false
+published: false
 ---
 
 <h2 class="intro">
