@@ -9,6 +9,19 @@ footer: true
 
 <h2 class="intro">The following are talks that I've given or presented at various events, meetups or conferences:</h2>
 
+### PyGotham 2019: Can Neural Networks Make Me a Better Parent?
+
+A talk about my Deep Learning Baby Monitor project, which I used to prove some greater insights into the need to incorporate human feedback loops into our ML pipelines.
+
+<script async class="speakerdeck-embed" data-id="01b04271a7fc42a996799435411f660b" data-ratio="1.77777777777778" src="//speakerdeck.com/assets/embed.js"></script>
+
+
+### Namegames - Solving the Hardest Problem in Computer Science
+
+A deep dive into the linguistic origins of naming with a detour into semiotics and communication theory. If you get through this, you'll be better able to understand why Domain-Driven Design leans so hard into the linguistic connotations of systems.
+
+<script async class="speakerdeck-embed" data-id="aa180d04572e440d88a9f9ac50d17526" data-ratio="1.77777777777778" src="//speakerdeck.com/assets/embed.js"></script>
+
 ### Fog City Ruby: The Slow-Cooked Side Project
 
 This was a fun talk about my experience building [Wejoinin](https://www.wejoinin.com) as a side project. Lots of pointers, especially for junior engineers and people looking to get started in the field.
