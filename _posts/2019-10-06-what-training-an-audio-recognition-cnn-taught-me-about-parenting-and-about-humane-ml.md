@@ -12,7 +12,7 @@ categories:
 ---
 
 <h2 class="intro">
-Over a year ago, I wrote a <a href="{% post_url 2018-03-21-tensorflow-for-tears-part-1 %}">couple</a> of <a href="{% post_url 2018-08-27-tensorflow-for-tears-part-2 %}">blog posts</a>) about how I trained a TensorFlow model on sound recordings of my crying baby (now infant) so I could plot the cry data as a time-series graph to glean some "insights" (air quotes mine).
+Over a year ago, I wrote a <a href="{% post_url 2018-03-21-tensorflow-for-tears-part-1 %}">couple</a> of <a href="{% post_url 2018-08-27-tensorflow-for-tears-part-2 %}">blog posts</a> about how I trained a TensorFlow model on sound recordings of my crying baby (now infant) so I could plot the cry data as a time-series graph to glean some "insights" (air quotes mine).
 </h2>
 
 <h2 class="intro">
