@@ -11,7 +11,7 @@ footer: true
 
 ### PyGotham 2019: Can Neural Networks Make Me a Better Parent?
 
-A talk about my Deep Learning Baby Monitor project, which I used to prove some greater insights into the need to incorporate human feedback loops into our ML pipelines. I wrote about this project in [several]({% post_url 2018-03-21-tensorflow-for-tears-part-1 %}) [other]({% post_url 2018-08-27-tensorflow-for-tears-part-2.markdown %}) [posts]({% post_url 2019-10-06-what-training-an-audio-recognition-cnn-taught-me-about-parenting-and-about-humane-ml.md %}) on this [blog]({% post_url 2019-12-07-on-using-personas-in-user-centered-ml-model-development.md %}).
+A talk about my Deep Learning Baby Monitor project, which I used to prove some greater insights into the need to incorporate human feedback loops into our ML pipelines. I wrote about this project in [several]({% post_url 2018-03-21-tensorflow-for-tears-part-1 %}) [other]({% post_url 2018-08-27-tensorflow-for-tears-part-2 %}) [posts]({% post_url 2019-10-06-what-training-an-audio-recognition-cnn-taught-me-about-parenting-and-about-humane-ml %}) on this [blog]({% post_url 2019-12-07-on-using-personas-in-user-centered-ml-model-development %}).
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/sT_yS8XAQEw" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
