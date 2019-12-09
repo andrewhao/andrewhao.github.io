@@ -12,14 +12,12 @@ categories:
 ---
 
 <h2 class="intro">
-Over a year ago, I wrote a <a href="{% post_url 2018-03-21-tensorflow-for-tears-part-1 %}">couple</a> of <a href="{% post_url 2018-08-27-tensorflow-for-tears-part-2 %}">blog posts</a> about how I trained a TensorFlow model on sound recordings of my crying baby (now infant) so I could plot the cry data as a time-series graph to glean some "insights" (air quotes mine).
+Over a year ago, I wrote a <a href="{% post_url 2018-03-21-tensorflow-for-tears-part-1 %}">couple</a> of <a href="{% post_url 2018-08-27-tensorflow-for-tears-part-2 %}">blog posts</a> about how I trained a TensorFlow model on audio clips of my crying baby so I could get some insights into his sleep patterns and behavior. I distilled this experience into a PyGotham talk titled "Can Neural Networks Make Me a Better Parent?" and it reflects some extra maturity in my machine learning knowledge, as well as some hard-won parenting wisdom and experience.
 </h2>
 
-<h2 class="intro">
-I distilled this experience into a talk called "Can Neural Networks Make Me a Better Parent?" and it reflects some extra maturity in my machine learning knowledge, as well as some hard-won parenting wisdom and experience.
-</h2>
+<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/sT_yS8XAQEw" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
-<script async class="speakerdeck-embed" data-id="01b04271a7fc42a996799435411f660b" data-ratio="1.77777777777778" src="//speakerdeck.com/assets/embed.js"></script>
+_Here's the recording of the talk from PyGotham 2019._
 
 Nighttime at our house is pretty hectic and crazy, and we have sleep battles with our toddler all the time. The question was, just _how much_ were we locking horns? I decided to train a machine learning model to find out.
 
@@ -102,6 +100,10 @@ _...to here?_
 ![Screen Shot 2019-10-06 at 1.58.46 PM.png](/images/bc717ded994241478794ca962fc6fceb)
 
 How can we build a consciousness of our customers and the humans that work within? I have a silly idea, but I think it might be a good one: **Personas**. Let me expand on that idea in a future post...
+
+## Slides
+
+<script async class="speakerdeck-embed" data-id="01b04271a7fc42a996799435411f660b" data-ratio="1.77777777777778" src="//speakerdeck.com/assets/embed.js"></script>
 
 ## Appendix
 
