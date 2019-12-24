@@ -11,13 +11,18 @@ footer: true
 
 ### PyGotham 2019: Can Neural Networks Make Me a Better Parent?
 
-A talk about my Deep Learning Baby Monitor project, which I used to prove some greater insights into the need to incorporate human feedback loops into our ML pipelines. I wrote about this project in [several]({% post_url 2018-03-21-tensorflow-for-tears-part-1 %}) [other]({% post_url 2018-08-27-tensorflow-for-tears-part-2 %}) [posts]({% post_url 2019-10-06-what-training-an-audio-recognition-cnn-taught-me-about-parenting-and-about-humane-ml %}) on this [blog]({% post_url 2019-12-07-on-using-personas-in-user-centered-ml-model-development %}).
+A talk about my Deep Learning Baby Monitor project, which I used to prove some greater insights into the need to incorporate human feedback loops into our ML pipelines. I wrote about this project in [several]({% post_url 2018-03-21-tensorflow-for-tears-part-1 %}) [other]({% post_url 2018-08-27-tensorflow-for-tears-part-2 %}) [posts]({% post_url 2019-10-06-what-training-an-audio-recognition-cnn-taught-me-about-parenting-and-about-humane-ml %}) on this [blog]({% post_url 2019-12-07-on-using-personas-in-user-centered-ml-model-development %}) and on [Medium](https://towardsdatascience.com/integrating-personas-in-user-centered-ml-model-development-afb593741c49).
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/sT_yS8XAQEw" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 Slides:
 
 <script async class="speakerdeck-embed" data-id="01b04271a7fc42a996799435411f660b" data-ratio="1.77777777777778" src="//speakerdeck.com/assets/embed.js"></script>
+
+
+### Elixir Mix 053 - "Building beautiful systems with Phoenix Contexts and DDD with Andrew Hao"
+
+I appeared on the Elixir Mix podcast with hosts Mark Ericksen and Josh Adams to discuss Domain-Driven Design and how it can be used with Phoenix contexts. We even go into an exercise I love called Context Mapping. [Listen to the episode on Elixir Mix](https://devchat.tv/elixir-mix/emx-053-building-beautiful-systems-with-phoenix-contexts-and-ddd-with-andrew-hao/) or on [Apple Podcasts](https://podcasts.apple.com/us/podcast/emx-053-building-beautiful-systems-phoenix-contexts/id1379029137?i=1000439929527).
 
 
 ### Namegames - Solving the Hardest Problem in Computer Science
