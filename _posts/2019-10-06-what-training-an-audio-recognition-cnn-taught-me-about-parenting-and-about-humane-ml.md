@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Can Neural Networks Make Me a Better Parent? A tale in three parts"
+title: "TensorFlow for Tears (Or: Can Neural Networks Make Me a Better Parent?) - Part 3"
 categories:
 - Machine Learning
 - TensorFlow
@@ -99,7 +99,7 @@ There are humans whose inputs are valuable to our models. If we base our models 
 _...to here?_
 ![Screen Shot 2019-10-06 at 1.58.46 PM.png](/images/bc717ded994241478794ca962fc6fceb)
 
-How can we build a consciousness of our customers and the humans that work within? I have a silly idea, but I think it might be a good one: **Personas**. Let me expand on that idea in a future post...
+How can we build a consciousness of our customers and the humans that work within? I have a silly idea, but I think it might be a good one: **Personas**. Read the next blog post, ["Integrating Personas in User-Centered ML Model Development"]({% post_url 2019-12-07-on-using-personas-in-user-centered-ml-model-development %}), to learn more.
 
 ## Slides
 
