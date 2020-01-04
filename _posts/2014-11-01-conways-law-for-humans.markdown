@@ -4,10 +4,9 @@ title: "Conway's Law for humans"
 date: 2014-11-01 18:38
 comments: true
 categories: 
-- conway's law
-- engineering
-- management theory
-- management
+- Conway's Law
+- Engineering
+- Management
 ---
 
 If you're familiar with [Conway's Law](http://en.wikipedia.org/wiki/Conway's_law), it states:

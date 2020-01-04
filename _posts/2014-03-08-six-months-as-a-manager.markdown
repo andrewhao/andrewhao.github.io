@@ -3,7 +3,7 @@ layout: post
 title: "Six months as a manager"
 date: 2014-03-08 16:15
 comments: true
-categories: 
+categories:
 - Code
 - Management
 - Thoughts

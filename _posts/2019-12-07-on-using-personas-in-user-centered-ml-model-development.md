@@ -12,6 +12,8 @@ categories:
 For all the toil that went into developing the pipeline and deep learning model for my <a href="{% post_url 2019-10-06-what-training-an-audio-recognition-cnn-taught-me-about-parenting-and-about-humane-ml %}">ML baby monitor project</a>, I discovered that my model didn't actually solve the problem at hand. This kind of gap exists in the real world of ML development as well, and there's a critical insight from the field of User-Centered Design that could be the key to bridging it.
 </h2>
 
+(Note: this post has been <a href="https://towardsdatascience.com/integrating-personas-in-user-centered-ml-model-development-afb593741c49">republished</a> to Medium in the <a href="https://towardsdatascience.com/">Towards Data Science</a> publication.)
+
 As I’ve been growing my data science and machine learning chops, I’ve thought long and hard about what it means to develop a user-centered model. It seems to me that a lion’s share of ML energies are spent cultivating the data set and performing tricks to get the model architecture right.
 
 After all, ML model development is hard - in addition to developing a data pipeline to arrive at a large data set that’s properly formatted, preprocessed, scaled, and trained on, there’s problems of balance, bias, out-of-training performance, and overall model performance.
