@@ -67,6 +67,6 @@ _Direct, actionable feedback from a place of genuine care is a crucial component
 
 ### Great management is hard work!
 
-After about a year and a half in my position, I decided to move back to an individual contributor role - the next four years of my career were happily spent in software consulting. The lessons I've learned from my first stint in management were hard lessons to learn, but they're mistakes I hope I'll only have to make once. 
+After about a year and a half in my position, I decided to move back to an individual contributor role - the next four years of my career were happily spent in software consulting at <a href="https://www.carbonfive.com">Carbon Five</a> with the most fantastic people I've ever worked with. The lessons I've learned from my first stint in management were hard lessons to learn, but they're mistakes I hope I'll only have to make once. 
 
 In a future post I'm going to write about the great experiences I did get to have in software management, and why I think it's something worth doing.
