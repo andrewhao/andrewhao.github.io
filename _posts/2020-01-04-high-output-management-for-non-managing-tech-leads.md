@@ -9,9 +9,9 @@ categories:
 - OKRs
 ---
 
-<h2 class="intro">It's hard to work in tech for any amount of time and not hear praise for Andy Grove's management tome, High Output Management. Since its initial publication in the mid-nineties, it's been hailed as a cultural touchstone of technology management (Grove is often referred to as the "Father of the OKR"). A year or so ago, I got to read his book through Michael Dearing's <a href="https://www.harrisonmetal.com/classes/foundations-general-management">General Management course</a> and I've had a lot to chew on since then.</h2>
+<h2 class="intro">If you've worked in tech long enough, you'll hear praise for Andy Grove's <u>High Output Management</u>, oft-praised as a touchstone of technology management (Grove is often referred to as the "Father of the OKR"). A year or so ago, I got to read his book through Harrison Metal's <a href="https://www.harrisonmetal.com/classes/foundations-general-management">General Management course</a>. What can you apply from the book when you're a tech lead, and not actually a manager?</h2>
 
-I've written a bit on this blog about the [highs and lows](https://www.g9labs.com/2019/03/11/mistakes-of-a-first-time-manager/) of my short stint in management. I'm a team lead nowadays - less managing, more coding, but I still think long and hard about what leadership means and looks like in the tech industry.
+I've written a bit on this blog about the [highs and lows]({% post_url 2019-03-11-mistakes-of-a-first-time-manager %}) of my time in engineering management. I'm a team lead nowadays - less managing, more coding, but I still think long and hard about what leadership means and looks like in the tech industry.
 
 Re-reading the book recently made me realize that there could be a useful angle for tech leaders who aren't in direct management, but are in leadership roles anyway. Folks in our shoes tend to work closely with first- and second-line managers. Even though Andy Grove's advice is targeted to this group, plenty of it still applies to the lead role, and understanding the challenges and mindset of your manager compatriots will greatly increase your effectiveness as a lead.
 
