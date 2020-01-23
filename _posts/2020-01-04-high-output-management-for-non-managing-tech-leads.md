@@ -3,7 +3,7 @@ title: High Output Management for (Non-managing) Tech Leads
 layout: post
 date: 2020-01-04 13:43 -0800
 image: /images/high-output-management/high-output-leverage.jpg
-description: How to apply Andy Grove's High Output Managment principles to tech leading a team - even when you aren't a manager.
+description: Applying Andy Grove's High Output Managment principles when you aren't a manager.
 categories:
 - Management
 - Tech Leadership
