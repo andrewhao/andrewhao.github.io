@@ -18,7 +18,7 @@ email: andrewhao@gmail.com
 subtitle: On software development, engineering leadership, machine learning and all things shiny.
 author: Andrew Hao
 description: >- # this means to ignore newlines until "baseurl:"
-  Andrew Hao's thoughts on software engineering, team leadership, machine learning & product design.
+  Andrew Hao's thoughts on software engineering, leadership, machine learning & product design.
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "https://www.g9labs.com" # the base hostname & protocol for your site, e.g. http://example.com
 twitter_username: andrewhao

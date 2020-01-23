@@ -226,11 +226,12 @@ article {
     width: 100%;
     max-width: 100%;
     margin-bottom: 1rem;
-	background-color: transparent;
-	
-	thead th {
-		text-align: initial;
-	}
+    background-color: transparent;
+    table-layout: fixed;
+
+    thead th {
+      text-align: initial;
+    }
 
     td,
     th {
@@ -263,6 +264,13 @@ article {
       font-size: $post-first-words-font-size;
       font-variant: $post-first-words-font-variant;
     }
+  }
+}
+
+/* Custom image treatment */
+.img-constrain-width {
+  @media only screen and (min-width: 768px) {
+    max-width: 768px;
   }
 }
 
