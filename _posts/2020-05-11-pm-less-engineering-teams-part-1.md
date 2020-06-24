@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 'PM-less Engineering Teams: Part 1'
+title: 'PM-less Engineering Teams: Part 1 - Into the Wild'
 date: 2020-05-11 22:04 -0700
 description: Can engineers learn to think like product managers?
 categories:
@@ -8,7 +8,7 @@ categories:
 - Engineering
 ---
 
-<h2 class="intro">Or: how my engineering team operates without a formal Product Manager by training engineers to think like product owners</h2>
+<h2 class="intro">Can a team with a recently-departed product manager learn to survive on its own?</h2>
 
 ## What if there were no PM's?
 
@@ -53,4 +53,4 @@ Surprise, surprise. Having lost a PM, we had one less teammate who could be whol
 
 We needed to empower the team - the entire team - to think like PMs.
 
-*In the next post, I'll talk about how we made some changes to the team - and empowered every engineer to think like a product owner!*
+*In the next post, I'll talk about how we made some changes to the team - and empowered every engineer to think like a product owner! Read [Part 2]({% post_url 2020-06-23-pm-less-engineering-teams-part-2-the-idea-backlog %})*
