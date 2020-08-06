@@ -49,6 +49,20 @@ In other words, this isn't *coding*, but it's a foundational part of the explora
 
 At the beginning of each week, we evaluate our roadmap and see if there is any need to "pull" a new idea from our idea backlog into the roadmap. At this point, the team can decide together whether an idea has enough legs, definition, and impact alignment so as to actually become a project!
 
+### Getting an idea out there: from execution to launch
+
+The ideas that get their wings as features oftentimes are:
+
+- Defined well enough so that they are actionable to one or two weeks' of effort.
+- Backed by clear metrics (or are designed with the right data instrumentation in mind to be able to retrieve clear metrics)
+- Launchable easily with minimal dependencies
+
+This usually means that the kinds of ideas that get wings are quick tests - for example, we want to test the listing on the App Store. Or we want to test a quick JSON-LD rich snippet change on a web page that might cause our Google search index rank to rise. Or we deploy an alpha prototype to a small group of trusted prerelease customers.
+
+### Measuring success
+
+And finally, the hallmark of an idea is that there are clear metrics for success - or failure. From this, we take a page from the playbook of the Lean Startup manual. If it doesn't work - roll it back. Learn quickly. Talk to customers, even, if you can.
+
 ### Idea Backlogs - a great way to get involvement from  your teams
 
 The projects that make it out of this cycle get formalized in our roadmap and worked on in upcoming sprints. Better yet - all engineers are responsible for the generation of these ideas, so the sense of ownership they feel over their idea is huge.
