@@ -11,7 +11,7 @@ categories:
 
 ## Rebuilding the team with a growth engineering structure
 
-In our [last post]({% post_url 2020-05-11-pm-less-engineering-teams-part-1 %}), I told a story about how the departure of our PM led my manager and I to split the PM roles between ourselves and shield the team from the change. This led to burnout, spreading the two of us way too thin.
+In [Part 1]({% post_url 2020-05-11-pm-less-engineering-teams-part-1 %}), I told a story about how the departure of our PM led my manager and I to split the PM roles between ourselves and shield the team from the change. This led to burnout, spreading the two of us way too thin.
 
 We decided to make a major change to the team structure with a process that would focus on individual empowerment.
 
@@ -67,4 +67,4 @@ And finally, the hallmark of an idea is that there are clear metrics for success
 
 The projects that make it out of this cycle get formalized in our roadmap and worked on in upcoming sprints. Better yet - all engineers are responsible for the generation of these ideas, so the sense of ownership they feel over their idea is huge.
 
-*In our next post, we'll discuss how we split up some shared PM responsibilities among team members and got the day-to-day work of executing and strategy development rolling among the team!*
+*In [Part 3]({% post_url 2020-08-05-pm-less-engineering-teams-part-3-the-four-hats %}), we'll discuss how we split up some shared PM responsibilities among team members and got the day-to-day work of executing and strategy development rolling among the team!*

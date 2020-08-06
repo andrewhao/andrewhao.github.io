@@ -9,6 +9,14 @@ footer: true
 
 <h2 class="intro">The following are talks that I've given or presented at various events, meetups or conferences:</h2>
 
+### ProductWorld 2020: We are All Product Owners
+
+A talk about how my team at Lyft operates without a PM teammate, and how my manager and I shifted our team to an organic, bottoms-up methodology of discovering, planning and executing impactful projects.
+
+I turned this into a tweet and a series of blog articles ([Part 1]({% post_url 2020-05-11-pm-less-engineering-teams-part-1 %}), [Part 2]({% post_url 2020-06-23-pm-less-engineering-teams-part-2-the-idea-backlog %}), [Part 3]({% post_url 2020-08-05-pm-less-engineering-teams-part-3-the-four-hats %})).
+
+<blockquote class="twitter-tweet"><p lang="en" dir="ltr">Thanks for coming out to hear us speak at <a href="https://twitter.com/hashtag/DEVWEEK2020?src=hash&amp;ref_src=twsrc%5Etfw">#DEVWEEK2020</a>! To summarize: we run a self-organizing PM-less eng team at Lyft. How do we do that? We train all engineers to take on product ownership by wearing a &quot;Product Hat&quot; 🎩 on the team. <a href="https://t.co/wwc0TVxGjr">pic.twitter.com/wwc0TVxGjr</a></p>&mdash; Andrew Hao (@andrewhao) <a href="https://twitter.com/andrewhao/status/1228823278233382912?ref_src=twsrc%5Etfw">February 15, 2020</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
 ### PyGotham 2019: Can Neural Networks Make Me a Better Parent?
 
 A talk about my Deep Learning Baby Monitor project, which I used to prove some greater insights into the need to incorporate human feedback loops into our ML pipelines. I wrote about this project in [several]({% post_url 2018-03-21-tensorflow-for-tears-part-1 %}) [other]({% post_url 2018-08-27-tensorflow-for-tears-part-2 %}) [posts]({% post_url 2019-10-06-what-training-an-audio-recognition-cnn-taught-me-about-parenting-and-about-humane-ml %}) on this [blog]({% post_url 2019-12-07-on-using-personas-in-user-centered-ml-model-development %}) and on [Medium](https://towardsdatascience.com/integrating-personas-in-user-centered-ml-model-development-afb593741c49).

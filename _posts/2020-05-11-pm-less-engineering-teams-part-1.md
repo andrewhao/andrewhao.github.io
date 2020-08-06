@@ -2,15 +2,15 @@
 layout: post
 title: 'PM-less Engineering Teams: Part 1 - Into the Wild'
 date: 2020-05-11 22:04 -0700
-description: Can engineers learn to think like product managers?
+description: What if there were no PMs? Can a team with a recently-departed product manager learn to survive on its own?
 categories:
 - Product Management
 - Engineering
 ---
 
-<h2 class="intro">Can a team with a recently-departed product manager learn to survive on its own?</h2>
+<h2 class="intro">What if there were no PMs? Can a team with a recently-departed product manager learn to survive on its own? (and other ruminations).</h2>
 
-## What if there were no PM's?
+## What if there were no product managers?
 
 A former PM colleague once told me, with some amount of jest, "I don't know why product managers need to exist."
 
