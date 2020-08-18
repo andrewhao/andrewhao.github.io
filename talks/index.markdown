@@ -13,7 +13,7 @@ footer: true
 
 A talk about how my team at Lyft operates without a PM teammate, and how my manager and I shifted our team to an organic, bottoms-up methodology of discovering, planning and executing impactful projects.
 
-I turned this into a tweet and a series of blog articles ([Part 1]({% post_url 2020-05-11-pm-less-engineering-teams-part-1 %}), [Part 2]({% post_url 2020-06-23-pm-less-engineering-teams-part-2-the-idea-backlog %}), [Part 3]({% post_url 2020-08-05-pm-less-engineering-teams-part-3-the-four-hats %})).
+I turned this into a tweet and a series of blog articles ([Part 1]({% post_url 2020-05-11-pm-less-engineering-teams-part-1 %}), [Part 2]({% post_url 2020-06-23-pm-less-engineering-teams-part-2-the-idea-backlog %}). 
 
 <blockquote class="twitter-tweet"><p lang="en" dir="ltr">Thanks for coming out to hear us speak at <a href="https://twitter.com/hashtag/DEVWEEK2020?src=hash&amp;ref_src=twsrc%5Etfw">#DEVWEEK2020</a>! To summarize: we run a self-organizing PM-less eng team at Lyft. How do we do that? We train all engineers to take on product ownership by wearing a &quot;Product Hat&quot; 🎩 on the team. <a href="https://t.co/wwc0TVxGjr">pic.twitter.com/wwc0TVxGjr</a></p>&mdash; Andrew Hao (@andrewhao) <a href="https://twitter.com/andrewhao/status/1228823278233382912?ref_src=twsrc%5Etfw">February 15, 2020</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 

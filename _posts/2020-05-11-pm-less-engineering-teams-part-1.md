@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 'PM-less Engineering Teams: Part 1 - Into the Wild'
+title: 'The Product Owner Engineer: What if there were no PMs?'
 date: 2020-05-11 22:04 -0700
 description: What if there were no PMs? Can a team with a recently-departed product manager learn to survive on its own?
 categories:
@@ -8,7 +8,7 @@ categories:
 - Engineering
 ---
 
-<h2 class="intro">What if there were no PMs? Can a team with a recently-departed product manager learn to survive on its own? (and other ruminations).</h2>
+<h2 class="intro">Can a team with a recently-departed product manager learn to survive on its own? How we built a bottom-up product development culture on my team at Lyft.</h2>
 
 ## What if there were no product managers?
 

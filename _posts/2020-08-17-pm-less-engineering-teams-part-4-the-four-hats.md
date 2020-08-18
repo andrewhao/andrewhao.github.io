@@ -1,7 +1,8 @@
 ---
 layout: post
-title: 'PM-less Engineering Teams: Part 3 - The Four Hats'
-date: 2020-08-05 23:12 -0700
+title: 'The Product Owner Engineer - The Four Product Hats'
+date: 2020-08-17 23:31 -0700
+description: Empowered swarms of developers aren't going to organize themselves (easily). How can you help the team keep track of big-picture PM responsibilities? You hand out some hats.
 categories:
 - Product Management
 - Engineering
@@ -14,8 +15,14 @@ In Part 2, we [built a bottom-up Idea Backlog-driven generation engine]({% post_
 *  Deciding what the most important (or impactful) work is to take on during that iteration. 
 *  Reporting team progress and work output to interested stakeholders
 *  Managing work within an Agile process
+    
+## The Four Hats
 
-We thought about what PM's do for teams and we broke them up into four jobs, or "hats", which four volunteers on the team manage.
+We thought about what PM's do for teams and we broke them up into four jobs, or "hats", which four volunteers on the team manage. It looks something like this:
+
+![A diagram of four people wearing four stylistic hats](/images/pm-less-engineering-teams/team-role.png)
+
+In addition to taking on *Project Roles*, teammates also rotate through *Team Roles* that reflect one aspect of product ownership. Let's go through them one by one:
 
 ## *The Messenger's Job is to Inform Stakeholders*
 

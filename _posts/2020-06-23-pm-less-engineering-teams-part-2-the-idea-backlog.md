@@ -1,12 +1,12 @@
 ---
 layout: post
-title: 'PM-less Engineering Teams: Part 2 - The Idea Backlog'
+title: 'The Product Owner Engineer - The Idea Backlog'
 date: 2020-06-23 22:10 -0700
+description: How do you teach engineers to think like PMs? You give them the awesome and scary responsibility of choosing their work. Our team learned how to think and prioritize strategically by collectively building an Idea Backlog where we dream up and prioritize impactful projects to tackle. Here's how it works.
 categories:
 - Product Management
 - Engineering
 ---
-
 <h2 class="intro">How do you teach engineers to think like PMs? You give them the awesome and scary responsibility of choosing their work. Our team learned how to think and prioritize strategically by collectively building an Idea Backlog where we dream up and prioritize impactful projects to tackle. Here's how it works.</h2>
 
 ## Rebuilding the team with a growth engineering structure
@@ -36,7 +36,7 @@ Our **Idea Backlog** is really just a Kanban board of big ideas; rough and unfil
 
 Each idea backlog item moves from "this is a cool idea" verbal discussion into written form as a 1-pager specification. This specification needs to have:
 
-- A sense of the opportunity size or impact, usually measured in one of our key metrics ($ or rides).
+- A sense of the opportunity size or impact, usually measured in one of our key metrics ($ or another core business metric - rides, in our case).
 - A discussion of how the implementation will work, usually defined as a A/B experiment that is measurable and time-bound.
 - A discussion of the risks and non-goals involved.
 - Any external stakeholders or teams that also need to be involved.
@@ -45,11 +45,17 @@ Yes, it's painstaking work that often lives outside of most engineers' comfort z
 
 In other words, this isn't *coding*, but it's a foundational part of the exploratory analysis needed to be a product owner. And we have our engineers all go build that muscle.
 
-### How do ideas become reality?
+This is also time-consuming - idea generation should be factored into team sprints. It's not uncommon to spend a whole day writing queries digging through data to form a hypothesis, or finalizing the 1-pager spec that is to be circulated.
 
-At the beginning of each week, we evaluate our roadmap and see if there is any need to "pull" a new idea from our idea backlog into the roadmap. At this point, the team can decide together whether an idea has enough legs, definition, and impact alignment so as to actually become a project!
+### How Ideas move into the backlog
 
-### Getting an idea out there: from execution to launch
+At the beginning of each week, we evaluate our roadmap and see if there is any need to "pull" a new idea from our idea backlog into the roadmap. At this point, the team can decide together whether an idea has enough legs, definition, and impact alignment so as to actually become a project.
+
+That was the simple answer - there's a little more nuance to that answer - 
+
+Ideas make their way into the backlog when there's a good match of Idea scope to team availability and individual ownership. If the original author of the idea is currently actively working on another project, we may ask the team if somebody wants to lead it up. Or we might just put the idea on ice for a bit until the original owner becomes freed up to start work.
+
+### What are common qualities of successful ideas?
 
 The ideas that get their wings as features oftentimes are:
 
@@ -59,12 +65,16 @@ The ideas that get their wings as features oftentimes are:
 
 This usually means that the kinds of ideas that get wings are quick tests - for example, we want to test the listing on the App Store. Or we want to test a quick JSON-LD rich snippet change on a web page that might cause our Google search index rank to rise. Or we deploy an alpha prototype to a small group of trusted prerelease customers.
 
+It doesn't mean we don't do ambitious releases, but those are vetted with more deliberation and care, and do require much more unblocking from the team alignment perspective. My manager counterpart will often have to do some roadmap planning and stakeholder communications with upstream/downstream teams to get buy-in consensus.
+
 ### Measuring success
 
-And finally, the hallmark of an idea is that there are clear metrics for success - or failure. From this, we take a page from the playbook of the Lean Startup manual. If it doesn't work - roll it back. Learn quickly. Talk to customers, even, if you can.
+And finally, the hallmark of an idea is that there are clear metrics for success - or failure. From this, we take a page from the playbook of the Lean Startup manual. If it doesn't work - roll it back. Learn quickly. Talk to customers as much as you can.
+
+Clear metrics are essential to our ideas since they force you to see your feature through the unflinching story of data. 
 
 ### Idea Backlogs - a great way to get involvement from  your teams
 
 The projects that make it out of this cycle get formalized in our roadmap and worked on in upcoming sprints. Better yet - all engineers are responsible for the generation of these ideas, so the sense of ownership they feel over their idea is huge.
 
-*In [Part 3]({% post_url 2020-08-05-pm-less-engineering-teams-part-3-the-four-hats %}), we'll discuss how we split up some shared PM responsibilities among team members and got the day-to-day work of executing and strategy development rolling among the team!*
+*In [Part 3]({% post_url 2020-08-17-pm-less-engineering-teams-part-3-project-drivers %}), we'll discuss how we distribute this work among team members and got the day-to-day work of executing and strategy development rolling among the team!*
