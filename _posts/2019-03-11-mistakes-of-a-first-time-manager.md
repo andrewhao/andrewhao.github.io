@@ -1,6 +1,7 @@
 ---
 layout: post
 title: My Biggest Three Mistakes as a Manager
+comments: true
 categories:
 - Management
 - Leadership

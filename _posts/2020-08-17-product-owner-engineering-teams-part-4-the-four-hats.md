@@ -3,6 +3,8 @@ layout: post
 title: 'The Product Owner Engineer - The Four Product Hats'
 date: 2020-08-17 23:31 -0700
 description: Empowered swarms of developers aren't going to organize themselves (easily). How can you help the team keep track of big-picture PM responsibilities? You hand out some hats.
+comments: true
+image: /images/product-owner-engineering-teams/team-role.png
 categories:
 - Product Management
 - Engineering
@@ -10,7 +12,7 @@ categories:
 
 <h2 class="intro">Cool, we've got swarms of empowered ICs working on their newly ideated projects. How do you keep the team holistically moving toward the right goals, without having the superpowers of a PM on hand? You improvise and hand out some hats.</h2>
 
-In Part 2, we [built a bottom-up Idea Backlog-driven generation engine]({% post_url 2020-06-23-pm-less-engineering-teams-part-2-the-idea-backlog %}). Now we have swarms of ICs working on their own projects, the team still lacks organizing principles and a way to keep moving forward toward the right goalposts. In other words, we still need to solve the same problems that a PM would normally solve:
+In Part 2, we [built a bottom-up Idea Backlog-driven generation engine]({% post_url 2020-06-23-product-owner-engineering-teams-part-2-the-idea-backlog %}). Now we have swarms of ICs working on their own projects, the team still lacks organizing principles and a way to keep moving forward toward the right goalposts. In other words, we still need to solve the same problems that a PM would normally solve:
 
 *  Deciding what the most important (or impactful) work is to take on during that iteration. 
 *  Reporting team progress and work output to interested stakeholders
@@ -20,13 +22,13 @@ In Part 2, we [built a bottom-up Idea Backlog-driven generation engine]({% post_
 
 We thought about what PM's do for teams and we broke them up into four jobs, or "hats", which four volunteers on the team manage. It looks something like this:
 
-![A diagram of four people wearing four stylistic hats](/images/pm-less-engineering-teams/team-role.png)
+![A diagram of four people wearing four stylistic hats](/images/product-owner-engineering-teams/team-role.png)
 
 In addition to taking on *Project Roles*, teammates also rotate through *Team Roles* that reflect one aspect of product ownership. Let's go through them one by one:
 
 ## *The Messenger's Job is to Inform Stakeholders*
 
-![Woman wearing a Messenger hat](/images/pm-less-engineering-teams/messenger.png)
+![Woman wearing a Messenger hat](/images/product-owner-engineering-teams/messenger.png)
 
 **In one sentence**: The Messenger ensures that necessary stakeholders are informed of team progress.
 
@@ -40,7 +42,7 @@ Messengers may also represent the team at cross-team meetings, such as product r
 
 ## *The Scrum Master's job is to Do Agile™️*
 
-![Woman wearing a Scrum Master Hat](/images/pm-less-engineering-teams/scrum-master.png)
+![Woman wearing a Scrum Master Hat](/images/product-owner-engineering-teams/scrum-master.png)
 
 **In one sentence:** The Scrum Master facilitates our planning-oriented Agile ceremonies:
 
@@ -59,7 +61,7 @@ The Scrum Master doesn't have any explicit decision-making powers, but ensures t
 
 ### *The Architect's Job is to Make Prioritization Decisions*
 
-![Man wearing an Architect Hat](/images/pm-less-engineering-teams/architect.png)
+![Man wearing an Architect Hat](/images/product-owner-engineering-teams/architect.png)
 
 **In one sentence:** The Architect makes prioritization decisions for the team.
 
@@ -75,7 +77,7 @@ On my team, my manager plays the Architect, and it's clear that their natural re
 
 ### *The Dreamer's Job is to Get the Idea Juices Flowing*
 
-![Man wearing a Dreamer Hat](/images/pm-less-engineering-teams/dreamer.png)
+![Man wearing a Dreamer Hat](/images/product-owner-engineering-teams/dreamer.png)
 
 **In one sentence:** The Dreamer's job is to facilitate the Idea Generation engine.
 
@@ -97,7 +99,7 @@ We've been running this process for nine months now, and a few findings have eme
 
 ### Wins
 
-**It's very possible to operate without a PM!** Months of PM-less operation have demonstrated to us that it is possible to run a bottom-up engineering team process. Our overall team output has not wavered much, despite the additional overhead of managing our PM responsibilities.
+**It's very possible to operate without a PM!** Months of product-owner operation have demonstrated to us that it is possible to run a bottom-up engineering team process. Our overall team output has not wavered much, despite the additional overhead of managing our PM responsibilities.
 
 **The team feels empowered to make impact** - the culture of the team is very encouraging and positive. Ideas are encouraged and celebrated. People report that they feel empowered to make ideas a reality, and that the team's culture encourages new, risky or unproven ideas.
 

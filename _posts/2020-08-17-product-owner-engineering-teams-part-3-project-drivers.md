@@ -2,6 +2,7 @@
 layout: post
 title: 'The Product Owner Engineer - Engineers as Project Drivers'
 date: 2020-08-17 21:13 -0700
+comments: true
 categories:
 - Product Management
 - Engineering
@@ -9,7 +10,7 @@ categories:
 
 <h2 class="intro">When individual empowerment is your radical idea, then you commit fully to it with the Engineer as Project Driver. All engineers, no matter their rank, are given the responsibility to take a project from start to finish and own the outcomes.</h2>
 
-In our [last installment, we saw how the Idea Backlog was a great tool]({% post_url 2020-06-23-pm-less-engineering-teams-part-2-the-idea-backlog %}) to generate new ideas. Now that we've got great, well-defined ideas with clear measurement metrics and juice opportunity sizes, how do we execute on this work with the team?
+In our [last installment, we saw how the Idea Backlog was a great tool]({% post_url 2020-06-23-product-owner-engineering-teams-part-2-the-idea-backlog %}) to generate new ideas. Now that we've got great, well-defined ideas with clear measurement metrics and juice opportunity sizes, how do we execute on this work with the team?
 
 ## What is a Project Driver?
 
@@ -31,7 +32,7 @@ The driver does *not*:
 
 We conceptualize the lifecycle of a Project from a Project Driver's perspective into **Plan**, **Build** and **Measure** phases:
 
-![Plan-Build-Measure diagram](/images/pm-less-engineering-teams/plan-build-measure.png)
+![Plan-Build-Measure diagram](/images/product-owner-engineering-teams/plan-build-measure.png)
 
 ### Plan
 
@@ -96,4 +97,4 @@ While everyone has the opportunity to be a project driver, not every team member
 
 We encourage engineers to lead for some season, but in other seasons they can be the supporting cast for another engineer's project. This allows all of our team members to be in the driver's seat. Pun intended.
 
-*In our [next installment, Part 4]({% post_url 2020-08-17-pm-less-engineering-teams-part-4-the-four-hats %}), we'll look at how it all comes together by rotating our team through the four "Hats" of Product Management. Tune in!*
+*In our [next installment, Part 4]({% post_url 2020-08-17-product-owner-engineering-teams-part-4-the-four-hats %}), we'll look at how it all comes together by rotating our team through the four "Hats" of Product Management. Tune in!*

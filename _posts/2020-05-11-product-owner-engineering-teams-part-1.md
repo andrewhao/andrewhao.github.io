@@ -3,6 +3,7 @@ layout: post
 title: 'The Product Owner Engineer: What if there were no PMs?'
 date: 2020-05-11 22:04 -0700
 description: What if there were no PMs? Can a team with a recently-departed product manager learn to survive on its own?
+comments: true
 categories:
 - Product Management
 - Engineering
@@ -53,4 +54,4 @@ Surprise, surprise. Having lost a PM, we had one less teammate who could be whol
 
 We needed to empower the team - the entire team - to think like PMs.
 
-*In the next post, I'll talk about how we made some changes to the team - and empowered every engineer to think like a product owner! Read [Part 2]({% post_url 2020-06-23-pm-less-engineering-teams-part-2-the-idea-backlog %})*
+*In the next post, I'll talk about how we made some changes to the team - and empowered every engineer to think like a product owner! Read [Part 2]({% post_url 2020-06-23-product-owner-engineering-teams-part-2-the-idea-backlog %})*

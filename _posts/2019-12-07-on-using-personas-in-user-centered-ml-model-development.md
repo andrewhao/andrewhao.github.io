@@ -2,6 +2,7 @@
 layout: post
 title: Integrating Personas in User-Centered ML Model Development
 date: 2019-12-07 21:13 -0800
+comments: true
 categories:
 - Machine Learning
 - User-Centered Design

@@ -4,6 +4,7 @@ layout: post
 date: 2020-01-04 13:43 -0800
 image: /images/high-output-management/high-output-leverage.jpg
 description: Applying Andy Grove's High Output Managment principles when you aren't a manager.
+comments: true
 categories:
 - Management
 - Tech Leadership

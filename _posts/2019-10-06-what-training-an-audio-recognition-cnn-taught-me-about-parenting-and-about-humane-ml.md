@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "TensorFlow for Tears (Or: Can Neural Networks Make Me a Better Parent?) - Part 3"
+comments: true
 categories:
 - Machine Learning
 - TensorFlow
