@@ -6,8 +6,10 @@ description: How do you teach engineers to think like PMs? You give them the awe
 comments: true
 image: /images/product-owner-engineering-teams/idea-backlog.jpg
 categories:
+- The Product Owner Engineer
 - Product Management
 - Engineering
+- OKRs
 ---
 
 <h2 class="intro">How do you teach engineers to think like PMs? You give them the awesome and scary responsibility of choosing their work. Our team learned how to think and prioritize strategically by collectively building an Idea Backlog where we dream up and prioritize impactful projects to tackle. Here's how it works.</h2>
@@ -64,13 +66,15 @@ This is also time-consuming - idea generation should be factored into team sprin
 
 ## How Ideas move into the backlog
 
-At the beginning of each week, we evaluate our roadmap and see if there is any need to "pull" a new idea from our idea backlog into the roadmap. At this point, the team can decide together whether an idea has enough legs, definition, and impact alignment so as to actually become a project.
+At the beginning of each week, we evaluate our roadmap and see if there is any need to "pull" a new idea from our idea backlog into the roadmap. At this point, the team can decide together whether an idea has enough legs, definition, and impact alignment so as to actually become a formal work project.
 
-Ideas make their way into the backlog when there's a good match of Idea scope to team availability and individual ownership. If the original author of the idea is currently actively working on another project, we may ask the team if somebody wants to lead it up. Or we might just put the idea on ice for a bit until the original owner becomes freed up to start work.
+The Ideas that rise to the top are the ones that have at least one of these traits:
 
-## What are common qualities of successful ideas?
+* Has a high impact-to-effort ratio
+* Has a total opportunity that meaningfully moves the needle
+* Helps us learn something we don't know and could validate a new market segment, partnership, or use case.
 
-The ideas that get their wings as features oftentimes are:
+Thoughtfully designed Ideas will also be:
 
 - Defined well enough so that they are actionable to one or two weeks' of effort.
 - Backed by clear metrics (or are designed with the right data instrumentation in mind to be able to retrieve clear metrics)
@@ -78,13 +82,13 @@ The ideas that get their wings as features oftentimes are:
 
 This usually means that the kinds of ideas that get wings are quick tests - for example, we want to test the listing on the App Store. Or we want to test a quick JSON-LD rich snippet change on a web page that might cause our Google search index rank to rise. Or we deploy an alpha prototype to a small group of trusted prerelease customers.
 
-It doesn't mean we don't do ambitious releases, but those are vetted with more deliberation and care, and do require much more unblocking from the team alignment perspective. My manager counterpart will often have to do some roadmap planning and stakeholder communications with upstream/downstream teams to get buy-in consensus.
+It doesn't mean we avoid ambitious, multimonth releases, but those are vetted with more deliberation and care, and do require much more unblocking and team alignment. My manager counterpart will often have to do some roadmap planning and stakeholder communications with upstream/downstream teams to get buy-in consensus for the very big projects.
 
 ## Measuring success
 
-And finally, the hallmark of an idea is that there are clear metrics for success - or failure. From this, we take a page from the playbook of the [Lean Startup](https://theleanstartup.com/principles) manual. If it doesn't work - roll it back. Learn quickly. Talk to customers as much as you can.
+And finally, the hallmark of an idea is that there are clear metrics for success - or failure. From this, we take a page from the playbook of the [Lean Startup](https://theleanstartup.com/principles) manual. We oftentimes use an [Experiment Canvas](https://designabetterbusiness.com/2017/11/30/experiment-with-your-riskiest-assumption) to help think through our experiment design to build metrics that are clearly quantifiable and time-bound.
 
-Clear metrics are essential to our ideas since they force us to see our ideas through actual data.
+Features are launched with metrics dashboards built as part of the feature work. Clear metrics are essential to our ideas since they force us to see the outcome of our work through actual data, give us the courage to roll back changes that are ineffective.
 
 ## Some caveats
 

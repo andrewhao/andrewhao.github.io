@@ -6,8 +6,10 @@ description: Empowered swarms of developers aren't going to organize themselves 
 comments: true
 image: /images/product-owner-engineering-teams/team-role.png
 categories:
+- The Product Owner Engineer
 - Product Management
 - Engineering
+- Agile
 ---
 
 <h2 class="intro">Cool, we've got swarms of empowered ICs working on their newly ideated projects. How do you keep the team holistically moving toward the right goals, without having the superpowers of a PM on hand? You improvise and hand out some hats.</h2>

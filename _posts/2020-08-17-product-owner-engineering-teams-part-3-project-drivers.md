@@ -4,11 +4,12 @@ title: 'The Product Owner Engineer - Engineers as Project Drivers'
 date: 2020-08-17 21:13 -0700
 comments: true
 categories:
+- The Product Owner Engineer
 - Product Management
 - Engineering
 ---
 
-<h2 class="intro">When individual empowerment is your radical idea, then you commit fully to it with the Engineer as Project Driver. All engineers, no matter their rank, are given the responsibility to take a project from start to finish and own the outcomes.</h2>
+<h2 class="intro">When individual empowerment is your radical idea, then you commit fully to it with the Engineer as Project Driver. All engineers, no matter their experience, are given the responsibility to take a project from start to finish and own the outcomes.</h2>
 
 In our [last installment, we saw how the Idea Backlog was a great tool]({% post_url 2020-06-23-product-owner-engineering-teams-part-2-the-idea-backlog %}) to generate new ideas. Now that we've got great, well-defined ideas with clear measurement metrics and juice opportunity sizes, how do we execute on this work with the team?
 
