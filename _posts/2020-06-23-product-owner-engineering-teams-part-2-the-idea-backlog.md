@@ -98,8 +98,8 @@ Interested in trying out this method? Of course there are limitations, and here 
 * As you might imagine, bottom-up ideation must be guided by well-defined OKRs. We are fortunate to have OKRs that are well-designed and aligned with the rest of the company.
 * Having an Idea Backlog doesn't mean your team doesn't have long-term strategy. You still need someone to think about the long-term bets and plans for the team (skip ahead to [Part 4]({% post_url 2020-08-17-product-owner-engineering-teams-part-4-the-four-hats %}) to read more about how we do that)
 
-## Idea Backlogs - a great way to get involvement from  your teams
+## Idea Backlogs - a great way to build bottom-up ownership and product thinking on the team
 
-The projects that make it out of this cycle get formalized in our roadmap and worked on in upcoming sprints. Better yet - all engineers are responsible for the generation of these ideas, so the sense of ownership they feel over their idea is huge.
+The projects that make it out of this cycle get formalized in our roadmap and worked on in upcoming sprints. Better yet - all engineers are responsible for the generation of these ideas, so the team feels an increased ownership over their work.
 
 *In [Part 3]({% post_url 2020-08-17-product-owner-engineering-teams-part-3-project-drivers %}), we'll discuss how we distribute this work among team members and got the day-to-day work of executing and strategy development rolling among the team!*
