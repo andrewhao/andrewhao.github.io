@@ -15,4 +15,4 @@ At [Blurb](https://www.blurb.com), I was a tech lead that transitioned into engi
 
 I [talk](/talks) a lot about Domain-Driven Design, and I've spoken at several Ruby and Elixir conferences on the topic. I also love XP (the process) and pair programming (the practice), both of which I sadly find too rare in the industry these days. I'm developing [machine learning]({% post_url 2018-03-21-tensorflow-for-tears-part-1 %}) chops at Lyft, but coupled with a healthy dose of skepticism (or realism).
 
-You can find me tweeting (rarely) on Twitter at [@andrewhao](https://www.twitter.com/andrewhao), or more professionaly at [LinkedIn](https://www.linkedin.com/in/andrewhao/). All my talks are listed on my [Talks](/talks) page.
+You can find me tweeting (rarely) on Twitter at [@andrewhao](https://www.twitter.com/andrewhao), or more professionally at [LinkedIn](https://www.linkedin.com/in/andrewhao/). All my talks are listed on my [Talks](/talks) page.
