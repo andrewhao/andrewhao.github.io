@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 'The Sacred Cows You Take From Job to Job'
+title: 'How now, sacred cow?'
 description: Sometimes, our most dearly-held beliefs and practices are the very things that keep us from succeeding in new leadership roles.
 comments: true
 categories:
