@@ -7,7 +7,7 @@ sharing: true
 footer: true
 ---
 
-I'm Andrew, nice to meet you. I'm currently a software engineer at Lyft, leading a growth engineering team focused on bringing new product ideas for our riders to life. I write often about how we try to [build product-owner mindsets]({% post_url 2020-05-11-product-owner-engineering-teams-part-1 %}) on the team by delegating product ownership and data scientist roles to our engineers.
+I'm Andrew, nice to meet you. I'm currently a Staff Engineer at Lyft, leading a growth engineering team focused on bringing new product ideas for our riders to life. I write often about how we try to [build product-owner mindsets]({% post_url 2020-05-11-product-owner-engineering-teams-part-1 %}) on the team by delegating product ownership and data scientist roles to our engineers.
 
 Prior to that, I was a Principal Engineer at [Carbon Five](https://www.carbonfive.com/), where I helped build some great products for clients like Stitch Fix, TaskRabbit, Guild Education, and more. These were unequivocably the best teammates I've ever worked with, and I look back fondly at my time with them.
 
