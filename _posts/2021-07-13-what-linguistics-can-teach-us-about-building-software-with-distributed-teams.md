@@ -24,9 +24,9 @@ In the days to come, everybody has an opinion about what could have gone better.
 
 ## Software as written, cultural artifact
 
-When we think of a software system, we often conceptualize it in its dynamic, operationalized form in production. We ask questions like, _how many transactions per second can it process under load? Is it meeting SLO targets? _But we also need to remember that software systems take a form much like written communication between the developers working on the system. It is just as important for a software system to have several nines of uptime as it is for it to be readable and understandable to the engineer poring over the code, trying to make sense of its shape.
+When we think of a software system, we often conceptualize it in its dynamic, operationalized form in production. We ask questions like, _how many transactions per second can it process under load? Is it meeting SLO targets?_ But we also need to remember that software systems take a form much like written communication between the developers working on the system. It is just as important for a software system to have several nines of uptime as it is for it to be readable and understandable to the engineer poring over the code, trying to make sense of its shape.
 
-After all, we know that engineers spend more time _reading_ code than writing it. If an engineer makes a change to a system with an incorrect mental model, then defects will emerge._ _And the team’s mental model is indelibly imprinted in the code, the tests, and the documentation.
+After all, we know that engineers spend more time _reading_ code than writing it. If an engineer makes a change to a system with an incorrect mental model, then defects will emerge. And the team’s mental model is indelibly imprinted in the code, the tests, and the documentation.
 
 Software’s purpose is not just to achieve business goals for the company, but to be easily changeable, elegantly designed, and robustly tested for _all current and future_ members of the team. In other words - one of the primary purposes of software is to guide its readers into constructing a mental model of the world and how it works.
 
