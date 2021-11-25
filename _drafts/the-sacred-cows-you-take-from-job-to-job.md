@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 'The Sacred Cows You Take From Job to Job'
+title: 'How Now, Sacred Cow?'
 ---
 
 A friend had introduced me to a peer from another company last year who was having troubles adjusting to his new role as tech lead on his new team. We sat down at a local coffee shop to talk it through.
