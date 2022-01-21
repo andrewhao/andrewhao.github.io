@@ -6,7 +6,7 @@ categories:
 - Work/Life Balance
 ---
 
-<h2 class="intro">I'm committing myself to an article a week on this blog while on paternity leave in early 2021. Today, I discuss how I'm reorienting myself after a very disorienting 2021.</h2>
+<h2 class="intro">I'm committing myself to an article a week on this blog while on paternity leave in early 2022. Today's topic is on how I'm recovering and reorienting myself after a disorienting 2021.</h2>
 
 What made 2021 so difficult? 2020 was tough enough, but I felt like I ran it all on adrenaline and we survived. 2021 felt like it opened with a glimmer of hope but then it quickly fell apart again.
 
