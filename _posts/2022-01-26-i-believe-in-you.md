@@ -6,7 +6,7 @@ categories:
 - Mentorship
 ---
 
-<h2 class="intro">Struggling with the responsibilities of being a new manager, I received encourage from an unlikely person. This next post is a short one. It's about the power of encouragement at the right time and place.</h2>
+<h2 class="intro">Struggling with the responsibilities of being a new manager, I received encouragement from an unlikely person. This next post is a short one. It's about the power of encouragement at the right time and place.</h2>
 
 2014 was my first year as a manager, and it had been *brutal*. In addition to feeling the (normal) overwhelm of transitioning from technical IC to manager, I was also struggling with performance managing one of my direct reports, who was pushing for a title and compensation bump and running into process and procedural hurdles from the company. I felt trapped and caught in the middle and completely out of my depth, losing sleep night after night wondering how I was going to make this happen.
 
