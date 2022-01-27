@@ -14,7 +14,7 @@ categories:
 
 <h2 class="intro">If you've worked in tech long enough, you'll hear praise for Andy Grove's <u>High Output Management</u>, oft-praised as a touchstone of technology management (Grove is often referred to as the "Father of the OKR"). A year or so ago, I got to read his book through Harrison Metal's <a href="https://www.harrisonmetal.com/classes/foundations-general-management">General Management course</a>. What can you apply from the book when you're a tech lead, and not actually a manager?</h2>
 
-![Photo of High Output Management Book Cover](https://businessagility.institute/wp-content/uploads/2019/03/High_Output_Management_by_Andrew_Grove-195x300.jpg)
+![Photo of High Output Management Book Cover](/images/high-output-management/domain-driven-design-cover.jpg)
 
 I've written a bit on this blog about the [highs and lows]({% post_url 2019-03-11-mistakes-of-a-first-time-manager %}) of my time in engineering management. I'm a team lead nowadays - less managing, more coding, but I still think long and hard about what leadership means and looks like in the tech industry.
 
