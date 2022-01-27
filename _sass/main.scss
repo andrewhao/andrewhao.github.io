@@ -27,6 +27,7 @@ body {
   border-top: $top-line-weight solid $black;
   font-family: $body-font;
   font-size: $body-font-size;
+  font-display: swap;
   color: $black;
 
   @media only screen and (max-width: 1000px) {
