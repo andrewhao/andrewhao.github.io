@@ -27,7 +27,6 @@ body {
   border-top: $top-line-weight solid $black;
   font-family: $body-font;
   font-size: $body-font-size;
-  font-display: swap;
   color: $black;
 
   @media only screen and (max-width: 1000px) {
@@ -380,6 +379,7 @@ p > code {
   margin: $month-indent 0 $month-spacing-bottom $month-indent;
   font-family: $month-font-family;
   font-size: $month-font-size;
+  font-weight: $month-font-weight;
 }
 
 .post-listing {

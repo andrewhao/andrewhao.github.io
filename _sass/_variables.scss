@@ -8,15 +8,15 @@ $gray: #b0b0b0;
 $black: #333;
 
 /* Typography */
-$body-font: 'IBM Plex Sans';
+$body-font: 'IBM Plex Sans', sans-serif;
 $body-font-italic: $body-font;
 $body-font-size: 1.1em;
 
-$blog-title-font: 'Yellowtail';
+$blog-title-font: 'Yellowtail', sans-serif;
 $blog-title-font-size: 5em;
 $blog-title-text-transform: none;
 
-$navi-font: 'Space Mono';
+$navi-font: 'Space Mono', sans-serif;
 $navi-font-size: 1.15em;
 
 $page-title-align: center;
@@ -50,7 +50,7 @@ $subheading-top-spacing: 2em;
 
 $subheadings-align: left;
 
-$code-font-family: 'Cousine';
+$code-font-family: 'Cousine', monospace;
 $code-font-size: 0.75em;
 $code-padding: 0.4em;
 $code-margin: 0.4em;
@@ -70,13 +70,14 @@ $blockquote-font-family: $body-font;
 $blockquote-font-size: 1em;
 
 /* On the category listing page */
-$year-font-family: 'IBM Plex Sans';
+$year-font-family: 'IBM Plex Sans', sans-serif;
 $year-font-size: 1.3em;
 $year-spacing-bottom: 1.5em;
-$month-font-family: 'IBM Plex Sans';
+$month-font-family: 'IBM Plex Sans', sans-serif;
 $month-font-size: 1em;
 $month-spacing-bottom: 1em;
 $month-indent: 2em;
+$month-font-weight: 900;
 
 /* Layout */
 
