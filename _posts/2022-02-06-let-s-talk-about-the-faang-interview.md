@@ -7,23 +7,23 @@ categories:
   - Career
 ---
 
-<h2 class="intro">If you've ever cruised Hacker News or Blind, you'll know there's an intense obsession with passing the interview loop at big tech companies like FAANG. This is a post for early-career engineers, or those looking to break into the field. As someone who's failed SO MANY of these loops, I'm here to tell you to relax.</h2>
+<h2 class="intro">If you've ever cruised Hacker News or Blind, you'll know there's an intense obsession with passing the interview loop at big tech companies like FAANG. This is a post for early-career engineers and those looking to break into the field. As someone who's failed SO MANY of these loops, I'm here to tell you to relax.</h2>
 
 ## A tale of two interviews
 
-I've never passed the interview loop at a FAANG[^1] company, and I've tried at least 6 times[^2] throughout my career - Rejection City!
+Let's get to the point - I've never passed the interview loop at a FAANG[^1] company, and I've tried at least 6 times[^2] throughout my career - Rejection City!
 
-Now, FAANG companies are famous for looking for qualities like rigorous computational thinking and mastery over algorithms and data structures. This advantages folks at computer science research institutions, or people who have hours every day to grind [leetcode](https://leetcode.com/)[^3]. I did have some memorable experiences[^4] though, and the interviewers I've met have been all kind and fair.
+Now the typical loop at these companies will prioritize mastery over algorithms and data structures. This advantages folks at computer science research institutions, or people who have hours every day to grind [leetcode](https://leetcode.com/)[^3]. Because there are so many applicants passing through the pipeline, there's a pretty low margin of error for any of these interviews.
 
 These big tech companies are inundated with candidates, and it pays them to be aggressive in how they filter candidates out. This means it's acceptable to have a very high rate of false negatives, or regrettable rejections (in statistical terms, that means they optimize for high precision and low recall). It also means that there is an entire cottage industry of cram schools, course materials that would rival any SAT / higher education cram school.
 
-At this point, I've received 6 FAANG rejections so far (and counting). Does it sting? No doubt, especially as I consider myself a fairly competent engineer. What I've concluded is that my strengths are not the strengths that the FAANG interview loops optimize for. Does it mean I'm less of an engineer? Hell no - I know what I'm worth and what I'm capable of.
+It's perfectly normal to end up failing out one of these loops because of anything including - nerves, blanking out, or simply having some bad luck with the type of problem you were given. At this point, I've received 6 FAANG rejections so far (and counting). Does it sting? No doubt, especially as I consider myself a fairly competent engineer. (I did have some memorable experiences[^4] though, and the interviewers I've met have been all kind and fair.)
 
-And you know what? That's OK!
+Does my record indicate I'm any less of an engineer? Nope - I know what I'm worth and what I'm capable of. And you know what? I'm OK with it!
 
 ## What's your superpower?
 
-And that's what I usually ask students or junior engineers at this point - what's your superpower? Is it your keen collaborative spirit? Your thorough PR reviews, and responsible custodianship of the health of your systems? Your ability to write a thorough doc or tech spec? Your deep knowledge of important domains of web performance or observability?
+That's what I usually ask students or junior engineers at this point - what's your superpower? Is it your keen collaborative spirit? Your thorough PR reviews, and responsible custodianship of the health of your systems? Your ability to write a thorough doc or tech spec? Your deep knowledge of important domains of web performance or observability or some deep understanding of the business?
 
 These might not have a chance to shine in your next FAANG interview.
 
@@ -36,7 +36,7 @@ I'm a big believer in making interviews work like actual day-to-day coding pract
 * Let you work as a pair with your interviewer, two pairs of hands on the keyboard.
 * With real production-like code (or as real of a coding challenge as can reasonably/legally designed)
 * Emphasizing the glue work involved in being an engineer - how you review PRs, or write specs, or plan to develop a project.
-* Take-home programming challenges are controversial, but I generally enjoy them provided they are bounded in scope because they decrease the stress of coding with someone looking over your shoulder.
+* Giving you the opportunity to show your work offline with take-home programming challenges. Though controversial, I generally enjoy them provided they are bounded in scope because they decrease the stress of coding with someone looking over your shoulder.
 
 It's the reason at [Lyft](https://www.lyft.com) we've designed our [Apprenticeship](https://www.lyft.com/careers/university) interview loop to be specifically more collaborative. And each day I hear more and more about people working on well-designed interview loops.
 
