@@ -5,9 +5,9 @@ categories:
 - Career
 - Consulting
 ---
-<h2 class="intro">Why you should consider a stint in consulting as part of your career path. There is no better way to gain exposure to so many technologies, industries, and people.</h2>
+<h2 class="intro">What career move will give you maximal exposure to technologies, industries, and orgs? Why you should consider a stint in consulting as part of your career path.</h2>
 
-When you think of a software engineering career path, you may default to the idea that you can climb the career ladder at various companies and corporations, working directly with stakeholders and leadership to ship products to customers. The types of companies you might consider are early/mid/late-stage  startups, established enterprises or Big Tech companies.
+When you think of a software engineering career path, you may default to the idea that you can climb the career ladder at various product companies and corporations, working directly with stakeholders and leadership to ship products to customers. The types of companies you might consider are early/mid/late-stage startups, established enterprises or Big Tech companies.
 
 What you may not have considered, however, is how a stint in consulting can accelerate your learning curve and teach you lessons that can multiply your effectiveness across any engineering organization you join later in your career.
 
