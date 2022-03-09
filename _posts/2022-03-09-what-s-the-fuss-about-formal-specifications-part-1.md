@@ -6,7 +6,7 @@ categories:
 - Engineering
 ---
 
-<h2 class="intro">What Math ✨ can bring to your daily toolbox of programming tools to write robust, concurrent programs: A light introduction to TLA+</h2>
+<h2 class="intro">What Math ✨ can bring to your daily toolbox of programming tools to write robust, concurrent programs: a light introduction to TLA+.</h2>
 
 If you've been writing software for any amount of time, you may be familiar with the many tools we have available to us to ensure correctness, consistency and debuggability of our systems. They range the gamut of unit / acceptance / integration tests, QA plans, CI/CD automation and the like. System or language tools like type systems, interactive debuggers and profilers abound. Practices emerge like DevOps process, TDD/BDD, and even Agile process itself can be argued to be invented toward the goal of writing correct, robust, easy to maintain systems.
 
