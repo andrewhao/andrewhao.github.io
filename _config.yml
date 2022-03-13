@@ -32,6 +32,14 @@ timezone: America/Los_Angeles
 # Build settings
 markdown: kramdown
 highlighter: rouge
+kramdown:
+  syntax_highlighter: rouge
+  syntax_highlighter_opts:
+    css_class: 'highlight'
+    span:
+      line_numbers: false
+    block:
+      line_numbers: true
 theme: minima
 plugins:
   - jekyll-feed

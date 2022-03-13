@@ -277,55 +277,34 @@ article {
 
 /* Code blocks */
 
-figure.code {
-  width: 100%;
-  margin: 0;
+pre.highlight {
+  // position: relative;
+  // border: 1px solid $light-gray;
 
-  table {
-    width: 100%;
-  }
-
-  td.gutter {
-    display: none;
-  }
-}
-
-pre {
-  position: relative;
-  border: 1px solid $light-gray;
-
-  @include border-radius(4px);
+  // @include border-radius(4px);
 
   line-height: $code-block-line-height;
-  background-color: $code-background-color;
-  overflow: hidden;
-
-  .line-number {
-    display: none;
-  }
-
-  .clip-btn {
-    position: absolute;
-    top: 0px;
-    right: 1em;
-    font-size: 0.8em;
-    text-decoration: underline;
-
-    @media only screen and (max-width: 1000) {
-      display: none;
+  // background-color: $code-background-color;
+  table {
+    td {
+      border-top: 1px solid #dee2e6;
+      border-bottom: 1px solid #dee2e6;
     }
   }
 }
+.rouge-gutter {
+  width: 2em;
+}
 
 code {
-  margin: $code-margin 0;
-  padding: $code-padding;
   font-family: $code-font-family;
   font-size: $code-font-size;
 }
 
 /* Inline code */
 p > code {
+  margin: $code-margin 0;
+  padding: $code-padding;
   border: 1px solid $light-gray;
 
   @include border-radius(4px);
