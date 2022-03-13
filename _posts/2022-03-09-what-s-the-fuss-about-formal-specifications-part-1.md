@@ -83,6 +83,8 @@ This will blow up! The TLA model checker will compute all possible computation s
 
 ![A diagram showing an error message of this proof failing](/images/tla-plus-examples/ex-1-failure.png)
 
+Just look - the model checker has run and blown up on a series of state transitions that got us to the Very Wrong situation we discussed before. The poor auditor has found that Account1 has $1500 and Account2 has $1000. That's not good!
+
 ### How do we fix this?
 
 Clearly, this is incorrect. We will need to ensure that the database is not able to allow other queries to read values happening from within a transaction. So here, we say "OK, we're going to wrap up these statements in a `TRANSACTION` block". But hold up! We need to move that change in system design into our TLA model.
