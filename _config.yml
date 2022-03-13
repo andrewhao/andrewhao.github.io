@@ -31,6 +31,7 @@ timezone: America/Los_Angeles
 
 # Build settings
 markdown: kramdown
+highlighter: rouge
 theme: minima
 plugins:
   - jekyll-feed

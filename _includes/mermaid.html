@@ -1,0 +1,14 @@
+{% comment %} Load script if mermaid diagrams are enabled{% endcomment %}
+{% if page.mermaid != false %}
+<script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+<script>
+  $(document).ready(function () {
+			console.log('doc ready');
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: "default",
+    });
+    window.mermaid.init(undefined, document.querySelectorAll('.language-mermaid'));
+  });
+</script>
+{% endif %}
