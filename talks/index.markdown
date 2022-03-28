@@ -9,6 +9,30 @@ footer: true
 
 <h2 class="intro">The following are talks that I've given or presented at various events, meetups or conferences:</h2>
 
+
+### CascadiaJS: Let's Go Fast! Creating a Culture of Frontend Performance
+
+What do Liberian tailors and Xerox field techs have in common? They co-create learning communities - more famously known as "Communities of Practice" - to spread best practices, share learnings and upskill newcomers.
+
+If you're looking to enact sociotechnical change within your org, this is worth a watch. A talk about culture change, and how it can be driven from the bottom-up from the practitioners themselves.
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/VT610mq5uSA" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+Slides:
+
+<iframe class="speakerdeck-iframe" frameborder="0" src="https://speakerdeck.com/player/5e5206627cd1489ea36c7be6fe727e93" title="CascadiaJS 2021 - Creating a Culture of Frontend Performance" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true" style="border: 0px; background: padding-box padding-box rgba(0, 0, 0, 0.1); margin: 0px; padding: 0px; border-radius: 6px; box-shadow: rgba(0, 0, 0, 0.2) 0px 5px 40px; width: 560px; height: 314px;" data-ratio="1.78343949044586"></iframe>
+
+### React Summit 2021: Platform-powered: Building a Frontend Platform that Scales
+
+I shared how Lyft was upgrading its frontend platform stack to Next.js - and gave insights on how tooling was the secret lever to move all 100+ services to the next generation stack. A talk relevant to any company looking to spin up platform teams and looking for high-leverage places to build products.
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/HwM7N92r52w" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+Slides:
+
+<iframe class="speakerdeck-iframe" frameborder="0" src="https://speakerdeck.com/player/bee39eb114bb496da034803272808c96" title="Platform-powered: Building a Frontend Platform that Scales" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true" style="border: 0px; background: padding-box padding-box rgba(0, 0, 0, 0.1); margin: 0px; padding: 0px; border-radius: 6px; box-shadow: rgba(0, 0, 0, 0.2) 0px 5px 40px; width: 560px; height: 314px;" data-ratio="1.78343949044586"></iframe>
+
+
 ### ProductWorld 2020: We are All Product Owners
 
 A talk about how the engineers on my team, with the departure of our then-product manager, developed the mindset of product owners with an empowered model of discovering, planning and executing impactful projects.
@@ -25,13 +49,14 @@ A talk about my Deep Learning Baby Monitor project, which I used to prove some g
 
 Slides:
 
-<script async class="speakerdeck-embed" data-id="01b04271a7fc42a996799435411f660b" data-ratio="1.77777777777778" src="//speakerdeck.com/assets/embed.js"></script>
-
+<iframe class="speakerdeck-iframe" frameborder="0" src="https://speakerdeck.com/player/01b04271a7fc42a996799435411f660b" title="Can Neural Networks Make Me a Better Parent?" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true" style="border: 0px; background: padding-box padding-box rgba(0, 0, 0, 0.1); margin: 0px; padding: 0px; border-radius: 6px; box-shadow: rgba(0, 0, 0, 0.2) 0px 5px 40px; width: 560px; height: 314px;" data-ratio="1.78343949044586"></iframe>
 
 ### Elixir Mix 053 - "Building beautiful systems with Phoenix Contexts and DDD with Andrew Hao"
 
-I appeared on the Elixir Mix podcast with hosts Mark Ericksen and Josh Adams to discuss Domain-Driven Design and how it can be used with Phoenix contexts. We even go into an exercise I love called Context Mapping. [Listen to the episode on Elixir Mix](https://devchat.tv/elixir-mix/emx-053-building-beautiful-systems-with-phoenix-contexts-and-ddd-with-andrew-hao/) or on [Apple Podcasts](https://podcasts.apple.com/us/podcast/emx-053-building-beautiful-systems-phoenix-contexts/id1379029137?i=1000439929527).
+I appeared on the Elixir Mix podcast with hosts Mark Ericksen and Josh Adams to discuss Domain-Driven Design and how it can be used with Phoenix contexts. We even go into an exercise I love called Context Mapping. [Listen to the episode on Elixir Mix](https://elixirmix.com/53) or on [Apple Podcasts](https://podcasts.apple.com/us/podcast/emx-053-building-beautiful-systems-phoenix-contexts/id1379029137?i=1000439929527).
 
+
+<iframe src="https://player.fireside.fm/v2/6lPOYVt4+OC2JTMb7?theme=dark" width="740" height="200" frameborder="0" scrolling="no"></iframe>
 
 ### Namegames - Solving the Hardest Problem in Computer Science
 

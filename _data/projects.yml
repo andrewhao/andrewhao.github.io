@@ -7,7 +7,19 @@
     - React
     - Elm
 
-- name: Babblefish
+- name: proxee
+  repo: https://github.com/andrewhao/proxee
+  description: A zero-config HTTP reverse proxy for microservice local development
+  tech:
+    - Rust
+
+- name: babyshusher3000
+  repo: https://github.com/andrewhao/babyshusher3000
+  description: A CLI tool to play shushing noises. If you're, you know, coding when the baby's around.
+  tech:
+    - Rust
+
+- name: babblefish
   repo: https://github.com/andrewhao/babblefish
   description: I built this TensorFlow-based baby cry detector to keep aggregate stats of how long it took the little one to cry himself to sleep. See my writeups about this project in the Articles section.
   tech:
