@@ -6,7 +6,14 @@
     <meta charset="utf-8" />
     <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" />
     <meta content="width=device-width,initial-scale=1" name="viewport" />
+
+    {% if page.description %}
+    <meta content="{{ page.description }}" name="description" />
+    {% elsif page.layout == 'post' %}
+    <meta content="{{ page.content | strip_html | truncatewords: 30 }}" name="description" />
+    {% else %}
     <meta content="{{ site.description }}" name="description" />
+    {% endif %}
     <meta content="{{ site.author }}" name="author" />
 
     <meta content="{{ site.title }}" property="og:site_name" />
