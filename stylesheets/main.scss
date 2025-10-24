@@ -1,7 +1,7 @@
 ---
 # Front matter comment to ensure Jekyll processes this file
 ---
-@import "bourbon/bourbon";
+@use "sass:math";
 @import "typography";
 @import "variables";
 @import "responsive";
@@ -135,10 +135,10 @@ header {
       list-style: none;
 
       li {
-        @include inline-block;
+        display: inline-block;
 
         margin: 0;
-        padding: 0 ($navi-link-spacing / 2 * 1em);
+        padding: 0 (math.div($navi-link-spacing, 2) * 1em);
       }
 
       /* // li */
@@ -168,7 +168,7 @@ blockquote {
 }
 
 article {
-  margin-bottom: ($space-between-posts / 2) * 1em;
+  margin-bottom: (math.div($space-between-posts, 2)) * 1em;
   padding: 0;
   font-size: $post-font-size;
   line-height: $post-font-line-height;
@@ -259,7 +259,7 @@ article {
       max-width: 100%;
       padding: 4px;
 
-      @include box-shadow(0 0 0px 1px $gray);
+      box-shadow: 0 0 0px 1px $gray;
     }
 
     .word1,
@@ -310,7 +310,7 @@ p > code {
   padding: $code-padding;
   border: 1px solid $light-gray;
 
-  @include border-radius(4px);
+  border-radius: 4px;
 
   background-color: $code-background-color;
   white-space: nowrap;
