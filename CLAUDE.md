@@ -65,7 +65,7 @@ bundle exec jekyll page "Page Name"
   - `_sass/_responsive.scss` - Media query breakpoints
   - `_sass/bourbon/` - Bourbon Sass mixins library
   - `_sass/components/` - Component-specific styles (paginator, projects, newsletter)
-- **Syntax highlighting**: Rouge with custom styles in `stylesheets/rouge-code-styles.css`
+- **Syntax highlighting**: Rouge with custom styles in `stylesheets/rouge-code-styles.css` (block code line numbers enabled)
 
 ### Layout Hierarchy
 - `default.html` - Base layout with header, footer, meta tags, and navigation
@@ -80,6 +80,7 @@ bundle exec jekyll page "Page Name"
 - **Analytics**: Google Analytics tracking (UA-2330913-9)
 - **Social**: Open Graph meta tags for social sharing
 - **Images**: jQuery automatically centers images and adds captions from title attributes
+- **Mermaid**: Mermaid diagrams supported via `_includes/mermaid.html`
 
 ### Important Files
 - `_config.yml` - Site configuration (requires server restart when changed)
