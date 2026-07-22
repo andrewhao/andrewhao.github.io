@@ -7,7 +7,7 @@ sharing: true
 footer: true
 ---
 
-I'm Andrew, nice to meet you. I'm currently a Staff Engineer at YouTube, working on next-generation live streaming products. Formerly, I was at Lyft, overseeing Lyft's organic acquisition strategy for our riders and drivers. I write often about how we try to [build product-owner mindsets]({% post_url 2020-05-11-product-owner-engineering-teams-part-1 %}) on the team by empowering engineers to act as product owners.
+I'm Andrew, nice to meet you. I'm currently a Staff Engineer at YouTube, working on next-generation live streaming experiences. Formerly, I was at Lyft, overseeing Lyft's organic acquisition strategy for our riders and drivers. I write often about how we try to [build product-owner mindsets]({% post_url 2020-05-11-product-owner-engineering-teams-part-1 %}) on the team by empowering engineers to act as product owners.
 
 Prior to that, I was a Principal Engineer at [Carbon Five](https://www.carbonfive.com/), where I helped build some great products for clients like Stitch Fix, TaskRabbit, Guild Education, and more. I really loved my time with the great people here, and I reflected on my time here in my article, ["Consider Consulting"]({% post_url 2022-03-07-consider-consulting %}).
 
@@ -17,4 +17,6 @@ I [talk](/talks) a lot about Domain-Driven Design, and I've spoken at several Ru
 
 I also [contribute articles for LeadDev](https://leaddev.com/community/andrew-hao), where you can read some of my writing.
 
-You can find me tweeting (rarely) on Twitter at [@andrewhao](https://www.twitter.com/andrewhao), or more professionally at [LinkedIn](https://www.linkedin.com/in/andrewhao/). All my talks are listed on my [Talks](/talks) page.
+You can find me on [Bluesky @andrewhao.com](https://bsky.app/profile/andrewhao.com) or [LinkedIn](https://www.linkedin.com/in/andrewhao/). All my talks are listed on my [Talks](/talks) page.
+
+(I was formerly tweeting on Twitter at [@andrewhao](https://www.twitter.com/andrewhao) but I've since nuked the account and the profile there is no longer me.)
